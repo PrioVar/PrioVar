@@ -39,3 +39,15 @@ gem "kramdown-parser-gfm"
 # Lock `http_parser.rb` gem to `v0.6.x` on JRuby builds since newer versions of the gem
 # do not have a Java counterpart.
 gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
+
+gem 'drb', '~> 2.1.1'
+gem 'minitest', '~> 5.20.0'
+gem 'mutex_m', '~> 0.1.2'
+gem 'activesupport', '~> 7.1.0'
+gem 'addressable', '~> 2.8.5'
+gem 'execjs', '~> 2.9.1'
+gem 'commonmarker', '~> 0.23.10'
+gem 'ffi', '~> 1.16.3'
+gem 'faraday', '~> 2.7.11'
+gem 'rexml', '~> 3.2.6'
+gem 'nokogiri', '~> 1.15.4'

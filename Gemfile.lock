@@ -262,11 +262,22 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activesupport (~> 7.1.0)
+  addressable (~> 2.8.5)
+  commonmarker (~> 0.23.10)
+  drb (~> 2.1.1)
+  execjs (~> 2.9.1)
+  faraday (~> 2.7.11)
+  ffi (~> 1.16.3)
   github-pages (~> 228)
   http_parser.rb (~> 0.6.0)
   jekyll-feed (~> 0.15)
   kramdown-parser-gfm
   minima (~> 2.0)
+  minitest (~> 5.20.0)
+  mutex_m (~> 0.1.2)
+  nokogiri (~> 1.15.4)
+  rexml (~> 3.2.6)
   tzinfo (>= 1, < 3)
   tzinfo-data
   wdm (~> 0.1.0)
