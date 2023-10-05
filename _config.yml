@@ -26,9 +26,13 @@ github_username:  jekyll
 
 # Build settings
 markdown: kramdown
-theme: minima
+theme: hacker
+remote_theme: pages-themes/hacker@v0.2.0
 plugins:
-  - jekyll-feed
+- jekyll-remote-theme # add this line to the plugins list if you already have one
+#theme: minima
+#plugins:
+#  - jekyll-feed
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
