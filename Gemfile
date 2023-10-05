@@ -14,7 +14,7 @@ gem "jekyll", "~> 3.9.3"
 gem "minima", "~> 2.5.1"
 
 ##trying to use hacker themöe
-gem "hacker", "~> 0.0.1"
+#gem "hacker", "~> 0.0.1"
 
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
 # uncomment the line below. To upgrade, run `bundle update github-pages`.
