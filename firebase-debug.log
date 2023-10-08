@@ -1,0 +1,87 @@
+[debug] [2023-10-08T12:47:01.305Z] ----------------------------------------------------------------------
+[debug] [2023-10-08T12:47:01.307Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --debug
+[debug] [2023-10-08T12:47:01.307Z] CLI Version:   12.4.6
+[debug] [2023-10-08T12:47:01.308Z] Platform:      linux
+[debug] [2023-10-08T12:47:01.308Z] Node Version:  v18.17.0
+[debug] [2023-10-08T12:47:01.308Z] Time:          Sun Oct 08 2023 15:47:01 GMT+0300 (GMT+03:00)
+[debug] [2023-10-08T12:47:01.308Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-10-08T12:47:01.369Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-10-08T12:47:01.371Z] > authorizing via signed-in user (erkinresearch@gmail.com)
+[debug] [2023-10-08T12:47:01.371Z] [iam] checking project cs491-2-web for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-10-08T12:47:01.372Z] > refreshing access token with scopes: []
+[debug] [2023-10-08T12:47:01.375Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-10-08T12:47:01.375Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-10-08T12:47:01.647Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-10-08T12:47:01.648Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-10-08T12:47:01.669Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs491-2-web:testIamPermissions [none]
+[debug] [2023-10-08T12:47:01.670Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs491-2-web:testIamPermissions x-goog-quota-user=projects/cs491-2-web
+[debug] [2023-10-08T12:47:01.670Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs491-2-web:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-10-08T12:47:02.680Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs491-2-web:testIamPermissions 200
+[debug] [2023-10-08T12:47:02.680Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs491-2-web:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-10-08T12:47:02.682Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/cs491-2-web [none]
+[debug] [2023-10-08T12:47:03.040Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/cs491-2-web 200
+[debug] [2023-10-08T12:47:03.040Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/cs491-2-web {"projectId":"cs491-2-web","projectNumber":"269555720622","displayName":"cs491-2-web","name":"projects/cs491-2-web","resources":{"hostingSite":"cs491-2-web"},"state":"ACTIVE","etag":"1_ab949693-1679-445d-b909-31c1702e14d3"}
+[info] 
+[info] === Deploying to 'cs491-2-web'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2023-10-08T12:47:03.044Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/versions [none]
+[debug] [2023-10-08T12:47:03.044Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2023-10-08T12:47:04.412Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/versions 200
+[debug] [2023-10-08T12:47:04.413Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/versions {"name":"projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[cs491-2-web]: beginning deploy... 
+[info] i  hosting[cs491-2-web]: found 7 files in public 
+[debug] [2023-10-08T12:47:04.434Z] [hosting] uploading with 200 concurrency
+[debug] [2023-10-08T12:47:04.436Z] [hosting] hash cache [cHVibGlj] not populated
+[debug] [2023-10-08T12:47:04.449Z] [hosting] hash cache [cHVibGlj] stored for 7 files
+[debug] [2023-10-08T12:47:04.450Z] [hosting][hash queue][FINAL] {"max":10,"min":7,"avg":7.857142857142857,"active":0,"complete":7,"success":7,"errored":0,"retried":0,"total":7,"elapsed":14}
+[debug] [2023-10-08T12:47:04.450Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c:populateFiles [none]
+[debug] [2023-10-08T12:47:04.450Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c:populateFiles {"files":{"/404.html":"b7bab6b83fa074653ff28c8d2a64135d3434575f70a12ab3d3ba8080461b9537","/favicon.ico":"c599b7a91ab3627e3538125d9f40adc2d4bf949046984262670545dc7738af06","/index.html":"ae25650d1f07a645c5c5562593d4fd0cd51501159d74978ebe34b0b5a024a6b9","/logo192.png":"76c449ccb9cd117c2f2338f091b18f7050f3210e249b2228f5c81b23f34377cd","/manifest.json":"0958a5e0c831126100c8c2d06a6bbaa665a3900f21aaff4130238a6f5a113aa1","/robots.txt":"2544ca049f223a42bff01f72ad930a5edba75bbb7199d0f8430a02ff5aca16ec","/logo512.png":"7779210d56c1f3741e2e487799fe3092def4fa6ac450a60532b807c3a8971205"}}
+[debug] [2023-10-08T12:47:05.558Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c:populateFiles 200
+[debug] [2023-10-08T12:47:05.559Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c:populateFiles {"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/cs491-2-web/versions/09c63e8d02c39b1c/files"}
+[debug] [2023-10-08T12:47:05.560Z] [hosting][populate queue][FINAL] {"max":1112,"min":1112,"avg":1112,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":1112}
+[debug] [2023-10-08T12:47:05.560Z] [hosting] uploads queued: 0
+[debug] [2023-10-08T12:47:05.561Z] [hosting][upload queue][FINAL] {"max":0,"min":9999999999,"avg":0,"active":0,"complete":0,"success":0,"errored":0,"retried":0,"total":0,"elapsed":1696769225561}
+[info] i  hosting: upload complete 
+[info] ✔  hosting[cs491-2-web]: file upload complete 
+[debug] [2023-10-08T12:47:05.562Z] [hosting] deploy completed after 1145ms
+[debug] [2023-10-08T12:47:05.563Z] [
+  {
+    "config": {
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "cs491-2-web"
+    },
+    "version": "projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c"
+  }
+]
+[info] i  hosting[cs491-2-web]: finalizing version... 
+[debug] [2023-10-08T12:47:05.570Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/versions/09c63e8d02c39b1c updateMask=status%2Cconfig
+[debug] [2023-10-08T12:47:05.571Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/versions/09c63e8d02c39b1c {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2023-10-08T12:47:06.658Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/versions/09c63e8d02c39b1c 200
+[debug] [2023-10-08T12:47:06.659Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/versions/09c63e8d02c39b1c {"name":"projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2023-10-08T12:47:04.082942Z","createUser":{"email":"erkinresearch@gmail.com"},"finalizeTime":"2023-10-08T12:47:06.545445Z","finalizeUser":{"email":"erkinresearch@gmail.com"}}
+[debug] [2023-10-08T12:47:06.659Z] [hosting] finalized version for cs491-2-web:[object Object]
+[info] ✔  hosting[cs491-2-web]: version finalized 
+[info] i  hosting[cs491-2-web]: releasing new version... 
+[debug] [2023-10-08T12:47:06.661Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/channels/live/releases versionName=projects%2F269555720622%2Fsites%2Fcs491-2-web%2Fversions%2F09c63e8d02c39b1c
+[debug] [2023-10-08T12:47:06.661Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/channels/live/releases {}
+[debug] [2023-10-08T12:47:07.788Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/channels/live/releases 200
+[debug] [2023-10-08T12:47:07.789Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cs491-2-web/channels/live/releases {"name":"projects/269555720622/sites/cs491-2-web/channels/live/releases/1696769227131000","version":{"name":"projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2023-10-08T12:47:04.082942Z","createUser":{"email":"erkinresearch@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJu9GIClQyB1kc1EmM27zpIbTcu4d11t3GKjGv6auLE=mo"},"finalizeTime":"2023-10-08T12:47:06.545445Z","finalizeUser":{"email":"erkinresearch@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJu9GIClQyB1kc1EmM27zpIbTcu4d11t3GKjGv6auLE=mo"}},"type":"DEPLOY","releaseTime":"2023-10-08T12:47:07.131Z","releaseUser":{"email":"erkinresearch@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJu9GIClQyB1kc1EmM27zpIbTcu4d11t3GKjGv6auLE=mo"}}
+[debug] [2023-10-08T12:47:07.789Z] [hosting] release: {"name":"projects/269555720622/sites/cs491-2-web/channels/live/releases/1696769227131000","version":{"name":"projects/269555720622/sites/cs491-2-web/versions/09c63e8d02c39b1c","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2023-10-08T12:47:04.082942Z","createUser":{"email":"erkinresearch@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJu9GIClQyB1kc1EmM27zpIbTcu4d11t3GKjGv6auLE=mo"},"finalizeTime":"2023-10-08T12:47:06.545445Z","finalizeUser":{"email":"erkinresearch@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJu9GIClQyB1kc1EmM27zpIbTcu4d11t3GKjGv6auLE=mo"}},"type":"DEPLOY","releaseTime":"2023-10-08T12:47:07.131Z","releaseUser":{"email":"erkinresearch@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJu9GIClQyB1kc1EmM27zpIbTcu4d11t3GKjGv6auLE=mo"}}
+[info] ✔  hosting[cs491-2-web]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/cs491-2-web/overview
+[info] Hosting URL: https://cs491-2-web.web.app
