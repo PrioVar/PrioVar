@@ -2,6 +2,7 @@
 //<img src={logo} className="App-logo" alt="logo" />
 import './App.css';
 import WelcomePage from "./components/WelcomePage";
+import Team from "./components/Team";
 import Appbar from './components/Appbar';
 import React   from "react";
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,6 +23,7 @@ function App() {
         <AnimatePresence>
           <Routes>
             <Route path="/" element={<WelcomePage />} />
+            <Route path="/team" element={<Team />} />
           </Routes>
         </AnimatePresence>
         </motion.div>
