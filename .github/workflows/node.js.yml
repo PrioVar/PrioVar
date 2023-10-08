@@ -30,3 +30,4 @@ jobs:
     - run: npm install -g serve
     - run: npm install
     - run: npm run build --if-present
+    - run: serve -s build
