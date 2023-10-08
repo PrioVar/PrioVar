@@ -1,4 +1,8 @@
+import React, { useEffect } from 'react';
 const WelcomePage = () => {
+    useEffect(() => {
+        document.title = 'Xaga'
+      }, []);
     return (
         <div
         style={{
