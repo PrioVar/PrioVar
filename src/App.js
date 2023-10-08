@@ -1,4 +1,4 @@
-//import logo from './logo.svg';
+//import helix from './helix.svg';
 //<img src={logo} className="App-logo" alt="logo" />
 import './App.css';
 import WelcomePage from "./components/WelcomePage";
