@@ -21,7 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build -u 'Erkin-Aydin <erkinresearch@gmail.com>'"
+    "deploy": "gh-pages -d build -u 'Erkin-Aydin <erkinresearch@gmail.com>' -t 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"
   },
   "eslintConfig": {
     "extends": [
