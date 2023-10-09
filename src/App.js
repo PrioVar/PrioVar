@@ -3,6 +3,7 @@
 import './App.css';
 import WelcomePage from "./components/WelcomePage";
 import Team from "./components/Team";
+import Contact from "./components/Contact";
 import Appbar from './components/Appbar';
 import React   from "react";
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,6 +25,7 @@ function App() {
           <Routes>
             <Route path="/" element={<WelcomePage />} />
             <Route path="/team" element={<Team />} />
+            <Route path="/contact-us" element={<Contact />} />
           </Routes>
         </AnimatePresence>
         </motion.div>
