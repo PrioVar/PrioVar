@@ -45,7 +45,7 @@ const Team = () => {
                     <a href="https://github.com/korhankemalkaya" target="_blank" rel="noopener noreferrer">
                       <GitHub style={{ fontSize: '60px' }} />
                     </a>
-                    <a href="hhttps://www.linkedin.com/in/korhankemalkaya/" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.linkedin.com/in/korhankemalkaya/" target="_blank" rel="noopener noreferrer">
                       <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem"}} />
                     </a>
                   </span>
