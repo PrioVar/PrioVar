@@ -2,96 +2,103 @@ import React, { useEffect } from 'react';
 import { Grid, Paper, Container } from '@mui/material';
 import { GitHub } from '@mui/icons-material';
 import './Team.css'; // Import the CSS file for styling
-
+import CiceklabImage from "./ciceklab.png";
 const Team = () => {
   // Sample project data
   useEffect(() => {
     document.title = 'Meet the Xaga Team'
   }, []);
-  const team = [
-    {
-      name: 'Alperen Gözeten',
-      explanation: 'Small explanation goes here.',
-      student: true,
-      link: 'https://github.com/alperengozeten',
-    },
-    {
-      name: 'Korhan Kemal Kaya',
-      explanation: 'Small explanation goes here.',
-      student: true,
-      link: 'https://github.com/korhankemalkaya'
-    },
-    {
-      name: 'Safa Eren Kuday',
-      explanation: 'Small explanation goes here.',
-      student: true,
-      link: 'https://github.com/safa54'
-    },
-    {
-      name: 'Kaan Tek',
-      explanation: 'Small explanation goes here.',
-      student: true,
-      link: 'https://github.com/KaanTekTr'
-    },
-    {
-      name: 'Erkin Aydın',
-      explanation: 'Small explanation goes here.',
-      student: true,
-      link: 'https://github.com/Erkin-Aydin'
-    },
-    {
-      name: 'Abdullah Ercüment Çiçek',
-      explanation: 'Associate Professor at the Computer Engineering Department of Bilkent University',
-      student: false,
-      link: 'http://ciceklab.cs.bilkent.edu.tr/'
-    },
-    {
-      name: 'Innovation Expert name goes here',
-      explanation: 'Small explanation goes here.',
-      student: null,
-    },
-  ];
-
-  // Group projects based on their status
-  const teamMembers = {
-    'Xaga': team.filter((person) => person.student === true),
-    'Supervisor': team.filter((person) => person.student === false),
-    'Innovation Expert': team.filter((person) => person.student === null),
-  };
-
+  
   return (
     <div>
       <h2>Meet the Xaga Team</h2>
-      {Object.entries(teamMembers).map(([group, people]) => (
-        <div key={group}>
-          <h3>{group}</h3>
-          <Container className="centered-container">
-            <Grid container spacing={2}>
-              {people.map((person, index) => (
-                <Grid item xs={12} sm={6} key={index}>
-                  <Paper elevation={3} className="person-box" style={{ maxWidth: 800 }}>
-                    <div className="person-content">
-                      <p>
-                        <b>{person.name}</b>
-                        <p>{person.explanation}</p>
-                      </p>
-                      {person.student ? ( // Check if the person is a student
-                        <a href={person.link} target="_blank" rel="noopener noreferrer">
-                          <GitHub /> {/* Display GitHub icon for students */}
-                        </a>
-                      ) : (
-                        <a href={person.link} target="_blank" rel="noopener noreferrer">
-                          <img src="./ciceklab.png" alt="Link to Person" /> {/* Display image for non-students */}
-                        </a>
-                      )}
-                    </div>
-                  </Paper>
-                </Grid>
-              ))}
+        <Container className="centered-container">
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Paper elevation={3} className="person-box" style={{ maxWidth: 800, backgroundColor: "#c0c2c4" }}>
+                <div className="person-content" >
+                  <b>Alperen Gözeten</b>
+                  <div>
+                    <em>Bilkent CS - Senior Student</em>
+                    <p>Small explanation goes here</p>
+                  </div>
+                  <a href="https://github.com/alperengozeten" target="_blank" rel="noopener noreferrer">
+                    <GitHub />
+                  </a>
+                </div>
+              </Paper>
             </Grid>
-          </Container>
-        </div>
-      ))}
+            <Grid item xs={12} sm={6} >
+              <Paper elevation={3} className="person-box" style={{ maxWidth: 800, backgroundColor: "#c0c2c4" }}>
+                <div className="person-content">
+                  <b>Korhan Kemal Kaya</b>
+                  <div>
+                    <em>Bilkent CS - Senior Student</em>
+                    <p>Small explanation goes here</p>
+                  </div>
+                  <a href="https://github.com/korhankemalkaya" target="_blank" rel="noopener noreferrer">
+                    <GitHub />
+                  </a>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} >
+              <Paper elevation={3} className="person-box" style={{ maxWidth: 800, backgroundColor: "#c0c2c4" }}>
+                <div className="person-content">
+                  <b>Safa Eren Kuday</b>
+                  <div>
+                    <em>Bilkent CS - Senior Student</em>
+                    <br/>
+                    <em>Bilkent MATH - Double Major</em>
+                    <p>Small explanation goes here</p>
+                  </div>
+                  <a href="https://github.com/safa54" target="_blank" rel="noopener noreferrer">
+                    <GitHub />
+                  </a>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} >
+              <Paper elevation={3} className="person-box" style={{ maxWidth: 800, backgroundColor: "#c0c2c4" }}>
+                <div className="person-content">
+                  <b>Kaan Tek</b>
+                  <div>
+                    <em>Bilkent CS - Senior Student</em>
+                    <p>Small explanation goes here</p>
+                  </div>
+                  <a href="https://github.com/KaanTekTr" target="_blank" rel="noopener noreferrer">
+                    <GitHub />
+                  </a>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} >
+              <Paper elevation={3} className="person-box" style={{ maxWidth: 800, backgroundColor: "#c0c2c4" }}>
+                <div className="person-content">
+                  <b>Erkin Aydın</b>
+                  <div>
+                    <em>Bilkent CS - Senior Student</em>
+                    <p>Small explanation goes here</p>
+                  </div>
+                  <a href="https://github.com/Erkin-Aydin" target="_blank" rel="noopener noreferrer">
+                    <GitHub />
+                  </a>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} >
+              <Paper elevation={3} className="person-box" style={{ maxWidth: 800, backgroundColor: "#c0c2c4"}}>
+                <div className="person-content">
+                  <b>Abdullah Ercüment Çiçek</b>
+                  <p>Small explanation goes here</p>
+                  <a href="http://ciceklab.cs.bilkent.edu.tr/" target="_blank" rel="noopener noreferrer">
+                    <img src={CiceklabImage} alt="Link to Çiçeklab"/>
+                  </a>
+                </div>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
     </div>
   );
 };
