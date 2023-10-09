@@ -14,10 +14,10 @@ const WelcomePage = () => {
           }}
         >
         <h1>Project Xaga</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna 
-            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint 
-            occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>Introducing 'PrioVar,' where science meets precision to transform rare disease diagnosis. 
+            We leverage cutting-edge analysis of phenotype and genotype data to prioritize variants, 
+            providing medical professionals with actionable insights. Our mission is simple: empower early 
+            and accurate diagnosis, ultimately improving the lives of those affected by rare diseases.</p>
         <br/>
         <h2>Details of Xaga</h2>
         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, 
