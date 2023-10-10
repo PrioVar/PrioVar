@@ -6,12 +6,12 @@ import CiceklabImage from "./ciceklab.png";
 const Team = () => {
   // Sample project data
   useEffect(() => {
-    document.title = 'Meet the Xaga Team'
+    document.title = 'Meet the PrioVar Team'
   }, []);
   
   return (
     <div>
-      <h2>Meet the Xaga Team</h2>
+      <h2>Meet the PrioVar Team</h2>
         <Container className="centered-container">
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

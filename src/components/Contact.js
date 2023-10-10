@@ -8,7 +8,7 @@ const ContactMe = () => {
   }, []);
   return (
     <div>
-      <h2>Contact Xaga!</h2>
+      <h2>Contact PrioVar!</h2>
       <p>You can contact us via following channels:</p>
       <ul style={{ listStyle: 'none', padding: 0 }}>
         <li style={{ marginBottom: '0.5rem' }}>
