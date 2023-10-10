@@ -20,7 +20,6 @@ const Team = () => {
                   <b>Alperen Gözeten</b>
                   <div>
                     <em>Bilkent CS - Senior Student</em>
-                    <p>Small explanation goes here</p>
                   </div>
                   <span>
                     <a href="https://github.com/alperengozeten" target="_blank" rel="noopener noreferrer">
@@ -39,7 +38,6 @@ const Team = () => {
                   <b>Korhan Kemal Kaya</b>
                   <div>
                     <em>Bilkent CS - Senior Student</em>
-                    <p>Small explanation goes here</p>
                   </div>
                   <span>
                     <a href="https://github.com/korhankemalkaya" target="_blank" rel="noopener noreferrer">
@@ -60,7 +58,6 @@ const Team = () => {
                     <em>Bilkent CS - Senior Student</em>
                     <br/>
                     <em>Bilkent MATH - Double Major</em>
-                    <p>Small explanation goes here</p>
                   </div>
                   <span>
                     <a href="https://github.com/safa54" target="_blank" rel="noopener noreferrer">
@@ -79,7 +76,6 @@ const Team = () => {
                   <b>Kaan Tek</b>
                   <div>
                     <em>Bilkent CS - Senior Student</em>
-                    <p>Small explanation goes here</p>
                   </div>
                   <span>
                     <a href="https://github.com/KaanTekTr" target="_blank" rel="noopener noreferrer">
@@ -98,7 +94,6 @@ const Team = () => {
                   <b>Erkin Aydın</b>
                   <div>
                     <em>Bilkent CS - Senior Student</em>
-                    <p>Small explanation goes here</p>
                   </div>
                   <span>
                     <a href="https://github.com/Erkin-Aydin" target="_blank" rel="noopener noreferrer">
@@ -115,7 +110,6 @@ const Team = () => {
               <Paper elevation={3} className="person-box" style={{ maxWidth: 800, backgroundColor: "#d3d4d5"}}>
                 <div className="person-content" style={{ paddingTop: "1rem"}}>
                   <b>Abdullah Ercüment Çiçek</b>
-                  <p>Small explanation goes here</p>
                   <span>
                     <a href="http://ciceklab.cs.bilkent.edu.tr/" target="_blank" rel="noopener noreferrer">
                       <img src={CiceklabImage} alt="Link to Çiçeklab"/>
