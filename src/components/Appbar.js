@@ -29,7 +29,7 @@ const Appbar = () => {
 
   return (
     <nav style={{ backgroundColor: '#f8f9fa', padding: '12px 0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0 auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <form action="/" method="GET">
           <input
             type="submit"
@@ -44,7 +44,7 @@ const Appbar = () => {
               fontWeight: 'bold',
               transition: 'font-size 0.2s ease',
             }}
-            value="Xaga"
+            value="PrioVar"
           />
         </form>
         {isMobile ? (
