@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 const WelcomePage = () => {
     useEffect(() => {
-        document.title = 'Xaga'
+        document.title = 'PrioVar'
       }, []);
     return (
         <div
@@ -13,13 +13,13 @@ const WelcomePage = () => {
             textAlign: "left",
           }}
         >
-        <h1>Project Xaga</h1>
+        <h1>Project PrioVar</h1>
         <p>Introducing 'PrioVar,' where science meets precision to transform rare disease diagnosis. 
             We leverage cutting-edge analysis of phenotype and genotype data to prioritize variants, 
             providing medical professionals with actionable insights. Our mission is simple: empower early 
             and accurate diagnosis, ultimately improving the lives of those affected by rare diseases.</p>
         <br/>
-        <h2>Details of Xaga</h2>
+        <h2>Details of PrioVar</h2>
         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, 
             eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam 
             voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
