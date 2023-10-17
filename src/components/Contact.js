@@ -13,7 +13,10 @@ const ContactMe = () => {
       <ul style={{ listStyle: 'none', padding: 0 }}>
         <li style={{ marginBottom: '0.5rem' }}>
           <Mail style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
-          <a href="erkinresearch@gmail.com" style={{ textDecoration: 'none' }}>priovarmail@dummy.com</a>
+          <a href="erkin_mail" style={{ textDecoration: 'none' }}>erkin.aydin@ug.bilkent.edu.tr</a>
+          <br/>
+          <Mail style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
+          <a href="alperen_mail" style={{ textDecoration: 'none' }}>alperen.gozeten@ug.bilkent.edu.tr</a>
         </li>
       </ul>
     </div>
