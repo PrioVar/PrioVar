@@ -8,6 +8,8 @@ import Appbar from './components/Appbar';
 import React   from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Reports from './components/Reports';
+import Resources from './components/Resources';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Routes>
             <Route path="/" element={<WelcomePage />} />
             <Route path="/team" element={<Team />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="/contact-us" element={<Contact />} />
           </Routes>
         </AnimatePresence>
