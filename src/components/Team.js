@@ -32,10 +32,10 @@ const Team = () => {
                   </div>
                   <span>
                     <a href="https://github.com/alperengozeten" target="_blank" rel="noopener noreferrer">
-                      <GitHub style={{ fontSize: '60px' }} />
+                      <GitHub style={{ fontSize: '60px', color: '#555'}} />
                     </a>
                     <a href="https://www.linkedin.com/in/alperen-g%C3%B6zeten-62818a209/" target="_blank" rel="noopener noreferrer">
-                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem"}} />
+                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem", color: '#555'}} />
                     </a>
                   </span>
                 </div>
@@ -52,10 +52,10 @@ const Team = () => {
                   </div>
                   <span>
                     <a href="https://github.com/korhankemalkaya" target="_blank" rel="noopener noreferrer">
-                      <GitHub style={{ fontSize: '60px' }} />
+                      <GitHub style={{ fontSize: '60px', color: '#555' }} />
                     </a>
                     <a href="https://www.linkedin.com/in/korhankemalkaya/" target="_blank" rel="noopener noreferrer">
-                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem"}} />
+                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem", color: '#555'}} />
                     </a>
                   </span>
                 </div>
@@ -74,10 +74,10 @@ const Team = () => {
                   </div>
                   <span>
                     <a href="https://github.com/safa54" target="_blank" rel="noopener noreferrer">
-                      <GitHub style={{ fontSize: '60px' }} />
+                      <GitHub style={{ fontSize: '60px', color: '#555' }} />
                     </a>
                     <a href="https://www.linkedin.com/in/safa-eren-kuday/" target="_blank" rel="noopener noreferrer">
-                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem"}} />
+                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem", color: '#555'}} />
                     </a>
                   </span>
                 </div>
@@ -94,10 +94,10 @@ const Team = () => {
                   </div>
                   <span>
                     <a href="https://github.com/KaanTekTr" target="_blank" rel="noopener noreferrer">
-                      <GitHub style={{ fontSize: '60px' }} />
+                      <GitHub style={{ fontSize: '60px', color: '#555' }} />
                     </a>
                     <a href="https://www.linkedin.com/in/kaan-tek-a299bb195/" target="_blank" rel="noopener noreferrer">
-                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem"}} />
+                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem", color: '#555'}} />
                     </a>
                   </span>
                 </div>
@@ -114,10 +114,10 @@ const Team = () => {
                   </div>
                   <span>
                     <a href="https://github.com/Erkin-Aydin" target="_blank" rel="noopener noreferrer">
-                      <GitHub style={{ fontSize: '60px' }} />
+                      <GitHub style={{ fontSize: '60px', color: '#555' }} />
                     </a>
                     <a href="https://www.linkedin.com/in/erkin-ayd%C4%B1n-167aa8229/" target="_blank" rel="noopener noreferrer">
-                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem"}} />
+                      <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem", color: '#555'}} />
                     </a>
                   </span>
                 </div>
@@ -144,10 +144,10 @@ const Team = () => {
                     <img src={CiceklabImage} alt="Link to Çiçeklab" />
                   </a>
                   <a href="https://github.com/Erkin-Aydin" target="_blank" rel="noopener noreferrer">
-                    <GitHub style={{ fontSize: '60px', marginLeft: "2.5rem" }} />
+                    <GitHub style={{ fontSize: '60px', marginLeft: "2.5rem", color: '#555' }} />
                   </a>
                   <a href="https://www.linkedin.com/in/ercumentcicek/" target="_blank" rel="noopener noreferrer">
-                    <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem" }} />
+                    <LinkedIn style={{ fontSize: '60px', marginLeft: "1rem", color: '#555' }} />
                   </a>
                 </span>
               </div>
