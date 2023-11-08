@@ -10,12 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table
 @Entity
-public class Patient {
-
+public class Variant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
+
     @OneToOne
-    private MedicalCenter medicalCenter;
-    private String diagnosis;
+    private Patient patient;
 }
