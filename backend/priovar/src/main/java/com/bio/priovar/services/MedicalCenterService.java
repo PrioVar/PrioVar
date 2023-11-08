@@ -1,7 +1,9 @@
 package com.bio.priovar.services;
 
 import com.bio.priovar.models.MedicalCenter;
+import com.bio.priovar.models.Patient;
 import com.bio.priovar.repositories.MedicalCenterRepository;
+import com.bio.priovar.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,12 @@ import java.util.Optional;
 public class MedicalCenterService {
 
     private final MedicalCenterRepository medicalCenterRepository;
+    private final PatientRepository patientRepository;
 
     @Autowired
-    public MedicalCenterService(MedicalCenterRepository medicalCenterRepository) {
+    public MedicalCenterService(MedicalCenterRepository medicalCenterRepository, PatientRepository patientRepository) {
         this.medicalCenterRepository = medicalCenterRepository;
+        this.patientRepository = patientRepository;
     }
 
     public List<MedicalCenter> getAllMedicalCenters() {
@@ -31,5 +35,25 @@ public class MedicalCenterService {
         }
 
         medicalCenterRepository.save(medicalCenter);
+    }
+
+    public List<Patient> getPatientsByMedicalCenterId(Long medicalCenterId) {
+        Optional<MedicalCenter> medicalCenterOptional = medicalCenterRepository.findById(medicalCenterId);
+
+        if ( !medicalCenterOptional.isPresent() ) {
+            throw new IllegalStateException("Medical center with id: " + medicalCenterId + " doesn't exist!");
+        }
+
+        return patientRepository.findAllByMedicalCenter_ID(medicalCenterId);
+    }
+
+    public MedicalCenter getMedicalCenterById(Long medicalCenterId) {
+        Optional<MedicalCenter> medicalCenterOptional = medicalCenterRepository.findById(medicalCenterId);
+
+        if ( !medicalCenterOptional.isPresent() ) {
+            throw new IllegalStateException("Medical center with id: " + medicalCenterId + " doesn't exist!");
+        }
+
+        return medicalCenterOptional.get();
     }
 }
