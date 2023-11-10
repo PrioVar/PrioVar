@@ -17,4 +17,12 @@ public class Variant {
 
     @OneToOne
     private Patient patient;
+    private int CHROM;
+    private int POS;
+    private String ID_;
+    private String REF;
+    private String ALT;
+    private String QUAL;
+    private String FILTER;
+    private String INFO;
 }
