@@ -24,9 +24,14 @@ public class PatientController {
         return patientService.getAllPatients();
     }
 
-    @GetMapping("/{id}")
-    public Patient getPatientById(@PathVariable("id") Long id) {
+    @GetMapping("/{patientId}")
+    public Patient getPatientById(@PathVariable("patientId") Long id) {
         return patientService.getPatientById(id);
+    }
+
+    @GetMapping("/byDisease/{diseaseName}")
+    public List<Patient> getPatientsByDiseaseName(@PathVariable("diseaseName") String diseaseName) {
+        return patientService.getPatientsByDiseaseName(diseaseName);
     }
 
     @PostMapping("/add")

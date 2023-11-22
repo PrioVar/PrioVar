@@ -23,4 +23,8 @@ public class DiseaseService {
     public List<Disease> getAllDiseases() {
         return diseaseRepository.findAll();
     }
+
+    public Disease getDiseaseById(Long id) {
+        return diseaseRepository.findById(id).orElse(null);
+    }
 }
