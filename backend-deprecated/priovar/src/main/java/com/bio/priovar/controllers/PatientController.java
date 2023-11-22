@@ -5,6 +5,8 @@ import com.bio.priovar.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/patient")
 @CrossOrigin
@@ -15,6 +17,16 @@ public class PatientController {
     @Autowired
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
+    }
+
+    @GetMapping()
+    public List<Patient> getAllPatients() {
+        return patientService.getAllPatients();
+    }
+
+    @GetMapping("/{id}")
+    public Patient getPatientById(@PathVariable("id") Long id) {
+        return patientService.getPatientById(id);
     }
 
     @PostMapping("/add")
