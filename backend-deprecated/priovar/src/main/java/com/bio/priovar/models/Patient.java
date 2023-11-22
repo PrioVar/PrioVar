@@ -18,6 +18,10 @@ public class Patient {
     @GeneratedValue
     private Long id;
 
+    private String name;
+    private int age;
+    private String sex;
+
     @Relationship(type = "BELONGS_TO_MEDICAL_CENTER", direction = Relationship.Direction.OUTGOING)
     private MedicalCenter medicalCenter;
 
