@@ -24,6 +24,11 @@ public class DiseaseController {
         return diseaseService.getAllDiseases();
     }
 
+    @GetMapping("/{diseaseId}")
+    public Disease getDiseaseById(@PathVariable("diseaseId") Long id) {
+        return diseaseService.getDiseaseById(id);
+    }
+
     @PostMapping("/add")
     public void addDisease(@RequestBody Disease Disease) {
         diseaseService.addDisease(Disease);

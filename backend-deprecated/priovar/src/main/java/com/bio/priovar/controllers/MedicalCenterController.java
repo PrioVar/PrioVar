@@ -5,6 +5,8 @@ import com.bio.priovar.services.MedicalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/medicalCenter")
 @CrossOrigin
@@ -14,6 +16,16 @@ public class MedicalCenterController {
     @Autowired
     public MedicalCenterController(MedicalCenterService medicalCenterService) {
         this.medicalCenterService = medicalCenterService;
+    }
+
+    @GetMapping()
+    public List<MedicalCenter> getAllMedicalCenters() {
+        return medicalCenterService.getAllMedicalCenters();
+    }
+
+    @GetMapping("/{medicalCenterId}")
+    public MedicalCenter getMedicalCenterById(@PathVariable("medicalCenterId") Long medicalCenterId) {
+        return medicalCenterService.getMedicalCenterById(medicalCenterId);
     }
 
     @PostMapping("/add")

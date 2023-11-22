@@ -27,4 +27,8 @@ public class PatientService {
     public Patient getPatientById(Long id) {
         return patientRepository.findById(id).orElse(null);
     }
+
+    public List<Patient> getPatientsByDiseaseName(String diseaseName) {
+        return patientRepository.findByDiseaseName(diseaseName);
+    }
 }
