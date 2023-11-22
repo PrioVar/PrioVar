@@ -6,18 +6,16 @@ import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Node("Patient")
-public class Patient {
-
+@Node("Disease")
+public class Disease {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Relationship(type = "HAS_DISEASE", direction = Relationship.Direction.OUTGOING)
-    private Disease disease;
+    private String name;
 }
