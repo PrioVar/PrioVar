@@ -8,6 +8,8 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,4 +29,7 @@ public class Patient {
 
     @Relationship(type = "HAS_DISEASE", direction = Relationship.Direction.OUTGOING)
     private Disease disease;
+
+    @Relationship(type = "HAS_VARIANT", direction = Relationship.Direction.OUTGOING)
+    private List<Variant> variants;
 }

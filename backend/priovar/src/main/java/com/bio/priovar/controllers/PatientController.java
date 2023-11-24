@@ -50,4 +50,9 @@ public class PatientController {
     public ResponseEntity<String> addDiseaseToPatient(@PathVariable("patientId") Long patientId, @PathVariable("diseaseId") Long diseaseId) {
         return new ResponseEntity<>(patientService.addDiseaseToPatient(patientId, diseaseId), org.springframework.http.HttpStatus.OK);
     }
+
+    @PostMapping("/{patientId}/addVariant/{variantId}")
+    public ResponseEntity<String> addVariantToPatient(@PathVariable("patientId") Long patientId, @PathVariable("variantId") Long variantId) {
+        return new ResponseEntity<>(patientService.addVariantToPatient(patientId, variantId), org.springframework.http.HttpStatus.OK);
+    }
 }

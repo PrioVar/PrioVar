@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/variant")
 @CrossOrigin
@@ -15,6 +17,16 @@ public class VariantController {
     @Autowired
     public VariantController(VariantService variantService) {
         this.variantService = variantService;
+    }
+
+    @GetMapping()
+    public List<Variant> getAllVariants() {
+        return variantService.getAllVariants();
+    }
+
+    @GetMapping("/{variantId}")
+    public Variant getVariantById(@PathVariable("variantId") Long id) {
+        return variantService.getVariantById(id);
     }
 
     @PostMapping("/add")
