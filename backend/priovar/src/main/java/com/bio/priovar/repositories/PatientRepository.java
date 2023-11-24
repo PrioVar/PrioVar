@@ -11,4 +11,6 @@ import java.util.List;
 public interface PatientRepository extends Neo4jRepository<Patient, Long> {
     @Query("MATCH (p:Patient)-[:HAS_DISEASE]->(d:Disease) WHERE d.name = $diseaseName RETURN p")
     List<Patient> findByDiseaseName(String diseaseName);
+
+    List<Patient> findByMedicalCenterId(Long medicalCenterId);
 }

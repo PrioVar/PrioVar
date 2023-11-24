@@ -73,4 +73,8 @@ public class PatientService {
         patientRepository.save(patient);
         return "Disease added to patient successfully";
     }
+
+    public List<Patient> getPatientsByMedicalCenterId(Long medicalCenterId) {
+        return patientRepository.findByMedicalCenterId(medicalCenterId);
+    }
 }
