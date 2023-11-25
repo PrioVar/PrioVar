@@ -45,6 +45,11 @@ public class PatientController {
         return new ResponseEntity<>(patientService.addPatient(patient), patient.getMedicalCenter() == null ? org.springframework.http.HttpStatus.BAD_REQUEST : org.springframework.http.HttpStatus.OK);
     }
 
+    @PostMapping("/addPatientToClinician/{clinicianId}")
+    public ResponseEntity<String> addPatientToClinician(@RequestBody Patient patient, @PathVariable("clinicianId") Long clinicianId) {
+        return new ResponseEntity<>(patientService.addPatientToClinician(patient, clinicianId), patient.getMedicalCenter() == null ? org.springframework.http.HttpStatus.BAD_REQUEST : org.springframework.http.HttpStatus.OK);
+    }
+
     // add disease to the patient
     @PostMapping("/{patientId}/addDisease/{diseaseId}")
     public ResponseEntity<String> addDiseaseToPatient(@PathVariable("patientId") Long patientId, @PathVariable("diseaseId") Long diseaseId) {
