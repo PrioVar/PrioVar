@@ -174,4 +174,28 @@ public class PatientService {
         patientRepository.save(patient);
         return "Phenotype term added to patient successfully";
     }
+
+    public String deletePhenotypeTermFromPatient(Long patientId, Long phenotypeTermId) {
+        PhenotypeTerm phenotypeTerm = phenotypeTermRepository.findById(phenotypeTermId).orElse(null);
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+
+        if ( phenotypeTerm == null ) {
+            return "Phenotype term with id " + phenotypeTermId + " does not exist";
+        }
+
+        if ( patient == null ) {
+            return "Patient with id " + patientId + " does not exist";
+        }
+
+        // if the list is null or doesn't contain the phenotypeTerm, return an error
+        if ( patient.getPhenotypeTerms() == null || !patient.getPhenotypeTerms().contains(phenotypeTerm) ) {
+            return "Patient does not have the phenotype term with id " + phenotypeTermId;
+        }
+        else {
+            patient.getPhenotypeTerms().remove(phenotypeTerm);
+        }
+
+        patientRepository.save(patient);
+        return "Phenotype term deleted from patient successfully";
+    }
 }

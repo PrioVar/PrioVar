@@ -71,4 +71,12 @@ public class PatientController {
     public ResponseEntity<String> addVariantToPatient(@PathVariable("patientId") Long patientId, @PathVariable("variantId") Long variantId) {
         return new ResponseEntity<>(patientService.addVariantToPatient(patientId, variantId), org.springframework.http.HttpStatus.OK);
     }
+
+    // Delete Requests
+
+    // delete phenotypeTerm from the patient
+    @DeleteMapping("/{patientId}/deletePhenotypeTerm/{phenotypeTermId}")
+    public ResponseEntity<String> deletePhenotypeTermFromPatient(@PathVariable("patientId") Long patientId, @PathVariable("phenotypeTermId") Long phenotypeTermId) {
+        return new ResponseEntity<>(patientService.deletePhenotypeTermFromPatient(patientId, phenotypeTermId), org.springframework.http.HttpStatus.OK);
+    }
 }

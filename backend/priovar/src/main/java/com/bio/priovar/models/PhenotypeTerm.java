@@ -27,6 +27,15 @@ public class PhenotypeTerm {
     private List<String> xrefs;
     private List<String> isAs;
 
+    // override equals method by comparing hpoId
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof PhenotypeTerm)) return false;
+        PhenotypeTerm phenotypeTerm = (PhenotypeTerm) obj;
+        return phenotypeTerm.getHpoId().equals(this.hpoId);
+    }
+
     // create a sample PhenotypeTerm object in comments as a JSON object
     // {
     //     "hpoId": "HP:0000001",
