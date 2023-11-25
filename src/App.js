@@ -5,6 +5,7 @@ import WelcomePage from "./components/WelcomePage";
 import Team from "./components/Team";
 import Contact from "./components/Contact";
 import Appbar from './components/Appbar';
+import PrioVar from './components/PrioVar';
 import React   from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -30,6 +31,7 @@ function App() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/contact-us" element={<Contact />} />
+            <Route path="/priovar" element={<PrioVar/>} />
           </Routes>
         </AnimatePresence>
         </motion.div>
