@@ -14,14 +14,16 @@ public class PatientService {
     private final MedicalCenterRepository medicalCenterRepository;
     private final VariantRepository variantRepository;
     private final ClinicianRepository clinicianRepository;
+    private final PhenotypeTermRepository phenotypeTermRepository;
 
     @Autowired
-    public PatientService(PatientRepository patientRepository, DiseaseRepository diseaseRepository, MedicalCenterRepository medicalCenterRepository, VariantRepository variantRepository, ClinicianRepository clinicianRepository) {
+    public PatientService(PatientRepository patientRepository, DiseaseRepository diseaseRepository, MedicalCenterRepository medicalCenterRepository, VariantRepository variantRepository, ClinicianRepository clinicianRepository, PhenotypeTermRepository phenotypeTermRepository) {
         this.patientRepository = patientRepository;
         this.diseaseRepository = diseaseRepository;
         this.medicalCenterRepository = medicalCenterRepository;
         this.variantRepository = variantRepository;
         this.clinicianRepository = clinicianRepository;
+        this.phenotypeTermRepository = phenotypeTermRepository;
     }
 
     public String addPatient(Patient patient) {
@@ -138,5 +140,38 @@ public class PatientService {
         patient.setMedicalCenter(medicalCenter);
         patientRepository.save(patient);
         return "Patient added successfully";
+    }
+
+    public List<Patient> getPatientsByClinicianId(Long clinicianId) {
+        Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
+
+        if ( clinician == null ) {
+            return null;
+        }
+
+        return clinician.getPatients();
+    }
+
+    public String addPhenotypeTermToPatient(Long patientId, Long phenotypeTermId) {
+        PhenotypeTerm phenotypeTerm = phenotypeTermRepository.findById(phenotypeTermId).orElse(null);
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+
+        if ( phenotypeTerm == null ) {
+            return "Phenotype term with id " + phenotypeTermId + " does not exist";
+        }
+
+        if ( patient == null ) {
+            return "Patient with id " + patientId + " does not exist";
+        }
+
+        // add the phenotypeTerm to the list of the patient if list is not empty, otherwise create a new list
+        if ( patient.getPhenotypeTerms() != null ) {
+            patient.getPhenotypeTerms().add(phenotypeTerm);
+        } else {
+            patient.setPhenotypeTerms(List.of(phenotypeTerm));
+        }
+
+        patientRepository.save(patient);
+        return "Phenotype term added to patient successfully";
     }
 }
