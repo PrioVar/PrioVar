@@ -62,6 +62,7 @@ const Appbar = () => {
             <NavItem to="/reports" label="Reports"  style={{ fontWeight: 'bold' }}/>
             <NavItem to="/resources" label="Resources Used"  style={{ fontWeight: 'bold' }}/>
             <NavItem to="/contact-us" label="Contact Us"  style={{ fontWeight: 'bold' }}/>
+            <NavItem to="/priovar" label="PrioVar"  style={{ fontWeight: 'bold' }}/>
             {
               /* 
               <div style={{ display: 'flex', alignItems: 'center', marginLeft: '0.5rem', fontWeight: 'bold' }}>
@@ -79,6 +80,7 @@ const Appbar = () => {
             <NavItem to="/reports" label="Reports"  style={{ fontWeight: 'bold' }}/>
             <NavItem to="/resources" label="Resources Used"  style={{ fontWeight: 'bold' }}/>
             <NavItem to="/contact-us" label="Contact Us"  style={{ fontWeight: 'bold' }}/>
+            <NavItem to="/priovar" label="PrioVar"  style={{ fontWeight: 'bold' }}/>
             {
               /*
                 <NavItem style = {{ className:'ml-auto' }}>
