@@ -10,12 +10,11 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Getter
 @Setter
 @NoArgsConstructor
-@Node("MedicalCenter")
-public class MedicalCenter {
-
+@Node("Admin")
+public class Admin {
     @Id
     @GeneratedValue
     private Long id;
 
-    private String name;
+    private String email;
 }
