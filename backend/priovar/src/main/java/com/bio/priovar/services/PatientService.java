@@ -1,12 +1,7 @@
 package com.bio.priovar.services;
 
-import com.bio.priovar.models.Disease;
-import com.bio.priovar.models.Patient;
-import com.bio.priovar.models.Variant;
-import com.bio.priovar.repositories.DiseaseRepository;
-import com.bio.priovar.repositories.MedicalCenterRepository;
-import com.bio.priovar.repositories.PatientRepository;
-import com.bio.priovar.repositories.VariantRepository;
+import com.bio.priovar.models.*;
+import com.bio.priovar.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +13,15 @@ public class PatientService {
     private final DiseaseRepository diseaseRepository;
     private final MedicalCenterRepository medicalCenterRepository;
     private final VariantRepository variantRepository;
+    private final ClinicianRepository clinicianRepository;
 
     @Autowired
-    public PatientService(PatientRepository patientRepository, DiseaseRepository diseaseRepository, MedicalCenterRepository medicalCenterRepository, VariantRepository variantRepository) {
+    public PatientService(PatientRepository patientRepository, DiseaseRepository diseaseRepository, MedicalCenterRepository medicalCenterRepository, VariantRepository variantRepository, ClinicianRepository clinicianRepository) {
         this.patientRepository = patientRepository;
         this.diseaseRepository = diseaseRepository;
         this.medicalCenterRepository = medicalCenterRepository;
         this.variantRepository = variantRepository;
+        this.clinicianRepository = clinicianRepository;
     }
 
     public String addPatient(Patient patient) {
@@ -105,5 +102,41 @@ public class PatientService {
 
         patientRepository.save(patient);
         return "Variant added to patient successfully";
+    }
+
+    public String addPatientToClinician(Patient patient, Long clinicianId) {
+        if ( patient.getDisease() != null ) {
+            Long diseaseId = patient.getDisease().getId();
+            patient.setDisease(diseaseRepository.findById(diseaseId).orElse(null));
+        }
+
+        if ( patient.getMedicalCenter() == null ) {
+            // return an error
+            return "Medical Center is required";
+        }
+        Long medicalCenterId = patient.getMedicalCenter().getId();
+        MedicalCenter medicalCenter = medicalCenterRepository.findById(medicalCenterId).orElse(null);
+
+        if ( medicalCenter == null ) {
+            return "Medical Center with id " + medicalCenterId + " does not exist";
+        }
+
+        Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
+
+        if ( clinician == null ) {
+            return "Clinician with id " + clinicianId + " does not exist";
+        }
+
+        // add the patient to the list of the clinician if list is not empty, otherwise create a new list
+        if ( clinician.getPatients() != null ) {
+            clinician.getPatients().add(patient);
+        } else {
+            clinician.setPatients(List.of(patient));
+        }
+
+        clinicianRepository.save(clinician);
+        patient.setMedicalCenter(medicalCenter);
+        patientRepository.save(patient);
+        return "Patient added successfully";
     }
 }
