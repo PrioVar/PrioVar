@@ -5,6 +5,7 @@ import com.bio.priovar.repositories.PhenotypeTermRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,5 +26,17 @@ public class PhenotypeTermService {
 
         phenotypeTermRepository.save(phenotypeTerm);
         return "Phenotype term added successfully";
+    }
+
+    public List<PhenotypeTerm> getAllPhenotypeTerms() {
+        return phenotypeTermRepository.findAll();
+    }
+
+    public PhenotypeTerm getPhenotypeTermById(Long id) {
+        return phenotypeTermRepository.findById(id).orElse(null);
+    }
+
+    public PhenotypeTerm getPhenotypeTermByHpoId(String hpoId) {
+        return phenotypeTermRepository.findPhenotypeTermByHpoId(hpoId).orElse(null);
     }
 }

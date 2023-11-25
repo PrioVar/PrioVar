@@ -32,4 +32,7 @@ public class Patient {
 
     @Relationship(type = "HAS_VARIANT", direction = Relationship.Direction.OUTGOING)
     private List<Variant> variants;
+
+    @Relationship(type = "HAS_PHENOTYPE_TERM", direction = Relationship.Direction.OUTGOING)
+    private List<PhenotypeTerm> phenotypeTerms;
 }

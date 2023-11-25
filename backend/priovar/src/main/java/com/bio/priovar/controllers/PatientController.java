@@ -40,6 +40,11 @@ public class PatientController {
         return patientService.getPatientsByMedicalCenterId(medicalCenterId);
     }
 
+    @GetMapping("/byClinician/{clinicianId}")
+    public List<Patient> getPatientsByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
+        return patientService.getPatientsByClinicianId(clinicianId);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addPatient(@RequestBody Patient patient) {
         return new ResponseEntity<>(patientService.addPatient(patient), patient.getMedicalCenter() == null ? org.springframework.http.HttpStatus.BAD_REQUEST : org.springframework.http.HttpStatus.OK);
@@ -54,6 +59,12 @@ public class PatientController {
     @PostMapping("/{patientId}/addDisease/{diseaseId}")
     public ResponseEntity<String> addDiseaseToPatient(@PathVariable("patientId") Long patientId, @PathVariable("diseaseId") Long diseaseId) {
         return new ResponseEntity<>(patientService.addDiseaseToPatient(patientId, diseaseId), org.springframework.http.HttpStatus.OK);
+    }
+
+    // add phenotypeTerm to the patient
+    @PostMapping("/{patientId}/addPhenotypeTerm/{phenotypeTermId}")
+    public ResponseEntity<String> addPhenotypeTermToPatient(@PathVariable("patientId") Long patientId, @PathVariable("phenotypeTermId") Long phenotypeTermId) {
+        return new ResponseEntity<>(patientService.addPhenotypeTermToPatient(patientId, phenotypeTermId), org.springframework.http.HttpStatus.OK);
     }
 
     @PostMapping("/{patientId}/addVariant/{variantId}")
