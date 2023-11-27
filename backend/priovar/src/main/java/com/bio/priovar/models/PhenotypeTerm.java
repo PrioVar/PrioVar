@@ -3,10 +3,9 @@ package com.bio.priovar.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-
+import org.springframework.data.neo4j.core.schema.Relationship;
 import java.util.List;
 
 @Getter
@@ -15,17 +14,25 @@ import java.util.List;
 @Node("PhenotypeTerm")
 public class PhenotypeTerm {
     @Id
-    @GeneratedValue
     private Long id;
-
-    private String hpoId;
-    private String name;
-    private List<String> altIds;
+    private String name;//label
+    //private List<String> altIds;
     private String definition;
     private List<String> synonyms;
     private String comment;
     private List<String> xrefs;
-    private List<String> isAs;
+
+    //phenotypes are a directed acyclic graph
+     @Relationship(type = "IS_A", direction = Relationship.Direction.OUTGOING)
+     private List<PhenotypeTerm> children;
+
+    // gene associations
+    @Relationship(type = "ASSOCIATED_WITH_GENE", direction = Relationship.Direction.OUTGOING)
+    private List<Gene> genes;
+
+    // disease associations
+    @Relationship(type = "ASSOCIATED_WITH_GENE", direction = Relationship.Direction.OUTGOING)
+    private List<Disease> diseases;
 
     // override equals method by comparing hpoId
     @Override
@@ -33,7 +40,13 @@ public class PhenotypeTerm {
         if (obj == this) return true;
         if (!(obj instanceof PhenotypeTerm)) return false;
         PhenotypeTerm phenotypeTerm = (PhenotypeTerm) obj;
-        return phenotypeTerm.getHpoId().equals(this.hpoId);
+        return phenotypeTerm.id == this.id;
+    }
+
+    //to do
+    public String getLink() {
+        return "https://hpo.jax.org/app/browse/term/";
+        //http://purl.obolibrary.org/obo/HP_
     }
 
     // create a sample PhenotypeTerm object in comments as a JSON object

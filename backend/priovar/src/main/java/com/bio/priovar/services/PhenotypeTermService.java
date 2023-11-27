@@ -18,10 +18,10 @@ public class PhenotypeTermService {
     }
 
     public String addPhenotypeTerm(PhenotypeTerm phenotypeTerm) {
-        Optional<PhenotypeTerm> phenotypeTermOptional = phenotypeTermRepository.findPhenotypeTermByHpoId(phenotypeTerm.getHpoId());
+        Optional<PhenotypeTerm> phenotypeTermOptional = phenotypeTermRepository.findPhenotypeTermById((long) phenotypeTerm.getId());
 
         if ( phenotypeTermOptional.isPresent() ) {
-            return "HPO Term with ID: " + phenotypeTerm.getHpoId() + " already exists";
+            return "HPO Term with ID: " + phenotypeTerm.getId() + " already exists";
         }
 
         phenotypeTermRepository.save(phenotypeTerm);
@@ -36,7 +36,7 @@ public class PhenotypeTermService {
         return phenotypeTermRepository.findById(id).orElse(null);
     }
 
-    public PhenotypeTerm getPhenotypeTermByHpoId(String hpoId) {
-        return phenotypeTermRepository.findPhenotypeTermByHpoId(hpoId).orElse(null);
-    }
+    /**public PhenotypeTerm getPhenotypeTermByHpoId(String hpoId) {
+        return phenotypeTermRepository.findPhenotypeTermById(Long.valueOf(hpoId)).orElse(null);
+    }*/
 }
