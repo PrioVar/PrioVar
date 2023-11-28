@@ -1,0 +1,154 @@
+{
+  "HIGH": [
+    {
+      "label": "frameshift",
+      "value": "frameshift_variant"
+    },
+    {
+      "label": "splice acceptor",
+      "value": "splice_acceptor_variant"
+    },
+    {
+      "label": "splice donor",
+      "value": "splice_donor_variant"
+    },
+    {
+      "label": "start lost",
+      "value": "start_lost"
+    },
+    {
+      "label": "stop gained",
+      "value": "stop_gained"
+    },
+    {
+      "label": "stop lost",
+      "value": "stop_lost"
+    },
+    {
+      "label": "transcript ablation",
+      "value": "transcript_ablation"
+    },
+    {
+      "label": "transcript amplification",
+      "value": "transcript_amplification"
+    }
+  ],
+  "MODERATE": [
+    {
+      "value": "inframe_deletion",
+      "label": "inframe deletion"
+    },
+    {
+      "value": "inframe_insertion",
+      "label": "inframe insertion"
+    },
+    {
+      "value": "missense_variant",
+      "label": "missense"
+    },
+    {
+      "value": "protein_altering_variant",
+      "label": "protein altering"
+    },
+    {
+      "value": "regulatory_region_ablation",
+      "label": "regulatory region ablation"
+    }
+  ],
+  "LOW": [
+    {
+      "value": "incomplete_terminal_codon_variant",
+      "label": "incomplete terminal codon"
+    },
+    {
+      "value": "splice_region_variant",
+      "label": "splice region"
+    },
+    {
+      "value": "start_retained_variant",
+      "label": "start retained"
+    },
+    {
+      "value": "stop_retained_variant",
+      "label": "stop retained"
+    },
+    {
+      "value": "synonymous_variant",
+      "label": "synonymous"
+    }
+  ],
+  "MODIFIER": [
+    {
+      "value": "3_prime_UTR_variant",
+      "label": "3 prime UTR"
+    },
+    {
+      "value": "5_prime_UTR_variant",
+      "label": "5 prime UTR"
+    },
+    {
+      "value": "NMD_transcript_variant",
+      "label": "NMD transcript"
+    },
+    {
+      "value": "TFBS_ablation",
+      "label": "TFBS ablation"
+    },
+    {
+      "value": "TFBS_amplification",
+      "label": "TFBS amplification"
+    },
+    {
+      "value": "TF_binding_site_variant",
+      "label": "TF binding site"
+    },
+    {
+      "value": "coding_sequence_variant",
+      "label": "coding sequence"
+    },
+    {
+      "value": "downstream_gene_variant",
+      "label": "downstream gene"
+    },
+    {
+      "value": "feature_elongation",
+      "label": "feature elongation"
+    },
+    {
+      "value": "feature_truncation",
+      "label": "feature truncation"
+    },
+    {
+      "value": "intergenic_variant",
+      "label": "intergenic"
+    },
+    {
+      "value": "intron_variant",
+      "label": "intron"
+    },
+    {
+      "value": "mature_miRNA_variant",
+      "label": "mature miRNA"
+    },
+    {
+      "value": "non_coding_transcript_exon_variant",
+      "label": "non coding transcript exon"
+    },
+    {
+      "value": "non_coding_transcript_variant",
+      "label": "non coding transcript"
+    },
+    {
+      "value": "regulatory_region_amplification",
+      "label": "regulatory region amplification"
+    },
+    {
+      "value": "regulatory_region_variant",
+      "label": "regulatory region"
+    },
+    {
+      "value": "upstream_gene_variant",
+      "label": "upstream gene"
+    }
+  ]
+}
