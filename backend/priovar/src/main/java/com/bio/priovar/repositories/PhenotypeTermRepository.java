@@ -10,6 +10,10 @@ import java.util.Optional;
 @Repository
 public interface PhenotypeTermRepository extends Neo4jRepository<PhenotypeTerm, Long> {
     // find a phenotype term by its HPO ID
-    @Query("MATCH (p:PhenotypeTerm) WHERE p.hpoId = $hpoId RETURN p")
-    Optional<PhenotypeTerm> findPhenotypeTermByHpoId(String hpoId);
+    //@Query("MATCH (p:PhenotypeTerm) WHERE p.hpoId = $hpoId RETURN p")
+    //Optional<PhenotypeTerm> findPhenotypeTermByHpoId(String hpoId);
+
+    // find a phenotype term by its ID
+    @Query("MATCH (p:PhenotypeTerm) WHERE p.id = $id RETURN p")
+    Optional<PhenotypeTerm> findPhenotypeTermById(Long id);
 }

@@ -24,10 +24,10 @@ public class PhenotypeTermController {
         return phenotypeTermService.getPhenotypeTermById(id);
     }
 
-    @GetMapping("/byHpoId/{hpoId}")
+    /**@GetMapping("/byHpoId/{hpoId}")
     public PhenotypeTerm getPhenotypeTermByHpoId(@PathVariable("hpoId") String hpoId) {
         return phenotypeTermService.getPhenotypeTermByHpoId(hpoId);
-    }
+    }*/
 
     @GetMapping()
     public List<PhenotypeTerm> getAllPhenotypeTerms() {
