@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from helpers.hpo import read_hpo_from_json, process_nodes, process_edges, save_nodes, save_edges
+from helpers.clinvar import read_clinvar, save_clinvar
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +19,13 @@ def start_loading_data():
 
 
     return "Data loading finished"
+
+@app.route('/load-clinvar', methods=['GET'])
+def get_clinvar():
+    df = read_clinvar()
+    save_clinvar(df)
+
+    return "Variants from ClinVar successfully loaded"
 
 
 if __name__ == '__main__':
