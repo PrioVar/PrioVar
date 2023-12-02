@@ -14,5 +14,5 @@ def save_clinvar(df: pandas.DataFrame):
     driver = GraphDatabase.driver(uri, auth=(username, password))
     with driver.session() as session:
         for index, row in df.iterrows():
-            session.run("CREATE (a:Variant {id: $id, chrom: $chrom, pos: $pos, ref: $ref, alt: $alt, qual: $qual, filter: $filter, info: $info})",
-                        id=row['ID'], chrom=row['CHROM'], pos=row['POS'], ref=row['REF'], alt=row['ALT'], qual=row['QUAL'], filter=row['FILTER'], info=row['INFO'])
+            session.run("CREATE (a:Variant {id: $id, chrom: $chrom, pos: $pos, ref: $ref, alt: $alt, qual: $qual, filter: $filter, info: $info, isClinVar: $isClinVar})",
+                        id=row['ID'], chrom=row['CHROM'], pos=row['POS'], ref=row['REF'], alt=row['ALT'], qual=row['QUAL'], filter=row['FILTER'], info=row['INFO'], isClinVar=True)
