@@ -3,14 +3,10 @@ import json
 from neo4j import GraphDatabase
 from flask_cors import CORS
 
+from config import uri, username, password
+
 app = Flask(__name__)
 CORS(app)
-
-uri = "neo4j://localhost:7687"
-username = "neo4j"
-password = "priovar."
-
-
 
 
 
