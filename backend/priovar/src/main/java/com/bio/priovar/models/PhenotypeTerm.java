@@ -31,10 +31,11 @@ public class PhenotypeTerm {
     private List<Gene> genes;
 
     // disease associations
-    @Relationship(type = "ASSOCIATED_WITH_GENE", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "ASSOCIATED_WITH_DISEASE", direction = Relationship.Direction.OUTGOING)
     private List<Disease> diseases;
 
-    // override equals method by comparing hpoId
+
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
