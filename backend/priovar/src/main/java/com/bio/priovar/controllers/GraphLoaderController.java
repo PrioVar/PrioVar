@@ -17,7 +17,10 @@ public class GraphLoaderController {
 
     @GetMapping("/load-data")
     public void loadData() {
-        dataLoaderService.startDataLoading();
+        dataLoaderService.startHPODataLoading();
+        System.out.println("HPO data loaded");
+        dataLoaderService.startDiseaseDataLoading();
+        System.out.println("Disease data loaded");
     }
 }
 
