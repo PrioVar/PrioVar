@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 from helpers.hpo import read_hpo_from_json, process_nodes, process_edges, save_nodes, save_edges
 from helpers.clinvar import read_clinvar, save_clinvar
+from helpers.hpo_annotations import initiate_disease_database
 
 app = Flask(__name__)
 CORS(app)
@@ -27,7 +28,13 @@ def get_clinvar():
 
     return "Variants from ClinVar successfully loaded"
 
+@app.route('/load-diseases', methods=['GET'])
+def get_diseases():
+    initiate_disease_database()
 
+    return "Diseases successfully loaded"
+
+    
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
 
