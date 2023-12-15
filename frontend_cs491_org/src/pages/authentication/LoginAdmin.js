@@ -7,7 +7,7 @@ import { LoadingButton } from '@material-ui/lab'
 // components
 import Page from '../../components/Page'
 import LoginHealthCenter from './LoginHealthCenter'
-import LoginAdmin from './LoginAdmin'
+import Login from './Login'
 import {Link} from '@material-ui/core'
 // hooks
 // layouts
@@ -43,7 +43,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-export default function Login() {
+export default function LoginAdmin() {
   return (
     <RootStyle title="Login | Priovar">
       <AuthLayout />
@@ -68,13 +68,13 @@ export default function Login() {
             </Box>
           </Stack>
           <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
-            <Button size="large" color='success' variant="contained" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 5 }}>
+          <Button size="large" color="inherit"  variant="contained" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 5 }}>
                 Clinician Portal
             </Button>
-            <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginHealthCenter} sx={{ mt: 5 }}>
+            <Button size="large" color="inherit"  variant="contained" component={RouterLink} to={PATH_AUTH.loginHealthCenter} sx={{ mt: 5 }}>
                 Health Center Portal
             </Button>
-            <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginAdmin} sx={{ mt: 5 }}>
+            <Button size="large" color='success' variant="contained" component={RouterLink} to={PATH_AUTH.loginAdmin} sx={{ mt: 5 }}>
                 Admin Portal
             </Button>
           </Stack>

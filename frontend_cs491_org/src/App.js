@@ -1,12 +1,14 @@
 //
 
 // routes
+import Login from './pages/authentication/Login'
+import LoginHealthCenter from './pages/authentication/LoginHealthCenter'
+
 import { QueryClient, QueryClientProvider } from 'react-query'
 import Settings from 'src/components/settings'
 import GoogleAnalytics from './components/GoogleAnalytics'
 import LoadingScreen from './components/LoadingScreen'
 import NotistackProvider from './components/NotistackProvider'
-
 // components
 // hooks
 import useAuth from './hooks/useAuth'
