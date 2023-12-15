@@ -22,4 +22,6 @@ public class MedicalCenter {
     private String phone;
     private String email;
     private String password;
+    private Subscription subscription;
+    private int remainingAnalyses;
 }
