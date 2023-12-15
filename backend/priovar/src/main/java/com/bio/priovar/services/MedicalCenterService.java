@@ -50,7 +50,7 @@ public class MedicalCenterService {
         }
 
         medicalCenter.setSubscription(subscription);
-        medicalCenter.setRemainingAnalyses(subscription.getAnalyses());
+        medicalCenter.setRemainingAnalyses(subscription.getAnalyses() + medicalCenter.getRemainingAnalyses());
         medicalCenterRepository.save(medicalCenter);
         return "Subscription added successfully";
     }
