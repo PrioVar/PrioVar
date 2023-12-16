@@ -3,7 +3,7 @@ import { Navigate, useLocation, useRoutes } from 'react-router-dom'
 import LogoOnlyLayout from 'src/layouts/LogoOnlyLayout'
 
 // import RoleBasedGuard from '../guards/RoleBasedGuard';
-import Settings from '../components/settings'
+import SideNav from 'src/components/sidenav'
 // components
 import LoadingScreen from '../components/LoadingScreen'
 import AuthGuard from '../guards/AuthGuard'
@@ -92,6 +92,7 @@ export default function Router() {
       path: 'libra',
       element: (
         <AuthGuard>
+          <SideNav />
           <DashboardLayout />
         </AuthGuard>
       ),

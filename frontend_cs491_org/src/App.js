@@ -6,7 +6,6 @@ import LoginHealthCenter from './pages/authentication/LoginHealthCenter'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 import Settings from 'src/components/settings'
-import SideNav from 'src/components/sidenav'
 import GoogleAnalytics from './components/GoogleAnalytics'
 import LoadingScreen from './components/LoadingScreen'
 import NotistackProvider from './components/NotistackProvider'
@@ -36,7 +35,6 @@ export default function App() {
   return (
     <ThemeConfig>
       <NotistackProvider>
-        <SideNav />
         <Settings />
         {/* <GoogleAnalytics /> */}
         <QueryClientProvider client={queryClient}>{isInitialized ? <Router /> : <LoadingScreen />}</QueryClientProvider>

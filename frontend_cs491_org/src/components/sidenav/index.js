@@ -3,16 +3,17 @@ import { Icon } from '@iconify/react'
 import closeFill from '@iconify/icons-eva/close-fill'
 import options2Fill from '@iconify/icons-eva/options-2-fill'
 // material
-import { Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@material-ui/core'
+import { Box, Button, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@material-ui/core'
 //
 import Scrollbar from '../Scrollbar'
 import { MIconButton } from '../@material-extend'
-import SideNavMode from './SideNavMode'
 import SideNavColor from './SideNavColor'
 import SideNavStretch from './SideNavStretch'
 import SideNavDirection from './SideNavDirection'
-import SideNavFullscreen from './SideNavFullscreen'
 
+
+import { PATH_AUTH } from '../../routes/paths'
+import { Link as RouterLink } from 'react-router-dom'
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 260
@@ -101,9 +102,20 @@ export default function SideNav() {
 
           <Scrollbar sx={{ height: 1 }}>
             <Stack spacing={4} sx={{ pt: 3, px: 3, pb: 15 }}>
-              <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Mode</Typography>
-                <SideNavMode />
+              <Stack direction="column" spacing={1.5}>
+                
+              <Button size="large" color='success' variant="contained" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 5 }}>
+                Dashboard
+              </Button>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginHealthCenter} sx={{ mt: 5 }}>
+                  My Patients
+              </Button>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginAdmin} sx={{ mt: 5 }}>
+                  Clinics Patients
+              </Button>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginAdmin} sx={{ mt: 5 }}>
+                  Subscription Plans
+              </Button>
               </Stack>
 
               {/*              <Stack spacing={1.5}>
@@ -120,8 +132,6 @@ export default function SideNav() {
                 <Typography variant="subtitle2">Stretch</Typography>
                 <SettingStretch />
               </Stack>*/}
-
-              <SideNavFullscreen />
             </Stack>
           </Scrollbar>
         </Paper>
