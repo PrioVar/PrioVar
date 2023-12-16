@@ -4,7 +4,8 @@ import { Container, Grid } from '@material-ui/core'
 
 import FilesTable from './FilesTable'
 import UploadVCF from './UploadVCF'
-import UploadFastq from './UploadFastq'
+import VariantDashboard from './VariantDashboard'
+
 
 // TODO: UploadVCF and UploadFastq should be abstracted into a single component
 // Likewise for FilesTable
@@ -17,7 +18,7 @@ const UploadView = function () {
           <UploadVCF />
         </Grid>
         <Grid item xs={6}>
-          <UploadFastq />
+          <VariantDashboard />
         </Grid>
 
         <Grid item xs={12}>

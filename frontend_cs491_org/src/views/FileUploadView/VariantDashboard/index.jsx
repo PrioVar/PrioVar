@@ -46,9 +46,8 @@ import NavbarRoutes from '../VariantsView/NavbarRoutes'
 import GeneCov from './GeneCov'
 
 // api utils
-import { updateTrio, useHpo } from '../../api/vcf'
-import { startJobsForVcfFile } from '../../api/vcf/job'
-import { startJobsForFastqFile } from '../../api/fastq'
+import { updateTrio, useHpo } from '../../../api/vcf'
+import { startJobsForVcfFile } from '../../../api/vcf/job'
 
 const Loading = function () {
   return (
@@ -305,7 +304,7 @@ const ManageHpo = function ({ fileId }) {
   return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
 }
 
-const TABS = ['Analysis']
+const TABS = ['Sample Details']
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -400,9 +399,9 @@ const VariantDasboard = () => {
     setAnalysisOpen(false)
     if (activeFileCopy.vcf_id) {
       await startJobsForVcfFile(activeFileCopy.vcf_id)
-    } else if (activeFileCopy.fastq_pair_id) {
+    } /*else if (activeFileCopy.fastq_pair_id) {
       await startJobsForFastqFile(activeFileCopy.fastq_pair_id, { cnv, snp, alignment })
-    }
+    }*/
     await filesApi.refresh()
   }
 
@@ -417,12 +416,12 @@ const VariantDasboard = () => {
         key={'create-analysis-dialog' + fileId}
       />
       <Page title="Variant Dashboard | Genesus">
-        {ReactDOM.createPortal(
+        {/*ReactDOM.createPortal(
           <Stack direction="row" spacing={2}>
             <NavbarRoutes navConfig={DASHBOARD_CONFIG} />
           </Stack>,
           document.getElementById('custom-toolbar-container'),
-        )}
+        )*/}
         {fileDetails ? (
           <Box flexDirection="column" spacing={3} mt={2}>
             <Typography textAlign="center" variant="h4">
@@ -437,19 +436,122 @@ const VariantDasboard = () => {
             >
               {sampleName && TABS.map((table) => <VarTab label={table} />)}
             </Tabs>
-            
-              <Stack key={`dashboard-tabPanel-${2}`}>
-                <Grid item xs={12}>
-                  {fileDetails && (
-                    <AnalysesTable
-                      fileId={fileDetails?.vcf_id || fileDetails?.fastq_pair_id || fileDetails?.fastq_file_id}
-                      sampleName={fileDetails.sample_name}
-                      data={fileDetails?.analyses?.list ?? []}
-                      onCreate={() => setAnalysisOpen(true)}
-                    />
-                  )}
+
+              <Stack key={`dashboard-tabPanel-${1}`}>
+                <Grid item sx={{ minWidth: '65%', flexGrow: 1 }}>
+                  <CardHeader title="Symptoms (HPO)" titleTypographyProps={{ variant: 'subtitle1' }} />
+                  <CardContent>
+                    <ManageHpo fileId={fileId} sampleName={sampleName} />
+                  </CardContent>
                 </Grid>
+                <Grid item container direction="row" xs={12}>
+                  <Grid item xs={6}>
+                    <CardHeader title="Parents" titleTypographyProps={{ variant: 'subtitle1' }} />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <CardHeader
+                      title="Clinical History"
+                      titleTypographyProps={{ variant: 'subtitle1' }}
+                      sx={{ paddingLeft: 0 }}
+                    />
+                  </Grid>
+                </Grid>
+                {fileDetails?.details && (
+                  <>
+                    <Grid item container direction="row" xs={12}>
+                      <Grid container item xs={6} sx={{ flexGrow: 1 }}>
+                        <Grid item xs={12}>
+                          <CardContent>
+                            {fileDetails && (
+                              <TrioSelector
+                                trio={fileDetails?.trio ? fileDetails.trio : null}
+                                options={trioOptions}
+                                samples={sampleName}
+                                fileId={fileId}
+                              />
+                            )}
+                          </CardContent>
+                        </Grid>
+                        <Grid item xs={12} sx={{ flexGrow: 1 }}>
+                          <CardHeader
+                            title="Details"
+                            titleTypographyProps={{ variant: 'subtitle1' }}
+                            sx={{ paddingTop: 0 }}
+                          />
+                        </Grid>
+                        <Grid container direction={'row'} item xs={12} height={'auto'}>
+                          <Grid container item xs={6} direction={'row'}>
+                            <Grid item xs={12}>
+                              <CardContent>
+                                <FormControl fullWidth>
+                                  <InputLabel id="select-age">Age</InputLabel>
+                                  <Input type="number" value={age} onChange={handleAgeChange}></Input>
+                                </FormControl>
+                              </CardContent>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <CardContent>
+                                <FormControl fullWidth>
+                                  <InputLabel id="select-start-age">Symptoms start age</InputLabel>
+                                  <Input type="number" value={startAge} onChange={handleStartAgeChange}></Input>
+                                </FormControl>
+                              </CardContent>
+                            </Grid>
+                          </Grid>
+                          <Grid container item xs={6} direction={'row'}>
+                            <Grid xs={12} item>
+                              <CardContent>
+                                <FormControl fullWidth>
+                                  <InputLabel id="select-gender">Gender</InputLabel>
+                                  <Select
+                                    labelId="select-gender"
+                                    value={gender}
+                                    onChange={handleGenderChange}
+                                    label="Gender"
+                                  >
+                                    <MenuItem value={'M'}>Male</MenuItem>
+                                    <MenuItem value={'F'}>Female</MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </CardContent>
+                            </Grid>
+                            {/*                     <Grid xs={12} item container direction="row" alignItems="center" justifyContent="space-between">
+                      <InputLabel htmlFor="select-is-progressin">Is symptoms progressing?</InputLabel>
+                      <Checkbox
+                        id="select-is-progressin"
+                        checked={is_progressing}
+                        onClick={handleIsProgressingChange}
+                      ></Checkbox>
+                    </Grid>
+                    <Grid xs={12} item container direction="row" alignItems="center" justifyContent="space-between">
+                      <InputLabel htmlFor="select-is-inbred">Is there any inbred?</InputLabel>
+                      <Checkbox id="select-is-inbred" checked={is_inbred} onClick={handleIsInbredChange}></Checkbox>
+                    </Grid> */}
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <CardContent sx={{ height: '100%', paddingLeft: 0 }}>
+                          <TextField
+                            fullWidth
+                            id="details-notes"
+                            value={notes}
+                            onChange={handleSetNotes}
+                            multiline
+                            rows={11}
+                          ></TextField>
+                        </CardContent>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12} sx={{ flexGrow: 1 }} alignSelf="end" mr={3}>
+                      <Button color="primary" variant="contained" onClick={handleSave}>
+                        Save Details
+                      </Button>
+                    </Grid>
+                  </>
+                )}
               </Stack>
+
           </Box>
         ) : (
           <Loading />

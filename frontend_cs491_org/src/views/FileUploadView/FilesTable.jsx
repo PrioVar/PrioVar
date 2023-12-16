@@ -232,7 +232,7 @@ const SamplesView = function () {
     },
     {
       name: 'finished_at',
-      label: 'Is Done',
+      label: 'Completed',
       options: {
         filter: true,
         sort: false,
