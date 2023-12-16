@@ -9,7 +9,7 @@ const JobStateStatus = function ({ status = 'PENDING', isAnalysis = false }) {
     DONE: { color: 'success', label: 'Analyzed' },
     FAILED: { color: 'error', label: 'Failed' },
     UNKNOWN: { color: 'error', label: 'Unknown' },
-    WAITING: { color: 'warning', label: 'Annotation Required' },
+    WAITING: { color: 'warning', label: 'Phenotype Data Required' },
     ANNO_PENDING: { color: 'secondary', label: 'Annotation In Queue' },
     ANNO_RUNNING: { color: 'warning', label: 'Annotation Processing' },
     ANNO_FAILED: { color: 'error', label: 'Annotation Failed' },

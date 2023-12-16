@@ -7,7 +7,7 @@ import { useFiles } from '../../api/file/list'
 
 let cancelTokenSource = null
 
-const UploadVCF = function () {
+const UploadVCF = function ({ onUploadComplete }) {
   const [fileQueue, setFileQueue] = useState([])
   const [state, setState] = useState('IDLE')
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -51,12 +51,13 @@ const UploadVCF = function () {
         } else {
           // Done uploading all the files
           setState('IDLE')
+          onUploadComplete(true);
         }
       }
     }
 
     uploadFilesStateMachine()
-  }, [state, fileQueue])
+  }, [state, fileQueue, onUploadComplete])
 
   return (
     <Card sx={{ mb: 3 }}>
