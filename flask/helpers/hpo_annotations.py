@@ -21,12 +21,12 @@ def read_and_create_diseases_from_hpoa(session):
         for row in reader:
             # Create disease node if not exists
             create_disease_query = (
-                "MERGE (d:Disease {name: $diseaseName}) "
+                "MERGE (d:Disease {diseaseName: $diseaseName}) "
             )
             session.run(create_disease_query,  diseaseName=row['disease_name'])
             # Create relationship with phenotype term
             create_relationship_query = (
-                "MATCH (d:Disease {name: $diseaseName}), (p:PhenotypeTerm {id: $hpo_id}) "
+                "MATCH (d:Disease {diseaseName: $diseaseName}), (p:PhenotypeTerm {id: $hpo_id}) "
                 "MERGE (d)-[r:ASSOCIATED_WITH_PHENOTYPE]->(p) "
                 "SET r.frequency = $frequency, r.databaseId = $databaseId "
             )
