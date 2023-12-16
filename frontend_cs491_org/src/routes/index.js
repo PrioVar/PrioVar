@@ -3,6 +3,7 @@ import { Navigate, useLocation, useRoutes } from 'react-router-dom'
 import LogoOnlyLayout from 'src/layouts/LogoOnlyLayout'
 
 // import RoleBasedGuard from '../guards/RoleBasedGuard';
+import Settings from '../components/settings'
 // components
 import LoadingScreen from '../components/LoadingScreen'
 import AuthGuard from '../guards/AuthGuard'

@@ -7,17 +7,17 @@ import { Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@mate
 //
 import Scrollbar from '../Scrollbar'
 import { MIconButton } from '../@material-extend'
-import SettingMode from './SettingMode'
-import SettingColor from './SettingColor'
-import SettingStretch from './SettingStretch'
-import SettingDirection from './SettingDirection'
-import SettingFullscreen from './SettingFullscreen'
+import SideNavMode from './SideNavMode'
+import SideNavColor from './SideNavColor'
+import SideNavStretch from './SideNavStretch'
+import SideNavDirection from './SideNavDirection'
+import SideNavFullscreen from './SideNavFullscreen'
 
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 260
 
-export default function Settings() {
+export default function SideNav() {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -44,10 +44,10 @@ export default function Settings() {
         sx={{
           top: 12,
           bottom: 12,
-          right: 0,
+          left: 0,
           position: 'fixed',
           zIndex: 2001,
-          ...(open && { right: 12 }), // change this part to make it left aligned? maybe??
+          ...(open && { left: 12 }), // change this part to make it left aligned? maybe??
         }}
       >
         <Box
@@ -55,7 +55,7 @@ export default function Settings() {
             p: 0.5,
             px: '4px',
             mt: -3,
-            left: -44,
+            right: -44,
             top: '50%',
             color: 'grey.800',
             position: 'absolute',
@@ -64,7 +64,7 @@ export default function Settings() {
             boxShadow: (theme) => theme.customShadows.z12,
           }}
         >
-          <Tooltip title="Settings">
+          <Tooltip title="SideNav">
             <MIconButton
               color="inherit"
               onClick={handleToggle}
@@ -92,7 +92,7 @@ export default function Settings() {
           }}
         >
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ py: 2, pr: 1, pl: 2.5 }}>
-            <Typography variant="subtitle1">Settings</Typography>
+            <Typography variant="subtitle1">Navigate</Typography>
             <MIconButton onClick={handleClose}>
               <Icon icon={closeFill} width={20} height={20} />
             </MIconButton>
@@ -103,7 +103,7 @@ export default function Settings() {
             <Stack spacing={4} sx={{ pt: 3, px: 3, pb: 15 }}>
               <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Mode</Typography>
-                <SettingMode />
+                <SideNavMode />
               </Stack>
 
               {/*              <Stack spacing={1.5}>
@@ -121,7 +121,7 @@ export default function Settings() {
                 <SettingStretch />
               </Stack>*/}
 
-              <SettingFullscreen />
+              <SideNavFullscreen />
             </Stack>
           </Scrollbar>
         </Paper>
