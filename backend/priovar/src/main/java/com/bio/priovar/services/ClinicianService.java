@@ -66,4 +66,24 @@ public class ClinicianService {
 
         return ResponseEntity.ok("Login successful");
     }
+
+    public ResponseEntity<String> changePasswordByEmailClinician(String email, String newPass, String oldPass) {
+        Clinician clinician = clinicianRepository.findByEmail(email);
+
+        if ( clinician == null ) {
+            return ResponseEntity.badRequest().body("Clinician with email " + email + " does not exist");
+        }
+
+        if ( !clinician.getPassword().equals(oldPass) ) {
+            return ResponseEntity.badRequest().body("Incorrect password");
+        }
+
+        if ( newPass.equals(oldPass) ) {
+            return ResponseEntity.badRequest().body("New password cannot be same as old password");
+        }
+
+        clinician.setPassword(newPass);
+        clinicianRepository.save(clinician);
+        return ResponseEntity.ok("Password changed successfully");
+    }
 }
