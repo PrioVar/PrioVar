@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClinicianRepository extends Neo4jRepository<Clinician, Long> {
+    Clinician findByEmail(String email);
 }

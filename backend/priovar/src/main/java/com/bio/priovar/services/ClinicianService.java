@@ -5,6 +5,7 @@ import com.bio.priovar.models.MedicalCenter;
 import com.bio.priovar.repositories.ClinicianRepository;
 import com.bio.priovar.repositories.MedicalCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,26 +25,45 @@ public class ClinicianService {
         return clinicianRepository.findAll();
     }
 
-    public String addClinician(Clinician clinician) {
+    public ResponseEntity<String> addClinician(Clinician clinician) {
         MedicalCenter medicalCenter = clinician.getMedicalCenter();
 
         if ( medicalCenter == null ) {
-            return "Medical Center is required";
+            return ResponseEntity.badRequest().body("Medical Center is required");
         }
 
         Long medicalCenterId = medicalCenter.getId();
         medicalCenter = medicalCenterRepository.findById(medicalCenterId).orElse(null);
 
         if ( medicalCenter == null ) {
-            return "Medical Center with id " + medicalCenterId + " does not exist";
+            return ResponseEntity.badRequest().body("Medical Center with id " + medicalCenterId + " does not exist");
+        }
+
+        Clinician clinicianWithSameEmail = clinicianRepository.findByEmail(clinician.getEmail());
+        if ( clinicianWithSameEmail != null ) {
+            return ResponseEntity.badRequest().body("Clinician with email " + clinician.getEmail() + " already exists");
         }
 
         clinician.setMedicalCenter(medicalCenter);
         clinicianRepository.save(clinician);
-        return "Clinician added successfully";
+        return ResponseEntity.ok("Clinician added successfully");
     }
 
     public Clinician getClinicianById(Long id) {
         return clinicianRepository.findById(id).orElse(null);
+    }
+
+    public ResponseEntity<String> loginClinician(String email, String password) {
+        Clinician clinician = clinicianRepository.findByEmail(email);
+
+        if ( clinician == null ) {
+            return ResponseEntity.badRequest().body("Clinician with email " + email + " does not exist");
+        }
+
+        if ( !clinician.getPassword().equals(password) ) {
+            return ResponseEntity.badRequest().body("Incorrect password");
+        }
+
+        return ResponseEntity.ok("Login successful");
     }
 }

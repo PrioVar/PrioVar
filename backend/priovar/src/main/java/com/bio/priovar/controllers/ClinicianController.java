@@ -31,6 +31,11 @@ public class ClinicianController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addClinician(@RequestBody Clinician clinician) {
-        return new ResponseEntity<>(clinicianService.addClinician(clinician), org.springframework.http.HttpStatus.OK);
+        return clinicianService.addClinician(clinician);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginClinician(@RequestParam String email, @RequestParam String password ) {
+        return clinicianService.loginClinician(email,password);
     }
 }
