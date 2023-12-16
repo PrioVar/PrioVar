@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DiseaseRepository extends Neo4jRepository<Disease, Long> {
+    Disease findByDiseaseName(String s);
 }
