@@ -34,6 +34,11 @@ public class MedicalCenterController {
         return medicalCenterService.loginMedicalCenter(email,password);
     }
 
+    @PatchMapping("/changePassword")
+    public ResponseEntity<String> changePasswordMedicalCenter(@RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        return medicalCenterService.changePasswordByEmailMedicalCenter(email,newPass, oldPass);
+    }
+
     @PostMapping("/add")
     public void addMedicalCenter(@RequestBody MedicalCenter medicalCenter) {
         medicalCenterService.addMedicalCenter(medicalCenter);

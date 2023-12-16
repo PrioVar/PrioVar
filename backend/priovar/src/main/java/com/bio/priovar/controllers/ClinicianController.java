@@ -38,4 +38,9 @@ public class ClinicianController {
     public ResponseEntity<String> loginClinician(@RequestParam String email, @RequestParam String password ) {
         return clinicianService.loginClinician(email,password);
     }
+
+    @PatchMapping("/changePassword")
+    public ResponseEntity<String> changePasswordClinician(@RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        return clinicianService.changePasswordByEmailClinician(email,newPass, oldPass);
+    }
 }

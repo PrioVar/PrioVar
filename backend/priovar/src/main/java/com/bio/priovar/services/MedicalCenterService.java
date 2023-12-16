@@ -68,4 +68,23 @@ public class MedicalCenterService {
 
         return ResponseEntity.ok("Login successful");
     }
+
+    public ResponseEntity<String> changePasswordByEmailMedicalCenter(String email, String newPass, String oldPass) {
+        MedicalCenter medicalCenter = medicalCenterRepository.findByEmail(email);
+        if ( medicalCenter == null ) {
+            return ResponseEntity.badRequest().body("Medical Center with email " + email + " does not exist");
+        }
+
+        if ( !medicalCenter.getPassword().equals(oldPass) ) {
+            return ResponseEntity.badRequest().body("Invalid password");
+        }
+
+        if ( newPass.equals(oldPass) ) {
+            return ResponseEntity.badRequest().body("New password cannot be the same as old password");
+        }
+
+        medicalCenter.setPassword(newPass);
+        medicalCenterRepository.save(medicalCenter);
+        return ResponseEntity.ok("Password changed successfully");
+    }
 }
