@@ -55,12 +55,7 @@ const INITIAL_DISPLAY_COLUMNS = [
     keys: ['Phenotypes'],
     label: 'Related Diseases',
     renderCell: ([phenotypes]) => <PhenotypesCell phenotypes={phenotypes} />,
-    width: 250,
-  },
-  {
-    keys: ['GT'],
-    label: 'GT',
-    renderCell: ([gt]) => <GtCell gt={gt} />,
+    width: 450,
     collapse: true,
   },
   {
@@ -72,45 +67,10 @@ const INITIAL_DISPLAY_COLUMNS = [
     collapse: true,
   },
   {
-    keys: ['Impact'],
-    label: 'Impact',
-    renderCell: ([impact]) => <ImpactCell value={impact} />,
-    collapse: true,
-  },
-  {
-    keys: ['HGVS'],
-    label: 'HGVSc',
-    renderCell: ([hgvs]) => (
-      <HgvsCCell
-        value={hgvs
-          .filter(([_, __, hgvsC, ___]) => hgvsC)
-          .map(([isCanonical, consequences, hgvsC, _]) => [isCanonical, consequences, hgvsC])}
-      />
-    ),
-    collapse: true,
-  },
-  {
-    keys: ['DP', 'AD'],
-    label: 'Read Details',
-    renderCell: ([dp, adList]) => <ReadDetailsCell dp={dp} adList={adList} />,
-    collapse: true,
-  },
-
-  {
-    keys: ['Databases', 'CHROM', 'POS'],
-    label: 'Databases',
-    renderCell: ([databases, CHROM, POS]) => <DatabasesCell ids={databases} CHROM={CHROM} POS={POS} />,
-    collapse: true,
-  },
-  {
-    keys: ['HGVS'],
-    label: 'HGVSp',
-    renderCell: ([hgvs]) => (
-      <HgvsPCell
-        value={hgvs
-          .filter(([_, __, ___, hgvsP]) => hgvsP)
-          .map(([isCanonical, consequences, _, hgvsP]) => [isCanonical, consequences, hgvsP])}
-      />
+    keys: ['Priovar Pathogenicity Score'],
+    label: 'Priovar Pathogenicity Score',
+    renderCell: ([libraAf, gnomAdAf, oneKgAf, tvAf, exAcAf]) => (
+      <FrequencyCell libraAf={libraAf} gnomAdAf={gnomAdAf} oneKgAf={oneKgAf} tvAf={tvAf} exAcAf={exAcAf} />
     ),
     collapse: true,
   },

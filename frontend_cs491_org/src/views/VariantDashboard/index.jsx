@@ -146,136 +146,9 @@ const CreateAnalysisDialog = function ({ open, onClose, onClickCreateAnalysis, f
     <Dialog open={open} onClose={onClose} maxWidth={false} PaperProps={{ sx: { width: 600 } }}>
       {title && (
         <>
-          <DialogTitle>Create a new analysis for {title}</DialogTitle>
+          <DialogTitle>Dou you want to start the analysis of {title}?</DialogTitle>
           <DialogContent>
-            <CardHeader title="Sequence" titleTypographyProps={{ variant: 'subtitle1' }} />
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField label="Machine" defaultValue={0} select fullWidth>
-                    <MenuItem value={0}>Illumina</MenuItem>
-                    <MenuItem value={1}>MGISEQ</MenuItem>
-                    <MenuItem value={2}>BGISEQ</MenuItem>
-                  </TextField>
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField label="Kit" defaultValue={0} select fullWidth>
-                    <MenuItem value={0}>Agilent SureSelect Human All Exon V5 r2</MenuItem>
-                    <MenuItem value={1}>Agilent SureSelect Human All Exon V5 UTR r2</MenuItem>
-                    <MenuItem value={2}>Agilent SureSelect version 5</MenuItem>
-                  </TextField>
-                </Grid>
 
-                <Grid item xs={6}>
-                  <TextField label="Type" value={type} fullWidth onChange={(e) => setType(e.target.value)} select>
-                    <MenuItem value="Exome">Whole Exome</MenuItem>
-                    <MenuItem value="Genome">Whole Genome</MenuItem>
-                    <MenuItem value="Gene Panel">Capture Kit</MenuItem>
-                  </TextField>
-                </Grid>
-                {type === 'Gene Panel' && (
-                  <Grid item xs={6}>
-                    <TextField label="Panel" fullWidth />
-                  </Grid>
-                )}
-                <Grid item xs={6}>
-                  <TextField label="Germline/Somatic" defaultValue={0} select fullWidth>
-                    <MenuItem value={0}>Germline</MenuItem>
-                    <MenuItem value={1}>Somatic</MenuItem>
-                  </TextField>
-                </Grid>
-              </Grid>
-            </CardContent>
-            <CardHeader
-              title={
-                <Stack direction="row" justifyContent="space-between">
-                  <Typography variant="subtitle1">Analysis</Typography>
-                  {fileType === 'VCF' && (
-                    <Box>
-                      <Alert severity="warning" sx={{ px: 1, py: 0 }}>
-                        VCF detected
-                      </Alert>
-                    </Box>
-                  )}
-                </Stack>
-              }
-            />
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Checkbox
-                      disableRipple
-                      disabled={fileType === 'VCF'}
-                      checked={alignmentChecked}
-                      onChange={(e) => {
-                        setAlignmentChecked(e.target.checked)
-                        if (!e.target.checked) {
-                          setSnpChecked(false)
-                          setCnvChecked(false)
-                        }
-                      }}
-                    />
-                    <TextField label="Alignment" defaultValue={0} select fullWidth disabled={!alignmentChecked}>
-                      <MenuItem value={0}>BWA MEM v1</MenuItem>
-                      {/* <MenuItem value={1}>Bowtie</MenuItem> */}
-                    </TextField>
-                  </Stack>
-                </Grid>
-                <Grid item xs={12}>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Tooltip
-                      title={
-                        alignmentChecked || fileType === 'VCF' ? '' : 'SNP analysis is not possible without alignment'
-                      }
-                    >
-                      <Box>
-                        <Checkbox
-                          disableRipple
-                          disabled={!alignmentChecked}
-                          checked={snpChecked}
-                          onChange={(e) => setSnpChecked(e.target.checked)}
-                        />
-                      </Box>
-                    </Tooltip>
-                    <TextField label="SNP" defaultValue={0} select fullWidth disabled={!snpChecked}>
-                      <MenuItem value={0}>GATK v4 HaplotypeCaller</MenuItem>
-                      <MenuItem value={1}>Free-bayes</MenuItem>
-                      <MenuItem value={2}>Mutect2</MenuItem>
-                    </TextField>
-                  </Stack>
-                </Grid>
-                <Grid item xs={12}>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Tooltip
-                      title={
-                        alignmentChecked || fileType === 'VCF' ? '' : 'CNV analysis is not possible without alignment'
-                      }
-                    >
-                      <Box>
-                        <Checkbox
-                          disableRipple
-                          disabled={!alignmentChecked}
-                          checked={cnvChecked}
-                          onChange={(e) => setCnvChecked(e.target.checked)}
-                        />
-                      </Box>
-                    </Tooltip>
-                    <TextField
-                      label="CNV"
-                      value={cnvAnalysis}
-                      onChange={(e) => setCnvAnalysis(e.target.value)}
-                      select
-                      fullWidth
-                      disabled={!cnvChecked}
-                    >
-                      <MenuItem value={'xhmm+decont'}>XHMM + DECoNT</MenuItem>
-                      <MenuItem value={'xhmm'}>XHMM</MenuItem>
-                    </TextField>
-                  </Stack>
-                </Grid>
-              </Grid>
-            </CardContent>
           </DialogContent>
           <DialogActions>
             <Button onClick={onClose} color="secondary">
@@ -288,7 +161,7 @@ const CreateAnalysisDialog = function ({ open, onClose, onClickCreateAnalysis, f
                   color="primary"
                   disabled={!alignmentChecked && fileType !== 'VCF'}
                 >
-                  Create
+                  Start
                 </Button>
               </Box>
             </Tooltip>
