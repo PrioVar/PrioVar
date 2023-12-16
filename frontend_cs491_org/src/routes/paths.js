@@ -54,6 +54,7 @@ export const PATH_DASHBOARD = {
     variantDashboard: path(ROOTS_DASHBOARD, '/sample/:fileId/:sampleName'),
     variants: path(ROOTS_DASHBOARD, '/variants/:fileId/:sampleName?'),
     variantDetails: path(ROOTS_DASHBOARD, '/variants/:fileId/:sampleName/:chrom/:pos'),
+    //add my patients, clinics patients, subscription plans
   },
   mail: {
     root: path(ROOTS_DASHBOARD, '/mail'),
