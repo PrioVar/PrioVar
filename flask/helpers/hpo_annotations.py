@@ -21,17 +21,17 @@ def read_and_create_diseases_from_hpoa(session):
         for row in reader:
             # Create disease node if not exists
             create_disease_query = (
-                "MERGE (d:Disease {name: $disease_name}) "
+                "MERGE (d:Disease {name: $diseaseName}) "
             )
-            session.run(create_disease_query,  disease_name=row['disease_name'])
+            session.run(create_disease_query,  diseaseName=row['disease_name'])
             # Create relationship with phenotype term
             create_relationship_query = (
-                "MATCH (d:Disease {name: $disease_name}), (p:PhenotypeTerm {id: $hpo_id}) "
+                "MATCH (d:Disease {name: $diseaseName}), (p:PhenotypeTerm {id: $hpo_id}) "
                 "MERGE (d)-[r:ASSOCIATED_WITH_PHENOTYPE]->(p) "
-                "SET r.frequency = $frequency, r.database_id = $database_id "
+                "SET r.frequency = $frequency, r.databaseId = $databaseId "
             )
             hpo_idd = int(row['hpo_id'][-7:])
-            session.run(create_relationship_query, disease_name=row['disease_name'], hpo_id=hpo_idd, frequency=row['frequency'], database_id=row['database_id'])
+            session.run(create_relationship_query, diseaseName=row['disease_name'], hpo_id=hpo_idd, frequency=row['frequency'], databaseId=row['database_id'])
 
 
 #Function to read genes_to_phenotype.txt and create the gene nodes and relationships with phenotype terms
