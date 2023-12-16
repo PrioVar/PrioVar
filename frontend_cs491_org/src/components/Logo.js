@@ -31,8 +31,8 @@ export default function Logo({ sx, size = 'small' }) {
     default:
       if (window.devicePixelRatio > 1) {
         return (
-          <Box sx={{ width: 84, ...sx }}>
-            <img src="/static/brand/logo2x.png" className={classes.img} />
+          <Box sx={{ width: 54, ...sx }}>
+            <img src="/static/new_images/priovar_logo.png" className={classes.img} />
           </Box>
         )
       }
