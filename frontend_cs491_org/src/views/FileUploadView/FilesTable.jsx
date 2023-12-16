@@ -25,11 +25,13 @@ import JobStateStatus from './JobStateStatus'
 import { deleteVcfFile } from '../../api/vcf'
 import { deleteFastqFile } from '../../api/fastq'
 import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
+import VariantDashboard from './VariantDashboard'
+
 
 import ExpandOnClick from 'src/components/ExpandOnClick'
 import AnalysedCheckbox from './AnalysedCheckbox'
 
-import AnnotationDialog from './AnnotationDialog'
+import VariantDasboard2 from './VariantDasboard2'
 
 const EditableNote = ({ note, onSave, details }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -185,9 +187,32 @@ const SamplesView = function () {
     })
   }
 
+
   const handleAnnotationModelOpen = (row) => {
     setSelectedFile(row)
     setAnnotationModalOpen(true)
+  }
+  const handleButtonChange = () => {
+    //do the change here
+    const { id, type } = selectedFile?.vcf_id
+    ? { id: selectedFile.vcf_id, type: 'VCF' }
+    : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
+    let annotation = {
+        type: 'Exome',
+        machine: 'Illumina',
+        kit: 0,
+        panel: '',
+        germline: true,
+        alignment: 'BWA',
+        reference: 'GRCh38',
+        isSnp: false,
+        isCnv: false,
+        cnvAnalysis: 'xhmm+decont',
+      }
+    annotateFile(id, annotation, type).then((res) => {
+        filesApi.refresh()
+        //setAnnotationModalOpen(false)
+      })
   }
 
   const COLUMNS = [
@@ -346,15 +371,10 @@ const SamplesView = function () {
     case 'success':
       return (
         <>
-          <AnnotationDialog
-            open={isAnnotationModalOpen}
-            onClose={() => setAnnotationModalOpen(false)}
-            onClickAnnotate={handleFileAnnotation}
-            fileType={selectedFile?.vcf_id ? 'VCF' : 'FASTQ'}
-            title={selectedFile?.sample_name}
-            bedFiles={bedFiles}
-            bedFilesApi={bedFilesApi}
-            key={'create-analysis-dialog'}
+          <VariantDasboard2
+          open={isAnnotationModalOpen}
+          handleButtonChange = {handleButtonChange}
+          onClose={() => setAnnotationModalOpen()}
           />
           <MUIDataTable
             title="Files"

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEffect, useState } from 'react'
 import Page from 'src/components/Page'
 import { Container, Grid } from '@material-ui/core'
 
@@ -11,27 +12,23 @@ import VariantDashboard from './VariantDashboard'
 // Likewise for FilesTable
 
 const UploadView = function () {
+
+    const [isFileUploaded, setIsFileUploaded] = useState(false);
+
+    const handleFileUploadComplete = (uploaded) => {
+        setIsFileUploaded(uploaded);
+    };
+
   return (
     <Page title="Upload File | Genesus">
       <Grid container spacing={5}>
         <Grid item xs={6}>
-          <UploadVCF />
-        </Grid>
-        <Grid item xs={6}>
-          <VariantDashboard />
+          <UploadVCF onUploadComplete={handleFileUploadComplete}/>
         </Grid>
 
         <Grid item xs={12}>
           <FilesTable />
         </Grid>
-
-        {/*<Grid item xs={12}>*/}
-        {/*  <UploadFastq />*/}
-        {/*</Grid>*/}
-
-        {/*<Grid item xs={12}>*/}
-        {/*  <FastqFilesTable />*/}
-        {/*</Grid>*/}
       </Grid>
     </Page>
   )

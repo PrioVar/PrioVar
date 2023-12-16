@@ -38,12 +38,9 @@ import ReactDOM from 'react-dom'
 import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
 
 // components
-import AnalysesTable from './AnalysesTable'
-import VariantOverview from './VariantOverview'
 import Tags from 'src/components/Tags'
 import Page from 'src/components/Page'
-import NavbarRoutes from '../VariantsView/NavbarRoutes'
-import GeneCov from './GeneCov'
+
 
 // api utils
 import { updateTrio, useHpo } from '../../../api/vcf'
@@ -407,14 +404,7 @@ const VariantDasboard = () => {
 
   return (
     <>
-      <CreateAnalysisDialog
-        open={isAnalysisOpen}
-        onClose={() => setAnalysisOpen(null)}
-        onClickCreateAnalysis={handleCreateAnalysis}
-        fileType={fileDetails?.vcf_id ? 'VCF' : 'FASTQ'}
-        title={fileDetails?.sample_name}
-        key={'create-analysis-dialog' + fileId}
-      />
+
       <Page title="Variant Dashboard | Genesus">
         {/*ReactDOM.createPortal(
           <Stack direction="row" spacing={2}>
