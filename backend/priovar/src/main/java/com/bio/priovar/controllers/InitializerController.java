@@ -1,18 +1,17 @@
 package com.bio.priovar.controllers;
 
-import com.bio.priovar.models.Admin;
-import com.bio.priovar.models.Clinician;
-import com.bio.priovar.models.MedicalCenter;
-import com.bio.priovar.models.Subscription;
-import com.bio.priovar.repositories.AdminRepository;
-import com.bio.priovar.repositories.ClinicianRepository;
-import com.bio.priovar.repositories.MedicalCenterRepository;
+import com.bio.priovar.models.*;
+import com.bio.priovar.repositories.*;
+import com.bio.priovar.services.GraphLoaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/initialize")
@@ -21,16 +20,34 @@ public class InitializerController {
     private final MedicalCenterRepository medicalCenterRepository;
     private final ClinicianRepository clinicianRepository;
     private final AdminRepository adminRepository;
+    private final GraphLoaderService graphLoaderService;
+    private final PatientRepository patientRepository;
+    private final PhenotypeTermRepository phenotypeTermRepository;
 
     @Autowired
-    public InitializerController(MedicalCenterRepository medicalCenterRepository, ClinicianRepository clinicianRepository, AdminRepository adminRepository) {
+    public InitializerController(MedicalCenterRepository medicalCenterRepository, ClinicianRepository clinicianRepository, AdminRepository adminRepository, GraphLoaderService graphLoaderService, PatientRepository patientRepository, PhenotypeTermRepository phenotypeTermRepository) {
         this.medicalCenterRepository = medicalCenterRepository;
         this.clinicianRepository = clinicianRepository;
         this.adminRepository = adminRepository;
+        this.graphLoaderService = graphLoaderService;
+        this.patientRepository = patientRepository;
+        this.phenotypeTermRepository = phenotypeTermRepository;
     }
 
     @PostMapping()
     public ResponseEntity<String> initialize() {
+
+        // if the length of the PhenotypeTerm table is greater than 0, then skip loading PhenotypeTerm data
+        if ( phenotypeTermRepository.count() > 0) {
+            System.out.println("HPO data already loaded");
+        } else {
+            graphLoaderService.startHPODataLoading();
+            System.out.println("HPO data loaded");
+        }
+
+        //graphLoaderService.startDiseaseDataLoading(); commented to shorten the time to initialize
+        //System.out.println("Disease data loaded");
+
         MedicalCenter liva = new MedicalCenter();
         liva.setName("Liva");
         liva.setAddress("Kızılay, Ankara");
@@ -48,6 +65,34 @@ public class InitializerController {
         clinician1.setEmail("mehmet.kilic@acibadem");
         clinician1.setPassword("123");
         clinician1.setMedicalCenter(liva);
+        clinician1.setPatients(new ArrayList<>());
+        clinicianRepository.save(clinician1);
+
+        Patient patient1 = new Patient();
+        patient1.setName("Ali Veli");
+        patient1.setAge(25);
+        patient1.setSex("male");
+        patient1.setMedicalCenter(liva);
+        patientRepository.save(patient1);
+
+        Patient patient2 = new Patient();
+        patient2.setName("Ayşe Fatma");
+        patient2.setAge(40);
+        patient2.setSex("female");
+        patient2.setMedicalCenter(liva);
+        patientRepository.save(patient2);
+
+        Patient patient3 = new Patient();
+        patient3.setName("Ahmet Mehmet");
+        patient3.setAge(33);
+        patient3.setSex("male");
+        patient3.setMedicalCenter(liva);
+        patientRepository.save(patient3);
+
+        List<Patient> patients = clinician1.getPatients();
+        patients.add(patient1);
+        patients.add(patient2);
+        clinician1.setPatients(patients);
         clinicianRepository.save(clinician1);
 
         // MEDICAL CENTER 2
