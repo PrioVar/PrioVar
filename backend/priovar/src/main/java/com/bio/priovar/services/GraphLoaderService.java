@@ -19,5 +19,12 @@ public class GraphLoaderService {
         String response = restTemplate.getForObject(flaskUrl, String.class);
         return response;
     }
+
+    public String startGeneDatafromHPOLoading() {
+        RestTemplate restTemplate = new RestTemplate();
+        String flaskUrl = "http://localhost:5001/load-genes";
+        String response = restTemplate.getForObject(flaskUrl, String.class);
+        return response;
+    }
 }
 
