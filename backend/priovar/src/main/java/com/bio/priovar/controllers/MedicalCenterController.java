@@ -3,7 +3,6 @@ package com.bio.priovar.controllers;
 import com.bio.priovar.models.MedicalCenter;
 import com.bio.priovar.services.MedicalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +29,11 @@ public class MedicalCenterController {
         return medicalCenterService.getMedicalCenterById(medicalCenterId);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> loginMedicalCenter(@RequestParam String email, @RequestParam String password ) {
+        return medicalCenterService.loginMedicalCenter(email,password);
+    }
+
     @PostMapping("/add")
     public void addMedicalCenter(@RequestBody MedicalCenter medicalCenter) {
         medicalCenterService.addMedicalCenter(medicalCenter);
@@ -37,6 +41,6 @@ public class MedicalCenterController {
 
     @PostMapping("/addSubscription/{medicalCenterId}/{subscriptionId}")
     public ResponseEntity<String> addSubscriptionToMedicalCenter(@PathVariable("medicalCenterId") Long medicalCenterId, @PathVariable("subscriptionId") Long subscriptionId) {
-        return new ResponseEntity<>(medicalCenterService.addSubscriptionToMedicalCenter(medicalCenterId, subscriptionId), HttpStatus.OK);
+        return medicalCenterService.addSubscriptionToMedicalCenter(medicalCenterId, subscriptionId);
     }
 }
