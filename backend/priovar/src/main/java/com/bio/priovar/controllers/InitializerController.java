@@ -23,15 +23,17 @@ public class InitializerController {
     private final GraphLoaderService graphLoaderService;
     private final PatientRepository patientRepository;
     private final PhenotypeTermRepository phenotypeTermRepository;
+    private final DiseaseRepository diseaseRepository;
 
     @Autowired
-    public InitializerController(MedicalCenterRepository medicalCenterRepository, ClinicianRepository clinicianRepository, AdminRepository adminRepository, GraphLoaderService graphLoaderService, PatientRepository patientRepository, PhenotypeTermRepository phenotypeTermRepository) {
+    public InitializerController(MedicalCenterRepository medicalCenterRepository, ClinicianRepository clinicianRepository, AdminRepository adminRepository, GraphLoaderService graphLoaderService, PatientRepository patientRepository, PhenotypeTermRepository phenotypeTermRepository, DiseaseRepository diseaseRepository) {
         this.medicalCenterRepository = medicalCenterRepository;
         this.clinicianRepository = clinicianRepository;
         this.adminRepository = adminRepository;
         this.graphLoaderService = graphLoaderService;
         this.patientRepository = patientRepository;
         this.phenotypeTermRepository = phenotypeTermRepository;
+        this.diseaseRepository = diseaseRepository;
     }
 
     @PostMapping()
@@ -43,10 +45,9 @@ public class InitializerController {
         } else {
             graphLoaderService.startHPODataLoading();
             System.out.println("HPO data loaded");
+            graphLoaderService.startDiseaseDataLoading();
+            System.out.println("Disease data loaded");
         }
-
-        //graphLoaderService.startDiseaseDataLoading(); commented to shorten the time to initialize
-        //System.out.println("Disease data loaded");
 
         MedicalCenter liva = new MedicalCenter();
         liva.setName("Liva");
@@ -73,6 +74,8 @@ public class InitializerController {
         patient1.setAge(25);
         patient1.setSex("male");
         patient1.setMedicalCenter(liva);
+        Disease disease1 = diseaseRepository.findByDiseaseName("White-Kernohan syndrome");
+
         patientRepository.save(patient1);
 
         Patient patient2 = new Patient();
@@ -88,6 +91,13 @@ public class InitializerController {
         patient3.setSex("male");
         patient3.setMedicalCenter(liva);
         patientRepository.save(patient3);
+
+        Patient patient4 = new Patient();
+        patient4.setName("Ece Nur");
+        patient4.setAge(20);
+        patient4.setSex("female");
+        patient4.setMedicalCenter(liva);
+        patientRepository.save(patient4);
 
         List<Patient> patients = clinician1.getPatients();
         patients.add(patient1);
