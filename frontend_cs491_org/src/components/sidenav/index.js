@@ -12,7 +12,7 @@ import SideNavStretch from './SideNavStretch'
 import SideNavDirection from './SideNavDirection'
 
 
-import { PATH_AUTH } from '../../routes/paths'
+import { PATH_AUTH, PATH_DASHBOARD } from '../../routes/paths'
 import { Link as RouterLink } from 'react-router-dom'
 // ----------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ export default function SideNav() {
             boxShadow: (theme) => theme.customShadows.z12,
           }}
         >
-          <Tooltip title="SideNav">
+          <Tooltip title="Side Navigation">
             <MIconButton
               color="inherit"
               onClick={handleToggle}
@@ -103,17 +103,20 @@ export default function SideNav() {
           <Scrollbar sx={{ height: 1 }}>
             <Stack spacing={4} sx={{ pt: 3, px: 3, pb: 15 }}>
               <Stack direction="column" spacing={1.5}>
-                
-              <Button size="large" color='success' variant="contained" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 5 }}>
+              {/**Done */}
+              <Button size="large" color='inherit' variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
                 Dashboard
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginHealthCenter} sx={{ mt: 5 }}>
+              {/**TODO */}
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
                   My Patients
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginAdmin} sx={{ mt: 5 }}>
+              {/**TODO */}
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
                   Clinics Patients
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginAdmin} sx={{ mt: 5 }}>
+              {/**TODO */}
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
                   Subscription Plans
               </Button>
               </Stack>

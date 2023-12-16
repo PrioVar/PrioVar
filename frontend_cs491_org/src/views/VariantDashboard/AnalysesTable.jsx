@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import AddIcon from '@material-ui/icons/Add'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
-import JobStateStatus from '../FileUploadView/JobStateStatus'
+import JobStateStatus from '../common/JobStateStatus'
 import { API_BASE_URL } from '../../constants'
 
 const useStyles = makeStyles((theme) => ({
