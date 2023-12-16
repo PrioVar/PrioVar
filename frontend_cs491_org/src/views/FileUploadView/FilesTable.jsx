@@ -21,15 +21,15 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { fDateTime } from 'src/utils/formatTime'
-import JobStateStatus from './JobStateStatus'
+import JobStateStatus from '../common/JobStateStatus'
 import { deleteVcfFile } from '../../api/vcf'
 import { deleteFastqFile } from '../../api/fastq'
 import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
 
 import ExpandOnClick from 'src/components/ExpandOnClick'
-import AnalysedCheckbox from './AnalysedCheckbox'
+import AnalysedCheckbox from '../common/AnalysedCheckbox'
 
-import AnnotationDialog from './AnnotationDialog'
+import AnnotationDialog from '../common/AnnotationDialog'
 
 const EditableNote = ({ note, onSave, details }) => {
   const [isEditing, setIsEditing] = useState(false)
