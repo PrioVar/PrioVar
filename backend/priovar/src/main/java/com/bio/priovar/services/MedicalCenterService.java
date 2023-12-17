@@ -2,6 +2,7 @@ package com.bio.priovar.services;
 
 import com.bio.priovar.models.MedicalCenter;
 import com.bio.priovar.models.Subscription;
+import com.bio.priovar.models.dto.LoginObject;
 import com.bio.priovar.repositories.MedicalCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -56,17 +57,24 @@ public class MedicalCenterService {
         return ResponseEntity.ok("Subscription added successfully");
     }
 
-    public ResponseEntity<String> loginMedicalCenter(String email, String password) {
+    public ResponseEntity<LoginObject> loginMedicalCenter(String email, String password) {
         MedicalCenter medicalCenter = medicalCenterRepository.findByEmail(email);
+        LoginObject loginObject = new LoginObject();
         if ( medicalCenter == null ) {
-            return ResponseEntity.badRequest().body("Medical Center with email " + email + " does not exist");
+            loginObject.setMessage("Medical Center with email " + email + " does not exist");
+            loginObject.setId(-1L);
+            return ResponseEntity.badRequest().body(loginObject);
         }
 
         if ( !medicalCenter.getPassword().equals(password) ) {
-            return ResponseEntity.badRequest().body("Invalid password");
+            loginObject.setMessage("Invalid password");
+            loginObject.setId(-1L);
+            return ResponseEntity.badRequest().body(loginObject);
         }
 
-        return ResponseEntity.ok("Login successful");
+        loginObject.setMessage("Login successful");
+        loginObject.setId(medicalCenter.getId());
+        return ResponseEntity.ok(loginObject);
     }
 
     public ResponseEntity<String> changePasswordByEmailMedicalCenter(String email, String newPass, String oldPass) {
