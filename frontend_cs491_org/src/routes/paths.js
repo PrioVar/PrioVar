@@ -7,7 +7,7 @@ function path(root, sublink) {
 const ROOTS_AUTH = '/auth'
 const ROOTS_DASHBOARD = '/libra'
 const ROOTS_SAMPLE = '/sample'
-const ROOTS_PRIOVAR = 'localhost:8080'
+export const ROOTS_PRIOVAR = 'http://localhost:8080'
 // ----------------------------------------------------------------------
 
 export const PATH_PRIOVAR = {
