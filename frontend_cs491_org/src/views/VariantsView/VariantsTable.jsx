@@ -278,37 +278,6 @@ const VariantsTable = function ({
         },
       },
       {
-        keys: ['CHROM', 'POS'],
-        renderCell: ([chrom, pos]) => {
-          const isSelected = isRowSelected(currentTable.selectedVariants, chrom, pos)
-          return (
-            <Tooltip title="Send to selected variants">
-              <IconButton color={isSelected ? 'primary' : 'inherit'} onClick={() => handleClickBookmark(chrom, pos)}>
-                {isSelected ? <TurnedInIcon /> : <TurnedInNotIcon />}
-              </IconButton>
-            </Tooltip>
-          )
-        },
-      },
-      {
-        keys: ['CHROM', 'POS', 'VIEW'],
-        renderCell: ([chrom, pos, view]) => {
-          const handleGoToVariantDetails = () => {
-            const icon = document.getElementById(`icon-${chrom}-${pos}`)
-            icon.setAttribute('color', '#C58AF9')
-            window.open(`/libra/variants/${fileId}/${sampleName}/${chrom}/${pos}`, '_blank').focus()
-          }
-
-          return (
-            <Tooltip title="Go to variant details">
-              <IconButton onClick={handleGoToVariantDetails}>
-                <FindInPageIcon id={`icon-${chrom}-${pos}`} htmlColor={`${view ? '#C58AF9' : 'inherit'}`} />
-              </IconButton>
-            </Tooltip>
-          )
-        },
-      },
-      {
         keys: ['CHROM', 'POS', 'REF', 'ALT'],
         renderCell: ([chrom, pos, ref, alt]) => {
           const title = (
