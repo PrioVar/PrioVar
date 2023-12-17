@@ -1,6 +1,7 @@
 package com.bio.priovar.controllers;
 
 import com.bio.priovar.models.MedicalCenter;
+import com.bio.priovar.models.dto.LoginObject;
 import com.bio.priovar.services.MedicalCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class MedicalCenterController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginMedicalCenter(@RequestParam String email, @RequestParam String password ) {
+    public ResponseEntity<LoginObject> loginMedicalCenter(@RequestParam String email, @RequestParam String password ) {
         return medicalCenterService.loginMedicalCenter(email,password);
     }
 
