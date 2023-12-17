@@ -108,11 +108,11 @@ export default function SideNav() {
                 Dashboard
               </Button>
               {/**TODO */}
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.myPatients} sx={{ mt: 5 }}>
                   My Patients
               </Button>
               {/**TODO */}
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.clinicPatients} sx={{ mt: 5 }}>
                   Clinics Patients
               </Button>
               {/**TODO */}
