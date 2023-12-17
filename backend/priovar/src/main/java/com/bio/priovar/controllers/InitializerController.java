@@ -75,7 +75,13 @@ public class InitializerController {
         patient1.setSex("male");
         patient1.setMedicalCenter(liva);
         Disease disease1 = diseaseRepository.findByDiseaseName("White-Kernohan syndrome");
-
+        patient1.setDisease(disease1);
+        PhenotypeTerm phenotypeTerm1 = phenotypeTermRepository.findById(26L).get();
+        PhenotypeTerm phenotypeTerm2 = phenotypeTermRepository.findById(25L).get();
+        List<PhenotypeTerm> phenotypeTerms = new ArrayList<>();
+        phenotypeTerms.add(phenotypeTerm1);
+        phenotypeTerms.add(phenotypeTerm2);
+        patient1.setPhenotypeTerms(phenotypeTerms);
         patientRepository.save(patient1);
 
         Patient patient2 = new Patient();
@@ -89,6 +95,12 @@ public class InitializerController {
         patient3.setName("Ahmet Mehmet");
         patient3.setAge(33);
         patient3.setSex("male");
+        PhenotypeTerm phenotypeTerm3 = phenotypeTermRepository.findById(9L).get();
+        PhenotypeTerm phenotypeTerm4 = phenotypeTermRepository.findById(19L).get();
+        List<PhenotypeTerm> phenotypeTerms2 = new ArrayList<>();
+        phenotypeTerms2.add(phenotypeTerm3);
+        phenotypeTerms2.add(phenotypeTerm4);
+        patient3.setPhenotypeTerms(phenotypeTerms2);
         patient3.setMedicalCenter(liva);
         patientRepository.save(patient3);
 
