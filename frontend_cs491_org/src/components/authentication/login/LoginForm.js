@@ -23,7 +23,7 @@ import * as Yup from 'yup'
 import useAuth from '../../../hooks/useAuth'
 import useIsMountedRef from '../../../hooks/useIsMountedRef'
 // routes
-import { PATH_AUTH } from '../../../routes/paths'
+import { PATH_AUTH, PATH_PRIOVAR } from '../../../routes/paths'
 //
 import { MIconButton } from '../../@material-extend'
 //
@@ -65,6 +65,18 @@ export default function LoginForm() {
           setSubmitting(false)
         }
       } catch (error) {
+        console.error(error)
+        resetForm()
+        if (isMountedRef.current) {
+          setSubmitting(false)
+          setErrors({ afterSubmit: error.response.data?.non_field_errors?.[0] ?? error.message })
+        }
+      }
+      try {
+        const emailPriovar = ""
+        const passwordPriovar = ""
+      }
+      catch (error) {
         console.error(error)
         resetForm()
         if (isMountedRef.current) {
