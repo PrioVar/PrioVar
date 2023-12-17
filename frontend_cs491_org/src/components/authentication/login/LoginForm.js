@@ -80,6 +80,9 @@ export default function LoginForm() {
         const passwordPriovar = values.password
         const { data } = await axios.post(`${ROOTS_PRIOVAR}/medicalCenter/login?email=${emailPriovar}&password=${passwordPriovar}`)
         console.log(data)
+        const idFromResponse = data.id
+        localStorage.setItem('priovarUserId', idFromResponse);
+
       }
       catch (error) {
         console.error(error)
