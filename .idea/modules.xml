@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/cs491-2-web.iml" filepath="$PROJECT_DIR$/.idea/cs491-2-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/priovar/priovar.iml" filepath="$PROJECT_DIR$/backend/priovar/priovar.iml" />
     </modules>
   </component>
 </project>
