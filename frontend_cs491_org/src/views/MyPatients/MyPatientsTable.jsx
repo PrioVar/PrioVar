@@ -15,7 +15,7 @@ import {
     TextField,
   } from '@material-ui/core'
   import { makeStyles } from '@material-ui/styles'
-  import { ArrowForward, Info, Note } from '@material-ui/icons'
+  import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
   import MUIDataTable from 'mui-datatables'
   import React, { useState } from 'react'
   import { useNavigate } from 'react-router-dom'
@@ -25,7 +25,8 @@ import {
   import { deleteVcfFile } from '../../api/vcf'
   import { deleteFastqFile } from '../../api/fastq'
   import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-  
+  import { PATH_DASHBOARD } from '../../routes/paths'
+  import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
   
@@ -211,6 +212,14 @@ import {
       setSelectedFile(row)
       setAnnotationModalOpen(true)
     }
+
+    const handleSeeSimilarPatients = (row) => {
+        // TODO
+    }
+
+    const handleAddPatient = (row) => {
+        // TODO
+    }
   
     const COLUMNS = [
       {
@@ -341,6 +350,22 @@ import {
         },
       },
       {
+        name: 'similar_patients',
+        label: 'See similar patients',
+        options: {
+          filter: false,
+          sort: true,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex]
+            return (
+                <Button variant="contained" color="info" onClick={() => handleSeeSimilarPatients(row)} size="small">
+                  <Info />
+                </Button>
+              )
+          },
+        },
+      },
+      {
         name: 'go',
         label: 'Go',
         options: {
@@ -368,6 +393,18 @@ import {
       case 'success':
         return (
           <>
+            <Box display="flex" justifyContent="flex-end" mt={2}> 
+            <Button 
+                variant="contained" 
+                color="info" 
+                onClick={() => handleAddPatient()} 
+                component={RouterLink} to={PATH_DASHBOARD.general.files}
+                size="small"
+            >
+                <Add /> 
+                Add Patient 
+            </Button>
+            </Box>
             <VariantDasboard2
             open={isAnnotationModalOpen}
             handleButtonChange = {handleButtonChange}
