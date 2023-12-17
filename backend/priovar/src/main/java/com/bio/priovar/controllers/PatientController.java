@@ -1,6 +1,7 @@
 package com.bio.priovar.controllers;
 
 import com.bio.priovar.models.Patient;
+import com.bio.priovar.models.dto.PatientWithPhenotype;
 import com.bio.priovar.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,11 @@ public class PatientController {
     @PostMapping("/add")
     public ResponseEntity<String> addPatient(@RequestBody Patient patient) {
         return new ResponseEntity<>(patientService.addPatient(patient), patient.getMedicalCenter() == null ? org.springframework.http.HttpStatus.BAD_REQUEST : org.springframework.http.HttpStatus.OK);
+    }
+
+    @PostMapping("/addPatientWithPhenotype")
+    public ResponseEntity<String> addPatientWithPhenotype(@RequestBody PatientWithPhenotype patientDto) {
+        return patientService.addPatientWithPhenotype(patientDto);
     }
 
     @PostMapping("/addPatientToClinician/{clinicianId}")

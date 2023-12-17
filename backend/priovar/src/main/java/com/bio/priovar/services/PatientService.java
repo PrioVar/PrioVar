@@ -1,9 +1,11 @@
 package com.bio.priovar.services;
 
 import com.bio.priovar.models.*;
+import com.bio.priovar.models.dto.PatientWithPhenotype;
 import com.bio.priovar.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -325,7 +327,27 @@ public class PatientService {
     }
 
 
+    public ResponseEntity<String> addPatientWithPhenotype(PatientWithPhenotype patientDto) {
+        Patient patient = patientDto.getPatient();
+        List<PhenotypeTerm> phenotypeTerms = patientDto.getPhenotypeTerms();
 
+        if ( patient.getMedicalCenter() == null ) {
+            return new ResponseEntity<>("Medical Center is required", org.springframework.http.HttpStatus.BAD_REQUEST);
+        }
 
+        Long medicalCenterId = patient.getMedicalCenter().getId();
+        patient.setMedicalCenter(medicalCenterRepository.findById(medicalCenterId).orElse(null));
 
+        List<PhenotypeTerm> newPhenotypeTerms = new ArrayList<>();
+        if ( phenotypeTerms != null ) {
+            for ( PhenotypeTerm phenotypeTerm : phenotypeTerms ) {
+                Long phenotypeTermId = phenotypeTerm.getId();
+                newPhenotypeTerms.add(phenotypeTermRepository.findById(phenotypeTermId).orElse(null));
+            }
+        }
+
+        patient.setPhenotypeTerms(newPhenotypeTerms);
+        patientRepository.save(patient);
+        return new ResponseEntity<>("Patient added successfully", org.springframework.http.HttpStatus.OK);
+    }
 }
