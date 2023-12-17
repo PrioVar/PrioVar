@@ -23,8 +23,8 @@ export default function Logo({ sx, size = 'small' }) {
   switch (size) {
     case 'large':
       return (
-        <Box sx={{ width: { xs: 84, md: 256 }, ...sx }}>
-          <img src="/static/brand/logo_big.png" className={classes.img} />
+        <Box sx={{ width: { xs: 54, md: 256 }, ...sx }}>
+          <img src="/static/new_images/priovar_logo.png" className={classes.img} />
         </Box>
       )
     case 'small':
@@ -37,8 +37,8 @@ export default function Logo({ sx, size = 'small' }) {
         )
       }
       return (
-        <Box sx={{ width: 84, ...sx }}>
-          <img src="/static/brand/logo.png" className={classes.img} />
+        <Box sx={{ width: 54, ...sx }}>
+          <img src="/static/new_images/priovar_logo.png" className={classes.img} />
         </Box>
       )
   }

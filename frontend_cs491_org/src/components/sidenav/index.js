@@ -103,17 +103,17 @@ export default function SideNav() {
           <Scrollbar sx={{ height: 1 }}>
             <Stack spacing={4} sx={{ pt: 3, px: 3, pb: 15 }}>
               <Stack direction="column" spacing={1.5}>
-              {/**Done */}
               <Button size="large" color='inherit' variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
                 Dashboard
               </Button>
-              {/**TODO */}
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.myPatients} sx={{ mt: 5 }}>
                   My Patients
               </Button>
-              {/**TODO */}
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.clinicPatients} sx={{ mt: 5 }}>
                   Clinics Patients
+              </Button>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.customQuery} sx={{ mt: 5 }}>
+                  Custom Query
               </Button>
               {/**TODO */}
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
