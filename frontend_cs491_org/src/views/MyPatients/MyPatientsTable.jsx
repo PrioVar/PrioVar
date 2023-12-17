@@ -152,7 +152,7 @@ import {
     )
   }
   
-  const SamplesView = function () {
+  const MyPatientsTable = function () {
     //const classes = useStyles()
     const filesApi = useFiles()
     const bedFilesApi = useBedFiles()
@@ -374,7 +374,7 @@ import {
             onClose={() => setAnnotationModalOpen()}
             />
             <MUIDataTable
-              title="All patients of clinic ABC"
+              title="All patients of clinician Ahmet"
               data={data}
               columns={COLUMNS}
               options={{
@@ -393,5 +393,5 @@ import {
     }
   }
   
-  export default SamplesView
+  export default MyPatientsTable
   

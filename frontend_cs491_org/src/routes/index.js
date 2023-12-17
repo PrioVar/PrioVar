@@ -15,6 +15,7 @@ import MainLayout from '../layouts/main'
 import FileUploadView from '../views/FileUploadView'
 
 import ClinicsPatients from '../views/ClinicsPatients'
+import MyPatients from '../views/MyPatients'
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) =>
@@ -105,6 +106,7 @@ export default function Router() {
         { path: '/variants/:fileId/:sampleName/:chrom/:pos', element: <VariantDetailsView /> },
         { path: '/sample/:fileId/:sampleName', element: <VariantDashboard /> },
         { path: '/clinics/:healthCenterId/patients', element: <ClinicsPatients />},
+        { path: '/clinician/:healthCenterId/patients', element: <MyPatients />},
         {
           path: 'user',
           children: [
