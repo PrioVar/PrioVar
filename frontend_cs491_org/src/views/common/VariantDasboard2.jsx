@@ -40,6 +40,8 @@ import {
   // components
   import Tags from 'src/components/Tags'
   import Page from 'src/components/Page'
+  import axios from 'axios';
+
   
   
   // api utils
@@ -54,67 +56,6 @@ import {
     )
   }
   
-  const TrioSelector = function ({ options, trio = {}, sampleName, fileId }) {
-    const [motherOption, setMotherOption] = useState({
-      label: trio?.mother_sample_name,
-      value: { fileId: trio?.mother_file, sample: trio?.mother_sample_name },
-    })
-    const [fatherOption, setFatherOption] = useState({
-      label: trio?.father_sample_name,
-      value: { fileId: trio?.father_file, sample: trio?.father_sample_name },
-    })
-  
-    useLazyEffect(() => {
-      updateTrio(fileId, { mother: motherOption.value, father: fatherOption.value })
-    }, [fileId, motherOption, fatherOption])
-  
-    return (
-      <Grid container direction="row" spacing={1}>
-        <Grid item xs={6}>
-          <Autocomplete
-            options={options?.filter(
-              (o) =>
-                ![trio?.mother_sample_name, trio?.father_sample_name, sampleName, fatherOption.value.sample].includes(
-                  o.value.sample,
-                ),
-            )}
-            renderInput={(params) => <TextField {...params} label="Mother" variant="outlined" />}
-            value={motherOption}
-            getOptionLabel={(option) => option.label || ''}
-            onChange={(_e, newMother) => {
-              newMother = newMother || {
-                label: '',
-                value: { fileId: undefined, sample: undefined },
-              }
-  
-              setMotherOption(newMother)
-            }}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Autocomplete
-            options={options.filter(
-              (o) =>
-                ![trio?.mother_sample_name, trio?.father_sample_name, sampleName, motherOption.value.sample].includes(
-                  o.value.sample,
-                ),
-            )}
-            renderInput={(params) => <TextField {...params} label="Father" variant="outlined" />}
-            value={fatherOption}
-            getOptionLabel={(option) => option.label || ''}
-            onChange={(_e, newFather) => {
-              newFather = newFather || {
-                label: '',
-                value: { fileId: undefined, sample: undefined },
-              }
-  
-              setFatherOption(newFather)
-            }}
-          />
-        </Grid>
-      </Grid>
-    )
-  }
   
   const createTrioOptions = (rows) => {
     return rows.map((row) => ({
@@ -295,8 +236,7 @@ import {
     )
   }
   
-  const ManageHpo = function ({ fileId }) {
-    const [hpoList, setHpoList] = useHpo({ fileId })
+  const ManageHpo = function ({ fileId , hpoList, setHpoList}) {
   
     return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
   }
@@ -365,15 +305,19 @@ import {
     const [is_inbred, setIsInbred] = useState(fileDetails?.details?.is_inbred)
     const [is_progressing, setProgressing] = useState(fileDetails?.details?.is_progressing)
     const [notes, setNotes] = useState(fileDetails?.details?.notes)
+    const [name, setName] = useState(fileDetails?.details?.name)
+    const [medicalCenterId, setMedicalCenterId] = useState(17704)
   
     const handleGenderChange = (e) => setGender(e.target.value)
     const handleStartAgeChange = (e) => setStartAge(e.target.value)
     const handleAgeChange = (e) => setAge(e.target.value)
+    const handleNameChange = (e) => setName(e.target.value)
+    const handleMedicalCenterChange = (e) => setMedicalCenterId(e.target.value)
     /*  const handleIsInbredChange = (e) => setIsInbred(e.target.checked)
     const handleIsProgressingChange = (e) => setProgressing(e.target.checked) */
     const handleSetNotes = (e) => setNotes(e.target.value)
   
-    const handleSave = () => {
+    const handleSave = async () => {
       const details = {
         gender,
         start_age: Number(startAge),
@@ -381,6 +325,33 @@ import {
         is_inbred,
         is_progressing,
         notes,
+      }
+      const phenotypeTerms = hpoList.map(item => {
+        // Extract the numeric part of the HP code and remove leading zeros
+        const id = parseInt(item.value.split(':')[1], 10);
+        return { id };
+      });
+      let request = {
+        patient: {
+            name: name,
+            age: age,
+            sex: gender,
+            clinicalHistory: notes,
+            medicalCenter: {
+                id: medicalCenterId,
+            }
+          },
+        phenotypeTerms: phenotypeTerms
+      }
+      //console.log("request:")
+      //console.log(request)
+      try {
+        const response = await axios.post('http://localhost:8080/patient/addPatientWithPhenotype', request);
+        console.log("SUCCESS!")
+
+      } catch (error) {
+        console.log("FAIL!")
+        console.error('add patient error:', error.response);
       }
       const { id, type } = fileDetails.vcf_id
         ? { id: fileDetails.vcf_id, type: 'VCF' }
@@ -392,6 +363,7 @@ import {
       filesApi.refresh()
     }
   
+
     const trioOptions = createTrioOptions(data)
   
     const handleCreateAnalysis = async ({ cnv, snp, alignment }) => {
@@ -405,6 +377,7 @@ import {
       await filesApi.refresh()
     }
   
+    const [hpoList, setHpoList] = useHpo({ fileId })
     return (
         <Dialog open={open} onClose={onClose}>
       <>
@@ -433,12 +406,11 @@ import {
                   <Grid item sx={{ minWidth: '65%', flexGrow: 1 }}>
                     <CardHeader title="Symptoms (HPO)" titleTypographyProps={{ variant: 'subtitle1' }} />
                     <CardContent>
-                      <ManageHpo fileId={fileId} sampleName={sampleName} />
+                      <ManageHpo fileId={fileId} sampleName={sampleName} hpoList={hpoList} setHpoList={setHpoList} />
                     </CardContent>
                   </Grid>
                   <Grid item container direction="row" xs={12}>
                     <Grid item xs={6}>
-                      <CardHeader title="Parents" titleTypographyProps={{ variant: 'subtitle1' }} />
                     </Grid>
                     <Grid item xs={6}>
                       <CardHeader
@@ -452,18 +424,6 @@ import {
                     <>
                       <Grid item container direction="row" xs={12}>
                         <Grid container item xs={6} sx={{ flexGrow: 1 }}>
-                          <Grid item xs={12}>
-                            <CardContent>
-                              {fileDetails && (
-                                <TrioSelector
-                                  trio={fileDetails?.trio ? fileDetails.trio : null}
-                                  options={trioOptions}
-                                  samples={sampleName}
-                                  fileId={fileId}
-                                />
-                              )}
-                            </CardContent>
-                          </Grid>
                           <Grid item xs={12} sx={{ flexGrow: 1 }}>
                             <CardHeader
                               title="Details"
@@ -473,6 +433,12 @@ import {
                           </Grid>
                           <Grid container direction={'row'} item xs={12} height={'auto'}>
                             <Grid container item xs={6} direction={'row'}>
+                            <CardContent>
+                                  <FormControl fullWidth>
+                                    <InputLabel id="select-name">Name</InputLabel>
+                                    <Input type="text" value={name} onChange={handleNameChange}></Input>
+                                  </FormControl>
+                                </CardContent>
                               <Grid item xs={12}>
                                 <CardContent>
                                   <FormControl fullWidth>
@@ -481,44 +447,30 @@ import {
                                   </FormControl>
                                 </CardContent>
                               </Grid>
-                              <Grid item xs={12}>
-                                <CardContent>
-                                  <FormControl fullWidth>
-                                    <InputLabel id="select-start-age">Symptoms start age</InputLabel>
-                                    <Input type="number" value={startAge} onChange={handleStartAgeChange}></Input>
-                                  </FormControl>
-                                </CardContent>
-                              </Grid>
                             </Grid>
                             <Grid container item xs={6} direction={'row'}>
                               <Grid xs={12} item>
                                 <CardContent>
                                   <FormControl fullWidth>
-                                    <InputLabel id="select-gender">Gender</InputLabel>
+                                    <InputLabel id="select-gender">Sex</InputLabel>
                                     <Select
                                       labelId="select-gender"
                                       value={gender}
                                       onChange={handleGenderChange}
                                       label="Gender"
                                     >
-                                      <MenuItem value={'M'}>Male</MenuItem>
-                                      <MenuItem value={'F'}>Female</MenuItem>
+                                      <MenuItem value={'male'}>Male</MenuItem>
+                                      <MenuItem value={'female'}>Female</MenuItem>
                                     </Select>
                                   </FormControl>
                                 </CardContent>
+                                <CardContent>
+                                  <FormControl fullWidth>
+                                    <InputLabel id="select-medical-center">Medical Center ID</InputLabel>
+                                    <Input type="number" value={medicalCenterId} onChange={handleMedicalCenterChange}></Input>
+                                  </FormControl>
+                                </CardContent>
                               </Grid>
-                              {/*                     <Grid xs={12} item container direction="row" alignItems="center" justifyContent="space-between">
-                        <InputLabel htmlFor="select-is-progressin">Is symptoms progressing?</InputLabel>
-                        <Checkbox
-                          id="select-is-progressin"
-                          checked={is_progressing}
-                          onClick={handleIsProgressingChange}
-                        ></Checkbox>
-                      </Grid>
-                      <Grid xs={12} item container direction="row" alignItems="center" justifyContent="space-between">
-                        <InputLabel htmlFor="select-is-inbred">Is there any inbred?</InputLabel>
-                        <Checkbox id="select-is-inbred" checked={is_inbred} onClick={handleIsInbredChange}></Checkbox>
-                      </Grid> */}
                             </Grid>
                           </Grid>
                         </Grid>
