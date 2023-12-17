@@ -24,6 +24,9 @@ public class Patient {
     private int age;
     private String sex;
 
+    // vectorized form of the patient's phenotype (float array)
+    private float[] phenotypeVector;
+
     @Relationship(type = "BELONGS_TO_MEDICAL_CENTER", direction = Relationship.Direction.OUTGOING)
     private MedicalCenter medicalCenter;
 
@@ -35,4 +38,5 @@ public class Patient {
 
     @Relationship(type = "HAS_PHENOTYPE_TERM", direction = Relationship.Direction.OUTGOING)
     private List<PhenotypeTerm> phenotypeTerms;
+
 }
