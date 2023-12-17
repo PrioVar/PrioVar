@@ -3,9 +3,15 @@ package com.bio.priovar.services;
 import com.bio.priovar.models.*;
 import com.bio.priovar.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PatientService {
@@ -15,6 +21,8 @@ public class PatientService {
     private final VariantRepository variantRepository;
     private final ClinicianRepository clinicianRepository;
     private final PhenotypeTermRepository phenotypeTermRepository;
+
+
 
     @Autowired
     public PatientService(PatientRepository patientRepository, DiseaseRepository diseaseRepository, MedicalCenterRepository medicalCenterRepository, VariantRepository variantRepository, ClinicianRepository clinicianRepository, PhenotypeTermRepository phenotypeTermRepository) {
@@ -198,4 +206,126 @@ public class PatientService {
         patientRepository.save(patient);
         return "Phenotype term deleted from patient successfully";
     }
+
+    // vectorized patient's phenotype by updating the phenotypeVector field
+    public String vectorizePatientPhenotype(Long patientId) {
+        //get patient from database
+        Patient patient = getPatientById(patientId);
+
+        if ( patient == null ) {
+            return "Patient with id " + patientId + " does not exist";
+        }
+
+        //get patient's phenotype terms
+        List<PhenotypeTerm> phenotypeTerms = patient.getPhenotypeTerms();
+
+        if ( phenotypeTerms == null ) {
+            return "Patient does not have any phenotype terms";
+        }
+
+        //get all phenotype terms ids from SsortedHPOids.txt file
+        //open file under resources
+
+        //arraylist of all phenotype term ids
+        List<Integer> allPhenotypeTermIds = new ArrayList<>();
+
+        ClassPathResource resource = new ClassPathResource("sortedHPOids.txt");
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                //add the phenotype term id as long to the arraylist
+                allPhenotypeTermIds.add(Integer.parseInt(line));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        //sort them by id (already sorted)
+        //allPhenotypeTerms.sort((PhenotypeTerm p1, PhenotypeTerm p2) -> p1.getId().compareTo(p2.getId()));
+        //provide index table for all phenotype terms
+        //create a map of phenotype terms and their indices in the allPhenotypeTerms list
+        Map<Integer, Integer> phenotypeTermIndexMap = new HashMap<>();
+
+        for (int i = 0; i < allPhenotypeTermIds.size(); i++) {
+            phenotypeTermIndexMap.put(allPhenotypeTermIds.get(i), i);
+
+            //if 66
+            if( allPhenotypeTermIds.get(i) == 66){
+                System.out.println("yess66ss");
+                System.out.println(i);
+            }
+
+
+        }
+
+        //vectorize the patient's phenotype
+        //create a float array of zeros of size allPhenotypeTerms.size()
+        float phenotypeVector[] = new float[allPhenotypeTermIds.size()];
+        for (int i = 0; i < phenotypeVector.length; i++) {
+            phenotypeVector[i] = 0;
+        }
+
+        //for every phenotype term in patient's phenotype terms,
+        // set the corresponding index and all its ancestors in the phenotypeVector to 1
+
+        for (PhenotypeTerm phenotypeTerm : phenotypeTerms) {
+            //convert phenotypeTerm.getId() to integer and get the index from the map
+            Integer id2 = phenotypeTerm.getId().intValue();
+
+            //print type of id2
+            System.out.println( "Name " +    id2.getClass().getName());
+
+            int index = phenotypeTermIndexMap.get( id2 );
+            //set the index and all its ancestors in the phenotypeVector to 1
+
+            // dynamic initialization of index arraylist of ancestors
+            List<Integer> indexes = new ArrayList<>();
+            indexes.add(index);
+
+            while (indexes.size() > 0) {
+                //get the last index from the indexes list
+                int currentIndex = indexes.get(indexes.size() - 1);
+
+                if (phenotypeVector[currentIndex] == 1) {
+                    //if the index in the phenotypeVector is already 1, remove the last index from the indexes list
+                    indexes.remove(indexes.size() - 1);
+                    continue;
+                }
+
+                //set the index in the phenotypeVector to 1
+                phenotypeVector[currentIndex] = 1;
+                //remove the last index from the indexes list
+                indexes.remove(indexes.size() - 1);
+
+                //get the phenotype term from the allPhenotypeTerms list at the currentIndex
+                PhenotypeTerm currentPhenotypeTerm = phenotypeTermRepository.findById((long) allPhenotypeTermIds.get(currentIndex)).orElse(null);
+                //get the parents of the current phenotype term
+                List<PhenotypeTerm> parents = currentPhenotypeTerm.getParents();
+
+                //if the current phenotype term has parents, add their indices to the indexes list
+                if (parents != null) {
+                    for (PhenotypeTerm parent : parents) {
+                        Integer pID = phenotypeTerm.getId().intValue();
+                        int pIndex = phenotypeTermIndexMap.get( pID );
+                        indexes.add(phenotypeTermIndexMap.get(pIndex));
+                    }
+                }
+            }
+        }
+        //update the patient's phenotypeVector field
+        patient.setPhenotypeVector(phenotypeVector);
+
+        // save and flush the patient
+        patientRepository.save(patient);
+
+        return "Patient's phenotype vectorized successfully";
+    }
+
+
+
+
+
 }
