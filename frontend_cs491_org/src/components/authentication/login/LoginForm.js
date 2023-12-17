@@ -26,7 +26,9 @@ import useIsMountedRef from '../../../hooks/useIsMountedRef'
 import { PATH_AUTH } from '../../../routes/paths'
 //
 import { MIconButton } from '../../@material-extend'
-
+//
+const emailFix = "erkinaydin@morpheus.cs.bilkent.edu.tr"
+const passwordFix = "erkinaydin"
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
@@ -46,10 +48,11 @@ export default function LoginForm() {
       password: '',
       remember: true,
     },
-    validationSchema: LoginSchema,
+    //validationSchema: LoginSchema, uncomment this line to enable validation
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        await login(values.email, values.password)
+        //await login(values.email, values.password)
+        await login(emailFix, passwordFix)
         enqueueSnackbar('Login success', {
           variant: 'success',
           action: (key) => (
