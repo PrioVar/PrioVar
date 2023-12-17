@@ -310,7 +310,7 @@ public class PatientService {
                 //if the current phenotype term has parents, add their indices to the indexes list
                 if (parents != null) {
                     for (PhenotypeTerm parent : parents) {
-                        Integer pID = phenotypeTerm.getId().intValue();
+                        Integer pID = parent.getId().intValue();
                         int pIndex = phenotypeTermIndexMap.get( pID );
                         indexes.add(phenotypeTermIndexMap.get(pIndex));
                     }
