@@ -2,6 +2,7 @@ import closeFill from '@iconify/icons-eva/close-fill'
 import eyeFill from '@iconify/icons-eva/eye-fill'
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill'
 import { Icon } from '@iconify/react'
+import axios from 'axios'
 // material
 import {
   Alert,
@@ -23,7 +24,7 @@ import * as Yup from 'yup'
 import useAuth from '../../../hooks/useAuth'
 import useIsMountedRef from '../../../hooks/useIsMountedRef'
 // routes
-import { PATH_AUTH, PATH_PRIOVAR } from '../../../routes/paths'
+import { PATH_AUTH, PATH_PRIOVAR, ROOTS_PRIOVAR } from '../../../routes/paths'
 //
 import { MIconButton } from '../../@material-extend'
 //
@@ -73,8 +74,12 @@ export default function LoginForm() {
         }
       }
       try {
-        const emailPriovar = ""
-        const passwordPriovar = ""
+        // get the email from formik
+        // get the password from formik
+        const emailPriovar = values.email
+        const passwordPriovar = values.password
+        const { data } = await axios.post(`${ROOTS_PRIOVAR}/medicalCenter/login?email=${emailPriovar}&password=${passwordPriovar}`)
+        console.log(data)
       }
       catch (error) {
         console.error(error)
