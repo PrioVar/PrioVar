@@ -88,6 +88,12 @@ public class InitializerController {
         patient2.setName("Ayşe Fatma");
         patient2.setAge(40);
         patient2.setSex("female");
+        PhenotypeTerm phenotypeTerm5 = phenotypeTermRepository.findById(2L).get();
+        PhenotypeTerm phenotypeTerm6 = phenotypeTermRepository.findById(98L).get();
+        List<PhenotypeTerm> phenotypeTerms1 = new ArrayList<>();
+        phenotypeTerms1.add(phenotypeTerm5);
+        phenotypeTerms1.add(phenotypeTerm6);
+        patient2.setPhenotypeTerms(phenotypeTerms1);
         patient2.setMedicalCenter(liva);
         patientRepository.save(patient2);
 
@@ -137,6 +143,14 @@ public class InitializerController {
         clinician2.setPassword("123");
         clinician2.setMedicalCenter(acibadem);
         clinicianRepository.save(clinician2);
+
+        Patient patient5 = new Patient();
+        patient5.setName("Mehmet Ali");
+        patient5.setAge(29);
+        patient5.setSex("male");
+        patient5.setMedicalCenter(acibadem);
+        patientRepository.save(patient5);
+
 
         // ADMIN
 
