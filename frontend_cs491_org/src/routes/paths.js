@@ -7,8 +7,33 @@ function path(root, sublink) {
 const ROOTS_AUTH = '/auth'
 const ROOTS_DASHBOARD = '/libra'
 const ROOTS_SAMPLE = '/sample'
-
+const ROOTS_PRIOVAR = ''
 // ----------------------------------------------------------------------
+
+export const PATH_PRIOVAR = {
+  root: ROOTS_PRIOVAR,
+  clinician: {
+    root: path(ROOTS_PRIOVAR, '/clinician'),
+    get: path(ROOTS_PRIOVAR, '/:clinicianId'),
+    add: path(ROOTS_PRIOVAR, '/add'),
+    login: path(ROOTS_PRIOVAR, '/login'),
+    changepassword: path(ROOTS_PRIOVAR, '/changePassword'),
+  },
+  healthCenter: {
+    root: path(ROOTS_PRIOVAR, '/medicalCenter'),
+    get: path(ROOTS_PRIOVAR, '/:medicalCenterId'),
+    add: path(ROOTS_PRIOVAR, '/add'),
+    login: path(ROOTS_PRIOVAR, '/login'),
+    changepassword: path(ROOTS_PRIOVAR, '/changePassword'),
+    addsubscription: path(ROOTS_PRIOVAR, "/addSubscription/:medicalCenterId/:subscriptionId")
+  },
+  admin: {
+    root: path(ROOTS_PRIOVAR, '/admin'),
+    add: path(ROOTS_PRIOVAR, '/add'),
+    login: path(ROOTS_PRIOVAR, '/login'),
+    changepassword: path(ROOTS_PRIOVAR, '/changePassword'),
+  },
+}
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
