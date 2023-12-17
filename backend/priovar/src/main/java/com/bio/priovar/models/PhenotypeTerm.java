@@ -24,7 +24,7 @@ public class PhenotypeTerm {
 
     //phenotypes are a directed acyclic graph
      @Relationship(type = "IS_A", direction = Relationship.Direction.OUTGOING)
-     private List<PhenotypeTerm> children;
+     private List<PhenotypeTerm> parents;
 
     // gene associations
     @Relationship(type = "ASSOCIATED_WITH_GENE", direction = Relationship.Direction.OUTGOING)
