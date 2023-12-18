@@ -2,6 +2,7 @@ package com.bio.priovar.services;
 
 import com.bio.priovar.models.Clinician;
 import com.bio.priovar.models.MedicalCenter;
+import com.bio.priovar.models.Patient;
 import com.bio.priovar.models.dto.LoginObject;
 import com.bio.priovar.repositories.ClinicianRepository;
 import com.bio.priovar.repositories.MedicalCenterRepository;
@@ -94,5 +95,15 @@ public class ClinicianService {
         clinician.setPassword(newPass);
         clinicianRepository.save(clinician);
         return ResponseEntity.ok("Password changed successfully");
+    }
+
+    public List<Patient> getAllPatientsByClinicianId(Long clinicianId) {
+        Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
+
+        if ( clinician == null ) {
+            return null;
+        }
+
+        return clinician.getPatients();
     }
 }

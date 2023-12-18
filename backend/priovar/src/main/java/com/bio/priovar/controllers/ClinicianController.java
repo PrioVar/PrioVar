@@ -1,6 +1,7 @@
 package com.bio.priovar.controllers;
 
 import com.bio.priovar.models.Clinician;
+import com.bio.priovar.models.Patient;
 import com.bio.priovar.models.dto.LoginObject;
 import com.bio.priovar.services.ClinicianService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class ClinicianController {
     @GetMapping("/{clinicianId}")
     public Clinician getClinicianById(@PathVariable("clinicianId") Long id) {
         return clinicianService.getClinicianById(id);
+    }
+
+    @GetMapping("/allPatients/{clinicianId}")
+    public List<Patient> getAllPatientsByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
+        return clinicianService.getAllPatientsByClinicianId(clinicianId);
     }
 
     @PostMapping("/add")
