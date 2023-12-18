@@ -17,6 +17,7 @@ import FileUploadView from '../views/FileUploadView'
 import ClinicsPatients from '../views/ClinicsPatients'
 import MyPatients from '../views/MyPatients'
 import CustomQuery from 'src/views/CustomQuery'
+import SubscriptionPlans from 'src/views/SubscriptionPlans'
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) =>
@@ -109,6 +110,7 @@ export default function Router() {
         { path: '/clinics/:healthCenterId/patients', element: <ClinicsPatients />},
         { path: '/clinician/:healthCenterId/patients', element: <MyPatients />},
         { path: '/customquery', element: < CustomQuery/>},
+        { path: '/subscriptionPlans', element: < SubscriptionPlans/>},
         {
           path: 'user',
           children: [

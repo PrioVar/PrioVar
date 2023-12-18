@@ -27,7 +27,7 @@ import {
   } from '@material-ui/core'
   import { withStyles } from '@material-ui/styles'
   // hooks
-  import { useState, useMemo, useEffect } from 'react'
+  import React, { useState, useMemo, useEffect } from 'react'
   import { useParams } from 'react-router-dom'
   import useLazyEffect from 'src/hooks/useLazyEffect'
   import { useFiles } from 'src/api/file/list'
@@ -306,13 +306,16 @@ import {
     const [is_progressing, setProgressing] = useState(fileDetails?.details?.is_progressing)
     const [notes, setNotes] = useState(fileDetails?.details?.notes)
     const [name, setName] = useState(fileDetails?.details?.name)
-    const [medicalCenterId, setMedicalCenterId] = useState(17704)
+    const [healthCenterId, setHealthCenterId] = useState(localStorage.getItem('healthCenterId') || '');
   
     const handleGenderChange = (e) => setGender(e.target.value)
     const handleStartAgeChange = (e) => setStartAge(e.target.value)
     const handleAgeChange = (e) => setAge(e.target.value)
     const handleNameChange = (e) => setName(e.target.value)
-    const handleMedicalCenterChange = (e) => setMedicalCenterId(e.target.value)
+    const handleHealthCenterChange = (e) => setHealthCenterId(e.target.value)
+    React.useEffect(() => {
+        localStorage.setItem('healthCenterId', healthCenterId);
+      }, [healthCenterId]);
     /*  const handleIsInbredChange = (e) => setIsInbred(e.target.checked)
     const handleIsProgressingChange = (e) => setProgressing(e.target.checked) */
     const handleSetNotes = (e) => setNotes(e.target.value)
@@ -338,7 +341,7 @@ import {
             sex: gender,
             clinicalHistory: notes,
             medicalCenter: {
-                id: medicalCenterId,
+                id: healthCenterId,
             }
           },
         phenotypeTerms: phenotypeTerms
@@ -381,12 +384,6 @@ import {
     return (
         <Dialog open={open} onClose={onClose}>
       <>
-          {/*ReactDOM.createPortal(
-            <Stack direction="row" spacing={2}>
-              <NavbarRoutes navConfig={DASHBOARD_CONFIG} />
-            </Stack>,
-            document.getElementById('custom-toolbar-container'),
-          )*/}
           {fileDetails ? (
             <Box flexDirection="column" spacing={3} mt={2}>
               <Typography textAlign="center" variant="h4">
@@ -422,7 +419,7 @@ import {
                   </Grid>
                   {fileDetails?.details && (
                     <>
-                      <Grid item container direction="row" xs={12}>
+                      <Grid item container xs={12}>
                         <Grid container item xs={6} sx={{ flexGrow: 1 }}>
                           <Grid item xs={12} sx={{ flexGrow: 1 }}>
                             <CardHeader
@@ -431,9 +428,8 @@ import {
                               sx={{ paddingTop: 0 }}
                             />
                           </Grid>
-                          <Grid container direction={'row'} item xs={12} height={'auto'}>
-                            <Grid container item xs={6} direction={'row'}>
-                            <CardContent>
+                            <Grid container item xs={6} >
+                             <CardContent>
                                   <FormControl fullWidth>
                                     <InputLabel id="select-name">Name</InputLabel>
                                     <Input type="text" value={name} onChange={handleNameChange}></Input>
@@ -464,15 +460,14 @@ import {
                                     </Select>
                                   </FormControl>
                                 </CardContent>
-                                <CardContent>
+                                <CardContent >
                                   <FormControl fullWidth>
-                                    <InputLabel id="select-medical-center">Medical Center ID</InputLabel>
-                                    <Input type="number" value={medicalCenterId} onChange={handleMedicalCenterChange}></Input>
+                                    Health Center ID
+                                    <Input type="number" value={healthCenterId} onChange={handleHealthCenterChange}></Input>
                                   </FormControl>
                                 </CardContent>
                               </Grid>
                             </Grid>
-                          </Grid>
                         </Grid>
                         <Grid item xs={6}>
                           <CardContent sx={{ height: '100%', paddingLeft: 0 }}>
