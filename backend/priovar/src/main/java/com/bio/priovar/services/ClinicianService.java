@@ -72,6 +72,7 @@ public class ClinicianService {
 
         loginObject.setMessage("Login successful");
         loginObject.setId(clinician.getId());
+        loginObject.setRelatedId(clinician.getMedicalCenter().getId());
         return ResponseEntity.ok(loginObject);
     }
 
