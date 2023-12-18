@@ -155,6 +155,7 @@ import {
   
   const SamplesView = function () {
     //const classes = useStyles()
+    let navigate = useNavigate()
     const filesApi = useFiles()
     const bedFilesApi = useBedFiles()
     const { status, data = [] } = filesApi.query
@@ -214,7 +215,7 @@ import {
     }
 
     const handleSeeSimilarPatients = (row) => {
-        // TODO
+        navigate(PATH_DASHBOARD.general.similarPatients, { state: { detail: row } });
     }
 
     const handleAddPatient = (row) => {

@@ -18,6 +18,7 @@ import ClinicsPatients from '../views/ClinicsPatients'
 import MyPatients from '../views/MyPatients'
 import CustomQuery from 'src/views/CustomQuery'
 import SubscriptionPlans from 'src/views/SubscriptionPlans'
+import SimilarPatients from 'src/views/SimilarPatients'
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) =>
@@ -111,6 +112,7 @@ export default function Router() {
         { path: '/clinician/:healthCenterId/patients', element: <MyPatients />},
         { path: '/customquery', element: < CustomQuery/>},
         { path: '/subscriptionPlans', element: < SubscriptionPlans/>},
+        { path: '/similarPatients', element: < SimilarPatients/>},
         {
           path: 'user',
           children: [
