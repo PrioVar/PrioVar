@@ -1,6 +1,7 @@
 package com.bio.priovar.services;
 
 import com.bio.priovar.models.Admin;
+import com.bio.priovar.models.dto.LoginObject;
 import com.bio.priovar.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +27,25 @@ public class AdminService {
         return ResponseEntity.ok("Admin added successfully!");
     }
 
-    public ResponseEntity<String> loginAdmin(String email, String password) {
+    public ResponseEntity<LoginObject> loginAdmin(String email, String password) {
         Admin admin = adminRepository.findAdminByEmail(email);
+        LoginObject loginObject = new LoginObject();
 
         if (admin == null) {
-            return ResponseEntity.badRequest().body("Admin with email " + email + " does not exist!");
+            loginObject.setMessage("Admin with email " + email + " does not exist!");
+            loginObject.setId(-1L);
+            return ResponseEntity.badRequest().body(loginObject);
         }
 
         if (!admin.getPassword().equals(password)) {
-            return ResponseEntity.badRequest().body("Incorrect password!");
+            loginObject.setMessage("Incorrect password!");
+            loginObject.setId(-1L);
+            return ResponseEntity.badRequest().body(loginObject);
         }
 
-        return ResponseEntity.ok("Admin logged in successfully!");
+        loginObject.setMessage("Admin logged in successfully!");
+        loginObject.setId(admin.getId());
+        return ResponseEntity.ok(loginObject);
     }
 
     public ResponseEntity<String> changePasswordByEmailAdmin(String email, String newPass, String oldPass) {

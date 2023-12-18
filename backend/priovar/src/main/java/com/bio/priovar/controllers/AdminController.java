@@ -1,6 +1,7 @@
 package com.bio.priovar.controllers;
 
 import com.bio.priovar.models.Admin;
+import com.bio.priovar.models.dto.LoginObject;
 import com.bio.priovar.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginAdmin(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<LoginObject> loginAdmin(@RequestParam String email, @RequestParam String password) {
         return adminService.loginAdmin(email,password);
     }
 
