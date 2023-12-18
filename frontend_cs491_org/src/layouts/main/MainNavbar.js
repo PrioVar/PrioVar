@@ -78,9 +78,6 @@ export default function MainNavbar() {
             <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
           </MHidden>
 
-          <Button variant="contained" target="_blank" href={PATH_PAGE.contact}>
-            Contact Us
-          </Button>
 
           <MHidden width="mdUp">
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
