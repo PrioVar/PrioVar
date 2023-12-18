@@ -32,7 +32,7 @@ const emailFix = "erkinaydin@morpheus.cs.bilkent.edu.tr"
 const passwordFix = "erkinaydin"
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+export default function LoginForm({ callerPage }) {
   const { login } = useAuth()
   const isMountedRef = useIsMountedRef()
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -78,11 +78,29 @@ export default function LoginForm() {
         // get the password from formik
         const emailPriovar = values.email
         const passwordPriovar = values.password
-        const { data } = await axios.post(`${ROOTS_PRIOVAR}/medicalCenter/login?email=${emailPriovar}&password=${passwordPriovar}`)
-        console.log(data)
-        const idFromResponse = data.id
-        localStorage.setItem('priovarUserId', idFromResponse);
 
+        var clinicianId = -1
+        var healthCenterId = -1
+        var adminId = -1
+        if(callerPage === 'Login') {
+          const { data } = await axios.post(`${ROOTS_PRIOVAR}/clinician/login?email=${emailPriovar}&password=${passwordPriovar}`)
+          clinicianId = data.id
+        }
+        else if(callerPage === 'LoginHealthCenter') {
+          const { data } = await axios.post(`${ROOTS_PRIOVAR}/medicalCenter/login?email=${emailPriovar}&password=${passwordPriovar}`)
+          healthCenterId = data.id
+        }
+        else if(callerPage === 'LoginAdmin') {
+          const { data } = await axios.post(`${ROOTS_PRIOVAR}/medicalCenter/login?email=${emailPriovar}&password=${passwordPriovar}`)
+          adminId = data.id
+        }
+        
+        localStorage.setItem('clinicianId', clinicianId)
+        localStorage.setItem('healthCenterId', healthCenterId)
+        localStorage.setItem('adminId', adminId)
+        console.log(localStorage.getItem('clinicianId'))
+        console.log(localStorage.getItem('healthCenterId'))
+        console.log(localStorage.getItem('adminId'))
       }
       catch (error) {
         console.error(error)

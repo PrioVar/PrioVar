@@ -78,7 +78,7 @@ export default function LoginHealthCenter() {
                 Admin Portal
             </Button>
           </Stack>
-          <LoginForm />
+          <LoginForm callerPage={'LoginHealthCenter'}/>
         </ContentStyle>
       </Container>
     </RootStyle>

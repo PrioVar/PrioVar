@@ -78,7 +78,7 @@ export default function LoginAdmin() {
                 Admin Portal
             </Button>
           </Stack>
-          <LoginForm />
+          <LoginForm callerPage={'LoginAdmin'}/>
         </ContentStyle>
       </Container>
     </RootStyle>
