@@ -18,6 +18,7 @@ export const PATH_PRIOVAR = {
     add: path(ROOTS_PRIOVAR, '/add'),
     login: path(ROOTS_PRIOVAR, '/login'),
     changepassword: path(ROOTS_PRIOVAR, '/changePassword'),
+    allPatients: path(ROOTS_PRIOVAR, '/allPatients/:clinicianId'),
   },
   healthCenter: {
     root: path(ROOTS_PRIOVAR, '/medicalCenter'),
@@ -29,6 +30,16 @@ export const PATH_PRIOVAR = {
   },
   admin: {
     root: path(ROOTS_PRIOVAR, '/admin'),
+    add: path(ROOTS_PRIOVAR, '/add'),
+    login: path(ROOTS_PRIOVAR, '/login'),
+    changepassword: path(ROOTS_PRIOVAR, '/changePassword'),
+  },
+  patient: {
+    root: path(ROOTS_PRIOVAR, '/patient'),
+    get: path(ROOTS_PRIOVAR, '/:patientId'),
+    getByDisease: path(ROOTS_PRIOVAR, '/byDisease/:diseaseId'),
+    getByMedicalCenter: path(ROOTS_PRIOVAR, '/byMedicalCenter/:medicalCenterId'),
+    getByClinician: path(ROOTS_PRIOVAR, '/byClinician/:clinicianId'),
     add: path(ROOTS_PRIOVAR, '/add'),
     login: path(ROOTS_PRIOVAR, '/login'),
     changepassword: path(ROOTS_PRIOVAR, '/changePassword'),

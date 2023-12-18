@@ -251,7 +251,7 @@ import {
       },
       {
         name: 'created_at',
-        label: 'Uploaded At',
+        label: 'Created At',
         options: {
           filter: false,
           sort: true,
@@ -262,8 +262,8 @@ import {
         },
       },
       {
-        name: 'finished_at',
-        label: 'Completed',
+        name: 'patient_name',
+        label: 'Patient Name',
         options: {
           filter: true,
           sort: false,
