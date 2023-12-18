@@ -47,24 +47,6 @@ import {
   // constants
   import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
   
-  import VariantDasboard2 from '../common/VariantDasboard2'
-
-
-  
-  const GoToSampleDashboard = function ({ fileId, sampleName }) {
-    const navigate = useNavigate()
-  
-    const handleClick = () => {
-      navigate(`/libra/sample/${fileId}/${sampleName}`)
-    }
-  
-    return (
-      <Button variant="contained" onClick={handleClick} size="small">
-        <ArrowForward />
-      </Button>
-    )
-  }
-  
   const CustomQueryTable = function () {
     //const classes = useStyles()
     const bedFilesApi = useBedFiles()
@@ -115,30 +97,6 @@ import {
 
 
 
-  
-      const handleButtonChange = () => {
-        //do the change here
-        const { id, type } = selectedFile?.vcf_id
-        ? { id: selectedFile.vcf_id, type: 'VCF' }
-        : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
-        let annotation = {
-            type: 'Exome',
-            machine: 'Illumina',
-            kit: 0,
-            panel: '',
-            germline: true,
-            alignment: 'BWA',
-            reference: 'GRCh38',
-            isSnp: false,
-            isCnv: false,
-            cnvAnalysis: 'xhmm+decont',
-        }
-        annotateFile(id, annotation, type).then((res) => {
-            filesApi.refresh()
-            //setAnnotationModalOpen(false)
-        })
-    }
-
     const ManageHpo = function ({ fileId , hpoList, setHpoList}) {
       
         return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
@@ -150,7 +108,7 @@ import {
         <>
 
     <Box p={3} mt={4}>
-        Custom Query
+    <Typography variant="h5">Custom Query</Typography>
       <Grid container spacing={2} alignItems="flex-end" mt={4}>
         <Grid item xs={6}>
             <ManageHpo fileId={fileId} sampleName={sampleName} hpoList={hpoList} setHpoList={setHpoList}  />
