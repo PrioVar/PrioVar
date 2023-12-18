@@ -9,5 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LoginObject {
     private Long id;
+    private Long relatedId;
     private String message;
 }
