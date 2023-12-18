@@ -12,12 +12,22 @@ import {
     IconButton,
     DialogContentText,
     Typography,
+    Grid,
     TextField,
+    Tab,
+    Tabs,
+    Tooltip,
+    InputLabel,
+    FormControl,
+    Input,
+    Select,
+    MenuItem
   } from '@material-ui/core'
+  import axios from 'axios';
   import { makeStyles } from '@material-ui/styles'
   import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
   import MUIDataTable from 'mui-datatables'
-  import React, { useState } from 'react'
+  import React, { useState, useMemo, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
   import DeleteIcon from '@material-ui/icons/Delete'
   import { fDateTime } from 'src/utils/formatTime'
@@ -29,115 +39,17 @@ import {
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
+  import { useParams } from 'react-router-dom'
+
+  import Tags from 'src/components/Tags'
+  // api utils
+  import { updateTrio, useHpo } from '../../api/vcf'
+  // constants
+  import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
   
   import VariantDasboard2 from '../common/VariantDasboard2'
-  
-  const EditableNote = ({ note, onSave, details }) => {
-    const [isEditing, setIsEditing] = useState(false)
-    const [currentNote, setCurrentNote] = useState(note)
-  
-    const handleEdit = () => {
-      setIsEditing(true)
-    }
-  
-    const handleSave = () => {
-      onSave(currentNote)
-      setIsEditing(false)
-    }
-  
-    const handleChange = (e) => {
-      setCurrentNote(e.target.value)
-    }
-  
-    return (
-      <Box p={2}>
-        {isEditing ? (
-          <Box>
-            <TextField multiline value={currentNote} onChange={handleChange} />
-            <Box p={1} />
-            <Button variant="contained" onClick={handleSave}>
-              Save
-            </Button>
-          </Box>
-        ) : (
-          <Box>
-            <Typography>{currentNote}</Typography>
-            <Divider />
-            {details.date && details.person && (
-              <Typography variant="caption">
-                {details.date && fDateTime(details.date)} {details.person ? `by ${details.person}` : null}
-              </Typography>
-            )}
-            <Box p={1} />
-            <Button variant="contained" onClick={handleEdit}>
-              Edit
-            </Button>
-          </Box>
-        )}
-      </Box>
-    )
-  }
-  
-  const getStatusLabel = (row) => {
-    const analyzeStatus = row?.analyses?.status ? row.analyses.status : null
-    const annotationStatus = row?.annotations?.status ? row.annotations.status : null
-    const is_annotated = row?.is_annotated
-    if (!is_annotated) return 'WAITING'
-    // if we're finished with annotating, return analysis status
-    if (!annotationStatus || annotationStatus === 'DONE') return analyzeStatus
-    return 'ANNO_' + annotationStatus
-  }
-  
-  const useStyles = makeStyles((theme) => ({
-    expandedCell: {
-      boxShadow: theme.shadows[3]
-        .split('),')
-        .map((s) => `inset ${s}`)
-        .join('),'),
-    },
-  }))
-  
-  const DeleteFileButton = ({ onClickConfirm }) => {
-    const [dialogOpen, setDialogOpen] = useState(false)
-  
-    const handleClickDelete = () => {
-      setDialogOpen(true)
-    }
-  
-    const handleCloseDialog = () => {
-      setDialogOpen(false)
-    }
-  
-    const handleClickConfirm = () => {
-      setDialogOpen(false)
-      onClickConfirm()
-    }
-  
-    return (
-      <>
-        <IconButton sx={{ '&:hover': { color: 'error.main' } }} onClick={handleClickDelete}>
-          <DeleteIcon />
-        </IconButton>
-        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-          <DialogTitle>Danger: Delete file</DialogTitle>
-          <Box p={0.5} />
-          <DialogContent>
-            <DialogContentText>Do you really want to delete this file?</DialogContentText>
-            <DialogContentText>This will delete the file and all associated analyses.</DialogContentText>
-            <DialogContentText>
-              <strong>This action cannot be undone.</strong>
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog}>Cancel</Button>
-            <Button onClick={handleClickConfirm} autoFocus color="error">
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
-    )
-  }
+
+
   
   const GoToSampleDashboard = function ({ fileId, sampleName }) {
     const navigate = useNavigate()
@@ -155,36 +67,55 @@ import {
   
   const CustomQueryTable = function () {
     //const classes = useStyles()
-    const filesApi = useFiles()
     const bedFilesApi = useBedFiles()
-    const { status, data = [] } = filesApi.query
     const { data: bedFiles = [] } = bedFilesApi.query
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
+    const { fileId, sampleName } = useParams()
+    const filesApi = useFiles()
+    const { status, data = [] } = filesApi.query
+    const fileDetails = useMemo(
+      () => data.find((f) => f.vcf_id === fileId || f.fastq_pair_id === fileId),
+      [data, fileId, filesApi],
+    )
+
+    //
+    const [gene, setGene] = useState('');
+    const [ageIntervalStart, setAgeIntervalStart] = useState('');
+    const [ageIntervalEnd, setAgeIntervalEnd] = useState('');
+    const [gender, setGender] = useState(''); 
+
+    const handleSearch = async () => {
+
+        const phenotypeTerms = hpoList.map(item => {
+            // Extract the numeric part of the HP code and remove leading zeros
+            const id = parseInt(item.value.split(':')[1], 10);
+            return { id };
+        });
+
+        const body = {
+            phenotypeTerms: phenotypeTerms,
+            geneSpecification: gene,
+            sex: gender,
+            ageIntervalStart: ageIntervalStart,
+            ageIntervalEnd: ageIntervalEnd
+        }
+        console.log("body:")
+        console.log(body)
+        try {
+            const response = await axios.post('http://localhost:8080/customQuery', body);
+            console.log("SUCCESS!")
+    
+          } catch (error) {
+            console.log("FAIL!")
+            console.error('custom query error:', error.response);
+          }
+
+      };
+
+
+
   
-    const setFinishedInfo = (row) => {
-      const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
-      updateFinishInfo(id).then(() => {
-        filesApi.refresh()
-      })
-    }
-  
-    const setFileNotes = (row, notes) => {
-      const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
-      updateFileNotes(id, notes).then(() => {
-        filesApi.refresh()
-      })
-    }
-  
-    const handleFileAnnotation = (annotation) => {
-      const { id, type } = selectedFile?.vcf_id
-        ? { id: selectedFile.vcf_id, type: 'VCF' }
-        : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
-      annotateFile(id, annotation, type).then((res) => {
-        filesApi.refresh()
-        setAnnotationModalOpen(false)
-      })
-    }
       const handleButtonChange = () => {
         //do the change here
         const { id, type } = selectedFile?.vcf_id
@@ -207,227 +138,88 @@ import {
             //setAnnotationModalOpen(false)
         })
     }
-  
-    const handleAnnotationModelOpen = (row) => {
-      setSelectedFile(row)
-      setAnnotationModalOpen(true)
-    }
 
-    const handleSeeSimilarPatients = (row) => {
-        // TODO
-    }
+    const ManageHpo = function ({ fileId , hpoList, setHpoList}) {
+      
+        return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
+      }
+  
 
-    const handleAddPatient = (row) => {
-        // TODO
-    }
-  
-    const COLUMNS = [
-      {
-        name: 'delete',
-        label: 'Delete',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            if (!row) return null
-  
-            const handleClickConfirm = () => {
-              if (row.vcf_id) {
-                deleteVcfFile(row.vcf_id)
-              } else if (row.fastq_pair_id) {
-                deleteFastqFile(row.fastq_file_1.fastq_file_id)
-                deleteFastqFile(row.fastq_file_2.fastq_file_id)
-              } else {
-                deleteFastqFile(row.fastq_file_id)
-              }
-  
-              filesApi.refresh()
-            }
-  
-            return <DeleteFileButton onClickConfirm={handleClickConfirm} />
-          },
-        },
-      },
-      {
-        name: 'created_at',
-        label: 'Uploaded At',
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? fDateTime(row.created_at) : null
-          },
-        },
-      },
-      {
-        name: 'finished_at',
-        label: 'Completed',
-        options: {
-          filter: true,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? (
-              <AnalysedCheckbox
-                checked={row.is_finished}
-                onChange={(e) => setFinishedInfo(row)}
-                details={{ date: row.finish_time, person: row.finish_person }}
-              />
-            ) : null
-          },
-        },
-      },
-      {
-        name: 'notes',
-        label: 'Notes',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? (
-              <ExpandOnClick
-                expanded={
-                  <EditableNote
-                    note={row.file_notes}
-                    onSave={(notes) => setFileNotes(row, notes)}
-                    details={{ date: row.notes_time, person: row.notes_person }}
-                  />
-                }
-              >
-                {({ ref, onClick }) => (
-                  <IconButton variant="contained" ref={ref} onClick={onClick}>
-                    <Note />
-                  </IconButton>
-                )}
-              </ExpandOnClick>
-            ) : null
-          },
-        },
-      },
-      {
-        name: 'name',
-        label: 'Filename',
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRenderLite: (dataIndex) => {
-            const row = data[dataIndex]
-            if (!row) return null
-            if (row?.fastq_pair_id) {
-              return (
-                <Stack direction="row" spacing={1}>
-                  <Chip label={row.fastq_file_1.name} />
-                  <Chip label={row.fastq_file_2.name} />
-                </Stack>
-              )
-            }
-            return <Chip label={row.name} />
-          },
-        },
-      },
-      {
-        name: 'sample_name',
-        label: 'Sample',
-        options: {
-          filter: true,
-          sort: true,
-        },
-      },
-      {
-        name: 'status',
-        label: 'Status',
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRenderLite: (dataIndex) => {
-            const row = data[dataIndex]
-            const status = getStatusLabel(row)
-            return status ? <JobStateStatus status={status} /> : null
-          },
-        },
-      },
-      {
-        name: 'similar_patients',
-        label: 'See similar patients',
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return (
-                <Button variant="contained" color="info" onClick={() => handleSeeSimilarPatients(row)} size="small">
-                  <Info />
-                </Button>
-              )
-          },
-        },
-      },
-      {
-        name: 'go',
-        label: 'Go',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRenderLite: (dataIndex) => {
-            const row = data[dataIndex]
-            const status = getStatusLabel(row)
-            if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
-            if (status.includes('ANNO') || status === 'WAITING')
-              return (
-                <Button variant="contained" color="info" onClick={() => handleAnnotationModelOpen(row)} size="small">
-                  <Info />
-                </Button>
-              )
-            return (
-              <GoToSampleDashboard fileId={row.vcf_id ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
-            )
-          },
-        },
-      },
-    ]
-  
-    switch (status) {
-      case 'success':
-        return (
-          <>
-            <Box display="flex" justifyContent="flex-end" mt={2}> 
-            <Button 
-                variant="contained" 
-                color="info" 
-                onClick={() => handleAddPatient()} 
-                component={RouterLink} to={PATH_DASHBOARD.general.files}
-                size="small"
+    const [hpoList, setHpoList] = useHpo({ fileId })
+    return (
+        <>
+
+    <Box p={3} mt={4}>
+        Custom Query
+      <Grid container spacing={2} alignItems="flex-end" mt={4}>
+        <Grid item xs={6}>
+            <ManageHpo fileId={fileId} sampleName={sampleName} hpoList={hpoList} setHpoList={setHpoList}  />
+        </Grid>
+        <Grid item container xs={12} sm={6} spacing={2}>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              label="Age Interval Start"
+              type="number"
+              value={ageIntervalStart}
+              onChange={(e) => setAgeIntervalStart(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              label="Age Interval End"
+              type="number"
+              value={ageIntervalEnd}
+              onChange={(e) => setAgeIntervalEnd(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            label="Gene Specification"
+            value={gene}
+            onChange={(e) => setGene(e.target.value)}
+          />
+        </Grid>
+        <Grid item container xs={6} spacing={2} alignItems="center" >
+          <Grid item xs={6}>
+          <FormControl fullWidth>
+            <InputLabel id="gender-select-label">Gender</InputLabel>
+            <Select
+              labelId="gender-select-label"
+              id="gender-select"
+              value={gender}
+              label="Gender"
+              onChange={(e) => setGender(e.target.value)}
             >
-                <Add /> 
-                Add Patient 
-            </Button>
-            </Box>
-            <VariantDasboard2
-            open={isAnnotationModalOpen}
-            handleButtonChange = {handleButtonChange}
-            onClose={() => setAnnotationModalOpen()}
-            />
-            <MUIDataTable
-              title="Custom Query"
-              data={data}
-              columns={COLUMNS}
-              options={{
-                selectableRows: 'none',
-                sortOrder: { name: 'created_at', direction: 'desc' },
-                expandableRows: false,
-                print: false,
-                viewColumns: true,
-                download: false,
-              }}
-            />
-          </>
-        )
-      default:
-        return <CircularProgress />
-    }
+              <MenuItem value="M">Male</MenuItem>
+              <MenuItem value="F">Female</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      <Grid item>
+        <Button variant="contained" color="primary" onClick={handleSearch}>
+          Search
+        </Button>
+        </Grid>
+        </Grid>
+        </Grid>
+        <Box mt={12}>
+            Results will be displayed here
+      </Box>
+    </Box>
+
+
+
+
+        
+
+        </>
+    )
+
   }
   
   export default CustomQueryTable
