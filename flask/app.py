@@ -4,7 +4,7 @@ from flask_cors import CORS
 from helpers.hpo import read_hpo_from_json, process_nodes, process_edges, save_nodes, save_edges
 from helpers.clinvar import read_clinvar, save_clinvar
 from helpers.hpo_annotations import initiate_disease_database, initiate_gene_database
-from helpers.annotation import annotate_variants
+from helpers.annotation import annotate_variants, get_all_annotated_variants
 
 app = Flask(__name__)
 CORS(app)
@@ -47,11 +47,14 @@ def get_genes():
 def get_annotated_variants():
     # get the file from the request
     file = request.files['file']
-
     # annotate the variants
-    annotated_df = annotate_variants(file)
+    annotated_data = annotate_variants(file)
     # return the annotated variants as a dataframe
-    return annotated_df.to_json()
+    return annotated_data
+
+@app.route('/get-annotated-variants', methods=['GET'])
+def get_annotated_variants_of_patient():
+    return get_all_annotated_variants()
     
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
