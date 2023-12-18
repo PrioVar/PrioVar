@@ -619,7 +619,7 @@ function FiltersPanelMenu(props) {
   return (
     <>
       <CardContent className={classes.cardContent}>
-        {renderPanelItem({
+        {/*renderPanelItem({
           title: 'Location',
           component: (
             <LocationFilters
@@ -639,12 +639,11 @@ function FiltersPanelMenu(props) {
               setIsToggleChangedLoc={setIsToggleChangedLoc}
             />
           ),
-        })}
-        {renderPanelItem({
+        })*/}
+        {/*renderPanelItem({
           title: 'Genotype',
           component: <GenotypeFilter gtFilterEvent={gtFilterEvent} setGtFilterEvent={setGtFilterEvent} />,
-        })}
-        {/* {renderPanelItem({ title: 'Scenario', component: <ScenarioFilters /> })} */}
+        })*/}
         {renderPanelItem({
           title: 'Frequency',
           component: (
@@ -676,7 +675,7 @@ function FiltersPanelMenu(props) {
             />
           ),
         })}
-        {renderPanelItem({
+        {/*renderPanelItem({
           title: 'Quality',
           component: (
             <QualityFilters
@@ -694,11 +693,11 @@ function FiltersPanelMenu(props) {
               setIsToggleChangedQuality={setIsToggleChangedQuality}
             />
           ),
-        })}
-        {renderPanelItem({
+        })*/}
+        {/*renderPanelItem({
           title: 'Impact',
           component: <ImpactFilters impactEvent={impactEvent} setImpactEvent={setImpactEvent} filterType="impact" />,
-        })}
+        })*/}
         {renderPanelItem({
           title: 'Pathogenicity',
           component: (
@@ -729,35 +728,35 @@ function FiltersPanelMenu(props) {
             />
           ),
         })}
-        {renderPanelItem({
+        {/*renderPanelItem({
           title: 'ACMG',
           component: <ImpactFilters impactEvent={acmgEvent} setImpactEvent={setAcmgEvent} filterType="acmg" />,
           tooltip:
             'Li, Quan, and Kai Wang. "InterVar: clinical interpretation of genetic variants by the 2015 ACMG-AMP guidelines." The American Journal of Human Genetics 100.2 (2017): 267-280.',
-        })}
-        {renderPanelItem({
+        })*/}
+        {/*renderPanelItem({
           title: 'ClinVar',
           component: <ImpactFilters impactEvent={clinvarEvent} setImpactEvent={setClinvarEvent} filterType="clinvar" />,
           tooltip:
             'Landrum, Melissa J., et al. "ClinVar: improvements to accessing data." Nucleic acids research 48.D1 (2020): D835-D844.',
-        })}
-        {renderPanelItem({
+        })*/}
+        {/*renderPanelItem({
           title: 'Panels',
           component: <GeneSetFilters geneSets={geneSets} setGeneSets={setGeneSets} />,
-        })}
+        })*/}
         {renderPanelItem({
           title: 'Diseases',
           component: <PhenotypeFilter phenotypes={phenotypes} setPhenotypes={setPhenotypes} />,
           tooltip:
             'Pletscher-Frankild, Sune, et al. "DISEASES: Text mining and data integration of disease–gene associations." Methods 74 (2015): 83-89.',
         })}
-        {renderPanelItem({
+        {/*renderPanelItem({
           title: 'HPO',
           component: <HPOFilter hpoFilter={hpoFilter} setHpoFilter={setHpoFilter} />,
           tooltip:
             'Köhler, Sebastian, et al. "The human phenotype ontology in 2017." Nucleic acids research 45.D1 (2017): D865-D876.',
-        })}
-        {renderPanelItem({
+        })*/}
+        {/*renderPanelItem({
           title: 'Read Details',
           component: (
             <ReadFilters
@@ -771,7 +770,7 @@ function FiltersPanelMenu(props) {
               setAbFilterToggle={setAbFilterToggle}
             />
           ),
-        })}
+        })*/}
         {renderPanelItem({
           title: 'Saved Filters',
           component: (
