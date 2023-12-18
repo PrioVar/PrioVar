@@ -1,6 +1,7 @@
 // material
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+import { mt } from 'date-fns/locale'
 
 import PropTypes from 'prop-types'
 
@@ -23,7 +24,7 @@ export default function Logo({ sx, size = 'small' }) {
   switch (size) {
     case 'large':
       return (
-        <Box sx={{ width: { xs: 54, md: 256 }, ...sx }}>
+        <Box sx={{ width: { xs: 54, md: 256 }, mt:5, ...sx }}>
           <img src="/static/new_images/priovar_logo.png" className={classes.img} />
         </Box>
       )
