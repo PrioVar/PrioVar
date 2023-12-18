@@ -81,7 +81,8 @@ export const PATH_DASHBOARD = {
     variantDetails: path(ROOTS_DASHBOARD, '/variants/:fileId/:sampleName/:chrom/:pos'),
     myPatients: path(ROOTS_DASHBOARD, '/clinician/:healthCenterId/patients'),
     clinicPatients: path(ROOTS_DASHBOARD, '/clinics/:healthCenterId/patients'),
-    customQuery: path(ROOTS_DASHBOARD, '/customquery')
+    customQuery: path(ROOTS_DASHBOARD, '/customquery'),
+    subscriptionPlans: path(ROOTS_DASHBOARD, '/subscriptionPlans')
     //add my patients, clinics patients, subscription plans
   },
   mail: {

@@ -116,7 +116,7 @@ export default function SideNav() {
                   Custom Query
               </Button>
               {/**TODO */}
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.subscriptionPlans} sx={{ mt: 5 }}>
                   Subscription Plans
               </Button>
               </Stack>
