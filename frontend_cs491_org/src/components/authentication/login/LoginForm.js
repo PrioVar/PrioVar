@@ -84,7 +84,9 @@ export default function LoginForm({ callerPage }) {
         var adminId = -1
         if(callerPage === 'Login') {
           const { data } = await axios.post(`${ROOTS_PRIOVAR}/clinician/login?email=${emailPriovar}&password=${passwordPriovar}`)
+          console.log(data)
           clinicianId = data.id
+          healthCenterId = data.relatedId
         }
         else if(callerPage === 'LoginHealthCenter') {
           const { data } = await axios.post(`${ROOTS_PRIOVAR}/medicalCenter/login?email=${emailPriovar}&password=${passwordPriovar}`)
