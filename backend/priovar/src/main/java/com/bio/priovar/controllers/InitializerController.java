@@ -47,6 +47,8 @@ public class InitializerController {
             System.out.println("HPO data loaded");
             graphLoaderService.startDiseaseDataLoading();
             System.out.println("Disease data loaded");
+            graphLoaderService.startGeneDatafromHPOLoading();
+            System.out.println("Gene data loaded");
         }
 
         MedicalCenter liva = new MedicalCenter();

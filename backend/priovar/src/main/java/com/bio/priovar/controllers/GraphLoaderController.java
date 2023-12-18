@@ -21,8 +21,7 @@ public class GraphLoaderController {
         System.out.println("HPO data loaded");
         dataLoaderService.startDiseaseDataLoading();
         System.out.println("Disease data loaded");
-        dataLoaderService.startGeneDatafromHPOLoading();
-        System.out.println("Gene data loaded");
+
     }
 }
 
