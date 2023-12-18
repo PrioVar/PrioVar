@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Typography, Grid, Button } from '@material-ui/core';
 import axios from 'axios';
 
 
 const SubscriptionPlansTable = () => {
 
-  const healthCenterId = localStorage.getItem('healthCenterId') || ''; 
+  const healthCenterId = localStorage.getItem('healthCenterId') || '';
+  const [remainingAnalyses, setRemainingAnalyses] = useState(null); 
+
+  useEffect(() => {
+    const fetchRemainingAnalyses = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/medicalCenter/${healthCenterId}`);
+        setRemainingAnalyses(response.data.remainingAnalyses); 
+      } catch (error) {
+        console.error('Error fetching remaining analyses:', error);
+        // handle error, possibly setting remainingAnalyses to an error state or default value
+      }
+    };
+    fetchRemainingAnalyses();
+
+  }, [healthCenterId]); 
 
 
   const plans = [
@@ -76,6 +91,11 @@ const SubscriptionPlansTable = () => {
           </Grid>
         ))}
       </Grid>
+      <Box mt={2} ml={2} align="left">
+        <Typography variant="subtitle1">
+          Number of remaining analyses for your plan: {remainingAnalyses !== null ? remainingAnalyses : 'Loading...'}
+        </Typography>
+      </Box>
     </Box>
   );
 };
