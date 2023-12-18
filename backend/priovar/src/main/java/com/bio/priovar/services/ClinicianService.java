@@ -2,6 +2,7 @@ package com.bio.priovar.services;
 
 import com.bio.priovar.models.Clinician;
 import com.bio.priovar.models.MedicalCenter;
+import com.bio.priovar.models.dto.LoginObject;
 import com.bio.priovar.repositories.ClinicianRepository;
 import com.bio.priovar.repositories.MedicalCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,18 +54,25 @@ public class ClinicianService {
         return clinicianRepository.findById(id).orElse(null);
     }
 
-    public ResponseEntity<String> loginClinician(String email, String password) {
+    public ResponseEntity<LoginObject> loginClinician(String email, String password) {
         Clinician clinician = clinicianRepository.findByEmail(email);
+        LoginObject loginObject = new LoginObject();
 
         if ( clinician == null ) {
-            return ResponseEntity.badRequest().body("Clinician with email " + email + " does not exist");
+            loginObject.setMessage("Clinician with email " + email + " does not exist");
+            loginObject.setId(-1L);
+            return ResponseEntity.badRequest().body(loginObject);
         }
 
         if ( !clinician.getPassword().equals(password) ) {
-            return ResponseEntity.badRequest().body("Incorrect password");
+            loginObject.setMessage("Incorrect password");
+            loginObject.setId(-1L);
+            return ResponseEntity.badRequest().body(loginObject);
         }
 
-        return ResponseEntity.ok("Login successful");
+        loginObject.setMessage("Login successful");
+        loginObject.setId(clinician.getId());
+        return ResponseEntity.ok(loginObject);
     }
 
     public ResponseEntity<String> changePasswordByEmailClinician(String email, String newPass, String oldPass) {
