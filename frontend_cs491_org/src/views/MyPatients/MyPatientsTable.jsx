@@ -25,7 +25,7 @@ import {
   import { deleteVcfFile } from '../../api/vcf'
   import { deleteFastqFile } from '../../api/fastq'
   import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-  import { PATH_DASHBOARD, PATH_PRIOVAR, ROOTS_PRIOVAR } from '../../routes/paths'
+  import { PATH_DASHBOARD, PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
@@ -160,7 +160,7 @@ import {
       return;
     }
     try {
-      const allPatients = await axios.get(`${ROOTS_PRIOVAR}/clinician/allPatients/${clinicianId}`);
+      const allPatients = await axios.get(`${ROOTS_PrioVar}/clinician/allPatients/${clinicianId}`);
       hasBeenCalled = true;
       return allPatients.data;
   

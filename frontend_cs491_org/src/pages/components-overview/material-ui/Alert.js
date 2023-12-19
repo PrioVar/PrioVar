@@ -20,7 +20,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function AlertsComponent() {
   return (
-    <RootStyle title="Components: Alert | Genesus">
+    <RootStyle title="Components: Alert | PrioVar">
       <Box
         sx={{
           pt: 6,

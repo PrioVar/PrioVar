@@ -60,13 +60,13 @@ import { actions as variantFiltersActions, reducer as variantFiltersReducer } fr
 const getNewTableTitle = ({ variant, sampleName, filterName = '' }) => {
   switch (variant) {
     case 'kh1':
-      return `High Risk Variants of ${sampleName} detected by GenesusAI™`
+      return `High Risk Variants of ${sampleName} detected by PrioVarAI™`
     case 'kh2':
-      return `Medium Risk Variants of ${sampleName} detected by GenesusAI™`
+      return `Medium Risk Variants of ${sampleName} detected by PrioVarAI™`
     case 'kh3':
-      return `Target Area Variants of ${sampleName} detected by GenesusAI™`
+      return `Target Area Variants of ${sampleName} detected by PrioVarAI™`
     case 'kh4':
-      return `Variants supporting clinical evidence for ${sampleName} detected by GenesusAI™`
+      return `Variants supporting clinical evidence for ${sampleName} detected by PrioVarAI™`
     case 'Low Coverage':
     case 'ACMG Incidentals':
       return `${filterName === '' ? 'Predefined' : filterName} genes for sample ${sampleName}`
@@ -496,7 +496,7 @@ const VariantsView = function () {
   }, [dispatch, isSelectedVariantsMode, tables, value])
 
   return (
-    <Page title="Variants | Genesus">
+    <Page title="Variants | PrioVar">
       <CreateTableDialog
         onClose={() => setIsCreateNewDialogOpen(false)}
         open={isCreateNewDialogOpen}

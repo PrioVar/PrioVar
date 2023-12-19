@@ -26,7 +26,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function MegaMenu() {
   return (
-    <RootStyle title="Mega Menu | Genesus">
+    <RootStyle title="Mega Menu | PrioVar">
       <Box
         sx={{
           pt: 6,

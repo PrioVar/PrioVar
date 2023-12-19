@@ -25,7 +25,7 @@ export default function Logo({ sx, size = 'small' }) {
     case 'large':
       return (
         <Box sx={{ width: { xs: 54, md: 256 }, mt:5, ...sx }}>
-          <img src="/static/new_images/priovar_logo.png" className={classes.img} />
+          <img src="/static/new_images/PrioVar_logo.png" className={classes.img} />
         </Box>
       )
     case 'small':
@@ -33,13 +33,13 @@ export default function Logo({ sx, size = 'small' }) {
       if (window.devicePixelRatio > 1) {
         return (
           <Box sx={{ width: 54, ...sx }}>
-            <img src="/static/new_images/priovar_logo.png" className={classes.img} />
+            <img src="/static/new_images/PrioVar_logo.png" className={classes.img} />
           </Box>
         )
       }
       return (
         <Box sx={{ width: 54, ...sx }}>
-          <img src="/static/new_images/priovar_logo.png" className={classes.img} />
+          <img src="/static/new_images/PrioVar_logo.png" className={classes.img} />
         </Box>
       )
   }

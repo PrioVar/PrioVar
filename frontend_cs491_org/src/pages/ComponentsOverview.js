@@ -24,7 +24,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function ComponentsOverview() {
   return (
-    <RootStyle title="Components Overview | Genesus">
+    <RootStyle title="Components Overview | PrioVar">
       <ComponentHero />
       <Container maxWidth="lg">
         <ComponentFoundation />

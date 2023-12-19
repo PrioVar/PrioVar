@@ -40,7 +40,7 @@ export default function Animate() {
   }
 
   return (
-    <RootStyle title="Components: Animate | Genesus">
+    <RootStyle title="Components: Animate | PrioVar">
       <Box
         sx={{
           pt: 6,

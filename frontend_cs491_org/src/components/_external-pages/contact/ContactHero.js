@@ -40,7 +40,7 @@ export default function ContactHero() {
           <Box sx={{ mt: 5, color: 'common.white' }}>
             <motion.div variants={varFadeIn}>
               <Typography variant="h6" paragraph>
-                Lidya Genomics
+                PrioVar
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>

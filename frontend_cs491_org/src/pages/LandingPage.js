@@ -20,7 +20,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function LandingPage() {
   return (
-    <RootStyle title="Priovar" id="move_top">
+    <RootStyle title="PrioVar" id="move_top">
       <LandingHero />
       <ContentStyle>
         <LandingMinimal />

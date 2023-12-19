@@ -35,7 +35,7 @@ export default function RadioButtons() {
   }
 
   return (
-    <RootStyle title="Components: Radio Buttons | Genesus">
+    <RootStyle title="Components: Radio Buttons | PrioVar">
       <Box
         sx={{
           pt: 6,

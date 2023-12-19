@@ -15,7 +15,7 @@ export default function BlogNewPost() {
   const { themeStretch } = useSettings()
 
   return (
-    <Page title="Blog: New Post | Genesus">
+    <Page title="Blog: New Post | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Create a new post"

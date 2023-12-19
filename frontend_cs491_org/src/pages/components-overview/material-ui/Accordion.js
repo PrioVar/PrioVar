@@ -38,7 +38,7 @@ export default function AccordionComponent() {
   }
 
   return (
-    <RootStyle title="Components: Accordion | Genesus">
+    <RootStyle title="Components: Accordion | PrioVar">
       <Box
         sx={{
           pt: 6,

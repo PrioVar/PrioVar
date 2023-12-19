@@ -72,7 +72,7 @@ export default function BlogPosts() {
   }
 
   return (
-    <Page title="Blog: Posts | Genesus">
+    <Page title="Blog: Posts | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Blog"

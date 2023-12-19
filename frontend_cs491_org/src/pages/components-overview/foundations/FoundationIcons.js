@@ -43,7 +43,7 @@ const style = {
 
 export default function FoundationIcons() {
   return (
-    <RootStyle title="Foundations: Icons | Genesus">
+    <RootStyle title="Foundations: Icons | PrioVar">
       <Box
         sx={{
           pt: 6,

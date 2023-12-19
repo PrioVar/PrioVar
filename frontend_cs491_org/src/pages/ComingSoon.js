@@ -61,7 +61,7 @@ export default function ComingSoon() {
   const countdown = useCountdown(new Date('01 July 2023 14:30 UTC'))
 
   return (
-    <RootStyle title="Coming Soon | Genesus">
+    <RootStyle title="Coming Soon | PrioVar">
       <Container>
         <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
           <Typography variant="h3" paragraph>

@@ -67,8 +67,8 @@ const INITIAL_DISPLAY_COLUMNS = [
     collapse: true,
   },
   {
-    keys: ['Priovar Pathogenicity Score'],
-    label: 'Priovar Pathogenicity Score',
+    keys: ['PrioVar Pathogenicity Score'],
+    label: 'PrioVar Pathogenicity Score',
     renderCell: ([libraAf, gnomAdAf, oneKgAf, tvAf, exAcAf]) => (
       <FrequencyCell libraAf={libraAf} gnomAdAf={gnomAdAf} oneKgAf={oneKgAf} tvAf={tvAf} exAcAf={exAcAf} />
     ),

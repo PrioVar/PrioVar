@@ -1,45 +1,41 @@
-import { Typography } from '@material-ui/core'
-// material
-import { styled } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
-import { Link as RouterLink } from 'react-router-dom'
-//
-import { MHidden } from '../components/@material-extend'
-// components
-import Logo from '../components/Logo'
-
-// ----------------------------------------------------------------------
-
+import { Typography, useMediaQuery } from '@material-ui/core';
+import { styled, useTheme } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
+import { MHidden } from '../components/@material-extend';
+import Logo from '../components/Logo';
+/*
 const HeaderStyle = styled('header')(({ theme }) => ({
   top: 0,
-  zIndex: 9,
+  zIndex: 1000,
   lineHeight: 0,
   width: '100%',
   display: 'flex',
   alignItems: 'center',
-  position: 'absolute',
+  position: 'fixed',
   padding: theme.spacing(3),
   justifyContent: 'space-between',
   [theme.breakpoints.up('md')]: {
     alignItems: 'flex-start',
-    padding: theme.spacing(7, 5, 0, 7),
+    padding: theme.spacing(3, 5, 0, 3),
   },
-}))
-
-// ----------------------------------------------------------------------
-
+}));
+*/
 AuthLayout.propTypes = {
   children: PropTypes.node,
-}
+};
 
 export default function AuthLayout({ children }) {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'));
+
   return (
-    <HeaderStyle>
-      <RouterLink to="/">
-        <Logo size="large" />
+   <>
+   <RouterLink to="/">
+      <Logo size={isSmallScreen ? 'small' : 'large'} />
       </RouterLink>
 
-      <MHidden width="smDown">
+      <MHidden width="smUp">
         <Typography
           variant="body2"
           sx={{
@@ -49,6 +45,6 @@ export default function AuthLayout({ children }) {
           {children}
         </Typography>
       </MHidden>
-    </HeaderStyle>
-  )
+   </>
+  );
 }
