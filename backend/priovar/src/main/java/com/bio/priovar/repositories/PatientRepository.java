@@ -15,12 +15,12 @@ public interface PatientRepository extends Neo4jRepository<Patient, Long> {
     List<Patient> findByMedicalCenterId(Long medicalCenterId);
 
     @Query(
-    "MATCH (p:Patient) "+
-    "WHERE p.sex = $sexQuery " +
-    "AND p.age >= $ageIntervalStartQuery "+
-    "AND p.age <= $ageIntervalEndQuery "+
-    "AND (size($genesQuery) = 0 OR ALL(g IN $genesQuery WHERE EXISTS((p)-[:ASSOCIATED_WITH_GENE]->(:Gene) WHERE Gene.geneSymbol = g))) "+
-    "AND (size($phenotypeTermsQuery) = 0 OR ALL(pt IN $phenotypeTermsQuery WHERE EXISTS((p)-[:HAS_PHENOTYPE_TERM]->(:PhenotypeTerm) WHERE PhenotypeTerm.name = pt))) "+
-    "RETURN p")
+            "MATCH (p:Patient) " +
+                    "WHERE ($sexQuery IS NULL OR p.sex = $sexQuery) " +
+                    "AND ($ageIntervalStartQuery IS NULL OR p.age >= $ageIntervalStartQuery) " +
+                    "AND ($ageIntervalEndQuery IS NULL OR p.age <= $ageIntervalEndQuery) " +
+                    "AND (size($genesQuery) = 0 OR $genesQuery IS NULL OR ALL(g IN $genesQuery WHERE (p)-[:HAS_GENE]->(:Gene {geneSymbol: g}))) " +
+                    "AND (size($phenotypeTermsQuery) = 0 OR $phenotypeTermsQuery IS NULL OR ALL(pt IN $phenotypeTermsQuery WHERE (p)-[:HAS_PHENOTYPE_TERM]->(:PhenotypeTerm {name: pt}))) " +
+                    "RETURN p")
     List<Patient> findPatientsBySexAndAgeIntervalAndGenesAndPhenotypeTerms( String sexQuery, int ageIntervalStartQuery, int ageIntervalEndQuery, List<String> genesQuery, List<String> phenotypeTermsQuery);
 }

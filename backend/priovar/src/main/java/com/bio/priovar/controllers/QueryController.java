@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/customQuery")
 public class QueryController {
 
     private final QueryService queryService;
@@ -19,7 +20,7 @@ public class QueryController {
         this.queryService = queryService;
     }
 
-    @GetMapping("/customQuery")
+    @GetMapping()
     public List<Patient> runCustomQuery(@RequestBody Query query) {
         return queryService.runCustomQuery(query);
     }

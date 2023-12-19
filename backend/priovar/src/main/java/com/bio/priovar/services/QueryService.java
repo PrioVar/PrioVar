@@ -24,18 +24,21 @@ public class QueryService {
         String sexQuery = query.getSex();
         int ageIntervalStartQuery = query.getAgeIntervalStart();
         int ageIntervalEndQuery = query.getAgeIntervalEnd();
-
-        //Get the query's genes
         List<String> genesQuery = new ArrayList<>();
-        for (int i = 0; i < query.getGenes().length; i++) {
-            genesQuery.add(query.getGenes()[i].getGeneSymbol());
+        List<String> phenotypeTermsQuery = new ArrayList<>();
+        //Get the query's genes if query has genes
+        if (query.getGenes() != null) {
+            for (int i = 0; i < query.getGenes().length; i++) {
+                genesQuery.add(query.getGenes()[i].getGeneSymbol());
 
+            }
         }
 
-        //Get the query's phenotype terms
-        List<String> phenotypeTermsQuery = new ArrayList<>();
-        for (int i = 0; i < query.getPhenotypeTerms().length; i++) {
-            phenotypeTermsQuery.add(query.getPhenotypeTerms()[i].getName());
+        //Get the query's phenotype terms if query has phenotype terms
+        if (query.getPhenotypeTerms() != null) {
+            for (int i = 0; i < query.getPhenotypeTerms().length; i++) {
+                phenotypeTermsQuery.add(query.getPhenotypeTerms()[i].getName());
+            }
         }
 
         List<Patient> patients = patientRepository.findPatientsBySexAndAgeIntervalAndGenesAndPhenotypeTerms(sexQuery, ageIntervalStartQuery, ageIntervalEndQuery, genesQuery, phenotypeTermsQuery);
