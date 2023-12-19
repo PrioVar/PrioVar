@@ -54,4 +54,13 @@ public class SimilarityController {
         return similarityService.findMostSimilarPatientByCosine(id);
     }
 
+    // find the most similar patientS (multiple) using findMostSimilarPatientsByCosine by specifying the number of patients
+    @GetMapping("/mostSimilarPatients/{patientId}/{numberOfPatients}")
+    public List<SimilarityReport> getMostSimilarPatients(@PathVariable("patientId") Long id, @PathVariable("numberOfPatients") int numberOfPatients) {
+        return similarityService.findMostSimilarPatientsByCosine(id, numberOfPatients);
+    }
+
+
+
+
 }

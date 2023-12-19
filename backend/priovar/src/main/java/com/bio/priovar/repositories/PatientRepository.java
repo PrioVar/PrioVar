@@ -14,6 +14,9 @@ public interface PatientRepository extends Neo4jRepository<Patient, Long> {
 
     List<Patient> findByMedicalCenterId(Long medicalCenterId);
 
+
+    Patient findByGenesusId(String genesusId);
+  
     @Query(
             "MATCH (p:Patient) " +
                     "WHERE ($sexQuery IS NULL OR p.sex = $sexQuery) " +
