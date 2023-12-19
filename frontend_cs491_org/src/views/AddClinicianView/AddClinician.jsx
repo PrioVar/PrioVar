@@ -1,119 +1,172 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Typography, Grid, Button } from '@material-ui/core';
-import axios from 'axios';
-import { MIconButton } from '../../components/@material-extend';
-import { useSnackbar } from 'notistack5';
-import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill'
+import eyeFill from '@iconify/icons-eva/eye-fill'
+import eyeOffFill from '@iconify/icons-eva/eye-off-fill'
+import { Icon } from '@iconify/react'
+import axios from 'axios'
+// material
+import {
+  Alert,
+  Checkbox,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  Link,
+  Stack,
+  TextField,
+  Box,
+  Typography,
+  Container
+} from '@material-ui/core'
+import { LoadingButton } from '@material-ui/lab'
+import { Form, FormikProvider, useFormik } from 'formik'
+import { useSnackbar } from 'notistack5'
+import { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import * as Yup from 'yup'
+// hooks
+import useIsMountedRef from '../../hooks/useIsMountedRef'
+// routes
+import { PATH_AUTH, PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
+//
+import { MIconButton } from '../../components/@material-extend'
+//
+// ----------------------------------------------------------------------
 
-
-const SubscriptionPlansTable = () => {
+export default function AddNewClinician() {
+  const isMountedRef = useIsMountedRef()
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const [showPassword, setShowPassword] = useState(false)
   const healthCenterId = localStorage.getItem('healthCenterId') || '';
-  const [remainingAnalyses, setRemainingAnalyses] = useState(null); 
 
-  useEffect(() => {
-    const fetchRemainingAnalyses = async () => {
+  const AddClinicianSchema = Yup.object().shape({
+    name: Yup.string().required('Name is required'),
+    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    password: Yup.string().required('Password is required'),
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+      remember: true,
+    },
+    //validationSchema: LoginSchema, uncomment this line to enable validation
+    onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        const response = await axios.get(`http://localhost:8080/medicalCenter/${healthCenterId}`);
-        setRemainingAnalyses(response.data.remainingAnalyses); 
-      } catch (error) {
-        console.error('Error fetching remaining analyses:', error);
-        // handle error, possibly setting remainingAnalyses to an error state or default value
+        // get the email from formik
+        // get the password from formik
+        const namePrioVar = values.name
+        const emailPrioVar = values.email
+        const passwordPrioVar = values.password
+        const clinician = {
+            name: namePrioVar,
+            email: emailPrioVar,
+            password: passwordPrioVar,
+            medicalCenter: {
+                id: healthCenterId
+            }
+        }
+
+        const { data } = await axios.post(`${ROOTS_PrioVar}/clinician/add`, clinician)
+        enqueueSnackbar('Clinician Added Successfully!', {
+            variant: 'success',
+            action: (key) => (
+                <MIconButton size="small" onClick={() => {
+                  closeSnackbar(key);
+                  // Reload the page after the request is successful
+                  window.location.reload();
+                }}>
+                  <Icon icon={closeFill} />
+                </MIconButton>
+              ),
+          })
       }
-    };
-    fetchRemainingAnalyses();
-
-  }, [healthCenterId]); 
-
-
-  const plans = [
-    {
-      name: 'Junior Packet',
-      price: '109.99$',
-      features: ['Property 1', 'Property 2', 'Property 3'],
+      catch (error) {
+        // print the error details, response is a JSON and has field 'message'
+        enqueueSnackbar(error.response.data.message, {
+            variant: 'error',
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            ),
+        })
+        console.error(error)
+        resetForm()
+        if (isMountedRef.current) {
+          setSubmitting(false)
+          setErrors({ afterSubmit: error.response.data?.non_field_errors?.[0] ?? error.message })
+        }
+      }
     },
-    {
-      name: 'Bioinformatician',
-      price: '509.99$',
-      features: ['Property 1', 'Property 2', 'Property 3', 'Property 4'],
-    },
-    {
-      name: 'DEVOURER OF THE GENES',
-      price: '1009.99$',
-      features: ['Property 1', 'Property 2', 'Property 3', 'Property 4', 'Property 5'],
-    },
-  ];
+  })
 
-  const HandleSelectPlan = async (subscriptionId) => {
-    const url = `http://localhost:8080/medicalCenter/addSubscription/${healthCenterId}/${subscriptionId}`;
-    try {
-      const response = await axios.post(url);
-      console.log("SUCCESS")
-      console.log(response.data);
-      // handle response
-      enqueueSnackbar('Subscription added successfully!', {
-        variant: 'success',
-        action: (key) => (
-            <MIconButton size="small" onClick={() => {
-              closeSnackbar(key);
-              // Reload the page after the request is successful
-              window.location.reload();
-            }}>
-              <Icon icon={closeFill} />
-            </MIconButton>
-          ),
-      })
-    } catch (error) {
-      console.log("ERROR")
-      console.error(error);
-      // handle error
-    }
-  };
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik
+
+  const handleShowPassword = () => {
+    setShowPassword((show) => !show)
+  }
 
   return (
-    <Box p={4} bgcolor="background.default">
-      <Typography variant="h4" gutterBottom align="center" mt={4}>
-        Add A New Clinician
-      </Typography>
-      <Grid container spacing={4} justifyContent="center" mt={4}>
-        {plans.map((plan, index) => (
-          <Grid item key={index} xs={12} sm={4}>
-            <Card raised>
-              <CardContent>
-                <Typography variant="h5" component="h2" align="center" gutterBottom>
-                  {plan.name}
-                </Typography>
-                <Box>
-                  {plan.features.map((feature, idx) => (
-                    <Typography key={idx} variant="body2">
-                      {feature}
-                    </Typography>
-                  ))}
-                </Box>
-                <Typography mt={4} variant="h6" align="center" gutterBottom >
-                  {plan.price} / month
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  onClick={() => HandleSelectPlan(index+1)}
-                >
-                  Select
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      <Box mt={2} ml={2} align="left">
-        <Typography variant="subtitle1">
-          Number of remaining analyses for your plan: {remainingAnalyses !== null ? remainingAnalyses : 'Loading...'}
-        </Typography>
-      </Box>
-    </Box>
-  );
-};
+    <Container maxWidth="md">
+        <Box p={4} bgcolor="background.default" display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="%50">
+            <Typography variant="h4" gutterBottom align="center" mt={4}>
+            Adding A New Clinician
+            </Typography>
+            <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+                <Stack spacing={3}>
+                {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>}
 
-export default SubscriptionPlansTable;
+                <TextField
+                    fullWidth
+                    autoComplete="name"
+                    type="text"
+                    label="Name"
+                    {...getFieldProps('name')}
+                    error={Boolean(touched.name && errors.name)}
+                    helperText={touched.name && errors.name}
+                />
+
+                <TextField
+                    fullWidth
+                    autoComplete="username"
+                    type="email"
+                    label="Email address"
+                    {...getFieldProps('email')}
+                    error={Boolean(touched.email && errors.email)}
+                    helperText={touched.email && errors.email}
+                />
+
+                <TextField
+                    fullWidth
+                    autoComplete="current-password"
+                    type={showPassword ? 'text' : 'password'}
+                    label="Password"
+                    {...getFieldProps('password')}
+                    InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                        <IconButton onClick={handleShowPassword} edge="end">
+                            <Icon icon={showPassword ? eyeFill : eyeOffFill} />
+                        </IconButton>
+                        </InputAdornment>
+                    ),
+                    }}
+                    error={Boolean(touched.password && errors.password)}
+                    helperText={touched.password && errors.password}
+                />
+                </Stack>
+                
+                <Box mt={2}>
+                    <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+                        Add
+                    </LoadingButton>
+                </Box>
+            </Form>
+            </FormikProvider>
+        </Box>
+    </Container>
+  )
+}
