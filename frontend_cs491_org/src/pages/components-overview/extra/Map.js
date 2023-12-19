@@ -77,7 +77,7 @@ const SkeletonLoad = (
 
 export default function Map() {
   return (
-    <RootStyle title="Components: Map | Genesus">
+    <RootStyle title="Components: Map | Priovar">
       <Box
         sx={{
           pt: 6,

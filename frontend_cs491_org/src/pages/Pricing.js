@@ -64,7 +64,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function Pricing() {
   return (
-    <RootStyle title="Pricing | Genesus">
+    <RootStyle title="Pricing | Priovar">
       <Container maxWidth="lg">
         <Typography variant="h3" align="center" paragraph>
           Flexible plans for your

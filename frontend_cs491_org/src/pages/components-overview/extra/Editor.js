@@ -27,7 +27,7 @@ export default function Editor() {
   const [draftSimple, setDraftSimple] = useState(EditorState.createEmpty())
 
   return (
-    <RootStyle title="Components: Editor | Genesus">
+    <RootStyle title="Components: Editor | Priovar">
       <Box
         sx={{
           pt: 6,

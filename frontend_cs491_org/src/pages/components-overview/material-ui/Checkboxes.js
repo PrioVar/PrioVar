@@ -45,7 +45,7 @@ export default function RadioButtons() {
   }
 
   return (
-    <RootStyle title="Components: Checkboxes | Genesus">
+    <RootStyle title="Components: Checkboxes | Priovar">
       <Box
         sx={{
           pt: 6,

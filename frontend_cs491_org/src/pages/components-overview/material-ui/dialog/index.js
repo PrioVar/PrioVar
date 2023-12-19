@@ -34,7 +34,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function DialogComponent() {
   return (
-    <RootStyle title="Components: Dialog | Genesus">
+    <RootStyle title="Components: Dialog | Priovar">
       <Box
         sx={{
           pt: 6,

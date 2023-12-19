@@ -95,7 +95,7 @@ export default function TimelineComponent() {
   const reduceTimeLine = slice(TIMELINES, TIMELINES.length - 3)
 
   return (
-    <RootStyle title="Components: Timeline | Genesus">
+    <RootStyle title="Components: Timeline | Priovar">
       <Box
         sx={{
           pt: 6,

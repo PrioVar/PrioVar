@@ -30,7 +30,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function Charts() {
   return (
-    <RootStyle title="Components: Charts | Genesus">
+    <RootStyle title="Components: Charts | Priovar">
       <Box
         sx={{
           pt: 6,

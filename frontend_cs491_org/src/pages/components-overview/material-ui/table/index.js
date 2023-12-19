@@ -21,7 +21,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function TableComponent() {
   return (
-    <RootStyle title="Components: Table | Genesus">
+    <RootStyle title="Components: Table | Priovar">
       <Box
         sx={{
           pt: 6,

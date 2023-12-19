@@ -22,7 +22,7 @@ export default function GeneralBanking() {
   const { themeStretch } = useSettings()
 
   return (
-    <Page title="General: Banking | Genesus">
+    <Page title="General: Banking | Priovar">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={7}>

@@ -18,7 +18,7 @@ const menuConfig = [
     path: '/',
   },
   {
-    title: 'Genesus',
+    title: 'Priovar',
     icon: <Icon icon={roundGrain} {...ICON_SIZE} />,
     path: PATH_DASHBOARD.general.files,
   },

@@ -20,7 +20,7 @@ const UploadView = function () {
     };
 
   return (
-    <Page title="Upload File | Genesus">
+    <Page title="Upload File | Priovar">
       <Grid container spacing={5}>
         <Grid item xs={6}>
           <UploadVCF onUploadComplete={handleFileUploadComplete}/>

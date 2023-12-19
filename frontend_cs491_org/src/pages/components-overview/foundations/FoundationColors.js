@@ -105,7 +105,7 @@ export default function FoundationColors() {
   }
 
   return (
-    <RootStyle title="Foundations: Color | Genesus">
+    <RootStyle title="Foundations: Color | Priovar">
       <Box
         sx={{
           pt: 6,

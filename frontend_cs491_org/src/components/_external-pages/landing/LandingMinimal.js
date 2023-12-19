@@ -15,30 +15,30 @@ const CARDS = [
   {
     icon: '/static/icons/navbar/ic_dashboard.svg',
     title: 'Load and Analyse Variants Quickly',
-    description: 'Genesus loads WGS/WES variants under 1 minute per sample and allows instant filtering analysis.',
+    description: 'Priovar loads WGS/WES variants under 1 minute per sample and allows instant filtering analysis.',
   },
   {
     icon: <PersonSearchIcon fontSize="large" />,
     title: 'High Risk Variant Detection based on Clinical Expertise',
     description:
-      'Genesus finds high risk variants using many algorithms based on clinical expertise, eliminating the tedious manual inspection and filtering processes.',
+      'Priovar finds high risk variants using many algorithms based on clinical expertise, eliminating the tedious manual inspection and filtering processes.',
   },
   {
     icon: <ScreenSearchDesktopIcon fontSize="large" />,
     title: 'Detailed Variant Annotation',
     description:
-      "Genesus annotates each variant and their transcripts using many pathogenicity, frequency and effect prediction databases. Hence, you don't miss risky variants.",
+      "Priovar annotates each variant and their transcripts using many pathogenicity, frequency and effect prediction databases. Hence, you don't miss risky variants.",
   },
   {
     icon: <PublicIcon fontSize="large" />,
     title: 'Population Allele Frequency Utilisation',
     description:
-      'Genesus maintains distinct allele frequency databases for each population, accounting for misleading regional polymorphisms in the diagnosis process.',
+      'Priovar maintains distinct allele frequency databases for each population, accounting for misleading regional polymorphisms in the diagnosis process.',
   },
   {
     icon: <DescriptionIcon fontSize="large" />,
     title: 'Diagnosis Report',
-    description: 'Genesus allows you to save any resulting variant during analysis, creating customisable reports.',
+    description: 'Priovar allows you to save any resulting variant during analysis, creating customisable reports.',
   },
 ]
 

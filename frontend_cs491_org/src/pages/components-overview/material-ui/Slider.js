@@ -73,7 +73,7 @@ export default function SliderComponent() {
   }
 
   return (
-    <RootStyle title="Components: Slider | Genesus">
+    <RootStyle title="Components: Slider | Priovar">
       <Box
         sx={{
           pt: 6,

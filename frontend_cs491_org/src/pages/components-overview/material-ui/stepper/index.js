@@ -24,7 +24,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function StepperComponent() {
   return (
-    <RootStyle title="Components: StepperView | Genesus">
+    <RootStyle title="Components: StepperView | Priovar">
       <Box
         sx={{
           pt: 6,

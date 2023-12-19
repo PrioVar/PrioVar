@@ -90,7 +90,7 @@ export default function RatingComponent() {
   const [hover, setHover] = useState(-1)
 
   return (
-    <RootStyle title="Components: Rating | Genesus">
+    <RootStyle title="Components: Rating | Priovar">
       <Box
         sx={{
           pt: 6,

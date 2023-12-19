@@ -62,7 +62,7 @@ export default function FoundationShadows() {
   const colorShadows = ['primary', 'secondary', 'info', 'success', 'warning', 'error']
 
   return (
-    <RootStyle title="Foundations: Shadows | Genesus">
+    <RootStyle title="Foundations: Shadows | Priovar">
       <Box
         sx={{
           pt: 6,

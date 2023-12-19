@@ -34,7 +34,7 @@ const LINKS = [
     headline: 'Contact',
     children: [
       { name: 'info@lidyagenomics.com', href: 'mailto:info@lidyagenomics.com', isMail: true },
-      { name: 'Lidya Genomics İthalat İhracat Ltd. Şti.', href: '#' },
+      { name: 'Priovar İthalat İhracat Ltd. Şti.', href: '#' },
       { name: 'Bilkent, Ankara, Turkey', href: '#' },
     ],
   },
@@ -64,7 +64,7 @@ export default function MainFooter() {
           </Grid>
           <Grid item xs={8} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              Lidya Genomics aims to provide powerful solutions to the problems in disease genomics using computer
+              Priovar aims to provide powerful solutions to the problems in disease genomics using computer
               science.
             </Typography>
 
@@ -133,7 +133,7 @@ export default function MainFooter() {
             textAlign: { xs: 'center', md: 'left' },
           }}
         >
-          Lidya Genomics © 2021. All rights reserved.
+          Priovar © 2021. All rights reserved.
         </Typography>
       </Container>
     </RootStyle>

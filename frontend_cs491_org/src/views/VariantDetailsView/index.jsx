@@ -39,7 +39,7 @@ const VariantDetailsView = function () {
   const { variant, disease, omim, matchmaking } = data
 
   return (
-    <Page title="Variant Details | Genesus">
+    <Page title="Variant Details | Priovar">
       {ReactDOM.createPortal(
         <Stack direction="row" spacing={2}>
           <NavbarRoutes navConfig={VAR_DETAILS_NAVBAR_CONFIG} params={{ fileId, sampleName }} />

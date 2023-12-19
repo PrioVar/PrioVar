@@ -98,7 +98,7 @@ export default function ListsComponent() {
   }
 
   return (
-    <RootStyle title="Components: Lists | Genesus">
+    <RootStyle title="Components: Lists | Priovar">
       <Box
         sx={{
           pt: 6,

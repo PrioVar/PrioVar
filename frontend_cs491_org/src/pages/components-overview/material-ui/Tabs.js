@@ -60,7 +60,7 @@ export default function TabsComponent() {
   }
 
   return (
-    <RootStyle title="Components: Tabs | Genesus">
+    <RootStyle title="Components: Tabs | Priovar">
       <Box
         sx={{
           pt: 6,

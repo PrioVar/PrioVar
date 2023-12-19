@@ -25,7 +25,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function Carousel() {
   return (
-    <RootStyle title="Components: Carousel | Genesus">
+    <RootStyle title="Components: Carousel | Priovar">
       <Box
         sx={{
           pt: 6,
