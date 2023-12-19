@@ -288,6 +288,10 @@ public class PatientService {
             indexes.add(index);
 
             while (indexes.size() > 0) {
+
+                //print indexes
+                //System.out.println("Indexes: " + indexes);
+
                 //get the last index from the indexes list
                 int currentIndex = indexes.get(indexes.size() - 1);
 
@@ -308,11 +312,11 @@ public class PatientService {
                 List<PhenotypeTerm> parents = currentPhenotypeTerm.getParents();
 
                 //if the current phenotype term has parents, add their indices to the indexes list
-                if (parents != null) {
+                if (parents != null && parents.size() > 0) {
                     for (PhenotypeTerm parent : parents) {
                         Integer pID = parent.getId().intValue();
                         int pIndex = phenotypeTermIndexMap.get( pID );
-                        indexes.add(phenotypeTermIndexMap.get(pIndex));
+                        indexes.add(pIndex);
                     }
                 }
             }
