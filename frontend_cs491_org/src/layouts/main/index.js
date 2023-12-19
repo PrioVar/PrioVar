@@ -4,27 +4,12 @@ import { Outlet, useLocation } from 'react-router-dom'
 import MainFooter from './MainFooter'
 //
 import MainNavbar from './MainNavbar'
-import Login from '../../pages/authentication/Login'
+import { G } from '@react-pdf/renderer'
+import { BrowserRouter as Navigate } from 'react-router-dom';
 // ----------------------------------------------------------------------
 
 export default function MainLayout() {
   const { pathname } = useLocation()
-  const isHome = pathname === '/'
-
-  /*
-  return (
-    <>
-      <MainNavbar />
-      <div>
-        <Outlet />
-      </div>
-
-    </>
-  )
-  */
-  return (
-    <>
-      <Login />
-    </>
-  )
+  // Check if the current path is the root path
+    return <Navigate to="/auth/login" />;
 }
