@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import Page from 'src/components/Page'
-import { Container, Grid } from '@material-ui/core'
+import { Container, Grid, Box } from '@material-ui/core'
 
 import FilesTable from './FilesTable'
 import UploadVCF from './UploadVCF'
@@ -24,6 +24,11 @@ const UploadView = function () {
       <Grid container spacing={5}>
         <Grid item xs={6}>
           <UploadVCF onUploadComplete={handleFileUploadComplete}/>
+        </Grid>
+        <Grid item xs={6}>
+        <Box width={330} mt={1} ml={25}>
+            <img src="/static/new_images/dna-removebg-preview.png"/>
+          </Box>
         </Grid>
 
         <Grid item xs={12}>
