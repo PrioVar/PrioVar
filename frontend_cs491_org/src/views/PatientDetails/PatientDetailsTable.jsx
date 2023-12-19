@@ -60,11 +60,49 @@ import {
       () => data.find((f) => f.vcf_id === fileId || f.fastq_pair_id === fileId),
       [data, fileId, filesApi],
     )
+    const [options, setOptions] = useState([]); // Store dropdown options
+    const [selectedOption, setSelectedOption] = useState('')
+    const [patientId, setPatientId] = useState('')
+    let navigate = useNavigate();
 
     //
     const [details, setDetails] = useState(
         { name: '', age: '', sex: '', disease: '', assignedClinic: '', phenotypeTerms: [] }
     );
+
+    // Fetch dropdown options
+    useEffect(() => {
+        const fetchOptions = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/disease`);
+                const fetchedOptions = response.data;
+                setOptions(fetchedOptions);
+            } catch (error) {
+                console.error('Error fetching options:', error);
+            }
+        };
+        fetchOptions();
+    }, []);
+
+    // Handle option selection
+    const handleSelectionChange = (event) => {
+        setSelectedOption(event.target.value);
+    };
+
+      // Handle submit
+    const handleSubmit = async () => {
+        try {
+            console.log(selectedOption)
+            const patient = await getPatient()
+            const response = await axios.post(`http://localhost:8080/patient/${patient.data.id}/addDisease/${selectedOption}`);
+            console.log(response.data);
+            // Handle response or success notification
+            navigate(0)
+        } catch (error) {
+            console.error('Error posting data:', error);
+            // Handle error notification
+        }
+    };
 
     const getPatient = async () => {
 
@@ -79,6 +117,7 @@ import {
         const fetch = async () => {
         // first get the patient
         const patient = await getPatient()
+        setPatientId(patient.data.id)
 
         // Ali Veli patient id: 17700
         axios.get(`http://localhost:8080/patient/${patient.data.id}`)
@@ -114,14 +153,33 @@ import {
             </Grid>
 
             {/* Disease and Phenotype Terms in the next row */}
-            <Grid item xs={6} mt={4}>
+            <Grid item xs={4} mt={4}>
             <Typography variant="h6">Disease: </Typography> {details.disease.diseaseName}
             </Grid>
-            <Grid item xs={6} mt={4}>
+            <Grid item xs={4} mt={4}>
             <Typography variant="h6">Phenotype Terms:</Typography>
                 {details.phenotypeTerms.map((term, index) => (
                     <div key={index}>{term.name}</div>
           ))}
+            </Grid>
+            <Grid item xs={4} mt={4}>
+            <FormControl fullWidth variant="outlined">
+                <InputLabel>Select Disease</InputLabel>
+                <Select
+                    value={selectedOption}
+                    onChange={(e) => setSelectedOption(e.target.value)}
+                    label="Select Disease"
+                >
+                    {options.map((option) => (
+                    <MenuItem key={option.id} value={option.id}>
+                        {option.diseaseName}
+                    </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+            <Button onClick={() => handleSubmit(selectedOption)} color="primary" variant="contained">
+            Set Diagnosis
+            </Button>
             </Grid>
         </Grid>
     </Box>
