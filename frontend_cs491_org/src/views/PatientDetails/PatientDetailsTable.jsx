@@ -62,119 +62,52 @@ import {
     )
 
     //
-    const [gene, setGene] = useState('');
-    const [ageIntervalStart, setAgeIntervalStart] = useState('');
-    const [ageIntervalEnd, setAgeIntervalEnd] = useState('');
-    const [gender, setGender] = useState(''); 
+    const [details, setDetails] = useState(
+        { name: '', age: '', sex: '', disease: '', assignedClinic: '', phenotypeTerms: [] }
+    );
 
-    const handleSearch = async () => {
+    useEffect(() => {
+        // Ali Veli patient id: 17700
+        axios.get(`http://localhost:8080/patient/17700`)
+          .then(response => {
+            console.log("SUCCESS")
+            console.log(response.data)
+            setDetails(response.data);
+          })
+          .catch(error => console.error('Error fetching data:', error));
+      }, []);
 
-        const phenotypeTerms = hpoList.map(item => {
-            // Extract the numeric part of the HP code and remove leading zeros
-            const id = parseInt(item.value.split(':')[1], 10);
-            return { id };
-        });
-
-        const body = {
-            phenotypeTerms: phenotypeTerms,
-            geneSpecification: gene,
-            sex: gender,
-            ageIntervalStart: ageIntervalStart,
-            ageIntervalEnd: ageIntervalEnd
-        }
-        console.log("body:")
-        console.log(body)
-        try {
-            const response = await axios.post('http://localhost:8080/customQuery', body);
-            console.log("SUCCESS!")
-    
-          } catch (error) {
-            console.log("FAIL!")
-            console.error('custom query error:', error.response);
-          }
-
-      };
-
-
-
-    const ManageHpo = function ({ fileId , hpoList, setHpoList}) {
-      
-        return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
-      }
-  
-
-    const [hpoList, setHpoList] = useHpo({ fileId })
     return (
         <>
 
-    <Box p={3} mt={4}>
-    <Typography variant="h5">Search Population</Typography>
-      <Grid container spacing={2} alignItems="flex-end" mt={4}>
-        <Grid item xs={6}>
-            <ManageHpo fileId={fileId} sampleName={sampleName} hpoList={hpoList} setHpoList={setHpoList}  />
-        </Grid>
-        <Grid item container xs={12} sm={6} spacing={2}>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Age Interval Start"
-              type="number"
-              value={ageIntervalStart}
-              onChange={(e) => setAgeIntervalStart(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Age Interval End"
-              type="number"
-              value={ageIntervalEnd}
-              onChange={(e) => setAgeIntervalEnd(e.target.value)}
-            />
-          </Grid>
-        </Grid>
+    <Box p={3}>
+        <Grid container spacing={2} mt={4}>
+            {/* Name, Age, Sex, and Assigned Clinic in one row */}
+            <Grid item xs={3}>
+            <Typography variant="h6">Name: </Typography> {details.name}
+            </Grid>
+            <Grid item xs={3}>
+            <Typography variant="h6">Age: </Typography>{details.age}
+            </Grid>
+            <Grid item xs={3}>
+            <Typography variant="h6">Sex: </Typography>{details.sex}
+            </Grid>
+            <Grid item xs={3}>
+            <Typography variant="h6">Assigned Clinic: </Typography>{details.medicalCenter?.name}
+            </Grid>
 
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            label="Gene Specification"
-            value={gene}
-            onChange={(e) => setGene(e.target.value)}
-          />
+            {/* Disease and Phenotype Terms in the next row */}
+            <Grid item xs={6} mt={4}>
+            <Typography variant="h6">Disease: </Typography> {details.disease.diseaseName}
+            </Grid>
+            <Grid item xs={6} mt={4}>
+            <Typography variant="h6">Phenotype Terms:</Typography>
+                {details.phenotypeTerms.map((term, index) => (
+                    <div key={index}>{term.name}</div>
+          ))}
+            </Grid>
         </Grid>
-        <Grid item container xs={6} spacing={2} alignItems="center" >
-          <Grid item xs={6}>
-          <FormControl fullWidth>
-            <InputLabel id="gender-select-label">Gender</InputLabel>
-            <Select
-              labelId="gender-select-label"
-              id="gender-select"
-              value={gender}
-              label="Gender"
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <MenuItem value="M">Male</MenuItem>
-              <MenuItem value="F">Female</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      <Grid item>
-        <Button variant="contained" color="primary" onClick={handleSearch}>
-          Search
-        </Button>
-        </Grid>
-        </Grid>
-        </Grid>
-        <Box mt={12}>
-            Results will be displayed here
-      </Box>
     </Box>
-
-
-
-
-        
-
         </>
     )
 

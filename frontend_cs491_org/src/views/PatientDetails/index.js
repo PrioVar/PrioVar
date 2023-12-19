@@ -10,7 +10,7 @@ import PatientDetailsTable from './PatientDetailsTable'
 
 const PatientDetails = function () {
   return (
-    <Page title="Search Population">
+    <Page title="Patient Details">
       <Grid container spacing={5}>
 
         <Grid item xs={12}>
