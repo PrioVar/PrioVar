@@ -68,7 +68,7 @@ export default function ProgressComponent() {
   }, [])
 
   return (
-    <RootStyle title="Components: Progress | Genesus">
+    <RootStyle title="Components: Progress | Priovar">
       <Box
         sx={{
           pt: 6,

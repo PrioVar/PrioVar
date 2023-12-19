@@ -86,7 +86,7 @@ export default function FormValidation() {
   }
 
   return (
-    <RootStyle title="Form Validation | Genesus">
+    <RootStyle title="Form Validation | Priovar">
       <Box
         sx={{
           pt: 6,

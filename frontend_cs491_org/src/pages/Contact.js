@@ -18,7 +18,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function Contact() {
   return (
-    <RootStyle title="Contact us | Genesus">
+    <RootStyle title="Contact us | Priovar">
       <ContactHero />
 
       {/* <Container sx={{ my: 10 }}>

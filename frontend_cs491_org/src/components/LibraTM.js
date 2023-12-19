@@ -23,7 +23,7 @@ export default function LibraTM({ sx, size = 'large' }) {
       }}
       style={{ fontSize: size === 'mega' ? 100 : undefined }}
     >
-      Genesus
+      Priovar
       <Typography
         variant={
           {

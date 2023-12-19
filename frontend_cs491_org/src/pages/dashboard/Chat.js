@@ -25,7 +25,7 @@ export default function Chat() {
   }, [dispatch])
 
   return (
-    <Page title="Chat | Genesus">
+    <Page title="Chat | Priovar">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
           heading="Chat"

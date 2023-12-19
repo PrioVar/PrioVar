@@ -131,7 +131,7 @@ export default function EcommerceShop() {
   }
 
   return (
-    <Page title="Ecommerce: Shop | Genesus">
+    <Page title="Ecommerce: Shop | Priovar">
       {values && (
         <Backdrop open={isSubmitting} sx={{ zIndex: 9999 }}>
           <CircularProgress />

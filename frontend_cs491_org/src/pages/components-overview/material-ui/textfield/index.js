@@ -38,7 +38,7 @@ export default function TextFieldComponent() {
   // ----------------------------------------------------------------------
 
   return (
-    <RootStyle title="Components: TextField | Genesus">
+    <RootStyle title="Components: TextField | Priovar">
       <Box
         sx={{
           pt: 6,

@@ -289,7 +289,7 @@ const VariantDasboard = () => {
         title={fileDetails?.sample_name}
         key={'create-analysis-dialog' + fileId}
       />
-      <Page title="Variant Dashboard | Genesus">
+      <Page title="Variant Dashboard | Priovar">
         {ReactDOM.createPortal(
           <Stack direction="row" spacing={2}>
             <NavbarRoutes navConfig={DASHBOARD_CONFIG} />

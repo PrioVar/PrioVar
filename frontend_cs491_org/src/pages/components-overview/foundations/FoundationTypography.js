@@ -89,7 +89,7 @@ function GetFontInfo({ name }) {
 
 export default function FoundationTypography() {
   return (
-    <RootStyle title="Foundations: Typography | Genesus">
+    <RootStyle title="Foundations: Typography | Priovar">
       <Box
         sx={{
           pt: 6,

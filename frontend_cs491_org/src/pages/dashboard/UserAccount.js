@@ -81,7 +81,7 @@ export default function UserAccount() {
   }
 
   return (
-    <Page title="User: Account Settings | Genesus">
+    <Page title="User: Account Settings | Priovar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Account"

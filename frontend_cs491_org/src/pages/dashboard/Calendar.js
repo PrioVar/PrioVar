@@ -150,7 +150,7 @@ export default function Calendar() {
   }
 
   return (
-    <Page title="Calendar | Genesus">
+    <Page title="Calendar | Priovar">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
           heading="Calendar"

@@ -15,7 +15,7 @@ const DashboardAppView = function () {
   const classes = useStyles()
 
   return (
-    <Page className={classes.root} title="Dashboard-App | Genesus">
+    <Page className={classes.root} title="Dashboard-App | Priovar">
       <Container maxWidth="xl">
         <Typography variant="h3" component="h1" paragraph>
           App

@@ -30,7 +30,7 @@ export default function AutocompleteComponent() {
   const [inputValue, setInputValue] = useState('')
 
   return (
-    <RootStyle title="Components: Autocomplete | Genesus">
+    <RootStyle title="Components: Autocomplete | Priovar">
       <Box
         sx={{
           pt: 6,
