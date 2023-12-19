@@ -27,6 +27,6 @@ public class SimilarityReport {
     private String status;
 
     //similarity strategy
-    private SimilarityStrategy similarityStrategy;
+    private String similarityStrategy;
 
 }
