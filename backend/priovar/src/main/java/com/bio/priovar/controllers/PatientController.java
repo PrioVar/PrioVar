@@ -46,6 +46,11 @@ public class PatientController {
         return patientService.getPatientsByClinicianId(clinicianId);
     }
 
+    @GetMapping("/byGenesusId/{genesusId}")
+    public Patient getPatientByGenesusId(@PathVariable("genesusId") String genesusId) {
+        return patientService.getPatientByGenesusId(genesusId);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addPatient(@RequestBody Patient patient) {
         return new ResponseEntity<>(patientService.addPatient(patient), patient.getMedicalCenter() == null ? org.springframework.http.HttpStatus.BAD_REQUEST : org.springframework.http.HttpStatus.OK);

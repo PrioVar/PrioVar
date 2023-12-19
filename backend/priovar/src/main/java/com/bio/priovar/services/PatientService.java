@@ -350,4 +350,8 @@ public class PatientService {
         patientRepository.save(patient);
         return new ResponseEntity<>("Patient added successfully", org.springframework.http.HttpStatus.OK);
     }
+
+    public Patient getPatientByGenesusId(String genesusId) {
+        return patientRepository.findByGenesusId(genesusId);
+    }
 }

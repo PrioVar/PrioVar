@@ -13,4 +13,6 @@ public interface PatientRepository extends Neo4jRepository<Patient, Long> {
     List<Patient> findByDiseaseName(String diseaseName);
 
     List<Patient> findByMedicalCenterId(Long medicalCenterId);
+
+    Patient findByGenesusId(String genesusId);
 }
