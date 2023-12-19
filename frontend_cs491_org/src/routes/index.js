@@ -20,6 +20,7 @@ import CustomQuery from 'src/views/CustomQuery'
 import SubscriptionPlans from 'src/views/SubscriptionPlans'
 import SimilarPatients from 'src/views/SimilarPatients'
 import AddClinician from 'src/views/AddClinicianView'
+import PatientDetails from 'src/views/PatientDetails'
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) =>
@@ -115,6 +116,7 @@ export default function Router() {
         { path: '/subscriptionPlans', element: < SubscriptionPlans/>},
         { path: '/similarPatients', element: < SimilarPatients/>},
         { path: '/addClinician', element: < AddClinician/>},
+        { path: '/patientDetails/:patiendId', element: < PatientDetails/>},
         {
           path: 'user',
           children: [
