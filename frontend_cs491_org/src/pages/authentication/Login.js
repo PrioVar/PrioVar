@@ -1,4 +1,4 @@
-import { Box, Button, Card, Container, Stack, Typography } from '@material-ui/core'
+import { Box, Button, Card, Container, Stack, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 // material
 import { styled } from '@material-ui/core/styles'
 import { MHidden } from '../../components/@material-extend'
@@ -44,11 +44,13 @@ const ContentStyle = styled('div')(({ theme }) => ({
 }));
 
 export default function Login() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <RootStyle title="Login | PrioVar">
       <AuthLayout />
-
-      <Container maxWidth="sm">
+      <Container maxWidth="lg">
+        
         <ContentStyle>
           <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
             <Box sx={{ flexGrow: 1 }}>
@@ -58,15 +60,36 @@ export default function Login() {
               <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
             </Box>
           </Stack>
-          <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
-            <Button size="large" color='success' variant="contained" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 5 }}>
-                Clinician Portal
+          <Stack direction={isSmallScreen ? 'column' : 'row'} alignItems={isSmallScreen ? 'center' : 'flex-start'} sx={{ mb: 5 }}>
+            <Button
+              size="large"
+              color="success"
+              variant="contained"
+              component={RouterLink}
+              to={PATH_AUTH.login}
+              sx={{ mt: isSmallScreen ? 2 : 0, mr: isSmallScreen ? 0 : 2 }}
+            >
+              Clinician Portal
             </Button>
-            <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginHealthCenter} sx={{ mt: 5 }}>
-                Health Center Portal
+            <Button
+              size="large"
+              color="inherit"
+              variant="contained"
+              component={RouterLink}
+              to={PATH_AUTH.loginHealthCenter}
+              sx={{ mt: isSmallScreen ? 2 : 0, mr: isSmallScreen ? 0 : 2 }}
+            >
+              Health Center Portal
             </Button>
-            <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_AUTH.loginAdmin} sx={{ mt: 5 }}>
-                Admin Portal
+            <Button
+              size="large"
+              color="inherit"
+              variant="contained"
+              component={RouterLink}
+              to={PATH_AUTH.loginAdmin}
+              sx={{ mt: isSmallScreen ? 2 : 0 }}
+            >
+              Admin Portal
             </Button>
           </Stack>
           <LoginForm callerPage={'Login'}/>
