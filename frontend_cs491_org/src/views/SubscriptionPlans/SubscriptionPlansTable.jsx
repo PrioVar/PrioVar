@@ -30,18 +30,18 @@ const SubscriptionPlansTable = () => {
   const plans = [
     {
       name: 'Junior Packet',
-      price: '109.99$',
-      features: ['Property 1', 'Property 2', 'Property 3'],
+      price: '99.99$',
+      features: ['Variant Analysis', 'Basic Report', '10 Patient Cases', 'Email Support'],
     },
     {
       name: 'Bioinformatician',
-      price: '509.99$',
-      features: ['Property 1', 'Property 2', 'Property 3', 'Property 4'],
+      price: '149.99$',
+      features: ['Variant Analysis', 'Comprehensive Report', '20 Patient Cases', 'Phone Support'],
     },
     {
-      name: 'DEVOURER OF THE GENES',
-      price: '1009.99$',
-      features: ['Property 1', 'Property 2', 'Property 3', 'Property 4', 'Property 5'],
+      name: 'Devourer Of The Genes',
+      price: '199.99$',
+      features: ['Variant Analysis', 'Comprehensive Report', '30 Patient Cases', '24/7 VIP Support'],
     },
   ];
 
@@ -87,7 +87,7 @@ const SubscriptionPlansTable = () => {
                 <Box>
                   {plan.features.map((feature, idx) => (
                     <Typography key={idx} variant="body2">
-                      {feature}
+                      <li key={idx}>{feature}</li>
                     </Typography>
                   ))}
                 </Box>
