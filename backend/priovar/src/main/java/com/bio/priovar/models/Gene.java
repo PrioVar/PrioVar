@@ -18,7 +18,6 @@ public class Gene {
     @Id
     @GeneratedValue
     private Long id;
-
     private String geneSymbol;
 
     @Relationship(type = "ASSOCIATED_WITH_PHENOTYPE", direction = Relationship.Direction.OUTGOING)

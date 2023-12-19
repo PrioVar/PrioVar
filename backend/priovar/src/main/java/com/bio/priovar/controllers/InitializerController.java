@@ -24,9 +24,10 @@ public class InitializerController {
     private final PatientRepository patientRepository;
     private final PhenotypeTermRepository phenotypeTermRepository;
     private final DiseaseRepository diseaseRepository;
+    private final GeneRepository geneRepository;
 
     @Autowired
-    public InitializerController(MedicalCenterRepository medicalCenterRepository, ClinicianRepository clinicianRepository, AdminRepository adminRepository, GraphLoaderService graphLoaderService, PatientRepository patientRepository, PhenotypeTermRepository phenotypeTermRepository, DiseaseRepository diseaseRepository) {
+    public InitializerController(MedicalCenterRepository medicalCenterRepository, ClinicianRepository clinicianRepository, AdminRepository adminRepository, GraphLoaderService graphLoaderService, PatientRepository patientRepository, PhenotypeTermRepository phenotypeTermRepository, DiseaseRepository diseaseRepository, GeneRepository geneRepository) {
         this.medicalCenterRepository = medicalCenterRepository;
         this.clinicianRepository = clinicianRepository;
         this.adminRepository = adminRepository;
@@ -34,6 +35,7 @@ public class InitializerController {
         this.patientRepository = patientRepository;
         this.phenotypeTermRepository = phenotypeTermRepository;
         this.diseaseRepository = diseaseRepository;
+        this.geneRepository = geneRepository;
     }
 
     @PostMapping()
@@ -83,7 +85,14 @@ public class InitializerController {
         List<PhenotypeTerm> phenotypeTerms = new ArrayList<>();
         phenotypeTerms.add(phenotypeTerm1);
         phenotypeTerms.add(phenotypeTerm2);
+        Gene gene1 = geneRepository.findById(4996L).get();
+        System.out.println(gene1.getGeneSymbol() + " *****************************************");
+        Gene gene2 = geneRepository.findById(4997L).get();
+        List<Gene> genes1 = new ArrayList<>();
+        genes1.add(gene1);
+        genes1.add(gene2);
         patient1.setPhenotypeTerms(phenotypeTerms);
+        patient1.setGenes(genes1);
         patientRepository.save(patient1);
 
         Patient patient2 = new Patient();
@@ -95,6 +104,12 @@ public class InitializerController {
         List<PhenotypeTerm> phenotypeTerms1 = new ArrayList<>();
         phenotypeTerms1.add(phenotypeTerm5);
         phenotypeTerms1.add(phenotypeTerm6);
+        Gene gene3 = geneRepository.findById(4998L).get();
+        Gene gene4 = geneRepository.findById(4999L).get();
+        List<Gene> genes2 = new ArrayList<>();
+        genes2.add(gene3);
+        genes2.add(gene4);
+        patient2.setGenes(genes2);
         patient2.setPhenotypeTerms(phenotypeTerms1);
         patient2.setMedicalCenter(liva);
         patientRepository.save(patient2);
@@ -108,6 +123,12 @@ public class InitializerController {
         List<PhenotypeTerm> phenotypeTerms2 = new ArrayList<>();
         phenotypeTerms2.add(phenotypeTerm3);
         phenotypeTerms2.add(phenotypeTerm4);
+        Gene gene5 = geneRepository.findById(5000L).get();
+        Gene gene6 = geneRepository.findById(5001L).get();
+        List<Gene> genes3 = new ArrayList<>();
+        genes3.add(gene5);
+        genes3.add(gene6);
+        patient3.setGenes(genes3);
         patient3.setPhenotypeTerms(phenotypeTerms2);
         patient3.setMedicalCenter(liva);
         patientRepository.save(patient3);
