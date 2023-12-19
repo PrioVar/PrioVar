@@ -31,6 +31,11 @@ public class ClinicianController {
         return clinicianService.getClinicianById(id);
     }
 
+    @GetMapping("/byMedicalCenter/{medicalCenterId}")
+    public List<Clinician> getAllCliniciansByMedicalCenterId(@PathVariable("medicalCenterId") Long medicalCenterId) {
+        return clinicianService.getAllCliniciansByMedicalCenterId(medicalCenterId);
+    }
+
     @GetMapping("/allPatients/{clinicianId}")
     public List<Patient> getAllPatientsByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
         return clinicianService.getAllPatientsByClinicianId(clinicianId);

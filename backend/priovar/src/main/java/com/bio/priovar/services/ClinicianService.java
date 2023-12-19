@@ -106,4 +106,8 @@ public class ClinicianService {
 
         return clinician.getPatients();
     }
+
+    public List<Clinician> getAllCliniciansByMedicalCenterId(Long medicalCenterId) {
+        return clinicianRepository.findAllByMedicalCenterId(medicalCenterId);
+    }
 }
