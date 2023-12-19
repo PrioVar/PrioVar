@@ -96,6 +96,7 @@ export const PATH_DASHBOARD = {
     subscriptionPlans: path(ROOTS_DASHBOARD, '/subscriptionPlans'),
     similarPatients: path(ROOTS_DASHBOARD, '/similarPatients'),
     addClinician: path(ROOTS_DASHBOARD, '/addClinician'),
+    patientDetails: path(ROOTS_DASHBOARD, '/patientDetails/:patientId'),
   },
   mail: {
     root: path(ROOTS_DASHBOARD, '/mail'),

@@ -239,7 +239,9 @@ import {
         navigate(PATH_DASHBOARD.general.similarPatients, { state: { detail: row } });
     }
 
-    const handleAddPatient = (row) => {
+    const handleAddPatient = (row) => {}
+
+    const handleDetails = (row) => {
         // TODO
     }
   
@@ -389,6 +391,23 @@ import {
             const row = data[dataIndex]
             return (
                 <Button variant="contained" color="info" onClick={() => handleSeeSimilarPatients(row)} size="small">
+                  <Info />
+                </Button>
+              )
+          },
+        },
+      },
+      {
+        name: 'details',
+        label: 'Details',
+        options: {
+          filter: false,
+          sort: true,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex]
+            return (
+                <Button variant="contained" color="info" onClick={() => handleDetails(row)} 
+                component={RouterLink} to={PATH_DASHBOARD.general.patientDetails} size="small">
                   <Info />
                 </Button>
               )
