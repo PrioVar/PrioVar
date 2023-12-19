@@ -143,12 +143,14 @@ export default function Router() {
     {
       path: '/',
       element: <MainLayout />,
+      /*
       children: [
         { path: '/', element: <Login /> },
         { path: 'about-us', element: <About /> },
         { path: 'contact-us', element: <Contact /> },
         { path: 'faqs', element: <Faqs /> },
       ],
+      */
     },
   ])
 }
