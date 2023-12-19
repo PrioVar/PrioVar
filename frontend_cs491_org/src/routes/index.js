@@ -51,10 +51,10 @@ const Loadable = (Component) =>
 export default function Router() {
   return useRoutes([
     {
-      path: 'auth',
+      path: '/',
       children: [
         {
-          path: 'login',
+          path: '',
           element: (
             <GuestGuard>
               <Login />
@@ -140,18 +140,20 @@ export default function Router() {
         { path: '*', element: <Navigate to="/404" replace /> },
       ],
     },
+    /*
     {
       path: '/',
       element: <MainLayout />,
-      /*
+      
       children: [
         { path: '/', element: <Login /> },
         { path: 'about-us', element: <About /> },
         { path: 'contact-us', element: <Contact /> },
         { path: 'faqs', element: <Faqs /> },
       ],
-      */
+      
     },
+    */
   ])
 }
 
