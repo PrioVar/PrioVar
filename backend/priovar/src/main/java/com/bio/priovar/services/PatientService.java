@@ -387,7 +387,7 @@ public class PatientService {
     }
 
     public Patient getPatientForDetailedView() {
-        Patient patient = patientRepository.findByName("Ahmet Meriç").get(0);
+        Patient patient = patientRepository.findByName("Ali Veli").get(0);
         return patient;
     }
 }
