@@ -1,6 +1,8 @@
 import menu2Fill from '@iconify/icons-eva/menu-2-fill'
 import { Icon } from '@iconify/react'
 import { AppBar, Box, IconButton, Stack, Toolbar } from '@material-ui/core'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 // material
 import { alpha, styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
@@ -45,6 +47,25 @@ DashboardNavbar.propTypes = {
 
 export default function DashboardNavbar({ onOpenSidebar }) {
   const { isCollapse } = useCollapseDrawer()
+  const [fetchedText, setFetchedText] = useState('');
+  const healthCenterId = localStorage.getItem('healthCenterId') || '';
+
+
+    // Fetch text when the component mounts
+    useEffect(() => {
+        const fetchText = async () => {
+            try {
+            const response = await axios.get(`http://localhost:8080/medicalCenter/${healthCenterId}`);
+            setFetchedText(response.data.name); // Update state with fetched text
+            console.log(response.data)
+            } catch (error) {
+            console.error('Error fetching text:', error);
+            }
+        };
+
+        fetchText();
+        }, []);
+
 
   return (
     <RootStyle
@@ -61,9 +82,14 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           </IconButton>
         </MHidden>
 
-        <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
-          <Logo />
-        </Box>
+        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+            {/* Logo inside RouterLink to remain clickable */}
+            <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
+                <Logo />
+            </Box>
+            {/* Text outside RouterLink to be non-clickable */}
+            {fetchedText && <span style={{ marginLeft: '10px' }}>{fetchedText}</span>}
+            </Box>
         <Box ml={2} />
 
         {/* <Searchbar /> */}
