@@ -118,7 +118,7 @@ public class InitializerController {
         patientRepository.save(patient2);
 
         Patient patient3 = new Patient();
-        patient3.setName("Ahmet Mehmet");
+        patient3.setName("Ahmet Meriç");
         patient3.setAge(33);
         patient3.setSex("Male");
         PhenotypeTerm phenotypeTerm3 = phenotypeTermRepository.findById(40085L).get(); //from group 2

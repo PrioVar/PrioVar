@@ -385,4 +385,9 @@ public class PatientService {
     public Patient getPatientByGenesusId(String genesusId) {
         return patientRepository.findByGenesusId(genesusId);
     }
+
+    public Patient getPatientForDetailedView() {
+        Patient patient = patientRepository.findByName("Ahmet Meriç").get(0);
+        return patient;
+    }
 }
