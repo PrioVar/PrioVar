@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Typography, Grid, Button } from '@material-ui/core';
 import axios from 'axios';
+import { MIconButton } from '../../components/@material-extend';
+import { useSnackbar } from 'notistack5';
+import { Icon } from '@iconify/react';
+import closeFill from '@iconify/icons-eva/close-fill'
 
 
 const SubscriptionPlansTable = () => {
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const healthCenterId = localStorage.getItem('healthCenterId') || '';
   const [remainingAnalyses, setRemainingAnalyses] = useState(null); 
 
@@ -41,13 +45,25 @@ const SubscriptionPlansTable = () => {
     },
   ];
 
-  const handleSelectPlan = async (subscriptionId) => {
+  const HandleSelectPlan = async (subscriptionId) => {
     const url = `http://localhost:8080/medicalCenter/addSubscription/${healthCenterId}/${subscriptionId}`;
     try {
       const response = await axios.post(url);
       console.log("SUCCESS")
       console.log(response.data);
       // handle response
+      enqueueSnackbar('Subscription added successfully!', {
+        variant: 'success',
+        action: (key) => (
+            <MIconButton size="small" onClick={() => {
+              closeSnackbar(key);
+              // Reload the page after the request is successful
+              window.location.reload();
+            }}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          ),
+      })
     } catch (error) {
       console.log("ERROR")
       console.error(error);
@@ -82,7 +98,7 @@ const SubscriptionPlansTable = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  onClick={() => handleSelectPlan(index+1)}
+                  onClick={() => HandleSelectPlan(index+1)}
                 >
                   Select
                 </Button>
