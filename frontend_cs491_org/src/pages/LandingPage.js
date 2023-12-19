@@ -20,7 +20,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function LandingPage() {
   return (
-    <RootStyle title="Lidya Genomics" id="move_top">
+    <RootStyle title="Priovar" id="move_top">
       <LandingHero />
       <ContentStyle>
         <LandingMinimal />
