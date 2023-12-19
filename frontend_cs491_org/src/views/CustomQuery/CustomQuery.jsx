@@ -23,6 +23,7 @@ import {
     Select,
     MenuItem
   } from '@material-ui/core'
+  import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
   import axios from 'axios';
   import { makeStyles } from '@material-ui/styles'
   import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
@@ -62,10 +63,14 @@ import {
     )
 
     //
-    const [gene, setGene] = useState('');
+    const [gene, setGene] = useState([]);
     const [ageIntervalStart, setAgeIntervalStart] = useState('');
     const [ageIntervalEnd, setAgeIntervalEnd] = useState('');
     const [gender, setGender] = useState(''); 
+    const [rows, setRows] = useState([]);
+
+    const geneOptions = ['ABCA1', 'ABCA2', 'ABCA3', 'ABCA4', 'ABCB7', 'ABAT', 'ABL1', 'NAT2', 'AARS1'];
+
 
     const handleSearch = async () => {
 
@@ -75,18 +80,21 @@ import {
             return { id };
         });
 
-        const body = {
-            phenotypeTerms: phenotypeTerms,
-            geneSpecification: gene,
+        const requestBody = {
             sex: gender,
+            genes: gene.map(g => ({ geneSymbol: g })),
+            phenotypeTerms: phenotypeTerms,
             ageIntervalStart: ageIntervalStart,
             ageIntervalEnd: ageIntervalEnd
-        }
+        };
+
         console.log("body:")
-        console.log(body)
+        console.log(requestBody)
         try {
-            const response = await axios.post('http://localhost:8080/customQuery', body);
+            const response = await axios.post('http://localhost:8080/customQuery', requestBody);
             console.log("SUCCESS!")
+            console.log(response)
+            setRows(response.data);
     
           } catch (error) {
             console.log("FAIL!")
@@ -96,11 +104,19 @@ import {
       };
 
 
+      const handleChange = (event) => {
+        setGene(event.target.value);
+      };
+
+
 
     const ManageHpo = function ({ fileId , hpoList, setHpoList}) {
       
         return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
       }
+
+
+      
   
 
     const [hpoList, setHpoList] = useHpo({ fileId })
@@ -135,12 +151,23 @@ import {
         </Grid>
 
         <Grid item xs={6}>
-          <TextField
-            fullWidth
-            label="Gene Specification"
-            value={gene}
-            onChange={(e) => setGene(e.target.value)}
-          />
+            <FormControl fullWidth>
+                <InputLabel>Gene Specification</InputLabel>
+                <Select
+                multiple
+                value={gene}
+                onChange={handleChange}
+                variant="outlined"
+                label='Gene Specification'
+                renderValue={(selected) => selected.join(', ')}
+                >
+                {geneOptions.map((option) => (
+                    <MenuItem key={option} value={option}>
+                    {option}
+                    </MenuItem>
+                ))}
+                </Select>
+            </FormControl>
         </Grid>
         <Grid item container xs={6} spacing={2} alignItems="center" >
           <Grid item xs={6}>
@@ -153,8 +180,8 @@ import {
               label="Gender"
               onChange={(e) => setGender(e.target.value)}
             >
-              <MenuItem value="M">Male</MenuItem>
-              <MenuItem value="F">Female</MenuItem>
+              <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -168,6 +195,31 @@ import {
         <Box mt={12}>
             Results will be displayed here
       </Box>
+    </Box>
+
+    <Box p={3} mt={4}>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell align="right">Age</TableCell>
+            <TableCell align="right">Sex</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.id}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{row.age}</TableCell>
+              <TableCell align="right">{row.sex}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
     </Box>
 
 
