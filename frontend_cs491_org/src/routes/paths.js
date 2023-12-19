@@ -4,7 +4,7 @@ function path(root, sublink) {
   return `${root}${sublink}`
 }
 
-const ROOTS_AUTH = '/auth'
+const ROOTS_AUTH = '/'
 const ROOTS_DASHBOARD = '/libra'
 const ROOTS_SAMPLE = '/sample'
 export const ROOTS_PRIOVAR = 'http://localhost:8080'
@@ -48,7 +48,7 @@ export const PATH_PRIOVAR = {
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
-  login: path(ROOTS_AUTH, '/login'),
+  login: path(ROOTS_AUTH, ''),
   loginUnprotected: path(ROOTS_AUTH, '/login-unprotected'),
   loginHealthCenter: path(ROOTS_AUTH, '/login-health-center'),
   loginHealthCenterUnprotected: path(ROOTS_AUTH, '/login-health-center-unprotected'),
