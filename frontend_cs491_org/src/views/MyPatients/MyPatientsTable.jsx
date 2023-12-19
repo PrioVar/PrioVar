@@ -246,238 +246,229 @@ import {
     }
   
     const COLUMNS = [
-      {
-        name: 'delete',
-        label: 'Delete',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            if (!row) return null
-  
-            const handleClickConfirm = () => {
-              if (row.vcf_id) {
-                deleteVcfFile(row.vcf_id)
-              } else if (row.fastq_pair_id) {
-                deleteFastqFile(row.fastq_file_1.fastq_file_id)
-                deleteFastqFile(row.fastq_file_2.fastq_file_id)
-              } else {
-                deleteFastqFile(row.fastq_file_id)
-              }
-  
-              filesApi.refresh()
-            }
-  
-            return <DeleteFileButton onClickConfirm={handleClickConfirm} />
-          },
-        },
-      },
-      {
-        name: 'created_at',
-        label: 'Created At',
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? fDateTime(row.created_at) : null
-          },
-        },
-      },
-      {
-        name: 'patient_name',
-        label: 'Patient Name',
-        options: {
-          filter: true,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? (
-              <AnalysedCheckbox
-                checked={row.is_finished}
-                onChange={(e) => setFinishedInfo(row)}
-                details={{ date: row.finish_time, person: row.finish_person }}
-              />
-            ) : null
-          },
-        },
-      },
-      {
-        name: 'notes',
-        label: 'Notes',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? (
-              <ExpandOnClick
-                expanded={
-                  <EditableNote
-                    note={row.file_notes}
-                    onSave={(notes) => setFileNotes(row, notes)}
-                    details={{ date: row.notes_time, person: row.notes_person }}
-                  />
+        {
+          name: 'delete',
+          label: 'Delete',
+          options: {
+            filter: false,
+            sort: false,
+            customBodyRenderLite(dataIndex) {
+              const row = data[dataIndex]
+              if (!row) return null
+    
+              const handleClickConfirm = () => {
+                if (row.vcf_id) {
+                  deleteVcfFile(row.vcf_id)
+                } else if (row.fastq_pair_id) {
+                  deleteFastqFile(row.fastq_file_1.fastq_file_id)
+                  deleteFastqFile(row.fastq_file_2.fastq_file_id)
+                } else {
+                  deleteFastqFile(row.fastq_file_id)
                 }
+    
+                filesApi.refresh()
+              }
+    
+              return <DeleteFileButton onClickConfirm={handleClickConfirm} />
+            },
+          },
+        },
+        {
+          name: 'created_at',
+          label: 'Uploaded At',
+          options: {
+            filter: false,
+            sort: true,
+            customBodyRenderLite(dataIndex) {
+              const row = data[dataIndex]
+              return row ? fDateTime(row.created_at) : null
+            },
+          },
+        },
+        {
+          name: 'finished_at',
+          label: 'Completed',
+          options: {
+            filter: true,
+            sort: false,
+            customBodyRenderLite(dataIndex) {
+              const row = data[dataIndex]
+              return row ? (
+                <AnalysedCheckbox
+                  checked={row.is_finished}
+                  onChange={(e) => setFinishedInfo(row)}
+                  details={{ date: row.finish_time, person: row.finish_person }}
+                />
+              ) : null
+            },
+          },
+        },
+        {
+          name: 'notes',
+          label: 'Notes',
+          options: {
+            filter: false,
+            sort: false,
+            customBodyRenderLite(dataIndex) {
+              const row = data[dataIndex]
+              return row ? (
+                <ExpandOnClick
+                  expanded={
+                    <EditableNote
+                      note={row.file_notes}
+                      onSave={(notes) => setFileNotes(row, notes)}
+                      details={{ date: row.notes_time, person: row.notes_person }}
+                    />
+                  }
+                >
+                  {({ ref, onClick }) => (
+                    <IconButton variant="contained" ref={ref} onClick={onClick}>
+                      <Note />
+                    </IconButton>
+                  )}
+                </ExpandOnClick>
+              ) : null
+            },
+          },
+        },
+        {
+          name: 'name',
+          label: 'Filename',
+          options: {
+            filter: true,
+            sort: true,
+            customBodyRenderLite: (dataIndex) => {
+              const row = data[dataIndex]
+              if (!row) return null
+              if (row?.fastq_pair_id) {
+                return (
+                  <Stack direction="row" spacing={1}>
+                    <Chip label={row.fastq_file_1.name} />
+                    <Chip label={row.fastq_file_2.name} />
+                  </Stack>
+                )
+              }
+              return <Chip label={row.name} />
+            },
+          },
+        },
+        {
+          name: 'sample_name',
+          label: 'Sample',
+          options: {
+            filter: true,
+            sort: true,
+          },
+        },
+        {
+          name: 'status',
+          label: 'Status',
+          options: {
+            filter: false,
+            sort: true,
+            customBodyRenderLite: (dataIndex) => {
+              const row = data[dataIndex]
+              const status = getStatusLabel(row)
+              return status ? <JobStateStatus status={status} /> : null
+            },
+          },
+        },
+        {
+          name: 'similar_patients',
+          label: 'See similar patients',
+          options: {
+            filter: false,
+            sort: true,
+            customBodyRenderLite(dataIndex) {
+              const row = data[dataIndex]
+              return (
+                  <Button variant="contained" color="info" onClick={() => handleSeeSimilarPatients(row)} size="small">
+                    <Info />
+                  </Button>
+                )
+            },
+          },
+        },
+        {
+          name: 'details',
+          label: 'Details',
+          options: {
+            filter: false,
+            sort: true,
+            customBodyRenderLite(dataIndex) {
+              const row = data[dataIndex]
+              return (
+                  <Button variant="contained" color="info" onClick={() => handleDetails(row)} 
+                  component={RouterLink} to={PATH_DASHBOARD.general.patientDetails} size="small">
+                    <Info />
+                  </Button>
+                )
+            },
+          },
+        },
+        {
+          name: 'go',
+          label: 'Go',
+          options: {
+            filter: false,
+            sort: false,
+            customBodyRenderLite: (dataIndex) => {
+              const row = data[dataIndex]
+              const status = getStatusLabel(row)
+              if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
+              if (status.includes('ANNO') || status === 'WAITING')
+                return (
+                  <Button variant="contained" color="info" onClick={() => handleAnnotationModelOpen(row)} size="small">
+                    <Info />
+                  </Button>
+                )
+              return (
+                <GoToSampleDashboard fileId={row.vcf_id ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
+              )
+            },
+          },
+        },
+      ]
+    
+      switch (status) {
+        case 'success':
+          return (
+            <>
+              <Box display="flex" justifyContent="flex-end" mt={2}> 
+              <Button 
+                  variant="contained" 
+                  color="info" 
+                  component={RouterLink} to={PATH_DASHBOARD.general.files}
+                  size="small"
               >
-                {({ ref, onClick }) => (
-                  <IconButton variant="contained" ref={ref} onClick={onClick}>
-                    <Note />
-                  </IconButton>
-                )}
-              </ExpandOnClick>
-            ) : null
-          },
-        },
-      },
-      {
-        name: 'age',
-        label: 'Age',
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRenderLite: (dataIndex) => {
-            const row = data[dataIndex]
-            if (!row) return null
-            if (row?.fastq_pair_id) {
-              return (
-                <Stack direction="row" spacing={1}>
-                  <Chip label={row.fastq_file_1.name} />
-                  <Chip label={row.fastq_file_2.name} />
-                </Stack>
-              )
-            }
-            return <Chip label={row.name} />
-          },
-        },
-      },
-      {
-        name: 'sex',
-        label: 'Sex',
-        options: {
-          filter: true,
-          sort: true,
-        },
-      },
-      {
-        name: 'clinical-history',
-        label: 'Clinical History',
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRenderLite: (dataIndex) => {
-            const row = data[dataIndex]
-            const status = getStatusLabel(row)
-            return status ? <JobStateStatus status={status} /> : null
-          },
-        },
-      },
-      {
-        name: 'disease',
-        label: 'Disease',
-        options: {
-          filter: true,
-          sort: true,
-        },
-      },
-      {
-        name: 'similar_patients',
-        label: 'See similar patients',
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return (
-                <Button variant="contained" color="info" onClick={() => handleSeeSimilarPatients(row)} size="small">
-                  <Info />
-                </Button>
-              )
-          },
-        },
-      },
-      {
-        name: 'details',
-        label: 'Details',
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return (
-                <Button variant="contained" color="info" onClick={() => handleDetails(row)} 
-                component={RouterLink} to={PATH_DASHBOARD.general.patientDetails} size="small">
-                  <Info />
-                </Button>
-              )
-          },
-        },
-      },
-      {
-        name: 'go',
-        label: 'Go',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRenderLite: (dataIndex) => {
-            const row = data[dataIndex]
-            const status = getStatusLabel(row)
-            if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
-            if (status.includes('ANNO') || status === 'WAITING')
-              return (
-                <Button variant="contained" color="info" onClick={() => handleAnnotationModelOpen(row)} size="small">
-                  <Info />
-                </Button>
-              )
-            return (
-              <GoToSampleDashboard fileId={row.vcf_id ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
-            )
-          },
-        },
-      },
-    ]
-  
-    switch (status) {
-      case 'success':
-        return (
-          <>
-            <Box display="flex" justifyContent="flex-end" mt={2}> 
-            <Button 
-                variant="contained" 
-                color="info" 
-                onClick={() => handleAddPatient()} 
-                component={RouterLink} to={PATH_DASHBOARD.general.files}
-                size="small"
-            >
-                <Add /> 
-                Add Patient 
-            </Button>
-            </Box>
-            <VariantDasboard2
-            open={isAnnotationModalOpen}
-            handleButtonChange = {handleButtonChange}
-            onClose={() => setAnnotationModalOpen()}
-            />
-            <MUIDataTable
-              title="All patients of clinician Ahmet"
-              data={data}
-              columns={COLUMNS}
-              options={{
-                selectableRows: 'none',
-                sortOrder: { name: 'created_at', direction: 'desc' },
-                expandableRows: false,
-                print: false,
-                viewColumns: true,
-                download: false,
-              }}
-            />
-          </>
-        )
-      default:
-        return <CircularProgress />
+                  <Add /> 
+                  Add Patient 
+              </Button>
+              </Box>
+              <VariantDasboard2
+              open={isAnnotationModalOpen}
+              handleButtonChange = {handleButtonChange}
+              onClose={() => setAnnotationModalOpen()}
+              />
+              <MUIDataTable
+                title="All patients of clinic ABC"
+                data={data}
+                columns={COLUMNS}
+                options={{
+                  selectableRows: 'none',
+                  sortOrder: { name: 'created_at', direction: 'desc' },
+                  expandableRows: false,
+                  print: false,
+                  viewColumns: true,
+                  download: false,
+                }}
+              />
+            </>
+          )
+        default:
+          return <CircularProgress />
+      }
     }
-  }
   
   export default MyPatientsTable
   
