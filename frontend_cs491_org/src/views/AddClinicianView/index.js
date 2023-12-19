@@ -2,7 +2,7 @@ import React from 'react'
 import Page from 'src/components/Page'
 import { Container, Grid } from '@material-ui/core'
 
-import SubscriptionPlansTable from './AddClinician'
+import AddNewClinician from './AddClinician'
 
 
 // TODO: UploadVCF and UploadFastq should be abstracted into a single component
@@ -14,7 +14,7 @@ const AddClinician = function () {
       <Grid container spacing={5}>
 
         <Grid item xs={12}>
-          <SubscriptionPlansTable />
+          <AddNewClinician />
         </Grid>
       </Grid>
     </Page>

@@ -81,6 +81,7 @@ import {
         <>
 
     <Box p={3}>
+        <Typography variant="h4" align="center">Patient Details</Typography>
         <Grid container spacing={2} mt={4}>
             {/* Name, Age, Sex, and Assigned Clinic in one row */}
             <Grid item xs={3}>
@@ -93,7 +94,7 @@ import {
             <Typography variant="h6">Sex: </Typography>{details.sex}
             </Grid>
             <Grid item xs={3}>
-            <Typography variant="h6">Assigned Clinic: </Typography>{details.medicalCenter?.name}
+            <Typography variant="h6">Health Center: </Typography>{details.medicalCenter?.name}
             </Grid>
 
             {/* Disease and Phenotype Terms in the next row */}
