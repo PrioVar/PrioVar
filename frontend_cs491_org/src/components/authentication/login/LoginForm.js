@@ -105,6 +105,15 @@ export default function LoginForm({ callerPage }) {
         console.log(localStorage.getItem('adminId'))
       }
       catch (error) {
+        // print the error details, response is a JSON and has field 'message'
+        enqueueSnackbar(error.response.data.message, {
+            variant: 'error',
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            ),
+        })
         console.error(error)
         resetForm()
         if (isMountedRef.current) {
