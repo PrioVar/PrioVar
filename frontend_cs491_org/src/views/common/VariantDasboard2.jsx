@@ -460,12 +460,6 @@ import {
                                     </Select>
                                   </FormControl>
                                 </CardContent>
-                                <CardContent >
-                                  <FormControl fullWidth>
-                                    Health Center ID
-                                    <Input type="number" value={healthCenterId} onChange={handleHealthCenterChange}></Input>
-                                  </FormControl>
-                                </CardContent>
                               </Grid>
                             </Grid>
                         </Grid>
