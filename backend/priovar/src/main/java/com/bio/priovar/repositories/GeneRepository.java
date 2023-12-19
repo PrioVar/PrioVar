@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 
 public interface GeneRepository extends Neo4jRepository<Gene, Long> {
-    @Query("MATCH (g:Gene) WHERE g.id = $id RETURN g")
-    Optional<Gene> findGeneById(Long id);
+
+    Optional<Gene> findByGeneSymbol(String geneSymbol);
 
 }

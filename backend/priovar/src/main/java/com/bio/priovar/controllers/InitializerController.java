@@ -76,7 +76,7 @@ public class InitializerController {
         Patient patient1 = new Patient();
         patient1.setName("Ali Veli");
         patient1.setAge(25);
-        patient1.setSex("male");
+        patient1.setSex("Male");
         patient1.setMedicalCenter(liva);
         Disease disease1 = diseaseRepository.findByDiseaseName("White-Kernohan syndrome");
         patient1.setDisease(disease1);
@@ -87,8 +87,8 @@ public class InitializerController {
         phenotypeTerms.add(phenotypeTerm1);
         phenotypeTerms.add(phenotypeTerm2);
         phenotypeTerms.add(phenotypeTerm7);
-        Gene gene1 = geneRepository.findById(4996L).get();
-        Gene gene2 = geneRepository.findById(4997L).get();
+        Gene gene1 = geneRepository.findByGeneSymbol("ABCA1").get();
+        Gene gene2 = geneRepository.findByGeneSymbol("AARS1").get();
         List<Gene> genes1 = new ArrayList<>();
         genes1.add(gene1);
         genes1.add(gene2);
@@ -99,7 +99,7 @@ public class InitializerController {
         Patient patient2 = new Patient();
         patient2.setName("Ayşe Fatma");
         patient2.setAge(40);
-        patient2.setSex("female");
+        patient2.setSex("Female");
         PhenotypeTerm phenotypeTerm5 = phenotypeTermRepository.findById(929L).get(); //from group 1
         PhenotypeTerm phenotypeTerm6 = phenotypeTermRepository.findById(847L).get(); //from group 2
         PhenotypeTerm phenotypeTerm8 = phenotypeTermRepository.findById(1106L).get(); //from group 3
@@ -107,8 +107,8 @@ public class InitializerController {
         phenotypeTerms1.add(phenotypeTerm5);
         phenotypeTerms1.add(phenotypeTerm6);
         phenotypeTerms1.add(phenotypeTerm8);
-        Gene gene3 = geneRepository.findById(4998L).get();
-        Gene gene4 = geneRepository.findById(4999L).get();
+        Gene gene3 = geneRepository.findByGeneSymbol("ABCA2").get();
+        Gene gene4 = geneRepository.findByGeneSymbol("ABL1").get();
         List<Gene> genes2 = new ArrayList<>();
         genes2.add(gene3);
         genes2.add(gene4);
@@ -120,14 +120,14 @@ public class InitializerController {
         Patient patient3 = new Patient();
         patient3.setName("Ahmet Mehmet");
         patient3.setAge(33);
-        patient3.setSex("male");
+        patient3.setSex("Male");
         PhenotypeTerm phenotypeTerm3 = phenotypeTermRepository.findById(40085L).get(); //from group 2
         PhenotypeTerm phenotypeTerm4 = phenotypeTermRepository.findById(19L).get();
         List<PhenotypeTerm> phenotypeTerms2 = new ArrayList<>();
         phenotypeTerms2.add(phenotypeTerm3);
         phenotypeTerms2.add(phenotypeTerm4);
-        Gene gene5 = geneRepository.findById(5000L).get();
-        Gene gene6 = geneRepository.findById(5001L).get();
+        Gene gene5 = geneRepository.findByGeneSymbol("ABCA3").get();
+        Gene gene6 = geneRepository.findByGeneSymbol("ABCA4").get();
         List<Gene> genes3 = new ArrayList<>();
         genes3.add(gene5);
         genes3.add(gene6);
@@ -139,7 +139,7 @@ public class InitializerController {
         Patient patient4 = new Patient();
         patient4.setName("Ece Nur");
         patient4.setAge(20);
-        patient4.setSex("female");
+        patient4.setSex("Female");
         PhenotypeTerm phenotypeTerm9 = phenotypeTermRepository.findById(3351L).get(); //from group 2
         PhenotypeTerm phenotypeTerm10 = phenotypeTermRepository.findById(5346L).get(); // from group 1
         List<PhenotypeTerm> phenotypeTerms3 = new ArrayList<>();
@@ -183,7 +183,7 @@ public class InitializerController {
         phenotypeTerms4.add(phenotypeTerm9);//g2
         patient5.setPhenotypeTerms(phenotypeTerms4);
         patient5.setAge(29);
-        patient5.setSex("male");
+        patient5.setSex("Male");
         patient5.setMedicalCenter(acibadem);
         patientRepository.save(patient5);
 

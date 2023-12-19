@@ -19,8 +19,7 @@ public class QueryController {
     public QueryController(QueryService queryService) {
         this.queryService = queryService;
     }
-
-    @GetMapping()
+    @PostMapping
     public List<Patient> runCustomQuery(@RequestBody Query query) {
         return queryService.runCustomQuery(query);
     }
