@@ -101,7 +101,7 @@ export default function EcommerceCheckout() {
   }, [dispatch, activeStep])
 
   return (
-    <Page title="Ecommerce: Checkout | Priovar">
+    <Page title="Ecommerce: Checkout | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Checkout"

@@ -17,7 +17,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function CopyToClipboard() {
   return (
-    <RootStyle title="Components: Copy To Clipboard | Priovar">
+    <RootStyle title="Components: Copy To Clipboard | PrioVar">
       <Box
         sx={{
           pt: 6,

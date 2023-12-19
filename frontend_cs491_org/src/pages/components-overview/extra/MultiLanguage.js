@@ -44,7 +44,7 @@ export default function MultiLanguage() {
   }
 
   return (
-    <RootStyle title="Components: Multi Language | Priovar">
+    <RootStyle title="Components: Multi Language | PrioVar">
       <Box
         sx={{
           pt: 6,

@@ -20,7 +20,7 @@ const UploadView = function () {
     };
 
   return (
-    <Page title="Upload File | Priovar">
+    <Page title="Upload File | PrioVar">
       <Grid container spacing={5}>
         <Grid item xs={6}>
           <UploadVCF onUploadComplete={handleFileUploadComplete}/>

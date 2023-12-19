@@ -30,7 +30,7 @@ export default function UserCreate() {
   }, [dispatch])
 
   return (
-    <Page title="User: Create a new user | Priovar">
+    <Page title="User: Create a new user | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading={!isEdit ? 'Create a new user' : 'Edit user'}

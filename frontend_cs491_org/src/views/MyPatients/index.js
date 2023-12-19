@@ -10,7 +10,7 @@ import MyPatientsTable from './MyPatientsTable'
 
 const MyPatients = function () {
   return (
-    <Page title="Upload File | Priovar">
+    <Page title="Upload File | PrioVar">
       <Grid container spacing={5}>
 
         <Grid item xs={12}>

@@ -93,7 +93,7 @@ export default function MenusComponent() {
   }
 
   return (
-    <RootStyle title="Components: Menus | Priovar">
+    <RootStyle title="Components: Menus | PrioVar">
       <Box
         sx={{
           pt: 6,

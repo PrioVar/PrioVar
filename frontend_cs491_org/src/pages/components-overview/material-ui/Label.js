@@ -29,7 +29,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function LabelsComponent() {
   return (
-    <RootStyle title="Components: Label | Priovar">
+    <RootStyle title="Components: Label | PrioVar">
       <Box
         sx={{
           pt: 6,

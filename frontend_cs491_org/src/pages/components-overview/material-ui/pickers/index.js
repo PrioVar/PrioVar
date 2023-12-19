@@ -38,7 +38,7 @@ export default function PickersComponent() {
   }
 
   return (
-    <RootStyle title="Components: Pickers | Priovar">
+    <RootStyle title="Components: Pickers | PrioVar">
       <Box
         sx={{
           pt: 6,

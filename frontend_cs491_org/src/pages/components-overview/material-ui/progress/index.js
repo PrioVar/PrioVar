@@ -68,7 +68,7 @@ export default function ProgressComponent() {
   }, [])
 
   return (
-    <RootStyle title="Components: Progress | Priovar">
+    <RootStyle title="Components: Progress | PrioVar">
       <Box
         sx={{
           pt: 6,

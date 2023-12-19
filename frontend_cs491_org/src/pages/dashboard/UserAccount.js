@@ -81,7 +81,7 @@ export default function UserAccount() {
   }
 
   return (
-    <Page title="User: Account Settings | Priovar">
+    <Page title="User: Account Settings | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Account"

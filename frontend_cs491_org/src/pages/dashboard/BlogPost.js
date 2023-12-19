@@ -50,7 +50,7 @@ export default function BlogPost() {
   }, [dispatch, title])
 
   return (
-    <Page title="Blog: Post Details | Priovar">
+    <Page title="Blog: Post Details | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Post Details"

@@ -38,7 +38,7 @@ export default function TextFieldComponent() {
   // ----------------------------------------------------------------------
 
   return (
-    <RootStyle title="Components: TextField | Priovar">
+    <RootStyle title="Components: TextField | PrioVar">
       <Box
         sx={{
           pt: 6,

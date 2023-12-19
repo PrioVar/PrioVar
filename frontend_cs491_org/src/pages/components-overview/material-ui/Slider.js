@@ -73,7 +73,7 @@ export default function SliderComponent() {
   }
 
   return (
-    <RootStyle title="Components: Slider | Priovar">
+    <RootStyle title="Components: Slider | PrioVar">
       <Box
         sx={{
           pt: 6,

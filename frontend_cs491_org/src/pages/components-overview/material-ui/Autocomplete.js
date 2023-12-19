@@ -30,7 +30,7 @@ export default function AutocompleteComponent() {
   const [inputValue, setInputValue] = useState('')
 
   return (
-    <RootStyle title="Components: Autocomplete | Priovar">
+    <RootStyle title="Components: Autocomplete | PrioVar">
       <Box
         sx={{
           pt: 6,
