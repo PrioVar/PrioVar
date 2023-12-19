@@ -119,6 +119,9 @@ export default function SideNav() {
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.subscriptionPlans} sx={{ mt: 5 }}>
                   Subscription Plans
               </Button>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.addClinician} sx={{ mt: 5 }}>
+                  Add Clinician
+              </Button>
               </Stack>
 
               {/*              <Stack spacing={1.5}>
