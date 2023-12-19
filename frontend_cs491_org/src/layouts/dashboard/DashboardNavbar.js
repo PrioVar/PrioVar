@@ -83,13 +83,13 @@ export default function DashboardNavbar({ onOpenSidebar }) {
         </MHidden>
 
         <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-            {/* Logo inside RouterLink to remain clickable */}
-            <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
-                <Logo />
-            </Box>
-            {/* Text outside RouterLink to be non-clickable */}
-            {fetchedText && <span style={{ marginLeft: '10px' }}>{fetchedText}</span>}
-            </Box>
+        {/* Logo inside RouterLink to remain clickable */}
+        <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
+            <Logo />
+        </Box>
+        {/* Text outside RouterLink to be non-clickable */}
+        {fetchedText && <span style={{ marginLeft: '10px' ,color: 'black'}}>{fetchedText} Health Center</span>}
+        </Box>
         <Box ml={2} />
 
         {/* <Searchbar /> */}
