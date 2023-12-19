@@ -108,7 +108,7 @@ import {
         <>
 
     <Box p={3} mt={4}>
-    <Typography variant="h5">Custom Query</Typography>
+    <Typography variant="h5">Search Population</Typography>
       <Grid container spacing={2} alignItems="flex-end" mt={4}>
         <Grid item xs={6}>
             <ManageHpo fileId={fileId} sampleName={sampleName} hpoList={hpoList} setHpoList={setHpoList}  />

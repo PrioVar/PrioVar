@@ -113,7 +113,7 @@ export default function SideNav() {
                   Clinics Patients
               </Button>
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.customQuery} sx={{ mt: 5 }}>
-                  Custom Query
+                  Search Population
               </Button>
               {/**TODO */}
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.subscriptionPlans} sx={{ mt: 5 }}>

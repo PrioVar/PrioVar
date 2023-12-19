@@ -10,7 +10,7 @@ import CustomQueryTable from './CustomQuery'
 
 const CustomQuery = function () {
   return (
-    <Page title="Custom Query">
+    <Page title="Search Population">
       <Grid container spacing={5}>
 
         <Grid item xs={12}>

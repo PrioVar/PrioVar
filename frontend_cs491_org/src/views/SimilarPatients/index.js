@@ -10,7 +10,7 @@ import SimilarPatientsTable from './SimilarPatientsTable'
 
 const SimilarPatients = function () {
   return (
-    <Page title="Custom Query">
+    <Page title="Searching Similar Patients">
       <Grid container spacing={5}>
 
         <Grid item xs={12}>
