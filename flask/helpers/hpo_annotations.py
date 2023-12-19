@@ -44,12 +44,12 @@ def read_and_create_genes_from_genes_to_phenotype(session):
         for row in reader:
             # Create gene node if not exists
             create_gene_query = (
-                "MERGE (g:Gene {gene_symbol: $gene_symbol, ncbi_gene_id: $ncbi_gene_id}) "
+                "MERGE (g:Gene {geneSymbol: $gene_symbol}) "
             )
-            session.run(create_gene_query,  gene_symbol=row['gene_symbol'], ncbi_gene_id=row['ncbi_gene_id'])
+            session.run(create_gene_query,  gene_symbol=row['gene_symbol'])
             # Create relationship with phenotype term
             create_relationship_query = (
-                "MATCH (g:Gene {gene_symbol: $gene_symbol}), (p:PhenotypeTerm {id: $hpo_id}) "
+                "MATCH (g:Gene {geneSymbol: $gene_symbol}), (p:PhenotypeTerm {id: $hpo_id}) "
                 "MERGE (g)-[:ASSOCIATED_WITH_PHENOTYPE]->(p) "
             )
             hpo_idd = int(row['hpo_id'][-7:])
