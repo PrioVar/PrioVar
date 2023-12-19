@@ -95,6 +95,7 @@ export const PATH_DASHBOARD = {
     customQuery: path(ROOTS_DASHBOARD, '/customquery'),
     subscriptionPlans: path(ROOTS_DASHBOARD, '/subscriptionPlans'),
     similarPatients: path(ROOTS_DASHBOARD, '/similarPatients'),
+    addClinician: path(ROOTS_DASHBOARD, '/addClinician'),
   },
   mail: {
     root: path(ROOTS_DASHBOARD, '/mail'),
