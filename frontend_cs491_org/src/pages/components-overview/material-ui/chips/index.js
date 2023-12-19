@@ -19,7 +19,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function ChipsComponent() {
   return (
-    <RootStyle title="Components: Chip | Genesus">
+    <RootStyle title="Components: Chip | PrioVar">
       <Box
         sx={{
           pt: 6,

@@ -77,7 +77,7 @@ export default function Upload() {
   }
 
   return (
-    <RootStyle title="Components: Upload | Genesus">
+    <RootStyle title="Components: Upload | PrioVar">
       <Box
         sx={{
           pt: 6,

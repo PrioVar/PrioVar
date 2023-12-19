@@ -41,7 +41,7 @@ export default function PaginationComponent() {
   }
 
   return (
-    <RootStyle title="Components: Pagination | Genesus">
+    <RootStyle title="Components: Pagination | PrioVar">
       <Box
         sx={{
           pt: 6,

@@ -103,7 +103,7 @@ export default function UserProfile() {
   ]
 
   return (
-    <Page title="User: Profile | Genesus">
+    <Page title="User: Profile | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Profile"

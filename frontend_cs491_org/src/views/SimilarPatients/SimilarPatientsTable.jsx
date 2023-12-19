@@ -106,13 +106,13 @@ import {
     <Typography variant="h5">Search for Similar Patients</Typography>
       <Grid container spacing={2} alignItems="flex-end" mt={4}>
         <Grid item xs={6}>
-        <FormControl fullWidth>
+        <FormControl fullWidth variant="outlined">
             <InputLabel id="search-type-select-label">Search by Phenotype or Genotype</InputLabel>
             <Select
               labelId="search-type-select-label"
               id="search-type-select"
               value={searchType}
-              label="Search Type"
+              label="Search by Phenotype or Genotype"
               onChange={handleSearchTypeChange}
             >
               <MenuItem value="G">Genotype</MenuItem>
@@ -122,7 +122,7 @@ import {
         </Grid>
         {searchType && (
             <Grid item xs={6}>
-              <FormControl fullWidth>
+              <FormControl fullWidth variant="outlined">
                 <InputLabel id="term-select-label">Choose {searchType === 'P' ? 'phenotype' : 'genotype'} terms</InputLabel>
                 <Select
                   labelId="terms-select-label"
@@ -130,7 +130,8 @@ import {
                   multiple
                   value={selectedTerms}
                   onChange={handleTermsChange}
-                  input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                  input={<OutlinedInput id="select-multiple-chip" 
+                  label={`Choose ${searchType === 'P' ? 'phenotype' : 'genotype'} terms`} />}
                   renderValue={renderValue}
                 >
                   {searchType === 'P'

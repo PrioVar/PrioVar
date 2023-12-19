@@ -93,7 +93,7 @@ export default function EcommerceProductDetails() {
   }
 
   return (
-    <Page title="Ecommerce: Product Details | Genesus">
+    <Page title="Ecommerce: Product Details | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Product Details"

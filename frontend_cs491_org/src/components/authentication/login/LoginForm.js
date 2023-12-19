@@ -24,7 +24,7 @@ import * as Yup from 'yup'
 import useAuth from '../../../hooks/useAuth'
 import useIsMountedRef from '../../../hooks/useIsMountedRef'
 // routes
-import { PATH_AUTH, PATH_PRIOVAR, ROOTS_PRIOVAR } from '../../../routes/paths'
+import { PATH_AUTH, PATH_PrioVar, ROOTS_PrioVar } from '../../../routes/paths'
 //
 import { MIconButton } from '../../@material-extend'
 //
@@ -76,24 +76,24 @@ export default function LoginForm({ callerPage }) {
       try {
         // get the email from formik
         // get the password from formik
-        const emailPriovar = values.email
-        const passwordPriovar = values.password
+        const emailPrioVar = values.email
+        const passwordPrioVar = values.password
 
         var clinicianId = -1
         var healthCenterId = -1
         var adminId = -1
         if(callerPage === 'Login') {
-          const { data } = await axios.post(`${ROOTS_PRIOVAR}/clinician/login?email=${emailPriovar}&password=${passwordPriovar}`)
+          const { data } = await axios.post(`${ROOTS_PrioVar}/clinician/login?email=${emailPrioVar}&password=${passwordPrioVar}`)
           console.log(data)
           clinicianId = data.id
           healthCenterId = data.relatedId
         }
         else if(callerPage === 'LoginHealthCenter') {
-          const { data } = await axios.post(`${ROOTS_PRIOVAR}/medicalCenter/login?email=${emailPriovar}&password=${passwordPriovar}`)
+          const { data } = await axios.post(`${ROOTS_PrioVar}/medicalCenter/login?email=${emailPrioVar}&password=${passwordPrioVar}`)
           healthCenterId = data.id
         }
         else if(callerPage === 'LoginAdmin') {
-          const { data } = await axios.post(`${ROOTS_PRIOVAR}/admin/login?email=${emailPriovar}&password=${passwordPriovar}`)
+          const { data } = await axios.post(`${ROOTS_PrioVar}/admin/login?email=${emailPrioVar}&password=${passwordPrioVar}`)
           adminId = data.id
         }
         

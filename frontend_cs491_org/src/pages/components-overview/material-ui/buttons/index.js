@@ -44,7 +44,7 @@ export default function ButtonsComponent() {
   }
 
   return (
-    <RootStyle title="Components: Buttons | Genesus">
+    <RootStyle title="Components: Buttons | PrioVar">
       <Box
         sx={{
           pt: 6,

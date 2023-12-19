@@ -21,7 +21,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function DataGridComponent() {
   return (
-    <RootStyle title="Components: DataGrid | Genesus">
+    <RootStyle title="Components: DataGrid | PrioVar">
       <Box
         sx={{
           pt: 6,

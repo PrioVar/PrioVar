@@ -46,7 +46,7 @@ export default function PopoversComponent() {
   }
 
   return (
-    <RootStyle title="Components: Popover | Genesus">
+    <RootStyle title="Components: Popover | PrioVar">
       <Box
         sx={{
           pt: 6,

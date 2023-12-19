@@ -96,7 +96,7 @@ export default function AboutWhat() {
           <Grid item xs={12} md={6} lg={14}>
             <MotionInView variants={varFadeInRight}>
               <Typography variant="h2" sx={{ mb: 1 }}>
-                About Lidya Genomics
+                About PrioVar
               </Typography>
             </MotionInView>
 
@@ -106,19 +106,19 @@ export default function AboutWhat() {
                   color: (theme) => (theme.palette.mode === 'light' ? 'text.secondary' : 'common.white'),
                 }}
               >
-                At Lidya Genomics, we are passionate about unraveling the mysteries of the human genome and transforming
+                At PrioVar, we are passionate about unraveling the mysteries of the human genome and transforming
                 the way we understand and approach healthcare. As a leading provider of innovative solutions for genomic
                 data analysis, we are dedicated to empowering researchers, scientists, and healthcare professionals with
                 the tools and knowledge they need to make discoveries and improve patient outcomes.
                 <br />
                 <br />
-                Founded in 2020, Lidya Genomics was born out of a vision to bridge the gap between cutting-edge genomic
+                Founded in 2020, PrioVar was born out of a vision to bridge the gap between cutting-edge genomic
                 technologies and their practical application in various domains. We recognized the immense potential of
                 genomics to revolutionize personalized medicine, and scientific research, and we set out to create a
                 company that could harness this potential to drive meaningful progress in the field.
                 <br />
                 <br />
-                Our team at Lidya Genomics comprises a diverse group of experts from various disciplines, including
+                Our team at PrioVar comprises a diverse group of experts from various disciplines, including
                 genomics, bioinformatics, and computer science. This multidisciplinary approach enables us to develop
                 comprehensive solutions that integrate the latest advancements in technology with the insights gained
                 from genomic data analysis.
@@ -132,7 +132,7 @@ export default function AboutWhat() {
                 insights from complex genomic data quickly and efficiently.
                 <br />
                 <br />
-                At Lidya Genomics, we are committed to driving scientific discovery. We believe that by democratizing
+                At PrioVar, we are committed to driving scientific discovery. We believe that by democratizing
                 access to advanced genomic analysis tools, we can foster collaboration, accelerate research, and enable
                 the development of personalized treatments for a wide range of diseases. Our goal is to empower our
                 customers to push the boundaries of genomics and unlock the full potential of this transformative field.

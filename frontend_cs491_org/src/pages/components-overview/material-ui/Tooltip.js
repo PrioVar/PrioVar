@@ -36,7 +36,7 @@ const style = {
 
 export default function TooltipsComponent() {
   return (
-    <RootStyle title="Components: Tooltip | Genesus">
+    <RootStyle title="Components: Tooltip | PrioVar">
       <Box
         sx={{
           pt: 6,

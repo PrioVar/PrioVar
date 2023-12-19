@@ -26,7 +26,7 @@ export default function AvatarComponent() {
   const theme = useTheme()
 
   return (
-    <RootStyle title="Components: Avatar | Genesus">
+    <RootStyle title="Components: Avatar | PrioVar">
       <Box
         sx={{
           pt: 6,

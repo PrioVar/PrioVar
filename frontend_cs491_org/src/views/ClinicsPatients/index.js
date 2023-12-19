@@ -10,7 +10,7 @@ import ClinicsPatientsTable from './ClinicsPatientsTable'
 
 const ClinicsPatients = function () {
   return (
-    <Page title="Upload File | Genesus">
+    <Page title="Upload File | PrioVar">
       <Grid container spacing={5}>
 
         <Grid item xs={12}>

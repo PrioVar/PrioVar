@@ -35,7 +35,7 @@ export default function UserCards() {
   }, [dispatch])
 
   return (
-    <Page title="User: Cards | Genesus">
+    <Page title="User: Cards | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="User Cards"

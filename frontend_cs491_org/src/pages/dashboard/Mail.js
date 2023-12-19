@@ -28,7 +28,7 @@ export default function Mail() {
   }, [dispatch])
 
   return (
-    <Page title="Mail | Genesus">
+    <Page title="Mail | PrioVar">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
           heading="Mail"

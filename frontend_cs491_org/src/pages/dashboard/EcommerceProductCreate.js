@@ -31,7 +31,7 @@ export default function EcommerceProductCreate() {
   }, [dispatch])
 
   return (
-    <Page title="Ecommerce: Create a new product | Genesus">
+    <Page title="Ecommerce: Create a new product | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading={!isEdit ? 'Create a new product' : 'Edit product'}
