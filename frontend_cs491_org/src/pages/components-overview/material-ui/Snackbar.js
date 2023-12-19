@@ -77,7 +77,7 @@ export default function SnackbarComponent() {
   }
 
   return (
-    <RootStyle title="Components: Snackbar | Priovar">
+    <RootStyle title="Components: Snackbar | PrioVar">
       <Box
         sx={{
           pt: 6,

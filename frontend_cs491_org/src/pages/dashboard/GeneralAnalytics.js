@@ -25,7 +25,7 @@ export default function GeneralAnalytics() {
   const { themeStretch } = useSettings()
 
   return (
-    <Page title="General: Analytics | Priovar">
+    <Page title="General: Analytics | PrioVar">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Hi, Welcome back</Typography>

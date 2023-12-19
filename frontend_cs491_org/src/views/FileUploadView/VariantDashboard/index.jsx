@@ -405,7 +405,7 @@ const VariantDasboard = () => {
   return (
     <>
 
-      <Page title="Variant Dashboard | Priovar">
+      <Page title="Variant Dashboard | PrioVar">
         {/*ReactDOM.createPortal(
           <Stack direction="row" spacing={2}>
             <NavbarRoutes navConfig={DASHBOARD_CONFIG} />

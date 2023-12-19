@@ -42,7 +42,7 @@ export default function FoundationGrid() {
   }
 
   return (
-    <RootStyle title="Foundations: Grid | Priovar">
+    <RootStyle title="Foundations: Grid | PrioVar">
       <Box
         sx={{
           pt: 6,

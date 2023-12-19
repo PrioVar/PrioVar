@@ -104,7 +104,7 @@ export default function Kanban() {
   }
 
   return (
-    <Page title="Kanban | Priovar" sx={{ height: '100%' }}>
+    <Page title="Kanban | PrioVar" sx={{ height: '100%' }}>
       <Container maxWidth={false} sx={{ height: '100%' }}>
         <HeaderBreadcrumbs
           heading="Kanban"

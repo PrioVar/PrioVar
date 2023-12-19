@@ -32,7 +32,7 @@ var Footer = function ({ className }) {
 
       <Typography variant="caption">
         © All rights reserved
-        <br /> Made by &nbsp; Priovar
+        <br /> Made by &nbsp; PrioVar
       </Typography>
     </Container>
   )

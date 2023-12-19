@@ -69,7 +69,7 @@ const StyledTreeItem = withStyles((theme) =>
 
 export default function TreesViewComponent() {
   return (
-    <RootStyle title="Components: Tree View | Priovar">
+    <RootStyle title="Components: Tree View | PrioVar">
       <Box
         sx={{
           pt: 6,

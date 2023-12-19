@@ -29,7 +29,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function TransferListComponent() {
   return (
-    <RootStyle title="Components: Transfer List | Priovar">
+    <RootStyle title="Components: Transfer List | PrioVar">
       <Box
         sx={{
           pt: 6,

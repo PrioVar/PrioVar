@@ -102,7 +102,7 @@ export default function UserList() {
   ]
 
   return (
-    <Page title="User: List | Priovar">
+    <Page title="User: List | PrioVar">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading=""

@@ -45,7 +45,7 @@ export default function RadioButtons() {
   }
 
   return (
-    <RootStyle title="Components: Checkboxes | Priovar">
+    <RootStyle title="Components: Checkboxes | PrioVar">
       <Box
         sx={{
           pt: 6,

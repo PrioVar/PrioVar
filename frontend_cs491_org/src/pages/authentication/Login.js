@@ -45,7 +45,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   return (
-    <RootStyle title="Login | Priovar">
+    <RootStyle title="Login | PrioVar">
       <AuthLayout />
 
       <MHidden width="mdDown">
@@ -62,7 +62,7 @@ export default function Login() {
           <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h2" gutterBottom>
-                Sign in to Priovar
+                Sign in to PrioVar
               </Typography>
               <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
             </Box>

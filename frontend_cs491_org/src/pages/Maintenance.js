@@ -21,7 +21,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function Maintenance() {
   return (
-    <RootStyle title="Maintenance | Priovar">
+    <RootStyle title="Maintenance | PrioVar">
       <Container sx={{ textAlign: 'center' }}>
         <Typography variant="h3" paragraph>
           Website currently under maintenance

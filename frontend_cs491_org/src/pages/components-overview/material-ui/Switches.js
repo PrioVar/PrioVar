@@ -28,7 +28,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function Switches() {
   return (
-    <RootStyle title="Components: Switches | Priovar">
+    <RootStyle title="Components: Switches | PrioVar">
       <Box
         sx={{
           pt: 6,

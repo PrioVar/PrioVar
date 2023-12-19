@@ -22,7 +22,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function BreadcrumbComponent() {
   return (
-    <RootStyle title="Components: Breadcrumbs | Priovar">
+    <RootStyle title="Components: Breadcrumbs | PrioVar">
       <Box
         sx={{
           pt: 6,
