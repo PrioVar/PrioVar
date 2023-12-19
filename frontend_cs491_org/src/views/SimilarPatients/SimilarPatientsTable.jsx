@@ -21,9 +21,9 @@ import {
     FormControl,
     Input,
     Select,
-    MenuItem,
-    OutlinedInput, 
+    MenuItem
   } from '@material-ui/core'
+  import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
   import axios from 'axios';
   import { makeStyles } from '@material-ui/styles'
   import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
@@ -48,8 +48,6 @@ import {
   // constants
   import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
   
-
-  
   const SimilarPatientsTable = function () {
     //const classes = useStyles()
     const bedFilesApi = useBedFiles()
@@ -63,106 +61,106 @@ import {
       () => data.find((f) => f.vcf_id === fileId || f.fastq_pair_id === fileId),
       [data, fileId, filesApi],
     )
-    const [searchType, setSearchType] = useState('');
-    const [selectedTerms, setSelectedTerms] = useState([]);;
 
     //
-    const [gene, setGene] = useState('');
-    const [ageIntervalStart, setAgeIntervalStart] = useState('');
-    const [ageIntervalEnd, setAgeIntervalEnd] = useState('');
-    const [gender, setGender] = useState(''); 
+    const [resultCount, setResultCount] = useState(fileDetails?.details?.resultCount)
+    const [rows, setRows] = useState([]);
+    const handleResultCount = (e) => setResultCount(e.target.value)
 
-    // Dummy values for phenotype and genotype options
-    const phenotypeTerms = ['Phenotype Term 1', 'Phenotype Term 2', 'Phenotype Term 3'];
-    const genotypeTerms = ['Genotype Term 1', 'Genotype Term 2', 'Genotype Term 3'];
-
-    const handleSearchTypeChange = (event) => {
-        setSearchType(event.target.value);
-        setSelectedTerms([]); // Reset terms when search type changes
-    };
-
-    const handleTermsChange = (event) => {
-        setSelectedTerms(event.target.value);
-    };
+    const getPatient = async () => {
+        return axios.get(`http://localhost:8080/patient/getPatient`);
+    }
 
     const handleSearch = async () => {
 
-        console.log(`Searching for ${searchType} with terms`, selectedTerms);
+        try {
+            // first get the patient
+            const patient = await getPatient()
 
-    };
+            const response = await axios.get(`http://localhost:8080/similarityReport/mostSimilarPatients/${patient.data.id}/${resultCount}`);
+            console.log("SUCCESS!")
+            console.log(patient)
+            console.log(response)
+            setRows(response.data);
+    
+          } catch (error) {
+            console.log("FAIL!")
+            console.error('similat patients query error:', error.response);
+          }
 
-    // Function to render the selected terms as chips
-    const renderValue = (selected) => (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-        {selected.map((value) => (
-            <Chip key={value} label={value} />
-        ))}
-        </Box>
-    );
+      };
 
+  
     return (
         <>
+
     <Box p={3} mt={4}>
-    <Typography variant="h5">Search for Similar Patients</Typography>
+    <Typography variant="h5">Similar Patients for </Typography>
       <Grid container spacing={2} alignItems="flex-end" mt={4}>
-        <Grid item xs={6}>
-        <FormControl fullWidth variant="outlined">
-            <InputLabel id="search-type-select-label">Search by Phenotype or Genotype</InputLabel>
-            <Select
-              labelId="search-type-select-label"
-              id="search-type-select"
-              value={searchType}
-              label="Search by Phenotype or Genotype"
-              onChange={handleSearchTypeChange}
-            >
-              <MenuItem value="G">Genotype</MenuItem>
-              <MenuItem value="P">Phenotype</MenuItem>
-            </Select>
-          </FormControl>
+        <Grid item xs={2}>
+            <FormControl fullWidth>
+                <InputLabel id="select-age">No of similar patients</InputLabel>
+                <Input type="number" value={resultCount} onChange={handleResultCount}></Input>
+            </FormControl>
         </Grid>
-        {searchType && (
-            <Grid item xs={6}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel id="term-select-label">Choose {searchType === 'P' ? 'phenotype' : 'genotype'} terms</InputLabel>
-                <Select
-                  labelId="terms-select-label"
-                  id="terms-select"
-                  multiple
-                  value={selectedTerms}
-                  onChange={handleTermsChange}
-                  input={<OutlinedInput id="select-multiple-chip" 
-                  label={`Choose ${searchType === 'P' ? 'phenotype' : 'genotype'} terms`} />}
-                  renderValue={renderValue}
-                >
-                  {searchType === 'P'
-                    ? phenotypeTerms.map((term, index) => (
-                        <MenuItem key={index} value={term}>
-                          {term}
-                        </MenuItem>
-                      ))
-                    : genotypeTerms.map((term, index) => (
-                        <MenuItem key={index} value={term}>
-                          {term}
-                        </MenuItem>
-                      ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          )}
         <Grid item container xs={12} sm={6} spacing={2}>
           <Grid item xs={6}>
-            <Button variant="contained" color="primary" onClick={handleSearch}>
-            Search
-            </Button>
+          <Button variant="contained" color="primary" onClick={handleSearch}>
+          Search
+        </Button>
           </Grid>
         </Grid>
-
-
         </Grid>
         <Box mt={12}>
-            Results will be displayed here
       </Box>
     </Box>
+
+    <Box p={3} mt={4}>
+    
+    {rows.length > 0 ? (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell align="right">Age</TableCell>
+                <TableCell align="right">Sex</TableCell>
+                <TableCell align="right">Similarity Score</TableCell>
+                <TableCell align="right">Request</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+                {rows.map((row) => (
+                    <TableRow key={row.secondaryPatient.name + row.phenotypeScore}>
+                    <TableCell component="th" scope="row">
+                        ************
+                    </TableCell>
+                    <TableCell align="right">{row.secondaryPatient.age}</TableCell>
+                    <TableCell align="right">{row.secondaryPatient.sex}</TableCell>
+                    <TableCell align="right">{row.phenotypeScore.toFixed(2)}</TableCell>
+                    <TableCell align="right">
+                    <Button variant="contained" color="info" size="small">
+                  <Info />
+                     </Button>
+                    </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Typography variant="subtitle1" style={{ textAlign: 'center', marginTop: '20px' }}>
+          No record found
+        </Typography>
+      )}
+          
+    </Box>
+
+
+
+
+        
+
         </>
     )
 

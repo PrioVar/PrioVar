@@ -66,15 +66,31 @@ import {
         { name: '', age: '', sex: '', disease: '', assignedClinic: '', phenotypeTerms: [] }
     );
 
+    const getPatient = async () => {
+
+        try {
+            return axios.get(`http://localhost:8080/patient/getPatient`);
+        } catch (error) {
+            console.log(error.response)
+        }
+    }
+
     useEffect(() => {
+        const fetch = async () => {
+        // first get the patient
+        const patient = await getPatient()
+
         // Ali Veli patient id: 17700
-        axios.get(`http://localhost:8080/patient/17700`)
+        axios.get(`http://localhost:8080/patient/${patient.data.id}`)
           .then(response => {
             console.log("SUCCESS")
             console.log(response.data)
             setDetails(response.data);
           })
           .catch(error => console.error('Error fetching data:', error));
+        }
+        fetch();
+
       }, []);
 
     return (
