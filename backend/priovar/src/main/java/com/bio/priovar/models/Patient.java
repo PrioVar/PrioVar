@@ -41,4 +41,7 @@ public class Patient {
     @Relationship(type = "HAS_PHENOTYPE_TERM", direction = Relationship.Direction.OUTGOING)
     private List<PhenotypeTerm> phenotypeTerms;
 
+    @Relationship(type = "HAS_GENE", direction = Relationship.Direction.OUTGOING)
+    private List<Gene> genes;
+
 }

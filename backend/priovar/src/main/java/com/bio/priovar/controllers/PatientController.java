@@ -83,6 +83,11 @@ public class PatientController {
         return new ResponseEntity<>(patientService.addVariantToPatient(patientId, variantId), org.springframework.http.HttpStatus.OK);
     }
 
+    @PostMapping("/{patientId}/addGene/{geneId}")
+    public ResponseEntity<String> addGeneToPatient(@PathVariable("patientId") Long patientId, @PathVariable("geneId") Long geneId) {
+        return new ResponseEntity<>(patientService.addGeneToPatient(patientId, geneId), org.springframework.http.HttpStatus.OK);
+    }
+
     // Delete Requests
 
     // delete phenotypeTerm from the patient

@@ -1,0 +1,17 @@
+package com.bio.priovar.repositories;
+
+import com.bio.priovar.models.Gene;
+import com.bio.priovar.models.PhenotypeTerm;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.neo4j.repository.query.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+
+public interface GeneRepository extends Neo4jRepository<Gene, Long> {
+    @Query("MATCH (g:Gene) WHERE g.id = $id RETURN g")
+    Optional<Gene> findGeneById(Long id);
+
+}

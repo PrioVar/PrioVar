@@ -23,17 +23,21 @@ public class PatientService {
     private final VariantRepository variantRepository;
     private final ClinicianRepository clinicianRepository;
     private final PhenotypeTermRepository phenotypeTermRepository;
+    private final GeneRepository geneRepository;
+
 
 
 
     @Autowired
-    public PatientService(PatientRepository patientRepository, DiseaseRepository diseaseRepository, MedicalCenterRepository medicalCenterRepository, VariantRepository variantRepository, ClinicianRepository clinicianRepository, PhenotypeTermRepository phenotypeTermRepository) {
+    public PatientService(PatientRepository patientRepository, DiseaseRepository diseaseRepository, MedicalCenterRepository medicalCenterRepository, VariantRepository variantRepository, ClinicianRepository clinicianRepository, PhenotypeTermRepository phenotypeTermRepository, GeneRepository geneRepository) {
+
         this.patientRepository = patientRepository;
         this.diseaseRepository = diseaseRepository;
         this.medicalCenterRepository = medicalCenterRepository;
         this.variantRepository = variantRepository;
         this.clinicianRepository = clinicianRepository;
         this.phenotypeTermRepository = phenotypeTermRepository;
+        this.geneRepository = geneRepository;
     }
 
     public String addPatient(Patient patient) {
@@ -183,6 +187,29 @@ public class PatientService {
 
         patientRepository.save(patient);
         return "Phenotype term added to patient successfully";
+    }
+
+    public String addGeneToPatient(Long patientId, Long geneId) {
+        Gene gene = geneRepository.findById(geneId).orElse(null);
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+
+        if ( gene == null ) {
+            return "Gene with id " + geneId + " does not exist";
+        }
+
+        if ( patient == null ) {
+            return "Patient with id " + patientId + " does not exist";
+        }
+
+        // add the gene to the list of the patient if list is not empty, otherwise create a new list
+        if ( patient.getGenes() != null ) {
+            patient.getGenes().add(gene);
+        } else {
+            patient.setGenes(List.of(gene));
+        }
+
+        patientRepository.save(patient);
+        return "Gene added to patient successfully";
     }
 
     public String deletePhenotypeTermFromPatient(Long patientId, Long phenotypeTermId) {
