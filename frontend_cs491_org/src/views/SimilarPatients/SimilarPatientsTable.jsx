@@ -21,7 +21,8 @@ import {
     FormControl,
     Input,
     Select,
-    MenuItem
+    MenuItem,
+    Snackbar
   } from '@material-ui/core'
   import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
   import axios from 'axios';
@@ -47,6 +48,7 @@ import {
   import { updateTrio, useHpo } from '../../api/vcf'
   // constants
   import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
+import { fi } from 'date-fns/locale';
   
   const SimilarPatientsTable = function () {
     //const classes = useStyles()
@@ -65,6 +67,7 @@ import {
     //
     const [resultCount, setResultCount] = useState(fileDetails?.details?.resultCount)
     const [rows, setRows] = useState([]);
+    const [searching, setSearching] = useState(false);
     const handleResultCount = (e) => setResultCount(e.target.value)
 
     const getPatient = async () => {
@@ -74,6 +77,7 @@ import {
     const handleSearch = async () => {
 
         try {
+            setSearching(true);
             // first get the patient
             const patient = await getPatient()
 
@@ -87,7 +91,9 @@ import {
             console.log("FAIL!")
             console.error('similat patients query error:', error.response);
           }
-
+          finally {
+            setSearching(false);
+          }
       };
 
   
@@ -114,6 +120,14 @@ import {
         <Box mt={12}>
       </Box>
     </Box>
+
+        {/* Snackbar for "Searching..." message */}
+    <Snackbar
+    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    open={searching}
+    message="Searching..."
+    action={<CircularProgress color="inherit" />}
+    />
 
     <Box p={3} mt={4}>
     
