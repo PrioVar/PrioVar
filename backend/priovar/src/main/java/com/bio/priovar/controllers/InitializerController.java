@@ -87,7 +87,11 @@ public class InitializerController {
         phenotypeTerms.add(phenotypeTerm1);
         phenotypeTerms.add(phenotypeTerm2);
         phenotypeTerms.add(phenotypeTerm7);
-
+        Gene gene1 = geneRepository.findById(4996L).get();
+        Gene gene2 = geneRepository.findById(4997L).get();
+        List<Gene> genes1 = new ArrayList<>();
+        genes1.add(gene1);
+        genes1.add(gene2);
         patient1.setPhenotypeTerms(phenotypeTerms);
         patient1.setGenes(genes1);
         patientRepository.save(patient1);
@@ -103,6 +107,12 @@ public class InitializerController {
         phenotypeTerms1.add(phenotypeTerm5);
         phenotypeTerms1.add(phenotypeTerm6);
         phenotypeTerms1.add(phenotypeTerm8);
+        Gene gene3 = geneRepository.findById(4998L).get();
+        Gene gene4 = geneRepository.findById(4999L).get();
+        List<Gene> genes2 = new ArrayList<>();
+        genes2.add(gene3);
+        genes2.add(gene4);
+        patient2.setGenes(genes2);
         patient2.setPhenotypeTerms(phenotypeTerms1);
         patient2.setMedicalCenter(liva);
         patientRepository.save(patient2);
