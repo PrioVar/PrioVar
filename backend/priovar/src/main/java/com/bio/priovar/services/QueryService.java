@@ -25,7 +25,7 @@ public class QueryService {
         int ageIntervalStartQuery = query.getAgeIntervalStart();
         int ageIntervalEndQuery = query.getAgeIntervalEnd();
         List<String> genesQuery = new ArrayList<>();
-        List<String> phenotypeTermsQuery = new ArrayList<>();
+        List<Long> phenotypeTermsQuery = new ArrayList<>();
         //Get the query's genes if query has genes
         if (query.getGenes() != null) {
             for (int i = 0; i < query.getGenes().length; i++) {
@@ -37,7 +37,7 @@ public class QueryService {
         //Get the query's phenotype terms if query has phenotype terms
         if (query.getPhenotypeTerms() != null) {
             for (int i = 0; i < query.getPhenotypeTerms().length; i++) {
-                phenotypeTermsQuery.add(query.getPhenotypeTerms()[i].getName());
+                phenotypeTermsQuery.add(query.getPhenotypeTerms()[i].getId());
             }
         }
 
