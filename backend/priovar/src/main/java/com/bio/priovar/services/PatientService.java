@@ -81,11 +81,6 @@ public class PatientService {
             return "Patient not found";
         }
 
-        // if patient already has a disease, return an error
-        if ( patient.getDisease() != null ) {
-            return "Patient already has a disease";
-        }
-
         patient.setDisease(disease);
         patientRepository.save(patient);
         return "Disease added to patient successfully";
