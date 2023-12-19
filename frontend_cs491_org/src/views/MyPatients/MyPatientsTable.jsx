@@ -25,11 +25,11 @@ import {
   import { deleteVcfFile } from '../../api/vcf'
   import { deleteFastqFile } from '../../api/fastq'
   import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-  import { PATH_DASHBOARD } from '../../routes/paths'
+  import { PATH_DASHBOARD, PATH_PRIOVAR, ROOTS_PRIOVAR } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
-  
+  import axios from '../../utils/axios'
   import VariantDasboard2 from '../common/VariantDasboard2'
   
   const EditableNote = ({ note, onSave, details }) => {
@@ -152,12 +152,33 @@ import {
       </Button>
     )
   }
+
+  let hasBeenCalled = false;
+
+  const fetchAllPatients = async (clinicianId) => {
+    if(hasBeenCalled) {
+      return;
+    }
+    try {
+      const allPatients = await axios.get(`${ROOTS_PRIOVAR}/clinician/allPatients/${clinicianId}`);
+      hasBeenCalled = true;
+      return allPatients.data;
   
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+  
+
   const MyPatientsTable = function () {
     //const classes = useStyles()
     let navigate = useNavigate()
     const filesApi = useFiles()
     const bedFilesApi = useBedFiles()
+    const clinicianId = localStorage.getItem('clinicianId');
+    const patients = fetchAllPatients(clinicianId);
+    console.log(patients);
     const { status, data = [] } = filesApi.query
     const { data: bedFiles = [] } = bedFilesApi.query
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
@@ -309,8 +330,8 @@ import {
         },
       },
       {
-        name: 'name',
-        label: 'Filename',
+        name: 'age',
+        label: 'Age',
         options: {
           filter: true,
           sort: true,
@@ -330,16 +351,16 @@ import {
         },
       },
       {
-        name: 'sample_name',
-        label: 'Sample',
+        name: 'sex',
+        label: 'Sex',
         options: {
           filter: true,
           sort: true,
         },
       },
       {
-        name: 'status',
-        label: 'Status',
+        name: 'clinical-history',
+        label: 'Clinical History',
         options: {
           filter: false,
           sort: true,
@@ -348,6 +369,14 @@ import {
             const status = getStatusLabel(row)
             return status ? <JobStateStatus status={status} /> : null
           },
+        },
+      },
+      {
+        name: 'disease',
+        label: 'Disease',
+        options: {
+          filter: true,
+          sort: true,
         },
       },
       {
