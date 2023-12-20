@@ -141,9 +141,9 @@ export default function AddNewClinician() {
         <Grid container spacing={3}>
             {/* Left Half: Table (adjust the content of this part as needed) */}
             <Grid item xs={6}>
-                <Box p={2} bgcolor="background.paper" style={{margin:"50px"}}>
+                <Box p={2} bgcolor="background.paper" style={{marginTop:"50px"}}>
                     <Typography variant="h6" gutterBottom align="center">
-                    Table Content
+                    Clinicians
                     </Typography>
                     <TableContainer>
                     <Table>
@@ -151,6 +151,7 @@ export default function AddNewClinician() {
                         <TableRow>
                             <TableCell>ID</TableCell>
                             <TableCell>Name</TableCell>
+                            <TableCell>Email</TableCell>
                             {/* Add more table headers as needed */}
                         </TableRow>
                         </TableHead>
@@ -160,6 +161,7 @@ export default function AddNewClinician() {
                                 <TableRow key={index + 1}>
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell>{row?.name}</TableCell>
+                                <TableCell>{row?.email}</TableCell>
                                 {/* Add more table cells as needed */}
                                 </TableRow>
                             )): null}
