@@ -156,12 +156,12 @@ export default function AddNewClinician() {
                         </TableHead>
                         <TableBody>
                         {/* Add dummy table rows */}
-                        {details ? details.map((row) => (
-                            <TableRow>
-                            <TableCell>{row?.id}</TableCell>
-                            <TableCell>{row?.name}</TableCell>
-                            {/* Add more table cells as needed */}
-                            </TableRow>
+                        {details ? details.map((row, index) => (
+                                <TableRow key={index + 1}>
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>{row?.name}</TableCell>
+                                {/* Add more table cells as needed */}
+                                </TableRow>
                             )): null}
                         </TableBody>
                     </Table>
