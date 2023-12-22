@@ -5,3 +5,22 @@
     padding: 20px;
   }
   
+  ul {
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 10px; /* Adjust the value as needed */
+  }
+  
+  .pdf-icon {
+    width: 20px; /* Adjust the size as needed */
+    margin-right: 5px; /* Adjust the spacing between icon and text */
+  }
+
+  /* Team.css */
+.reports-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
