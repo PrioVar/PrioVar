@@ -11,6 +11,7 @@ const Reports = () => {
     document.title = 'Reports';
   }, []);
 
+  /*
   const handleDownload = (filename) => {
     const fileUrl = process.env.PUBLIC_URL + '/' + filename;
     FileDownload(fileUrl, filename);
@@ -38,7 +39,8 @@ const Reports = () => {
   const downloadDemoPresentation = () => {
     handleReportDownload("PrioVar_491_Demo_Presentation.pdf", "PrioVar_491_Demo_Presentation.pdf");
   };
-
+  */
+  
   const [showSpecification, setShowSpecification] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showDemoPresentation, setShowDemoPresentation] = useState(false);
