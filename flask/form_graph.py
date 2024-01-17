@@ -1,5 +1,22 @@
 import torch
 from os import path
+from typing import Tuple
+from helpers.hpo import read_hpo_from_json, process_nodes, process_edges
+
+
+def get_hpo_terms_edges() -> Tuple:
+    graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
+    items = process_nodes(nodes)
+
+    # only create a list of id's from items
+    hpo_list = [item['id'] for item in items]
+
+    # sort the hpo_list
+    hpo_list.sort()
+
+    hpo_edges = process_edges(edges)
+
+    return hpo_list, hpo_edges
 
 # read the combined genemania network into a tensor
 # in each row, there's Gene_A, Gene_B, and the edge weight
@@ -21,17 +38,24 @@ for row in combined_network:
 gene_list = list(gene_set)
 gene_list.sort()
 
+
 # create a dictionary to map gene names to indices
-node_dict = {}
+gene_dict = {}
 for i in range(len(gene_list)):
-    node_dict[gene_list[i]] = i
+    gene_dict[gene_list[i]] = i
+
+hpo_list, hpo_edges = get_hpo_terms_edges()
+
+hpo_dict = {}
+for i in range(len(hpo_list)):
+    hpo_dict[hpo_list[i]] = i + len(gene_list)
 
 '''
  Fill in other nodes
 '''
 
 # TODO: CHANGE THIS LINE IF YOU ADD MORE NODES
-num_edges = len(combined_network)
+num_edges = len(combined_network) + len(hpo_edges)
 
 # create an edge_index tensor with size (2, num_edges)
 edge_index = torch.zeros(2, num_edges)
@@ -40,8 +64,8 @@ edge_weight = torch.zeros(num_edges)
 # fill in the network tensor
 for i, row in enumerate(combined_network):
     ls = row.strip().split('\t')
-    gene_a = node_dict[ls[0]]
-    gene_b = node_dict[ls[1]]
+    gene_a = gene_dict[ls[0]]
+    gene_b = gene_dict[ls[1]]
     weight = float(ls[2])
 
     edge_index[0, i] = gene_a
@@ -49,9 +73,19 @@ for i, row in enumerate(combined_network):
 
     edge_weight[i] = weight
 
+# fill in the tensor using hpo_edges
+for i, edge in enumerate(hpo_edges):
+    hpo_a = hpo_dict[edge[0]]
+    hpo_b = hpo_dict[edge[1]]
+    weight = 1.0 # TODO: CHANGE THIS IF YOU WANT TO ADD WEIGHTS TO HPO EDGES
+
+    edge_index[0, i + len(combined_network)] = hpo_a
+    edge_index[1, i + len(combined_network)] = hpo_b
+
+    edge_weight[i + len(combined_network)] = weight
+
 # save the edge_index and edge_weight tensors to pickle files
 torch.save(edge_index, path.join('data', 'edge_index.pt'))
 torch.save(edge_weight, path.join('data', 'edge_weight.pt'))
-
 
 
