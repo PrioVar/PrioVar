@@ -6,7 +6,7 @@ def get_gene_mapping_dict() -> Dict[str, str]:
     df = pd.read_csv("../data/identifier_mappings.txt", sep='\t', comment='#')
 
     # Collect all rows where 'Source' column is 'Gene Name'
-    df = df[df[2] == 'Gene Name']
+    df = df[df['Source'] == 'Gene Name']
 
     # create a dictionary to map 'Preferred_Name' to 'Name'
     gene_dict = {}
@@ -14,6 +14,7 @@ def get_gene_mapping_dict() -> Dict[str, str]:
         gene_dict[row[0]] = row[1]
 
     return gene_dict
+
 
 def get_gene_phenotype_relations() -> List[List]:
     """

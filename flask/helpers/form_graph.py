@@ -36,20 +36,18 @@ for row in combined_network:
     gene_set.add(ls[0])
     gene_set.add(ls[1])
 
+# get the dictionary using gene names
+gene_mapping_dict = get_gene_mapping_dict()
+
+# create the gene list and map it using the gene_mapping_dict and then sort it
 gene_list = list(gene_set)
+gene_list = [gene_mapping_dict[gene] for gene in gene_list]
 gene_list.sort()
 
 # create a dictionary to map gene names to indices
 gene_dict = {}
 for i in range(len(gene_list)):
     gene_dict[gene_list[i]] = i
-
-# get the dictionary using gene names
-gene_mapping_dict = get_gene_mapping_dict()
-
-for gene in gene_list:
-    if gene not in gene_mapping_dict:
-        print('Gene {} not found in gene mapping dictionary'.format(gene))
 
 hpo_list, hpo_edges = get_hpo_terms_edges()
 
