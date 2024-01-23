@@ -2,6 +2,7 @@ import pandas as pd
 from os import path
 from typing import Dict, List
 
+
 def get_combined_network():
     # read the combined genemania network into a tensor
     # in each row, there's Gene_A, Gene_B, and the edge weight
@@ -12,6 +13,7 @@ def get_combined_network():
     combined_network = combined_network[1:]
 
     return combined_network
+
 
 def get_gene_mapping_dict() -> Dict[str, str]:
     """
