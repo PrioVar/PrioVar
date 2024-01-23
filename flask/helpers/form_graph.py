@@ -1,8 +1,9 @@
 import torch
 from typing import Tuple
 from hpo import read_hpo_from_json, process_nodes, process_edges
-from gene_mapping import get_gene_mapping_dict, get_combined_network
-
+from gene_mapping import get_gene_mapping_dict, get_combined_network, get_gene_phenotype_relations, get_gene_disease_relations
+from disase_phenotype_mapping import proccess_hpoa
+from os import path
 
 def get_hpo_terms_edges() -> Tuple:
     graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
@@ -48,12 +49,39 @@ hpo_dict = {}
 for i in range(len(hpo_list)):
     hpo_dict[hpo_list[i]] = i + len(gene_list)
 
+
+# disease
+disease_phenotype_relations = proccess_hpoa()
+disease_set = set()
+for i, relation in enumerate(disease_phenotype_relations):
+    disease_set.add(relation[0])
+
+# print the number of elements in disease_set that starts with DECIPHER
+#print(len([disease for disease in disease_set if disease.startswith('DECIPHER')]))
+# 47 basıyor
+
+disease_gene_relations = get_gene_disease_relations()
+disease_set2 = set()
+for i, relation in enumerate(disease_gene_relations):
+    disease_set2.add(relation[1])
+
+disease_set = disease_set.union(disease_set2)
+
+disease_list = list(disease_set)
+disease_list.sort()
+
+disease_dict = {}
+for i in range(len(disease_list)):
+    disease_dict[disease_list[i]] = i + len(gene_list) + len(hpo_list)
+
+
 '''
  Fill in other nodes
 '''
 
 # TODO: CHANGE THIS LINE IF YOU ADD MORE NODES
-num_edges = len(combined_network) + len(hpo_edges)
+num_edges = (len(combined_network) + len(hpo_edges)
+             + len(disease_phenotype_relations) + len(disease_gene_relations))
 
 # create an edge_index tensor with size (2, num_edges)
 edge_index = torch.zeros(2, num_edges)
@@ -81,6 +109,27 @@ for i, edge in enumerate(hpo_edges):
     edge_index[1, i + len(combined_network)] = hpo_b
 
     edge_weight[i + len(combined_network)] = weight
+
+for i, relation in enumerate(disease_phenotype_relations):
+    disease = disease_dict[relation[0]]
+    hpo = hpo_dict[relation[1]]
+    weight = 1 #float(relation[2]) (şuan stringler olduğu için float'a çeviremiyoruz)
+
+    edge_index[0, i + len(combined_network) + len(hpo_edges)] = disease
+    edge_index[1, i + len(combined_network) + len(hpo_edges)] = hpo
+
+    edge_weight[i + len(combined_network) + len(hpo_edges)] = weight
+
+for i, relation in enumerate(disease_gene_relations):
+
+    disease = disease_dict[relation[1]]
+    gene = gene_dict[relation[0]]
+    weight = 1
+
+    edge_index[0, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations)] = disease
+    edge_index[1, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations)] = gene
+
+    edge_weight[i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations)] = weight
 
 # save the edge_index and edge_weight tensors to pickle files
 torch.save(edge_index, path.join('../data', 'edge_index.pt'))
