@@ -19,6 +19,7 @@ def get_hpo_terms_edges() -> Tuple:
 
     return hpo_list, hpo_edges
 
+
 # read the combined genemania network into a tensor
 # in each row, there's Gene_A, Gene_B, and the edge weight
 with open(path.join('../data', 'COMBINED.DEFAULT_NETWORKS.BP_COMBINING.txt'), 'r') as f:
@@ -28,7 +29,7 @@ with open(path.join('../data', 'COMBINED.DEFAULT_NETWORKS.BP_COMBINING.txt'), 'r
 combined_network = combined_network[1:]
 
 # TODO: REMOVE THIS
-#combined_network = combined_network[:10]
+# combined_network = combined_network[:10]
 
 gene_set = set()
 for row in combined_network:
@@ -82,7 +83,7 @@ for i, row in enumerate(combined_network):
 for i, edge in enumerate(hpo_edges):
     hpo_a = hpo_dict[edge[0]]
     hpo_b = hpo_dict[edge[1]]
-    weight = 1.0 # TODO: CHANGE THIS IF YOU WANT TO ADD WEIGHTS TO HPO EDGES
+    weight = 1.0  # TODO: CHANGE THIS IF YOU WANT TO ADD WEIGHTS TO HPO EDGES
 
     edge_index[0, i + len(combined_network)] = hpo_a
     edge_index[1, i + len(combined_network)] = hpo_b
@@ -92,5 +93,3 @@ for i, edge in enumerate(hpo_edges):
 # save the edge_index and edge_weight tensors to pickle files
 torch.save(edge_index, path.join('../data', 'edge_index.pt'))
 torch.save(edge_weight, path.join('../data', 'edge_weight.pt'))
-
-

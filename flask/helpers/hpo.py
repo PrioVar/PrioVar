@@ -4,7 +4,7 @@ from os import path
 from config import uri, username, password
 
 def read_hpo_from_json():
-    with open(path.join('data', 'hp.json'), 'r') as file:
+    with open(path.join('../data', 'hp.json'), 'r') as file:
         data = json.load(file)
 
     graphs = data["graphs"]
