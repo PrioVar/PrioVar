@@ -1,8 +1,7 @@
 import torch
-from os import path
 from typing import Tuple
 from hpo import read_hpo_from_json, process_nodes, process_edges
-from gene_mapping import get_gene_mapping_dict
+from gene_mapping import get_gene_mapping_dict, get_combined_network
 
 
 def get_hpo_terms_edges() -> Tuple:
@@ -20,14 +19,7 @@ def get_hpo_terms_edges() -> Tuple:
     return hpo_list, hpo_edges
 
 
-# read the combined genemania network into a tensor
-# in each row, there's Gene_A, Gene_B, and the edge weight
-with open(path.join('../data', 'COMBINED.DEFAULT_NETWORKS.BP_COMBINING.txt'), 'r') as f:
-    combined_network = f.readlines()
-
-# remove the header
-combined_network = combined_network[1:]
-
+combined_network = get_combined_network()
 # TODO: REMOVE THIS
 # combined_network = combined_network[:10]
 
