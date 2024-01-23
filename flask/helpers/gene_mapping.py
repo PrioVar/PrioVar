@@ -2,6 +2,10 @@ import pandas as pd
 from typing import Dict, List
 
 def get_gene_mapping_dict() -> Dict[str, str]:
+    """
+    :return: Dictionary that maps Genemanie gene names to HPO gene names
+    example: {'P48506': 'A1BG', 'O60762': 'A1CF', ...}
+    """
     # read data/identifier_mappings.txt into dataframe
     df = pd.read_csv("../data/identifier_mappings.txt", sep='\t', comment='#')
 
@@ -18,7 +22,9 @@ def get_gene_mapping_dict() -> Dict[str, str]:
 
 def get_gene_phenotype_relations() -> List[List]:
     """
-    :return: List of gene-phenotype relations
+    :return: List of gene-phenotype relations. Each relation is a list of two
+    elements: gene_symbol (HPO format) and hpo_id
+    example: [['A1BG', 1234567], ['B3GALT6', 15]]
     """
 
     # read ../data/genes_to_phenotype.txt into dataframe
@@ -29,3 +35,16 @@ def get_gene_phenotype_relations() -> List[List]:
 
     # return the list of gene-phenotype relations by getting only gene_symbol and hpo_id columns
     return df[["gene_symbol", "hpo_id"]].values.tolist()
+
+
+def get_gene_disease_relations() -> List[List]:
+    """
+    :return: List of gene-disease relations
+    example: [['A1BG', 'OMIM:615120'], ['B3GALT6', 'OMIM:615120']]
+    """
+
+    # read ../data/genes_to_disease.txt into dataframe
+    df = pd.read_csv("../data/genes_to_disease.txt", sep='\t', comment='#')
+
+    # return the list of gene-disease relations by getting only gene_symbol and disease_id columns
+    return df[["gene_symbol", "disease_id"]].values.tolist()
