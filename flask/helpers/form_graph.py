@@ -74,6 +74,7 @@ disease_dict = {}
 for i in range(len(disease_list)):
     disease_dict[disease_list[i]] = i + len(gene_list) + len(hpo_list)
 
+gene_phenotype_relations = get_gene_phenotype_relations()
 
 '''
  Fill in other nodes
@@ -81,7 +82,8 @@ for i in range(len(disease_list)):
 
 # TODO: CHANGE THIS LINE IF YOU ADD MORE NODES
 num_edges = (len(combined_network) + len(hpo_edges)
-             + len(disease_phenotype_relations) + len(disease_gene_relations))
+             + len(disease_phenotype_relations) + len(disease_gene_relations)
+             + len(gene_phenotype_relations))
 
 # create an edge_index tensor with size (2, num_edges)
 edge_index = torch.zeros(2, num_edges)
@@ -90,8 +92,8 @@ edge_weight = torch.zeros(num_edges)
 # fill in the network tensor
 for i, row in enumerate(combined_network):
     ls = row.strip().split('\t')
-    gene_a = gene_dict[ls[0]]
-    gene_b = gene_dict[ls[1]]
+    gene_a = gene_dict[gene_mapping_dict[ls[0]]]
+    gene_b = gene_dict[gene_mapping_dict[ls[1]]]
     weight = float(ls[2])
 
     edge_index[0, i] = gene_a
@@ -130,6 +132,17 @@ for i, relation in enumerate(disease_gene_relations):
     edge_index[1, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations)] = gene
 
     edge_weight[i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations)] = weight
+
+for i, relation in enumerate(gene_phenotype_relations):
+
+    gene = gene_dict[relation[0]]
+    hpo = hpo_dict[relation[1]]
+    weight = 1
+
+    edge_index[0, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations) + len(disease_gene_relations)] = gene
+    edge_index[1, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations) + len(disease_gene_relations)] = hpo
+
+    edge_weight[i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations) + len(disease_gene_relations)] = weight
 
 # save the edge_index and edge_weight tensors to pickle files
 torch.save(edge_index, path.join('../data', 'edge_index.pt'))

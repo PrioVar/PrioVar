@@ -46,14 +46,11 @@ def proccess_hpoa():
 
     df = pd.read_csv(path.join('../data', 'phenotype.hpoa'), sep='\t', comment='#', skiprows=4)
 
+    # get the last 7 characters of hpo_id and convert to int
+    df["hpo_id"] = df["hpo_id"].str[-7:].astype(int)
+
     # get database_id, hpo_id, frequency
     df = df[["database_id", "hpo_id", "frequency"]]
 
-    # rteurn list of tuples
+    # return list of tuples
     return df.values.tolist()
-
-
-
-
-list_of_tuples = proccess_hpoa()
-
