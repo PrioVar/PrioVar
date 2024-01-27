@@ -36,6 +36,7 @@ gene_mapping_dict = get_gene_mapping_dict()
 # create the gene list and map it using the gene_mapping_dict and then sort it
 gene_list = list(gene_set)
 gene_list = [gene_mapping_dict[gene] for gene in gene_list]
+
 gene_list.sort()
 
 # create a dictionary to map gene names to indices
@@ -64,6 +65,16 @@ disease_gene_relations = get_gene_disease_relations()
 disease_set2 = set()
 for i, relation in enumerate(disease_gene_relations):
     disease_set2.add(relation[1])
+
+# print number of genes (0. column in the relation) that is not in the gene_mapping_dict keys
+print("Number of genes that is not in the gene_mapping_dict: ")
+notInList = [relation[0] for relation in disease_gene_relations if relation[0] not in gene_dict.keys()]
+print(notInList[0:10])
+print(len(notInList))
+#print distinct in notInList
+print("Number of distinct genes that is not in the gene_mapping_dict: ")
+print(len(set(notInList)))
+
 
 disease_set = disease_set.union(disease_set2)
 
