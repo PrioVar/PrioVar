@@ -47,6 +47,13 @@ def get_gene_phenotype_relations() -> List[List]:
     # process hpo_id column to get the last 7 characters and convert to int
     df["hpo_id"] = df["hpo_id"].str[-7:].astype(int)
 
+    df1 = df[df["frequency"] == '-']
+    print(len(df1))
+
+    # TODO: handle those with '-' by replacing with 1/2???
+    # TODO: handle rows with % sign in frequency column
+    # TODO: handle rows with HPO id in frequency column by replacing with 1/5, 2/5, 3/5, 4/5, 5/5
+
     # return the list of gene-phenotype relations by getting only gene_symbol and hpo_id columns
     return df[["gene_symbol", "hpo_id"]].values.tolist()
 
@@ -60,5 +67,10 @@ def get_gene_disease_relations() -> List[List]:
     # read ../data/genes_to_disease.txt into dataframe
     df = pd.read_csv("../data/genes_to_disease.txt", sep='\t', comment='#')
 
+    # TODO: delete rows with gene='-'
+
     # return the list of gene-disease relations by getting only gene_symbol and disease_id columns
     return df[["gene_symbol", "disease_id"]].values.tolist()
+
+
+a = get_gene_phenotype_relations()
