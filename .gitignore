@@ -22,3 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /.vscode
+flask/helpers/data/orphanet_disease_to_gene.xml
+flask/helpers/data/orphanet_disease_to_phenotype.xml
