@@ -63,9 +63,16 @@ for i, relation in enumerate(disease_phenotype_relations):
 
 disease_gene_relations = get_gene_disease_relations()
 disease_set2 = set()
+count = 0
 for i, relation in enumerate(disease_gene_relations):
+    # skip relation if the gene is not in the gene_mapping_dict
+    if relation[0] not in gene_mapping_dict.keys():
+        count += 1
+        continue
+
     disease_set2.add(relation[1])
 
+'''
 # print number of genes (0. column in the relation) that is not in the gene_mapping_dict keys
 print("Number of genes that is not in the gene_mapping_dict: ")
 notInList = [relation[0] for relation in disease_gene_relations if relation[0] not in gene_dict.keys()]
@@ -77,7 +84,7 @@ notInList = list(set(notInList))
 print(notInList[:30])
 print(notInList[30:60])
 print(notInList[60:90])
-print(notInList[90:])
+print(notInList[90:])'''
 
 
 disease_set = disease_set.union(disease_set2)
