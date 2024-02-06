@@ -67,6 +67,9 @@ class Network:
         # precise, imporice, noisy are the number of samples for each category
         # choose which hpo_ids belong to precise, imprecise, and noisy (unique)
 
+        # assert precise + imprecise <= len(list_hpo_ids)
+        assert precise + imprecise <= len(list_hpo_ids)
+
         precise_samples = random.sample(list_hpo_ids, precise)
         # ????
         list_hpo_ids = list(set(list_hpo_ids) - set(precise_samples))
@@ -103,6 +106,15 @@ class Network:
         samples.extend(self.sample_noisy(list_hpo_ids, noisy))
 
         return samples
+
+    def sample_from_random_strategy(self, list_hpo_ids, strategies) -> list:
+
+        # strategies tuples of 3 elements: (precise, imprecise, noisy),
+
+        # random strategy
+        strategy = random.choice(strategies)
+
+        return self.sample_patient_phenotype_v2(list_hpo_ids, strategy[0], strategy[1], strategy[2])
 
 
 
