@@ -1,15 +1,15 @@
 from bs4 import BeautifulSoup
 
-#Iterate through disease_to_phenotype elements
+# Iterate through disease_to_phenotype elements
 def get_disease_phenotype_relations():
 
     print('start...')
-    with open('helpers/data/orphanet_disease_to_phenotype.xml', 'r', encoding='ISO-8859-1') as f:
+    with open('../data/orphanet_disease_to_phenotype.xml', 'r', encoding='ISO-8859-1') as f:
         data = f.read()
     disease_to_phenotype = BeautifulSoup(data, 'xml')
-    print('end.') 
+    print('end...')
 
-    #store disease to phenotype relations
+    # store disease to phenotype relations
     disease_to_pheno = []
 
     for disorder in disease_to_phenotype.find_all('Disorder'):
@@ -31,3 +31,5 @@ def get_disease_phenotype_relations():
                 disease_to_pheno.append([disease_id, phenotype_id, frequency])
     
     return disease_to_pheno
+
+a = get_disease_phenotype_relations()
