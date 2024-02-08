@@ -14,9 +14,7 @@ def get_disease_phenotype_relations():
 
     for disorder in disease_to_phenotype.find_all('Disorder'):
         # Extract information from each Disorder element
-        disease_id = disorder['id']
-        orpha_code = disorder.find('OrphaCode').text
-        disease_name = disorder.find('Name', {'lang': 'en'}).text
+        orpha_code = "ORPHA:" + disorder.find('OrphaCode').text
 
         # Extract information from DisorderPhenotypeAssociation element
         phenotype_association_list = disorder.find('HPODisorderAssociationList')
@@ -25,10 +23,10 @@ def get_disease_phenotype_relations():
             for phenotype_association in phenotype_association_list.find_all('HPODisorderAssociation'):
                 # Extract information from HPODisorderAssociation element
                 phenotype_id = phenotype_association.find('HPO').find('HPOId').text
-                phenotype_name = phenotype_association.find('HPO').find('HPOTerm').text
+                phenotype_id = int(phenotype_id[-7:])
                 frequency = phenotype_association.find('HPOFrequency').find('Name', {'lang': 'en'}).text
                 #add disease to phenotype relation to dictionary
-                disease_to_pheno.append([disease_id, phenotype_id, frequency])
+                disease_to_pheno.append([orpha_code, phenotype_id, frequency])
     
     return disease_to_pheno
 

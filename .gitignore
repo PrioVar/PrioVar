@@ -24,3 +24,4 @@ yarn-error.log*
 /.vscode
 flask/helpers/data/orphanet_disease_to_gene.xml
 flask/helpers/data/orphanet_disease_to_phenotype.xml
+flask/data/COMBINED.DEFAULT_NETWORKS.BP_COMBINING.txt
