@@ -4,6 +4,7 @@ from hpo import read_hpo_from_json, process_nodes, process_edges
 from gene_mapping import get_gene_mapping_dict, get_combined_network, get_gene_phenotype_relations, get_gene_disease_relations
 from disase_phenotype_mapping import proccess_hpoa
 from os import path
+#uncomment and add to edges if needed
 from orphanet import get_disease_phenotype_relations
 
 def get_hpo_terms_edges() -> Tuple:
@@ -97,7 +98,8 @@ for i in range(len(disease_list)):
 
 gene_phenotype_relations = get_gene_phenotype_relations()
 
-disease_phenotype_relations = get_disease_phenotype_relations()
+#uncomment and add to edges if needed
+#disease_phenotype_relations = get_disease_phenotype_relations
 
 '''
  Fill in other nodes
