@@ -4,8 +4,6 @@ from hpo import read_hpo_from_json, process_nodes, process_edges
 from gene_mapping import get_gene_mapping_dict, get_combined_network, get_gene_phenotype_relations, get_gene_disease_relations
 from disase_phenotype_mapping import proccess_hpoa
 from os import path
-#uncomment and add to edges if needed
-from orphanet import get_disease_phenotype_relations
 
 def get_hpo_terms_edges() -> Tuple:
     graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
@@ -59,10 +57,6 @@ disease_set = set()
 for i, relation in enumerate(disease_phenotype_relations):
     disease_set.add(relation[0])
 
-# print the number of elements in disease_set that starts with DECIPHER
-#print(len([disease for disease in disease_set if disease.startswith('DECIPHER')]))
-# 47 basıyor
-
 disease_gene_relations = get_gene_disease_relations()
 disease_set2 = set()
 for i, relation in enumerate(disease_gene_relations):
@@ -72,23 +66,15 @@ for i, relation in enumerate(disease_gene_relations):
 
     disease_set2.add(relation[1])
 
-'''
-# print number of genes (0. column in the relation) that is not in the gene_mapping_dict keys
-print("Number of genes that is not in the gene_mapping_dict: ")
-notInList = [relation[0] for relation in disease_gene_relations if relation[0] not in gene_dict.keys()]
-print(len(notInList))
-#print distinct in notInList
-print("Number of distinct genes that is not in the gene_dict: ")
-notInList = list(set(notInList))
-# print the first 30 elements
-print(notInList[:30])
-print(notInList[30:60])
-print(notInList[60:90])
-print(notInList[90:])'''
-
+# print out number of elements in disease_set2 which are not contained in disease_set
+count = 0
+ls = []
+for disease in disease_set2:
+    if disease not in disease_set:
+        count += 1
+        ls.append(disease)
 
 disease_set = disease_set.union(disease_set2)
-
 disease_list = list(disease_set)
 disease_list.sort()
 
