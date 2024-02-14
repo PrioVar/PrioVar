@@ -59,20 +59,17 @@ for i, relation in enumerate(disease_phenotype_relations):
 
 disease_gene_relations = get_gene_disease_relations()
 disease_set2 = set()
+disease_gene_relations_to_remove = []
 for i, relation in enumerate(disease_gene_relations):
-    # skip relation if the gene is not in the gene_mapping_dict
+    # TODO: (change later) skip relation if the gene is not in the gene_mapping_dict
     if relation[0] not in gene_dict.keys():
+        disease_gene_relations_to_remove.append(i)
         continue
-
     disease_set2.add(relation[1])
 
-# print out number of elements in disease_set2 which are not contained in disease_set
-count = 0
-ls = []
-for disease in disease_set2:
-    if disease not in disease_set:
-        count += 1
-        ls.append(disease)
+# removing the relations that are not in the gene_mapping_dict
+disease_gene_relations = [relation for i, relation in enumerate(disease_gene_relations)
+                          if i not in disease_gene_relations_to_remove]
 
 disease_set = disease_set.union(disease_set2)
 disease_list = list(disease_set)
@@ -83,9 +80,14 @@ for i in range(len(disease_list)):
     disease_dict[disease_list[i]] = i + len(gene_list) + len(hpo_list)
 
 gene_phenotype_relations = get_gene_phenotype_relations()
+gene_phenotype_relations_to_remove = []
+for i, relation in enumerate(gene_phenotype_relations):
+    # TODO: (change later) skip relation if the gene is not in the gene_mapping_dict
+    if relation[0] not in gene_dict.keys():
+        gene_phenotype_relations_to_remove.append(i)
 
-#uncomment and add to edges if needed
-#disease_phenotype_relations = get_disease_phenotype_relations
+gene_phenotype_relations = [relation for i, relation in enumerate(gene_phenotype_relations)
+                            if i not in gene_phenotype_relations_to_remove]
 
 '''
  Fill in other nodes
@@ -126,7 +128,7 @@ for i, edge in enumerate(hpo_edges):
 for i, relation in enumerate(disease_phenotype_relations):
     disease = disease_dict[relation[0]]
     hpo = hpo_dict[relation[1]]
-    weight = 1 #float(relation[2]) (şuan stringler olduğu için float'a çeviremiyoruz)
+    weight = 1.0  # float(relation[2]) (şuan stringler olduğu için float'a çeviremiyoruz)
 
     edge_index[0, i + len(combined_network) + len(hpo_edges)] = disease
     edge_index[1, i + len(combined_network) + len(hpo_edges)] = hpo
@@ -134,10 +136,13 @@ for i, relation in enumerate(disease_phenotype_relations):
     edge_weight[i + len(combined_network) + len(hpo_edges)] = weight
 
 for i, relation in enumerate(disease_gene_relations):
+    # TODO: maybe fix this later
+    if relation[0] not in gene_dict.keys():
+        continue
 
     disease = disease_dict[relation[1]]
     gene = gene_dict[relation[0]]
-    weight = 1
+    weight = 1.0
 
     edge_index[0, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations)] = disease
     edge_index[1, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations)] = gene
@@ -145,10 +150,13 @@ for i, relation in enumerate(disease_gene_relations):
     edge_weight[i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations)] = weight
 
 for i, relation in enumerate(gene_phenotype_relations):
+    # TODO: maybe fix this later
+    if relation[0] not in gene_dict.keys():
+        continue
 
     gene = gene_dict[relation[0]]
     hpo = hpo_dict[relation[1]]
-    weight = 1
+    weight = 1.0
 
     edge_index[0, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations) + len(disease_gene_relations)] = gene
     edge_index[1, i + len(combined_network) + len(hpo_edges) + len(disease_phenotype_relations) + len(disease_gene_relations)] = hpo
