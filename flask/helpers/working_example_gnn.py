@@ -22,8 +22,8 @@ with open(path.join('../data', 'num_nodes.txt'), 'r') as file:
     num_nodes = int(file.read())
 
 # read edge_indexes and edge_weights from edge_index.pt and edge_weight.pt
-edge_indexes = torch.load(path.join('../data', 'edge_index.pt'))
-edge_weights = torch.load(path.join('../data', 'edge_weight.pt'))
+edge_indexes = torch.load(path.join('../data', 'edge_index.pt')).long()
+edge_weights = torch.load(path.join('../data', 'edge_weight.pt')).float()
 
 # Initialize node features randomly
 node_features = torch.randn(num_nodes, latent_dimension)
@@ -37,7 +37,7 @@ data = Data(x=node_features, edge_index=edge_indexes, edge_attr=edge_weights)
 # Optimizer
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 
-# TODO: replace here with other type of distances/similiarities
+# TODO: replace here with other type of distances/similarities
 def cosine_similarity_normalized(u, v):
     # Cosine similarity normalized to be between 0 and 1
     cos_sim = F.cosine_similarity(u, v, dim=-1)
