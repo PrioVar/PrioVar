@@ -1,6 +1,7 @@
 import torch
 from torch_geometric.nn import GCNConv
 from torch_geometric.data import Data
+from os import path
 import torch.nn.functional as F
 
 class GNN(torch.nn.Module):
@@ -14,11 +15,15 @@ class GNN(torch.nn.Module):
         x = F.relu(x)
         return self.conv2(x, edge_index, edge_weight)
 
+
 # Constants
 latent_dimension = 16  # Example latent dimension
-num_nodes = 10  # Example number of nodes
-edge_indexes = torch.tensor([[0, 1, 2], [1, 2, 0]], dtype=torch.long)  # Example edge indexes
-edge_weights = torch.tensor([0.8, 0.5, 0.9], dtype=torch.float)  # Example edge weights
+with open(path.join('../data', 'num_nodes.txt'), 'r') as file:
+    num_nodes = int(file.read())
+
+# read edge_indexes and edge_weights from edge_index.pt and edge_weight.pt
+edge_indexes = torch.load(path.join('../data', 'edge_index.pt'))
+edge_weights = torch.load(path.join('../data', 'edge_weight.pt'))
 
 # Initialize node features randomly
 node_features = torch.randn(num_nodes, latent_dimension)

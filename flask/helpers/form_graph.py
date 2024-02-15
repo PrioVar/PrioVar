@@ -93,6 +93,12 @@ gene_phenotype_relations = [relation for i, relation in enumerate(gene_phenotype
  Fill in other nodes
 '''
 
+NUM_NODES = len(gene_list) + len(hpo_list) + len(disease_list)
+
+# write the number of nodes to a file
+with open(path.join('../data', 'num_nodes.txt'), 'w') as file:
+    file.write(str(NUM_NODES))
+
 # TODO: CHANGE THIS LINE IF YOU ADD MORE NODES
 num_edges = (len(combined_network) + len(hpo_edges)
              + len(disease_phenotype_relations) + len(disease_gene_relations)
