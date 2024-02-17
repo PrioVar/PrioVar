@@ -49,7 +49,7 @@ edge_weight = torch.load(path.join('../data', 'edge_weight.pt')).float()
 
 # Define model parameters
 num_nodes = edge_index.max().item() + 1
-input_dim = edge_weight.size(0)  # Assuming the input dimension is equal to the number of nodes
+input_dim = 32
 hidden_dim = 64
 embedding_dim = 32
 num_epochs = 100
@@ -62,13 +62,34 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 
 # Training loop
+accumulation_steps = 10  # Accumulate gradients over 10 mini-batches
+batch_size = 32
+number_of_edges = edge_index.size(1)
 for epoch in range(num_epochs):
     optimizer.zero_grad()
-    recon_x, z = model(edge_index)
-    loss = criterion(recon_x, edge_weight)  # Reconstruction loss using edge_weight
-    loss.backward()
-    optimizer.step()
-    print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, num_epochs, loss.item()))
+    total_loss = 0
+    for i in range(0, number_of_edges, batch_size):
+        print(f"Processing batch ", int(i / batch_size))
+        optimizer.zero_grad()
+        end_idx = min(i + batch_size, number_of_edges)
+        edge_index_batch = edge_index[:, i:end_idx]
+        edge_weight_batch = edge_weight[i:end_idx]
+
+        recon_x, z = model(edge_index_batch)
+        loss = criterion(recon_x, edge_weight_batch)  # Reconstruction loss using edge_weight
+        loss.backward()
+
+        total_loss += loss.item()
+
+        if (i + 1) % accumulation_steps == 0:
+            optimizer.step()
+            optimizer.zero_grad()
+
+    # Perform gradient update after accumulating gradients over multiple mini-batches
+    if len(edge_index) % accumulation_steps != 0:
+        optimizer.step()
+
+    print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch + 1, num_epochs, total_loss))
 
 # After training, you can use the encoder to obtain node embeddings
 node_embeddings = model.embedding
