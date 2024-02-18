@@ -49,7 +49,7 @@ edge_weight = torch.load(path.join('../data', 'edge_weight.pt')).float().cuda()
 
 # Define model parameters
 num_nodes = edge_index.max().item() + 1
-input_dim = 32
+input_dim = 2048
 hidden_dim = 64
 embedding_dim = 32
 num_epochs = 100
@@ -63,7 +63,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 
 # Training loop
 accumulation_steps = 10  # Accumulate gradients over 10 mini-batches
-batch_size = 32
+batch_size = 2048
 number_of_edges = edge_index.size(1)
 for epoch in range(num_epochs):
     optimizer.zero_grad()
