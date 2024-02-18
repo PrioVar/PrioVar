@@ -44,8 +44,8 @@ class GCNDecoder(nn.Module):
 
 
 # Define your edge_index and edge_weight tensors
-edge_index = torch.load(path.join('../data', 'edge_index.pt')).long()
-edge_weight = torch.load(path.join('../data', 'edge_weight.pt')).float()
+edge_index = torch.load(path.join('../data', 'edge_index.pt')).long().cuda()
+edge_weight = torch.load(path.join('../data', 'edge_weight.pt')).float().cuda()
 
 # Define model parameters
 num_nodes = edge_index.max().item() + 1
@@ -55,7 +55,7 @@ embedding_dim = 32
 num_epochs = 100
 
 # Initialize the model
-model = GraphAutoEncoder(input_dim, hidden_dim, embedding_dim, num_nodes)
+model = GraphAutoEncoder(input_dim, hidden_dim, embedding_dim, num_nodes).cuda()
 
 # Define loss function and optimizer
 criterion = nn.MSELoss()
@@ -69,7 +69,7 @@ for epoch in range(num_epochs):
     optimizer.zero_grad()
     total_loss = 0
     for i in range(0, number_of_edges, batch_size):
-        print(f"Processing batch ", int(i / batch_size))
+        #print(f"Processing batch ", int(i / batch_size))
         optimizer.zero_grad()
         end_idx = min(i + batch_size, number_of_edges)
         edge_index_batch = edge_index[:, i:end_idx]
