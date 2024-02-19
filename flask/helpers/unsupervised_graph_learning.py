@@ -81,15 +81,12 @@ for epoch in range(num_epochs):
 
         total_loss += loss.item()
 
-        if (i + 1) % accumulation_steps == 0:
+        if (i + 1) % accumulation_steps == 0 or i + batch_size >= number_of_edges:
             optimizer.step()
             optimizer.zero_grad()
-
-    # Perform gradient update after accumulating gradients over multiple mini-batches
-    if len(edge_index) % accumulation_steps != 0:
-        optimizer.step()
 
     print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch + 1, num_epochs, total_loss))
 
 # After training, you can use the encoder to obtain node embeddings
-node_embeddings = model.embedding
+with torch.no_grad():  # No need to compute gradients for this operation
+    node_embeddings = model.embedding.detach().cpu().numpy()
