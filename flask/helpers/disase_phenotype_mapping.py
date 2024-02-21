@@ -1,5 +1,4 @@
 from os import path
-from typing import List, Tuple, Dict
 import pandas as pd
 
 NODE_DICTIONARY = {
@@ -11,8 +10,57 @@ NODE_DICTIONARY = {
     "HP:0040285": 0,
 }
 
+def proccess_hpoa():
+    # read phenotype.hpoa skip the first 4 lines and store in dataframe
+
+    df = pd.read_csv(path.join('../data', 'phenotype.hpoa'), sep='\t', comment='#', skiprows=4)
+
+    # get the last 7 characters of hpo_id and convert to int
+    df["hpo_id"] = df["hpo_id"].str[-7:].astype(int)
+
+    # get database_id, hpo_id, frequency
+    df = df[["database_id", "hpo_id", "frequency", "disease_name"]]
+
+    # for all rows where frequency is not null and contains 'HP:', map frequency using NODE_DICTIONARY
+    df["frequency"] = df["frequency"].apply(
+        lambda x: NODE_DICTIONARY[x] if x is not None and x in NODE_DICTIONARY else x)
+    
+     # Group by disease_name, hpo_id, and database_id, and aggregate frequencies into a list
+    disease_to_phenotype_all = df.groupby('disease_name').agg({'hpo_id': list, 'database_id': list, 'frequency': list}).reset_index()
+    
+    #just for reality check, that is, we grouped in the correct format, uncomment if needed
+    #print(disease_to_phenotype_all.iloc[0])
+    
+    disease_database_ids = []
+
+    # Iterate over the rows in the grouped DataFrame
+    for index, row in disease_to_phenotype_all.iterrows():
+        # Extract disease name and unique database IDs
+        disease_name = row['disease_name']
+        unique_database_ids = list(set(row['database_id']))  # Extract unique database IDs
+        
+        # Append the tuple to the list
+        disease_database_ids.append((disease_name, unique_database_ids))
+
+    #just for checking the format, uncomment if needed
+    #print(unique_database_ids_list[1290])
+    
+    return disease_to_phenotype_all, disease_database_ids
+
+
+#b = "1/5"
+#b = '52\%'
+#c = eval(b)
+a = proccess_hpoa()
+
+# TODO: normally distribute these values 
+# TODO: check if frequency is overwritten while iterating through the rows
+
+#!!! A mixture of old code may be found below. The old code is not used in the current implementation. !!!
+
+"""
 # start reading phenotype.hpoa
-eskikod = """# read phenotype.hpoa line by line and find and find "Omim: " and "HP: " and store in list of tuples
+ #eskikod =  read phenotype.hpoa line by line and find and find "Omim: " and "HP: " and store in list of tuples
     list_of_tuples = []
     with open(path.join('../data', 'phenotype.hpoa'), 'r') as file:
         line_index = 1
@@ -39,15 +87,15 @@ eskikod = """# read phenotype.hpoa line by line and find and find "Omim: " and "
                 hpo_id = int(hpo_id[-7:])
                 list_of_tuples.append((disase_id, hpo_id))
 
-    return list_of_tuples"""
+    return list_of_tuples
 
 
 def combine_omim_orpha_diseases(df) -> Dict:
-    """
+    
     Map OMIM and ORPHA disease ids to disease names
     :param df:
     :return:
-    """
+    
     # create a dictionary to map disease_id to disease_name
     disease_dict = {}
     for index, row in df.iterrows():
@@ -76,6 +124,14 @@ def proccess_hpoa():
     # Group by 'X' and filter out those groups with more than one unique entry in 'Y'
     grouped = df.groupby(['disease_name', 'hpo_id'])
 
+    # Group by disease_name, hpo_id, and database_id, and aggregate frequencies into a list
+    grouped = df.groupby(['disease_name', 'hpo_id', 'database_id'])['frequency'].agg(list).reset_index()
+
+    # Further group by disease_name and merge rows
+    merged = grouped.groupby('disease_name').agg({'hpo_id': 'unique', 'database_id': 'unique', 'frequency': 'sum'}).reset_index()
+
+    print(merged)
+
     # Initialize an empty list to store the results
     result = []
 
@@ -90,11 +146,11 @@ def proccess_hpoa():
 
     # Convert the result list to a DataFrame
     filtered_df = pd.DataFrame(result, columns=['disease_name', 'hpo_id', 'disease_ids', 'frequencies'])
-    print(filtered_df['frequencies'].nunique())
+    print(filtered_df)
 
 
     #old code starts here
-    """
+    
     for group in grouped:
         print(group)
         break
@@ -105,7 +161,7 @@ def proccess_hpoa():
 
     print(filtered_df)
     print("unique groups with different freq: ", filtered_df[['disease_name','hpo_id']].drop_duplicates().shape[0])
-    """
+    
     # old code ends here
     # for all rows where frequency is not null and contains 'HP:', map frequency using NODE_DICTIONARY
     df["frequency"] = df["frequency"].apply(
@@ -125,26 +181,19 @@ def proccess_hpoa():
     for index, row in df.iterrows():
         disease_name = disease_dict[row[0]]
 
-        # check if any of the tuples in disease_name_frequency_list has first element equal to disease_name
-        # if it does, add the frequency to the second element of the tuple
-        # if it does not, add a new tuple to the list
+        # Check if the disease name already exists in disease_name_freq_list
         found = False
-        for i in range(len(disease_name_frequency_list)):
-            if disease_name_frequency_list[i][0] == disease_name:
-                disease_name_frequency_list[i][1] += row[2]
+        for item in disease_name_frequency_list:
+            if item[0] == disease_name:
+                item[1].append(row[2])  # Add the frequency to the existing frequency list
                 found = True
                 break
         if not found:
-            disease_name_frequency_list.append([disease_name, row[2]])
+            # If the disease name is not found, add a new entry to disease_name_freq_list
+            disease_name_frequency_list.append([disease_name, [row[2]]])
+
+
 
     # return list of tuples
     return df.values.tolist()
-
-
-#b = "1/5"
-#b = '52\%'
-#c = eval(b)
-a = proccess_hpoa()
-
-# TODO: normally distribute these values
-# TODO: check if frequency is overwritten while iterating through the rows
+"""
