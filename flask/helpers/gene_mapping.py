@@ -61,8 +61,42 @@ def get_gene_phenotype_relations() -> List[List]:
 def get_gene_disease_relations() -> List[List]:
     """
     :return: List of gene-disease relations
-    example: [['A1BG', 'OMIM:615120'], ['B3GALT6', 'OMIM:615120']]
+    example: [ ['abc disease', ['OMIM:615120', 'ORPHA:12354']], ['abdsdsc disease', ['OMIM:6151240', 'ORPHA:123254']]]
     """
+
+    # read ../data/genes_to_disease.txt into dataframe
+    df = pd.read_csv("../data/genes_to_disease.txt", sep='\t', comment='#')
+
+    # Delete rows with gene='-'
+    df = df[df['gene_symbol'] != '-']
+
+    # Group by gene_symbol and aggregate disease_ids into a list
+    grouped = df.groupby('gene_symbol')['disease_id'].agg(list).reset_index()
+
+    # Sort disease_ids lists based on the order 'OMIM', 'ORPHA', 'DECIPHER'
+    grouped['disease_id'] = grouped['disease_id'].apply(custom_sort)
+
+    # Convert DataFrame to list of tuples
+    gene_disease_relations = grouped.apply(lambda x: (x['gene_symbol'], x['disease_id']), axis=1).tolist()
+
+    return gene_disease_relations
+
+
+def custom_sort(disease_ids):
+    order = {'OMIM': 0, 'ORPHA': 1, 'DECIPHER': 2}
+    return sorted(disease_ids, key=lambda x: order.get(x.split(':')[0], float('inf')))
+
+
+#a = get_gene_disease_relations()
+#print(a)
+
+#OLD get_gene_phenotype_relations
+"""
+def get_gene_disease_relations() -> List[List]:
+    
+    :return: List of gene-disease relations
+    example: [['A1BG', 'OMIM:615120'], ['B3GALT6', 'OMIM:615120']]
+    
 
     # read ../data/genes_to_disease.txt into dataframe
     df = pd.read_csv("../data/genes_to_disease.txt", sep='\t', comment='#')
@@ -71,6 +105,4 @@ def get_gene_disease_relations() -> List[List]:
 
     # return the list of gene-disease relations by getting only gene_symbol and disease_id columns
     return df[["gene_symbol", "disease_id"]].values.tolist()
-
-
-a = get_gene_phenotype_relations()
+"""

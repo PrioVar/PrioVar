@@ -44,7 +44,7 @@ def proccess_hpoa():
 
     #just for checking the format, uncomment if needed
     #print(disease_database_ids[1290])
-    
+    #print(disease_database_ids)
     return disease_to_phenotype_all, disease_database_ids
 
 # Custom sorting function
@@ -56,7 +56,7 @@ def custom_sort(database_ids):
 #b = "1/5"
 #b = '52\%'
 #c = eval(b)
-a = proccess_hpoa()
+#a = proccess_hpoa()
 
 # TODO: normally distribute these values 
 # TODO: check if frequency is overwritten while iterating through the rows
