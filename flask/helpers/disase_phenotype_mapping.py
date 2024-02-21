@@ -37,15 +37,20 @@ def proccess_hpoa():
     for index, row in disease_to_phenotype_all.iterrows():
         # Extract disease name and unique database IDs
         disease_name = row['disease_name']
-        unique_database_ids = list(set(row['database_id']))  # Extract unique database IDs
-        
+        database_ids = list(set(row['database_id']))  # Extract unique database IDs
+        database_ids_sorted = custom_sort(database_ids)  # Sort the database IDs
         # Append the tuple to the list
-        disease_database_ids.append((disease_name, unique_database_ids))
+        disease_database_ids.append((disease_name, database_ids_sorted))
 
     #just for checking the format, uncomment if needed
-    #print(unique_database_ids_list[1290])
+    #print(disease_database_ids[1290])
     
     return disease_to_phenotype_all, disease_database_ids
+
+# Custom sorting function
+def custom_sort(database_ids):
+    order = {'OMIM': 0, 'ORPHA': 1, 'DECIPHER': 2}
+    return sorted(database_ids, key=lambda x: order.get(x.split(':')[0], float('inf')))
 
 
 #b = "1/5"
