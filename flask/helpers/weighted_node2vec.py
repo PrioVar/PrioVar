@@ -56,7 +56,7 @@ weighted_walks = rw.run(
 print("Number of random walks: {}".format(len(weighted_walks)))
 
 weighted_model = Word2Vec(
-    weighted_walks, vector_size=128, window=5, min_count=5, sg=1, workers=1, epochs=5
+    weighted_walks, vector_size=128, window=5, min_count=5, sg=1, workers=4, epochs=5
 )
 
 # save all embeddings into a file
