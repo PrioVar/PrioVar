@@ -56,8 +56,12 @@ weighted_walks = rw.run(
 print("Number of random walks: {}".format(len(weighted_walks)))
 
 weighted_model = Word2Vec(
-    weighted_walks, vector_size=128, window=5, min_count=5, sg=1, workers=4, epochs=5
+    weighted_walks, vector_size=128, window=5, min_count=5, sg=1, workers=2, epochs=5
 )
 
-# save all embeddings into a file
-weighted_model.wv.save_word2vec_format("../data/node_embeddings.txt")
+# Save all embeddings into a file manually
+with open("../data/node_embeddings.txt", "w") as f:
+    f.write(f"{len(weighted_model.wv)} {weighted_model.vector_size}\n")
+    for word in weighted_model.wv.index_to_key:
+        vector = " ".join(str(x) for x in weighted_model.wv[word])
+        f.write(f"{word} {vector}\n")
