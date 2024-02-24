@@ -62,6 +62,9 @@ weighted_model = Word2Vec(
 # Save all embeddings into a file manually
 with open("../data/node_embeddings.txt", "w") as f:
     f.write(f"{len(weighted_model.wv)} {weighted_model.vector_size}\n")
-    for word in weighted_model.wv.index_to_key:
-        vector = " ".join(str(x) for x in weighted_model.wv[word])
-        f.write(f"{word} {vector}\n")
+    keys = weighted_model.wv.index_to_key
+    vectors = weighted_model.wv.vectors
+    for i in range(len(keys)):
+        f.write(f"{keys[i]} {' '.join(map(str, vectors[i]))}\n")
+
+# maybe increase n???
