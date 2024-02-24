@@ -5,7 +5,7 @@ from stellargraph.data import BiasedRandomWalk
 from stellargraph import StellarGraph
 from gensim.models import Word2Vec
 
-WALK_LENGTH = 100
+WALK_LENGTH = 40
 
 
 def read_tensor_data(edge_index_path, edge_weight_path):
@@ -47,16 +47,16 @@ rw = BiasedRandomWalk(G)
 weighted_walks = rw.run(
     nodes=G.nodes(),  # root nodes
     length=WALK_LENGTH,  # maximum length of a random walk
-    n=10,  # number of random walks per root node
-    p=0.5,  # Defines (unormalised) probability, 1/p, of returning to source node
-    q=2.0,  # Defines (unormalised) probability, 1/q, for moving away from source node
+    n=1,  # number of random walks per root node
+    p=1,  # Defines (unormalised) probability, 1/p, of returning to source node
+    q=1,  # Defines (unormalised) probability, 1/q, for moving away from source node
     weighted=True,  # for weighted random walks
     seed=42,  # random seed fixed for reproducibility
 )
 print("Number of random walks: {}".format(len(weighted_walks)))
 
 weighted_model = Word2Vec(
-    weighted_walks, vector_size=128, window=5, min_count=0, sg=1, workers=1, epochs=1
+    weighted_walks, vector_size=128, window=5, min_count=5, sg=1, workers=1, epochs=5
 )
 
 # save all embeddings into a file
