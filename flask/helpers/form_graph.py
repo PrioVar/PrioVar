@@ -2,7 +2,7 @@ import torch
 from typing import Tuple
 from hpo import read_hpo_from_json, process_nodes, process_edges
 from gene_mapping import get_gene_mapping_dict, get_combined_network, get_gene_phenotype_relations, get_gene_disease_relations
-from disase_phenotype_mapping import proccess_hpoa
+from disase_phenotype_mapping import process_hpoa
 from os import path
 
 def get_hpo_terms_edges() -> Tuple:
@@ -52,7 +52,7 @@ for i in range(len(hpo_list)):
 
 
 # disease
-disease_phenotype_relations = proccess_hpoa()
+disease_phenotype_relations = process_hpoa()
 disease_set = set()
 for i, relation in enumerate(disease_phenotype_relations):
     disease_set.add(relation[0])
