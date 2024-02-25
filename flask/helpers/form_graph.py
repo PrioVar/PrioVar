@@ -5,6 +5,7 @@ from gene_mapping import get_gene_mapping_dict, get_combined_network, get_gene_p
 from disase_phenotype_mapping import process_hpoa
 from os import path
 
+
 def get_hpo_terms_edges() -> Tuple:
     graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
     items = process_nodes(nodes)
@@ -134,7 +135,7 @@ for i, edge in enumerate(hpo_edges):
 for i, relation in enumerate(disease_phenotype_relations):
     disease = disease_dict[relation[0]]
     hpo = hpo_dict[relation[1]]
-    weight = 1.0  # float(relation[2]) (şuan stringler olduğu için float'a çeviremiyoruz)
+    weight = 1.0  # float(relation[2])
 
     edge_index[0, i + len(combined_network) + len(hpo_edges)] = disease
     edge_index[1, i + len(combined_network) + len(hpo_edges)] = hpo
