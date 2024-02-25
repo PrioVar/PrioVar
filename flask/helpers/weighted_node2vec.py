@@ -5,8 +5,6 @@ from stellargraph.data import BiasedRandomWalk
 from stellargraph import StellarGraph
 from gensim.models import Word2Vec
 
-WALK_LENGTH = 40
-
 
 def read_tensor_data(edge_index_path, edge_weight_path):
     edge_index = torch.load(edge_index_path)
@@ -44,12 +42,16 @@ G = read_tensor_data("../data/edge_index.pt", "../data/edge_weight.pt")
 G = StellarGraph.from_networkx(G)
 rw = BiasedRandomWalk(G)
 
+# PARAMETERS
+WALK_LENGTH = 100  # maximum length of a random walk
+n = 5  # number of random walks per root node
+p = 0.5  # Defines (unormalised) probability, 1/p, of returning to source node
+q = 2  # Defines (unormalised) probability, 1/q, for moving away from source node
+
 weighted_walks = rw.run(
     nodes=G.nodes(),  # root nodes
     length=WALK_LENGTH,  # maximum length of a random walk
-    n=1,  # number of random walks per root node
-    p=1,  # Defines (unormalised) probability, 1/p, of returning to source node
-    q=1,  # Defines (unormalised) probability, 1/q, for moving away from source node
+    n=n, p=p, q=q,
     weighted=True,  # for weighted random walks
     seed=42,  # random seed fixed for reproducibility
 )
@@ -60,7 +62,8 @@ weighted_model = Word2Vec(
 )
 
 # Save all embeddings into a file manually
-with open("../data/node_embeddings.txt", "w") as f:
+file_path = f"../data/node_embeddings_p_{p}_q_{q}_n_{n}.txt"
+with open(file_path, "w") as f:
     f.write(f"{len(weighted_model.wv)} {weighted_model.vector_size}\n")
     keys = weighted_model.wv.index_to_key
     vectors = weighted_model.wv.vectors
