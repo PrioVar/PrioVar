@@ -10,9 +10,9 @@ NODE_DICTIONARY = {
     "HP:0040285": 0,
 }
 
-def proccess_hpoa():
-    # read phenotype.hpoa skip the first 4 lines and store in dataframe
 
+def process_hpoa():
+    # read phenotype.hpoa, skip the first 4 lines
     df = pd.read_csv(path.join('../data', 'phenotype.hpoa'), sep='\t', comment='#', skiprows=4)
 
     # get the last 7 characters of hpo_id and convert to int
@@ -25,27 +25,21 @@ def proccess_hpoa():
     df["frequency"] = df["frequency"].apply(
         lambda x: NODE_DICTIONARY[x] if x is not None and x in NODE_DICTIONARY else x)
     
-     # Group by disease_name, hpo_id, and database_id, and aggregate frequencies into a list
-    disease_to_phenotype_all = df.groupby('disease_name').agg({'hpo_id': list, 'database_id': list, 'frequency': list}).reset_index()
-    
-    #just for reality check, that is, we grouped in the correct format, uncomment if needed
-    #print(disease_to_phenotype_all.iloc[0])
-    
+    # Group by disease_name, hpo_id, and database_id, and aggregate frequencies into a list
+    disease_to_phenotype_all = (df.groupby('disease_name')
+                                .agg({'hpo_id': list, 'database_id': list, 'frequency': list})
+                                .reset_index())
     disease_database_ids = []
 
     # Iterate over the rows in the grouped DataFrame
     for index, row in disease_to_phenotype_all.iterrows():
-        # Extract disease name and unique database IDs
         disease_name = row['disease_name']
         database_ids = list(set(row['database_id']))  # Extract unique database IDs
         database_ids_sorted = custom_sort(database_ids)  # Sort the database IDs
-        # Append the tuple to the list
         disease_database_ids.append((disease_name, database_ids_sorted))
 
-    #just for checking the format, uncomment if needed
-    #print(disease_database_ids[1290])
-    #print(disease_database_ids)
     return disease_to_phenotype_all, disease_database_ids
+
 
 # Custom sorting function
 def custom_sort(database_ids):
