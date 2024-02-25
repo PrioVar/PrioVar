@@ -28,14 +28,13 @@ def process_hpoa():
     # Preprocess frequencies to handle division form and percentage form
     df["frequency"] = df["frequency"].apply(lambda x: eval(x.replace('%', '/100')) if isinstance(x, str) else x)
 
+    # handle the nan values in frequency column by
+    # replacing them with the mean of all non-null values
+    mean = df[df["frequency"].notnull()]["frequency"].mean()
+    df["frequency"] = df["frequency"].fillna(mean)
+
     # Convert frequencies to floats
     df["frequency"] = df["frequency"].astype(float)
-
-    # Check types of frequencies and print if they are not float
-    for index, value in df["frequency"].items():
-        if not isinstance(value, float):
-            print(f"Frequency value '{value}' at index {index} is not a float. Type: {type(value)}")
-
 
     # Group by disease_name, hpo_id, and database_id, and aggregate frequencies into a list
     disease_to_phenotype_all = (df.groupby('disease_name')
