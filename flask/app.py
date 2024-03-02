@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 
 from helpers.hpo import read_hpo_from_json, process_nodes, process_edges, save_nodes, save_edges
@@ -19,8 +19,8 @@ def start_loading_data():
     edge_items = process_edges(edges)
     save_edges(edge_items)
 
-
     return "Data loading finished"
+
 
 @app.route('/load-clinvar', methods=['GET'])
 def get_clinvar():
@@ -35,11 +35,13 @@ def get_diseases():
 
     return "Diseases successfully loaded"
 
+
 @app.route('/load-genes', methods=['GET'])
 def get_genes():
     initiate_gene_database()
 
     return "Genes successfully loaded"
+
 
 # write an endpoint that takes a VCF file as input and returns annotated variants
 # as a dataframe
@@ -52,10 +54,12 @@ def get_annotated_variants():
     # return the annotated variants as a dataframe
     return annotated_data
 
+
 @app.route('/get-annotated-variants', methods=['GET'])
 def get_annotated_variants_of_patient():
     return get_all_annotated_variants()
-    
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
 
