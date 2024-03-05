@@ -20,5 +20,10 @@ chain = GraphCypherQAChain.from_llm(
 
 
 def get_answer(question: str):
+    """
+    Get the answer by querying the knowledge graph.
+    :param question: Question from the user
+    :return: Answer
+    """
     return chain.invoke(" " + question + " ")
 
