@@ -5,10 +5,27 @@ from helpers.hpo import read_hpo_from_json, process_nodes, process_edges, save_n
 from helpers.clinvar import read_clinvar, save_clinvar
 from helpers.hpo_annotations import initiate_disease_database, initiate_gene_database
 from helpers.annotation import annotate_variants, get_all_annotated_variants
+from helpers.knowledge_graph import get_answer
 
 app = Flask(__name__)
 CORS(app)
 
+
+# write an endpoint that takes a question as an input and queries the knowledge graph
+# to return an answer
+@app.route('/search-graph', methods=['POST'])
+def search_graph():
+    # get the question, which is a parameter in the request
+    question = request.args.get('question')
+
+    if question is None:
+        return "No question provided"
+
+    # query the knowledge graph
+    answer = get_answer(question)
+
+    # return the answer
+    return answer
 
 @app.route('/load-hpo', methods=['GET'])
 def start_loading_data():
