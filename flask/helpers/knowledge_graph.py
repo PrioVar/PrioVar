@@ -1,7 +1,7 @@
 import os
 from langchain.chains import GraphCypherQAChain
-from langchain.chat_models import ChatOpenAI
-from langchain.graphs import Neo4jGraph
+from langchain_openai import ChatOpenAI
+from langchain_community.graphs import Neo4jGraph
 from config import uri, username, password, API_KEY
 
 os.environ["OPENAI_API_KEY"] = API_KEY
@@ -20,6 +20,5 @@ chain = GraphCypherQAChain.from_llm(
 
 
 def get_answer(question: str):
-    return chain(" " + question + " ")
+    return chain.invoke(" " + question + " ")
 
-print(get_answer("How many patients are under age 35?"))
