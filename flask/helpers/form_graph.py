@@ -37,7 +37,6 @@ gene_mapping_dict = get_gene_mapping_dict()
 # create the gene list and map it using the gene_mapping_dict and then sort it
 gene_list = list(gene_set)
 gene_list = [gene_mapping_dict[gene] for gene in gene_list]
-
 gene_list.sort()
 
 # create a dictionary to map gene names to indices
