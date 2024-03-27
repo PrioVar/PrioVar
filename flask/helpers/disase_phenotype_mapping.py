@@ -57,14 +57,12 @@ def custom_sort(database_ids):
     order = {'OMIM': 0, 'ORPHA': 1, 'DECIPHER': 2}
     return sorted(database_ids, key=lambda x: order.get(x.split(':')[0], float('inf')))
 
-a, b = process_hpoa()
+#a, b = process_hpoa()
 #b = "1/5"
 #b = '52\%'
 #c = eval(b)
 #a = process_hpoa()
 
-#get the first row
-print(a.iloc[0])
 #print(a.iloc[1])
 #x  =7
 # TODO: normally distribute these values 

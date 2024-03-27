@@ -5,10 +5,8 @@ from gene_mapping import get_gene_mapping_dict, get_combined_network, get_gene_p
 from disase_phenotype_mapping import process_hpoa
 from os import path
 
-warning = """
-şu anki hali çalışmaz durumda. disease ekleme olayları uyumsuz bir şekilde değiştirildiği için
-uyarıyı görüyorsan bu dosyanın eski halini kullan
-"""
+#dikkaatat
+default_disease_gene_relation_frequency = 0.5
 
 def get_hpo_terms_edges() -> Tuple:
     graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
@@ -191,7 +189,7 @@ for i, relation in disease_phenotype_relations.iterrows():
     for j in range(len(relation["hpo_id"])):
 
         # if frequency j is float, then weight = frequency[j]
-        weight = frequency[j] if isinstance(frequency[j], float) else 0.5
+        weight = frequency[j] if isinstance(frequency[j], float) else default_disease_gene_relation_frequency
         hpo = hpo_dict[hpo_id_list[j]]
 
         edge_index[0, disease_phenotype_count + len(combined_network) + len(hpo_edges)] = disease
@@ -224,9 +222,6 @@ for i, relation in enumerate(disease_gene_relations):
         edge_weight[disease_gene_count + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = weight
 
         disease_gene_count += 1
-
-
-
 
 
 print("line 183")
