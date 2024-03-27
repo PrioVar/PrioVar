@@ -53,9 +53,9 @@ for i in range(len(hpo_list)):
     hpo_dict[hpo_list[i]] = i + len(gene_list)
 
 # save the gene, hpo dict to pickle files
-torch.save(gene_dict, path.join('../data', 'gene_dict.pt'))
-torch.save(hpo_dict, path.join('../data', 'hpo_dict.pt'))
-exit(0)
+#torch.save(gene_dict, path.join('../data', 'gene_dict.pt'))
+#torch.save(hpo_dict, path.join('../data', 'hpo_dict.pt'))
+#exit(0)
 
 
 # disease
@@ -88,12 +88,16 @@ for i, relation in enumerate(disease_gene_relations):
         if disease_id in disease_dict_db.keys():
             disease_set2.add(disease_dict_db[disease_id])
         else:
-            disease_gene_relations_to_remove.append(i)
+            # directly remove it from the list
+            disease_gene_relations[i][1].remove(disease_id)
 
 
 # removing the relations that are not in the gene_mapping_dict
 disease_gene_relations = [relation for i, relation in enumerate(disease_gene_relations)
                           if i not in disease_gene_relations_to_remove]
+
+
+print("disease_gene_relations ", len(disease_gene_relations))
 
 disease_set = disease_set.union(disease_set2)
 disease_list = list(disease_set)
@@ -131,11 +135,15 @@ num_edges = (len(combined_network) + len(hpo_edges)
 for i, relation in disease_phenotype_relations.iterrows():
     num_edges += len(relation["hpo_id"])
 
+
 # create an edge_index tensor with size (2, num_edges)
 edge_index = torch.zeros(2, num_edges)
 edge_weight = torch.zeros(num_edges)
 
 # fill in the network tensor
+#
+# Warning: Uncomment this block !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+"""
 for i, row in enumerate(combined_network):
     ls = row.strip().split('\t')
     gene_a = gene_dict[gene_mapping_dict[ls[0]]]
@@ -146,7 +154,7 @@ for i, row in enumerate(combined_network):
     edge_index[1, i] = gene_b
 
     edge_weight[i] = weight
-
+"""
 print("line 141")
 
 # fill in the tensor using hpo_edges
@@ -178,12 +186,18 @@ for i, relation in disease_phenotype_relations.iterrows():
         edge_weight[disease_phenotype_count + len(combined_network) + len(hpo_edges)] = weight
         disease_phenotype_count += 1
 print("line 169")
+disease_gene_count = 0
 for i, relation in enumerate(disease_gene_relations):
     # TODO: maybe fix this later
     if relation[0] not in gene_dict.keys():
         continue
 
-    disease = disease_dict[disease_dict_db(relation[1][0])]
+    # if relation[1] is empty, then skip this relation
+    if len(relation[1]) == 0:
+        continue
+
+    print(relation[1][0])
+    disease = disease_dict[disease_dict_db[relation[1][0]]]
     gene = gene_dict[relation[0]]
     weight = 1.0
 
@@ -191,7 +205,13 @@ for i, relation in enumerate(disease_gene_relations):
     edge_index[1, i + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = gene
 
     edge_weight[i + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = weight
+
+    disease_gene_count += 1
+
+
+
 print("line 183")
+
 for i, relation in enumerate(gene_phenotype_relations):
     # TODO: maybe fix this later
     if relation[0] not in gene_dict.keys():
@@ -201,10 +221,10 @@ for i, relation in enumerate(gene_phenotype_relations):
     hpo = hpo_dict[relation[1]]
     weight = 1.0
 
-    edge_index[0, i + len(combined_network) + len(hpo_edges) + disease_phenotype_count + len(disease_gene_relations)] = gene
-    edge_index[1, i + len(combined_network) + len(hpo_edges) + disease_phenotype_count + len(disease_gene_relations)] = hpo
+    edge_index[0, i + len(combined_network) + len(hpo_edges) + disease_phenotype_count + disease_gene_count] = gene
+    edge_index[1, i + len(combined_network) + len(hpo_edges) + disease_phenotype_count + disease_gene_count] = hpo
 
-    edge_weight[i + len(combined_network) + len(hpo_edges) + disease_phenotype_count + len(disease_gene_relations)] = weight
+    edge_weight[i + len(combined_network) + len(hpo_edges) + disease_phenotype_count + disease_gene_count] = weight
 
 # save the edge_index and edge_weight tensors to pickle files
 torch.save(edge_index, path.join('../data', 'edge_index.pt'))
