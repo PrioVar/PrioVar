@@ -78,18 +78,27 @@ for i, relation in disease_phenotype_relations.iterrows():
 disease_gene_relations = get_gene_disease_relations()
 disease_set2 = set()
 disease_gene_relations_to_remove = []
+
+
+
 for i, relation in enumerate(disease_gene_relations):
     # TODO: (change later) skip relation if the gene is not in the gene_mapping_dict
     if relation[0] not in gene_dict.keys():
         disease_gene_relations_to_remove.append(i)
         continue
 
+    remove_ids = []
     for disease_id in relation[1]:
+
         if disease_id in disease_dict_db.keys():
             disease_set2.add(disease_dict_db[disease_id])
         else:
-            # directly remove it from the list
-            disease_gene_relations[i][1].remove(disease_id)
+            remove_ids.append(disease_id)
+
+    for remove_id in remove_ids:
+        disease_gene_relations[i][1].remove(remove_id)
+
+
 
 
 # removing the relations that are not in the gene_mapping_dict
@@ -129,11 +138,17 @@ with open(path.join('../data', 'num_nodes.txt'), 'w') as file:
 
 # TODO: CHANGE THIS LINE IF YOU ADD MORE NODES
 num_edges = (len(combined_network) + len(hpo_edges)
-             + len(gene_phenotype_relations) + len(disease_gene_relations))
+             + len(gene_phenotype_relations) )
+             #+ len(disease_gene_relations))
              #+ len(disease_phenotype_relations)) mk şeysi değiştiği için hesaplama  da değişti
 
 for i, relation in disease_phenotype_relations.iterrows():
     num_edges += len(relation["hpo_id"])
+
+for relation in disease_gene_relations:
+    if relation[0] not in gene_dict.keys():
+        continue
+    num_edges += len(relation[1])
 
 
 # create an edge_index tensor with size (2, num_edges)
@@ -142,8 +157,7 @@ edge_weight = torch.zeros(num_edges)
 
 # fill in the network tensor
 #
-# Warning: Uncomment this block !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-"""
+
 for i, row in enumerate(combined_network):
     ls = row.strip().split('\t')
     gene_a = gene_dict[gene_mapping_dict[ls[0]]]
@@ -154,7 +168,7 @@ for i, row in enumerate(combined_network):
     edge_index[1, i] = gene_b
 
     edge_weight[i] = weight
-"""
+
 print("line 141")
 
 # fill in the tensor using hpo_edges
@@ -192,21 +206,26 @@ for i, relation in enumerate(disease_gene_relations):
     if relation[0] not in gene_dict.keys():
         continue
 
-    # if relation[1] is empty, then skip this relation
-    if len(relation[1]) == 0:
-        continue
+    # for loop needed because there can be multiple diseases for a gene
 
-    print(relation[1][0])
-    disease = disease_dict[disease_dict_db[relation[1][0]]]
-    gene = gene_dict[relation[0]]
-    weight = 1.0
+    for disease_id in relation[1]:
 
-    edge_index[0, i + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = disease
-    edge_index[1, i + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = gene
 
-    edge_weight[i + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = weight
+        if disease_id not in disease_dict_db.keys():
+            continue
 
-    disease_gene_count += 1
+        disease = disease_dict[disease_dict_db[disease_id]]
+        gene = gene_dict[relation[0]]
+        weight = 1.0
+
+        edge_index[0, disease_gene_count + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = disease
+        edge_index[1, disease_gene_count + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = gene
+
+        edge_weight[disease_gene_count + len(combined_network) + len(hpo_edges) + disease_phenotype_count] = weight
+
+        disease_gene_count += 1
+
+
 
 
 
