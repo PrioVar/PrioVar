@@ -5,8 +5,9 @@ from gene_mapping import get_gene_mapping_dict, get_combined_network, get_gene_p
 from disase_phenotype_mapping import process_hpoa
 from os import path
 
-#dikkaatat
+# THIS IS A CONSTANT WHICH MIGHT BE CHANGED LATER
 default_disease_gene_relation_frequency = 0.5
+
 
 def get_hpo_terms_edges() -> Tuple:
     graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
@@ -50,13 +51,7 @@ hpo_dict = {}
 for i in range(len(hpo_list)):
     hpo_dict[hpo_list[i]] = i + len(gene_list)
 
-# save the gene, hpo dict to pickle files
-#torch.save(gene_dict, path.join('../data', 'gene_dict.pt'))
-#torch.save(hpo_dict, path.join('../data', 'hpo_dict.pt'))
-#exit(0)
-
-
-# disease
+# handling diseases
 disease_phenotype_relations, disease_database_ids = process_hpoa()
 
 # create hash map for disease names. key -> database_id, value-> disease_name
@@ -66,8 +61,6 @@ for i in range(len(disease_database_ids)):
     for database_id in database_ids:
         disease_dict_db[database_id] = disease_name
 
-print("line 62")
-
 disease_set = set()
 for i, relation in disease_phenotype_relations.iterrows():
     # add disease_name to the set
@@ -76,7 +69,6 @@ for i, relation in disease_phenotype_relations.iterrows():
 disease_gene_relations = get_gene_disease_relations()
 disease_set2 = set()
 disease_gene_relations_to_remove = []
-
 
 
 for i, relation in enumerate(disease_gene_relations):
@@ -95,8 +87,6 @@ for i, relation in enumerate(disease_gene_relations):
 
     for remove_id in remove_ids:
         disease_gene_relations[i][1].remove(remove_id)
-
-
 
 
 # removing the relations that are not in the gene_mapping_dict
@@ -127,7 +117,6 @@ gene_phenotype_relations = [relation for i, relation in enumerate(gene_phenotype
 '''
  Fill in other nodes
 '''
-print("line 110")
 NUM_NODES = len(gene_list) + len(hpo_list) + len(disease_list)
 
 # write the number of nodes to a file
@@ -154,8 +143,6 @@ edge_index = torch.zeros(2, num_edges)
 edge_weight = torch.zeros(num_edges)
 
 # fill in the network tensor
-#
-
 for i, row in enumerate(combined_network):
     ls = row.strip().split('\t')
     gene_a = gene_dict[gene_mapping_dict[ls[0]]]
@@ -167,7 +154,6 @@ for i, row in enumerate(combined_network):
 
     edge_weight[i] = weight
 
-print("line 141")
 
 # fill in the tensor using hpo_edges
 for i, edge in enumerate(hpo_edges):
@@ -180,7 +166,7 @@ for i, edge in enumerate(hpo_edges):
 
     edge_weight[i + len(combined_network)] = weight
 
-print("line 153")
+
 disease_phenotype_count = 0
 for i, relation in disease_phenotype_relations.iterrows():
     disease = disease_dict[relation["disease_name"]]
@@ -197,7 +183,8 @@ for i, relation in disease_phenotype_relations.iterrows():
 
         edge_weight[disease_phenotype_count + len(combined_network) + len(hpo_edges)] = weight
         disease_phenotype_count += 1
-print("line 169")
+
+
 disease_gene_count = 0
 for i, relation in enumerate(disease_gene_relations):
     # TODO: maybe fix this later
@@ -205,10 +192,7 @@ for i, relation in enumerate(disease_gene_relations):
         continue
 
     # for loop needed because there can be multiple diseases for a gene
-
     for disease_id in relation[1]:
-
-
         if disease_id not in disease_dict_db.keys():
             continue
 
@@ -223,8 +207,6 @@ for i, relation in enumerate(disease_gene_relations):
 
         disease_gene_count += 1
 
-
-print("line 183")
 
 for i, relation in enumerate(gene_phenotype_relations):
     # TODO: maybe fix this later
