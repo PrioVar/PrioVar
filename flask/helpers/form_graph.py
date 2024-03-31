@@ -6,7 +6,7 @@ from disase_phenotype_mapping import process_hpoa
 from os import path
 
 # THIS IS A CONSTANT WHICH MIGHT BE CHANGED LATER
-default_disease_gene_relation_frequency = 0.5
+default_disease_phenotype_relation_frequency = 0.5
 
 
 def get_hpo_terms_edges() -> Tuple:
@@ -66,6 +66,8 @@ for i, relation in disease_phenotype_relations.iterrows():
     # add disease_name to the set
     disease_set.add(relation["disease_name"])
 
+
+# disease_gene_relations are grouped by gene_symbol and aggregated disease_ids into a list
 disease_gene_relations = get_gene_disease_relations()
 disease_set2 = set()
 disease_gene_relations_to_remove = []
@@ -92,9 +94,6 @@ for i, relation in enumerate(disease_gene_relations):
 # removing the relations that are not in the gene_mapping_dict
 disease_gene_relations = [relation for i, relation in enumerate(disease_gene_relations)
                           if i not in disease_gene_relations_to_remove]
-
-
-print("disease_gene_relations ", len(disease_gene_relations))
 
 disease_set = disease_set.union(disease_set2)
 disease_list = list(disease_set)
@@ -123,11 +122,9 @@ NUM_NODES = len(gene_list) + len(hpo_list) + len(disease_list)
 with open(path.join('../data', 'num_nodes.txt'), 'w') as file:
     file.write(str(NUM_NODES))
 
-# TODO: CHANGE THIS LINE IF YOU ADD MORE NODES
+# TODO: CHANGE THIS PART IF YOU ADD MORE NODES/EDGES
 num_edges = (len(combined_network) + len(hpo_edges)
-             + len(gene_phenotype_relations) )
-             #+ len(disease_gene_relations))
-             #+ len(disease_phenotype_relations)) mk şeysi değiştiği için hesaplama  da değişti
+             + len(gene_phenotype_relations))
 
 for i, relation in disease_phenotype_relations.iterrows():
     num_edges += len(relation["hpo_id"])
@@ -172,10 +169,9 @@ for i, relation in disease_phenotype_relations.iterrows():
     disease = disease_dict[relation["disease_name"]]
     hpo_id_list = relation["hpo_id"]
     frequency = relation["frequency"]
-    for j in range(len(relation["hpo_id"])):
 
-        # if frequency j is float, then weight = frequency[j]
-        weight = frequency[j] if isinstance(frequency[j], float) else default_disease_gene_relation_frequency
+    for j in range(len(relation["hpo_id"])):
+        weight = frequency[j]
         hpo = hpo_dict[hpo_id_list[j]]
 
         edge_index[0, disease_phenotype_count + len(combined_network) + len(hpo_edges)] = disease
