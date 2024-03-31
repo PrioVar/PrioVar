@@ -63,8 +63,6 @@ def custom_sort(database_ids):
 #c = eval(b)
 #a = process_hpoa()
 
-#print(a.iloc[1])
-#x  =7
 # TODO: normally distribute these values 
 # TODO: check if frequency is overwritten while iterating through the rows
 

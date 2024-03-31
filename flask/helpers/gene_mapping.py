@@ -61,7 +61,7 @@ def get_gene_phenotype_relations() -> List[List]:
 def get_gene_disease_relations() -> List[List]:
     """
     :return: List of gene-disease relations
-    example: [ ['abc disease', ['OMIM:615120', 'ORPHA:12354']], ['abdsdsc disease', ['OMIM:6151240', 'ORPHA:123254']]]
+    example: [ ['A2ML1', ['OMIM:615120','ORPHA:12354']], ['A4GALT', ['OMIM:6151240','ORPHA:123254']]]
     """
 
     # read ../data/genes_to_disease.txt into dataframe
@@ -87,10 +87,7 @@ def custom_sort(disease_ids):
     return sorted(disease_ids, key=lambda x: order.get(x.split(':')[0], float('inf')))
 
 
-#a = get_gene_disease_relations()
-#print(a)
-
-#OLD get_gene_phenotype_relations
+# deprecated get_gene_phenotype_relations
 """
 def get_gene_disease_relations() -> List[List]:
     
