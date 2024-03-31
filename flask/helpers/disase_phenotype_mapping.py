@@ -12,6 +12,9 @@ NODE_DICTIONARY = {
 
 
 def process_hpoa():
+    """
+    NOTE: AVERAGE OF ALL FREQUENCIES IS EQUAL TO 0.52
+    """
     # read phenotype.hpoa, skip the first 4 lines
     df = pd.read_csv(path.join('../data', 'phenotype.hpoa'), sep='\t', comment='#', skiprows=4)
 
@@ -57,7 +60,7 @@ def custom_sort(database_ids):
     order = {'OMIM': 0, 'ORPHA': 1, 'DECIPHER': 2}
     return sorted(database_ids, key=lambda x: order.get(x.split(':')[0], float('inf')))
 
-#a, b = process_hpoa()
+a, b = process_hpoa()
 #b = "1/5"
 #b = '52\%'
 #c = eval(b)
