@@ -13,7 +13,10 @@ NODE_DICTIONARY = {
 
 def process_hpoa():
     """
-    NOTE: AVERAGE OF ALL FREQUENCIES IS EQUAL TO 0.52
+    NOTE: AVERAGE OF ALL FREQUENCIES IS EQUAL TO 0.52,
+    THEREFORE ALL THE VALUES ARE SCALED BY 10^-5 TO MAKE IT SUITABLE WITH THE
+    REST OF THE VALUES IN THE GRAPH. (THE AVERAGE OF THE GENE-GENE INTERACTIONS
+    IS ~5x10^-5)
     """
     # read phenotype.hpoa, skip the first 4 lines
     df = pd.read_csv(path.join('../data', 'phenotype.hpoa'), sep='\t', comment='#', skiprows=4)
@@ -38,6 +41,9 @@ def process_hpoa():
 
     # Convert frequencies to floats
     df["frequency"] = df["frequency"].astype(float)
+
+    # scale the frequencies by 10^-5
+    df["frequency"] = df["frequency"] * 10 ** -5
 
     # Group by disease_name, hpo_id, and database_id, and aggregate frequencies into a list
     disease_to_phenotype_all = (df.groupby('disease_name')
