@@ -63,7 +63,7 @@ weighted_model = Word2Vec(
 )
 
 # Save all embeddings into a file manually
-file_path = f"../data/weighted_node2vec_p{p}_q{q}_n{n}_v{vector_size}.txt"
+file_path = f"../data/node_embeddings_p{p}_q{q}_n{n}_v{vector_size}.txt"
 with open(file_path, "w") as f:
     f.write(f"{len(weighted_model.wv)} {weighted_model.vector_size}\n")
     keys = weighted_model.wv.index_to_key
