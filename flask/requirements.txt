@@ -12,3 +12,5 @@ torch==2.2.0
 torch_geometric==2.5.0
 langchain
 openai
+scikit-learn
+tqdm
