@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 def get_disease_phenotype_relations():
 
     print('start...')
-    with open('../data/orphanet_disease_to_phenotype.xml', 'r', encoding='ISO-8859-1') as f:
+    with open('../../data/orphanet_disease_to_phenotype.xml', 'r', encoding='ISO-8859-1') as f:
         data = f.read()
     disease_to_phenotype = BeautifulSoup(data, 'xml')
     print('end...')

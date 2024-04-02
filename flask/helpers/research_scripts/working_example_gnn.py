@@ -18,12 +18,12 @@ class GNN(torch.nn.Module):
 
 # Constants
 latent_dimension = 16  # Example latent dimension
-with open(path.join('../data', 'num_nodes.txt'), 'r') as file:
+with open(path.join('../../data', 'num_nodes.txt'), 'r') as file:
     num_nodes = int(file.read())
 
 # read edge_indexes and edge_weights from edge_index.pt and edge_weight.pt
-edge_indexes = torch.load(path.join('../data', 'edge_index.pt')).long()
-edge_weights = torch.load(path.join('../data', 'edge_weight.pt')).float()
+edge_indexes = torch.load(path.join('../../data', 'edge_index.pt')).long()
+edge_weights = torch.load(path.join('../../data', 'edge_weight.pt')).float()
 
 # Initialize node features randomly
 node_features = torch.randn(num_nodes, latent_dimension)
