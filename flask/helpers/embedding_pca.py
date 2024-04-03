@@ -11,7 +11,7 @@ disease_dict = torch.load(path.join('../data', 'disease_dict.pt'))
 
 # read the embeddings from data/embedding_results/weighted_node2vec_p0.5_q2_n5_v256.txt
 embeddings = np.loadtxt(
-    "../data/embedding_results/weighted_node2vec_p0.5_q2_n5_v256.txt", skiprows=1
+    "../data/embedding_results/node_embeddings_p0.5_q2_n5_v256.txt", skiprows=1
 )
 
 # NOTE: the first column indicates the index of the node,
@@ -28,4 +28,17 @@ for dimension in dimension_list:
     gene_embeddings_pca = pca.fit_transform(gene_embeddings)
     print(f"Explained variance ratio for dimension {dimension}: {sum(pca.explained_variance_ratio_):.2f}")
     print(f"Gene embeddings PCA shape for dimension {dimension}: {gene_embeddings_pca.shape}")
+
+
+def apply_pca(embeddings: np.ndarray, dimension: int) -> np.ndarray:
+    pca = PCA(n_components=dimension)
+    return pca.fit_transform(embeddings)
+
+
+# apply PCA with n_components=2 and n_components=4 to gene_embeddings and save
+gene_embeddings_pca = apply_pca(gene_embeddings, 2)
+np.savetxt("../data/embedding_results/gene_embeddings_pca2.txt", gene_embeddings_pca)
+
+gene_embeddings_pca = apply_pca(gene_embeddings, 4)
+np.savetxt("../data/embedding_results/gene_embeddings_pca4.txt", gene_embeddings_pca)
 
