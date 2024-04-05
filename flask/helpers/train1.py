@@ -1,6 +1,7 @@
 import random
 import xgboost as xgb
 import numpy as np
+from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 import pandas as pd
@@ -24,8 +25,8 @@ def read_variants():
     return df
 
 
-def read_embedding():
-    node_embeddings = np.loadtxt(path_embedding, skiprows=1)
+def read_embedding(path_of_embedding = path_embedding):
+    node_embeddings = np.loadtxt(path_of_embedding, skiprows=1)
 
     # sort the array by the first column
     node_embeddings = node_embeddings[node_embeddings[:, 0].argsort()]
@@ -41,7 +42,7 @@ def calculate_neutral_embedding_as_root_embedding(node_embeddings, hpo_dict):
 
 
 
-def read_dicts():
+def read_dicts(gene_path = path_gene_dict, hpo_path = path_hpo_dict):
     gene_dict = torch.load(path_gene_dict)
     hpo_dict = torch.load(path_hpo_dict)
     return gene_dict, hpo_dict
@@ -123,6 +124,11 @@ def get_model(df_training):
 
 
 """
+
+
+
+
+
 if False:
     # read the variants
     df_variants = read_variants()
@@ -130,7 +136,7 @@ if False:
     # show class distribution for CLIN_SIG column
     dist = df_variants['CLIN_SIG'].value_counts()
 
-    # only get the rows with pathogenic or benign values in CLIN_SIG column
+    # only get the rows with pathogenic or benign, likely_benign, likely_pathogenic values in CLIN_SIG column
 
     print("Ratio of pathogenic to benign: ", len(df_variants[df_variants['CLIN_SIG'] == 'pathogenic']) / len(df_variants))
     print("size of df_variants: ", df_variants.shape)
@@ -185,7 +191,8 @@ if False:
 ## AlphaMissense_pred : (from dbNSFP4.5a_grch38) The AlphaMissense classification of likely (B)enign, (A)mbiguous, or likely (P)athogenic with 90% expected precision estimated from ClinVar for likely benign and likely pathogenic classes.
 ## turkishvariome_TV_AF : TV_AF field from [PATH]/TurkishVariome.vcf.gz
 def clean_data(df_variants):
-    df_variants = df_variants[df_variants['CLIN_SIG'].isin(['pathogenic', 'benign'])]
+    # only get the rows with pathogenic or benign, likely_benign, likely_pathogenic values in CLIN_SIG column
+    df_variants = df_variants[df_variants['CLIN_SIG'].isin(['pathogenic', 'benign', 'likely_benign', 'likely_pathogenic'])]
     # divide  Hgvsc  columns into two columns by splitting the values by ':'
     df_variants[['HGVSc', 'HGVSc2']] = df_variants['HGVSc'].str.split(':', expand=True)
     # divide  Hgvsp  columns into two columns by splitting the values by ':'
@@ -241,11 +248,6 @@ def clean_data(df_variants):
          if any(num.replace('.', '', 1).isdigit() for num in x.split(','))
          else (np.nan, np.nan))
     ).apply(pd.Series)
-
-
-
-
-
 
 
 
@@ -335,84 +337,213 @@ def clean_data(df_variants):
 
     # save the dataframe to a new file that preseves data types (category, numerical etc for each column)
     # pickle the dataframe
-    df_variants.to_pickle('dataframe.pkl')
+    df_variants.to_pickle('multilabel_clean.pkl')
 
 
 # call
+#df_variants = read_variants()
 #clean_data(df_variants)
+#exit(0)
+
+def run_binary_classification():
+    print("Startanzi")
+    # read clean data
+    # mostly clean
+    df_clean = pd.read_pickle('dataframe.pkl')
+    #df_clean = pd.read_pickle('multilabel_clean.pkl')
+
+    # sample 5 HPO terms for each gene and add the embeddings to the dataframe
+    # get the embeddings of the HPO terms
+    #node_embeddings = read_embedding()
+    # read the gene and hpo dictionaries
+    #gene_dict, hpo_dict = read_dicts()
+    # calculate the neutral embedding as the root embedding
+    #neutral_embedding = calculate_neutral_embedding_as_root_embedding(node_embeddings, hpo_dict)
 
 
 
 
 
-print("Startanzi")
-# read clean data
-df_clean = pd.read_pickle('dataframe.pkl')
-
-#ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:Allele: category, Gene: object, Feature: category, Consequence: category, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object, DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
-# drop :Gene, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object,
-df_clean = df_clean.drop(columns=['Gene', 'Existing_variation', 'SYMBOL', 'CANONICAL', 'SIFT', 'PolyPhen', 'HGVSc', 'HGVSp', 'AlphaMissense_score', 'AlphaMissense_pred', 'HGVSc2', 'HGVSp2'])
-# make float or nan :  DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
-
-# drop uploaded_variation
-df_clean = df_clean.drop(columns=['#Uploaded_variation'])
-
-# convert the columns to float (pay attention to "None" values)
-# there are some None values in the columns, so we need to replace them with np.nan
-df_clean[['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']] = df_clean[['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']].replace('None', np.nan).astype('float')
 
 
+    #ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:Allele: category, Gene: object, Feature: category, Consequence: category, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object, DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
+    # drop :Gene, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object,
+    df_clean = df_clean.drop(columns=['Gene', 'Existing_variation', 'SYMBOL', 'CANONICAL', 'SIFT', 'PolyPhen', 'HGVSc', 'HGVSp', 'AlphaMissense_score', 'AlphaMissense_pred', 'HGVSc2', 'HGVSp2'])
+    # make float or nan :  DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
 
-# print data types and classes of the columns
-print(df_clean.dtypes)
-print(df_clean.select_dtypes(include=['category']).columns)
-print(df_clean.select_dtypes(include=['object']).columns)
+    # drop uploaded_variation
+    df_clean = df_clean.drop(columns=['#Uploaded_variation'])
+    df_clean = df_clean.drop(columns=['Feature'])
 
-
-# separate the data into features and target (label is CLIN_SIG)
-y = df_clean['CLIN_SIG']
-y = y.cat.codes # which is 0 or 1
-X = df_clean.drop(columns=['CLIN_SIG'])
-
-# split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# imputer: replace missing values with the mean of the column (only for numerical columns)
-# dont use it for categorical columns
-
-imputer = SimpleImputer(strategy='mean')
-# get the numerical columns
-numerical_columns = X_train.select_dtypes(include=[np.number]).columns
-# fit the imputer to the training data
-imputer.fit(X_train[numerical_columns])
-
-# The experimental DMatrix parameter`enable_categorical` must be set to `True` to enable categorical split.
-# give the imputed data to the model Xgbboost decision tree
-dtrain = xgb.DMatrix(X_train, label=y_train, enable_categorical=True)
-dtest = xgb.DMatrix(X_test, label=y_test, enable_categorical=True)
-
-# Train XGBoost model
-params = {
-    'objective': 'binary:logistic',
-    'eval_metric': 'logloss'
-}
-num_rounds = 100
-model = xgb.train(params, dtrain, num_rounds)
-
-# Predict probabilities
-y_pred_proba = model.predict(dtest)
-
-# round the probabilities to get the predicted class
-y_pred = np.round(y_pred_proba)
-
-# accuracy
-accuracy = (y_pred == y_test).mean()
-print("Accuracy ::", accuracy)
-
-print("Sample predicted probabilities and answers:", list(zip(y_pred[:100], y_test[:100])))
-
-# save the model
-model.save_model('../data/modelinzi.xgb')
+    # convert the columns to float (pay attention to "None" values)
+    # there are some None values in the columns, so we need to replace them with np.nan
+    df_clean[['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']] = df_clean[['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']].replace('None', np.nan).astype('float')
 
 
 
+    # print data types and classes of the columns
+    print(df_clean.dtypes)
+    print(df_clean.select_dtypes(include=['category']).columns)
+    print(df_clean.select_dtypes(include=['object']).columns)
+
+
+    # separate the data into features and target (label is CLIN_SIG)
+    y = df_clean['CLIN_SIG']
+    #print class distribution
+    print(y.value_counts())
+    y = y.cat.codes
+
+    X = df_clean.drop(columns=['CLIN_SIG'])
+
+
+    # split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # imputer: replace missing values with the mean of the column (only for numerical columns)
+    # dont use it for categorical columns
+
+    imputer = SimpleImputer(strategy='mean')
+    # get the numerical columns
+    numerical_columns = X_train.select_dtypes(include=[np.number]).columns
+    # fit the imputer to the training data
+    imputer.fit(X_train[numerical_columns])
+
+    # The experimental DMatrix parameter`enable_categorical` must be set to `True` to enable categorical split.
+    # give the imputed data to the model Xgbboost decision tree
+    dtrain = xgb.DMatrix(X_train, label=y_train, enable_categorical=True)
+    dtest = xgb.DMatrix(X_test, label=y_test, enable_categorical=True)
+
+
+    # print columns of the dataframe
+    print(X_train.columns)
+
+
+    # Train XGBoost model
+    params = {
+        #'objective': 'binary:logistic',
+        "objective": "multi:softmax",
+        'eval_metric': 'logloss'
+    }
+    num_rounds = 100
+    model = xgb.train(params, dtrain, num_rounds)
+
+    # Predict probabilities
+    y_pred_proba = model.predict(dtest)
+
+    # round the probabilities to get the predicted class
+    y_pred = np.round(y_pred_proba)
+
+    # accuracy
+    accuracy = (y_pred == y_test).mean()
+    print("Accuracy ::", accuracy)
+
+    print("Sample predicted probabilities and answers:", list(zip(y_pred[:100], y_test[:100])))
+
+    # save the model
+    model.save_model('../data/modelinzi.xgb')
+
+
+def run_multilabel():
+    print("Startanzi")
+    # read clean data
+    # mostly clean
+    # df_clean = pd.read_pickle('dataframe.pkl')
+    df_clean = pd.read_pickle('multilabel_clean.pkl')
+
+    # sample 5 HPO terms for each gene and add the embeddings to the dataframe
+    # get the embeddings of the HPO terms
+    # node_embeddings = read_embedding()
+    # read the gene and hpo dictionaries
+    # gene_dict, hpo_dict = read_dicts()
+    # calculate the neutral embedding as the root embedding
+    # neutral_embedding = calculate_neutral_embedding_as_root_embedding(node_embeddings, hpo_dict)
+
+    # ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:Allele: category, Gene: object, Feature: category, Consequence: category, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object, DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
+    # drop :Gene, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object,
+    df_clean = df_clean.drop(
+        columns=['Gene', 'Existing_variation', 'SYMBOL', 'CANONICAL', 'SIFT', 'PolyPhen', 'HGVSc', 'HGVSp',
+                 'AlphaMissense_score', 'AlphaMissense_pred', 'HGVSc2', 'HGVSp2'])
+    # make float or nan :  DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
+
+    # drop uploaded_variation
+    df_clean = df_clean.drop(columns=['#Uploaded_variation'])
+    df_clean = df_clean.drop(columns=['Feature'])
+
+    # convert the columns to float (pay attention to "None" values)
+    # there are some None values in the columns, so we need to replace them with np.nan
+    df_clean[['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']] = df_clean[
+        ['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']].replace('None', np.nan).astype(
+        'float')
+
+    # print data types and classes of the columns
+    print(df_clean.dtypes)
+    print(df_clean.select_dtypes(include=['category']).columns)
+    print(df_clean.select_dtypes(include=['object']).columns)
+
+    # separate the data into features and target (label is CLIN_SIG)
+    y = df_clean['CLIN_SIG']
+    # print class distribution
+    print(y.value_counts())
+    print("print codes and classes like class 0: benign etc", y.cat.categories)
+    y = y.cat.codes
+    print(y.value_counts())
+    #exit()
+
+    X = df_clean.drop(columns=['CLIN_SIG'])
+
+    # split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # imputer: replace missing values with the mean of the column (only for numerical columns)
+    # dont use it for categorical columns
+
+    imputer = SimpleImputer(strategy='mean')
+    # get the numerical columns
+    numerical_columns = X_train.select_dtypes(include=[np.number]).columns
+    # fit the imputer to the training data
+    imputer.fit(X_train[numerical_columns])
+
+    # The experimental DMatrix parameter`enable_categorical` must be set to `True` to enable categorical split.
+    # give the imputed data to the model Xgbboost decision tree
+    dtrain = xgb.DMatrix(X_train, label=y_train, enable_categorical=True)
+    dtest = xgb.DMatrix(X_test, label=y_test, enable_categorical=True)
+
+    # print columns of the dataframe
+    print(X_train.columns)
+
+    # Train XGBoost model
+    params = {
+        "objective": "multi:softmax",
+        "eval_metric": 'mlogloss',  # 'logloss' is for binary classification. Use 'mlogloss' for multi-class.
+        "num_class": 4  # Assuming there are 4 classes. Adjust according to your dataset.
+    }
+    num_rounds = 500
+    model = xgb.train(params, dtrain, num_rounds)
+
+    # Predict probabilities
+    y_pred_proba = model.predict(dtest)
+
+    # round the probabilities to get the predicted class
+    y_pred = np.round(y_pred_proba)
+
+    # accuracy
+    accuracy = (y_pred == y_test).mean()
+    print("Accuracy ::", accuracy)
+
+    # print accuracy of each class
+    print("Accuracy of each class:", (y_pred == y_test).groupby(y_test).mean())
+
+    # print precision, recall, and F1 score
+    print(classification_report(y_test, y_pred))
+
+    print("Sample predicted probabilities and answers:", list(zip(y_pred[:100], y_test[:100])))
+
+    # save the model
+    model.save_model('../data/multilabal_modelinzi.xgb')
+
+
+
+
+
+#run_binary_classification()
+run_multilabel()
