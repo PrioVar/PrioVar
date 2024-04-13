@@ -10,11 +10,18 @@ COPY requirements.txt .
 # Install any dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the content of the local src directory to the working directory
+# Copy the wait-for-it.sh script and your application files into the working directory
+COPY wait-for-it.sh .
 COPY . .
+
+# Make wait-for-it.sh executable
+RUN chmod +x wait-for-it.sh
 
 # Specify the port the app runs on
 EXPOSE 5000
 
-# Command to run the application
+# Use an entrypoint script to wait for Neo4j
+ENTRYPOINT ["./wait-for-it.sh", "neo4j:7687", "--"]
+
+# Command to run the application after the entrypoint
 CMD ["flask", "run", "--host=0.0.0.0"]

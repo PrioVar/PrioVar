@@ -1,18 +1,5 @@
 version: '3'
 services:
-  web:
-    build:
-      context: ./flask
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app
-    ports:
-      - "5000:5000"
-    depends_on:
-      - neo4j
-    environment:
-      - FLASK_APP=flask/app.py
-
   neo4j:
     image: neo4j:latest
     ports:
@@ -25,10 +12,17 @@ services:
       - $HOME/neo4j/logs:/logs
       - $HOME/neo4j/import:/var/lib/neo4j/import
       - $HOME/neo4j/plugins:/plugins
-
-volumes:
-  neo4j_data:
-  neo4j_logs:
+  
+  flask-backend:
+    build:
+      context: ./flask
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - neo4j
+    environment:
+      - FLASK_APP=flask/app.py
 
 networks:
   default:
