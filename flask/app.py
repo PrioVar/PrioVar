@@ -27,6 +27,7 @@ def search_graph():
     # return the answer
     return answer
 
+
 @app.route('/load-hpo', methods=['GET'])
 def start_loading_data():
     graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
