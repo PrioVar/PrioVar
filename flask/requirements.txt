@@ -4,13 +4,11 @@ Flask_Cors==3.0.10
 gensim==4.3.0
 neo4j==5.18.0
 networkx==3.1
-numpy==1.26.4
-pandas==2.2.1
-Requests==2.31.0
-stellargraph==1.2.1
-torch==2.2.0
-torch_geometric==2.5.0
+numpy
+pandas
+Requests
 langchain
 openai
+langchain_openai
 scikit-learn
 tqdm
