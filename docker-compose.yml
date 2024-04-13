@@ -27,6 +27,15 @@ services:
       - neo4j
     environment:
       - FLASK_APP=app.py
+  
+  react-frontend:
+    build:
+      context: ./  # Replace with the path to your React app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"  # Map port 3000 on the host to port 80 in the container
+    depends_on:
+      - flask-backend  # If the frontend depends on the backend service
 
 networks:
   default:
