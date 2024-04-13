@@ -20,8 +20,8 @@ RUN chmod +x wait-for-it.sh
 # Specify the port the app runs on
 EXPOSE 5000
 
-# Use an entrypoint script to wait for Neo4j
-ENTRYPOINT ["./wait-for-it.sh", "neo4j:7687", "--"]
+# Use an entrypoint script to wait for Neo4j with a timeout of 30 seconds
+ENTRYPOINT ["./wait-for-it.sh", "neo4j:7687", "--timeout=30", "--"]
 
 # Command to run the application after the entrypoint
 CMD ["flask", "run", "--host=0.0.0.0"]
