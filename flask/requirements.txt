@@ -12,3 +12,6 @@ openai
 langchain_openai
 scikit-learn
 tqdm
+requests
+biopython
+transformers
