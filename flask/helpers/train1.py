@@ -1,3 +1,4 @@
+import pickle
 import random
 import xgboost as xgb
 import numpy as np
@@ -8,6 +9,7 @@ import pandas as pd
 import numpy as np
 import torch
 import helpers.hpo_sample
+from helpers import hpo_sample
 from helpers.gene_mapping import get_gene_phenotype_relations
 
 path_variants = '../data/5bc6f943-66e0-4254-94f5-ed3888f05d0a.vep.tsv'
@@ -94,38 +96,6 @@ def add_sampled_hpo_terms_full_precise(df_variants, node_embeddings ,gene_dict, 
             df_variants.at[i, f'embedding{j}'] = sampled_embedding[j]
 
     return df_variants
-"""
-def get_model(df_training):
-    X = [3]
-    y = [4] # sill
-    # train the xgboost model
-    # model
-    # Imputation
-    imputer = SimpleImputer(strategy='mean')
-    X_imputed = imputer.fit_transform(X)
-
-    # Split data into train and test sets
-    X_train, X_test, y_train, y_test = train_test_split(X_imputed, y, test_size=0.2, random_state=42)
-
-    # Train XGBoost model
-    params = {
-        'objective': 'binary:logistic',
-        'eval_metric': 'logloss'
-    }
-    num_rounds = 100
-    dtrain = xgb.DMatrix(X_train, label=y_train)
-    dtest = xgb.DMatrix(X_test, label=y_test)
-    model = xgb.train(params, dtrain, num_rounds)
-
-    # Predict probabilities
-    y_pred_proba = model.predict(dtest)
-
-    print("Sample predicted probabilities:", y_pred_proba[:10])
-
-
-"""
-
-
 
 
 
@@ -237,9 +207,6 @@ def clean_data(df_variants):
 
     # eliminate ,., values for example 0.0848,.,0.0854 -> 0.0848,0.0854 or .,0.5 -> 0.5  or 0.5,. -> 0.5 so, repleca . , pairs that is adjacent to each other
 
-
-
-
     df_variants[['AlphaMissense_score_mean', 'AlphaMissense_std_dev']] = df_variants['AlphaMissense_score'].apply(
         lambda x: (np.nan, np.nan) if (x == "-" or x == "") else
         # Filter the split results to include only valid floats, then perform calculations
@@ -249,15 +216,11 @@ def clean_data(df_variants):
          else (np.nan, np.nan))
     ).apply(pd.Series)
 
-
-
     # alpha missense pred has several values ("A", "B", "P") seperated by commas, change this column to ratio of letters (pay attention to "-" values)
     df_variants['AlphaMissense_pred'] = df_variants['AlphaMissense_pred'].apply(lambda x: (x.count('A'), x.count('B'), x.count('P')) if x != "-" else (np.nan, np.nan, np.nan))
     # divide it so that we have 3 columns for each letter storing the ratio of the letter in the column if 3 A's 2 B's and 1 P's then 3/6, 2/6, 1/6
     df_variants[['AlphaMissense_pred_A', 'AlphaMissense_pred_B', 'AlphaMissense_pred_P']] = df_variants['AlphaMissense_pred'].apply(
         lambda x: (np.nan, np.nan, np.nan) if x == "-" or sum(x) == 0 else (x[0] / sum(x), x[1] / sum(x), x[2] / sum(x))).apply(pd.Series)
-
-
 
 
     # for each column print the different values in the first 100 rows and number of different values in the column (as a whole)
@@ -281,8 +244,6 @@ def clean_data(df_variants):
     # make the column SIFT a numerical column and categorical for model by extracting the number from the string and taking the string before by looking for the '(number)'
     df_variants['SIFT_number'] = df_variants['SIFT'].str.extract(r'\((\d+\.\d+)\)').astype('float')
     df_variants['SIFT'] = df_variants['SIFT'].str.extract(r'(\w+)').astype('category')
-
-
 
 
     # make the gene column a categorical column for model
@@ -345,6 +306,189 @@ def clean_data(df_variants):
 #clean_data(df_variants)
 #exit(0)
 
+
+
+# triplets of strategyies for hpo_sample.sample_from_random_strategy like (precise, imprecise, noisy)
+hpo_sample_strategies = [(2, 1, 0), (2, 0, 0), (3, 0, 1), (1, 2, 0), (2, 2, 0)]
+
+def sample_hpo_terms_for_variants_optimized(df_variants, gene_dict, max_ancesteral_depth = 10 , put_in_the_df = False):
+
+    # order df_variants by SYMBOL
+    df_variants = df_variants.sort_values(by='SYMBOL')
+
+    # add new column to the dataframe to store the sampled HPO terms
+    if put_in_the_df:
+        # np.nan is used to represent missing values
+        df_variants['sampled_hpo'] = np.nan
+
+    # get the gene-phenotype relations
+    gene_phenotype_relations = get_gene_phenotype_relations()
+
+    # create a network object from hpo_sample
+    network = hpo_sample.Network()
+
+    # create dictionary named: sampled_hpoIDs_for_variants
+    # key: variant name (e.g. 'rs12345'), value: list of sampled HPO terms
+    sampled_hpoIDs_for_variants = {}
+
+    # proccessed variants
+    count = 0
+    j = 0
+    print("Loop for phenotypes started")
+    # for each gene in the dataframe (ordered) , sample hpo terms using get_pool function
+    # dont calulate the hpo terms for the same gene again
+    last_gene = None
+    last_hpo_terms = []
+    last_hpo_pool = []
+    for i, row in df_variants.iterrows():
+        if j % 1000 == 0:
+            print("Row: ", j)
+        j += 1
+
+        # get the gene
+        gene = row['SYMBOL']
+
+        # if the gene is not in the gene_dict, continue to the next iteration
+        if gene not in gene_dict:
+            continue
+
+        # get the HPO terms for the gene from the gene-phenotype relations
+        if gene != last_gene:
+            hpo_terms = [relation[1] for relation in gene_phenotype_relations if relation[0] == gene]
+            last_gene = gene
+            last_hpo_terms = hpo_terms
+            last_hpo_pool = network.get_imprecision_pool(hpo_terms, max_ancesteral_depth)
+
+        if len(last_hpo_terms) == 0:
+            continue
+
+
+        count += 1
+        if count % 100 == 0:
+            print("Processed variants (sample pheno) : ", count)
+
+        strategy = random.choice(hpo_sample_strategies)
+        precision = min(strategy[0], len(last_hpo_terms))
+        imprecision = min(strategy[1], len(last_hpo_pool))
+
+        precise_samples = random.sample(last_hpo_terms, precision)
+        imprecise_samples = random.sample(last_hpo_pool, imprecision)
+
+        combined = precise_samples + imprecise_samples
+
+        # no noisy for now
+
+        # add the sampled HPO terms to the dictionary
+        sampled_hpoIDs_for_variants[row['#Uploaded_variation']] = combined
+
+        if put_in_the_df:
+            df_variants.at[i, 'sampled_hpo'] = ','.join([str(hpo) for hpo in combined])
+
+    # save dictionary to a file
+    with open('sampled_hpoIDs_for_variants.pkl', 'wb') as f:
+        pickle.dump(sampled_hpoIDs_for_variants, f)
+
+    print("Sampled HPO terms for variants are saved to sampled_hpoIDs_for_variants.pkl")
+    return sampled_hpoIDs_for_variants, df_variants
+
+
+
+def test_sample_hpo_terms_for_variants_optimized():
+
+    df_variants = read_variants()
+
+    print("len of df_variants dataframe: ", len(df_variants))
+
+    gene_dict, hpo_dict = read_dicts()
+
+    # pass the first 100 rows to the function
+    sampled_hpoIDs_for_variants, df100 = sample_hpo_terms_for_variants_optimized(df_variants.iloc[0:25000], gene_dict, put_in_the_df=True)
+    # print the rows of the dataframe (changed)
+    for i, row in df100.iterrows():
+        print(row['#Uploaded_variation'], row['SYMBOL'], row['sampled_hpo'])
+
+    print(sampled_hpoIDs_for_variants)
+
+#test_sample_hpo_terms_for_variants_optimized()
+#exit()
+
+#df_variants = read_variants()
+#gene_dict, hpo_dict = read_dicts()
+#sample_hpo_terms_for_variants_optimized(df_variants, gene_dict)
+
+
+# returns a dictionary with keys as variant names and values as lists of sampled HPO terms
+def sample_hpo_terms_for_variants(df_variants, gene_dict, put_in_the_df = False):
+
+    # add new column to the dataframe to store the sampled HPO terms
+    if put_in_the_df:
+        # np.nan is used to represent missing values
+        df_variants['sampled_hpo'] = np.nan
+
+    # get the gene-phenotype relations
+    gene_phenotype_relations = get_gene_phenotype_relations()
+
+    # create a network object from hpo_sample
+    network = hpo_sample.Network()
+
+    # create dictionary named: sampled_hpoIDs_for_variants
+    # key: variant name (e.g. 'rs12345'), value: list of sampled HPO terms
+    sampled_hpoIDs_for_variants = {}
+
+    # proccessed variants
+    count = 0
+    j = 0
+    print("Loop for phenotypes started")
+    # for each variant in the dataframe, sample hpo terms using the sample_from_random_strategy function
+    for i, row in df_variants.iterrows():
+        if j % 1000 == 0:
+            print("Row: ", j)
+        j += 1
+
+        # get the gene
+        gene = row['SYMBOL']
+
+        # if the gene is not in the gene_dict, continue to the next iteration
+        if gene not in gene_dict:
+            continue
+
+        # get the HPO terms for the gene from the gene-phenotype relations
+        hpo_terms = [relation[1] for relation in gene_phenotype_relations if relation[0] == gene]
+
+        if len(hpo_terms) == 0:
+            continue
+
+        count += 1
+        if count % 10 == 0:
+            print("Processed variants (sample pheno) : ", count)
+        # sample HPO terms for the gene
+        sampled_hpo = network.sample_from_random_strategy(hpo_terms, hpo_sample_strategies)
+
+        # add the sampled HPO terms to the dictionary
+        sampled_hpoIDs_for_variants[row['#Uploaded_variation']] = sampled_hpo
+
+        if put_in_the_df:
+            # add the sampled HPO terms to the dataframe as a new column
+            # make it a string to store in the dataframe seperated by comas (values are integers)
+            df_variants.at[i, 'sampled_hpo'] = ','.join([str(hpo) for hpo in sampled_hpo])
+
+    return sampled_hpoIDs_for_variants
+
+
+def test_sample_hpo_terms_for_variants():
+    df_variants = read_variants()
+
+    gene_dict, hpo_dict = read_dicts()
+
+    # pass the 22000-22500 rows to the function
+    sampled_hpoIDs_for_variants = sample_hpo_terms_for_variants(df_variants.iloc[22000:22500], gene_dict, put_in_the_df=True)
+    # print the rows of the dataframe (changed)
+    for i, row in df_variants.iloc[22000:22500].iterrows():
+        print(row['#Uploaded_variation'], row['SYMBOL'], row['sampled_hpo'])
+
+    print(sampled_hpoIDs_for_variants)
+
+
 def run_binary_classification():
     print("Startanzi")
     # read clean data
@@ -359,11 +503,6 @@ def run_binary_classification():
     #gene_dict, hpo_dict = read_dicts()
     # calculate the neutral embedding as the root embedding
     #neutral_embedding = calculate_neutral_embedding_as_root_embedding(node_embeddings, hpo_dict)
-
-
-
-
-
 
 
     #ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:Allele: category, Gene: object, Feature: category, Consequence: category, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object, DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
@@ -542,8 +681,147 @@ def run_multilabel():
     model.save_model('../data/multilabal_modelinzi.xgb')
 
 
+def add_embedding_info(df_variants, path_to_embedding, path_to_gene_dict, path_to_hpo_dict, path_to_sampled_hpo,
+                       add_scaled_average_dot_product=True, add_scaled_min_dot_product=False, add_scaled_max_dot_product=False,
+                       add_average_dot_product = True, add_min_dot_product = False, add_max_dot_product = False, add_std_dot_product = False, add_gene_embedding = False, add_fix_num_phen_embedding = 0):
+
+    # read the embeddings
+    node_embeddings = read_embedding(path_to_embedding)
+    # read the gene and hpo dictionaries
+    gene_dict, hpo_dict = read_dicts(path_to_gene_dict, path_to_hpo_dict)
+
+    # read sampled hpo
+    with open(path_to_sampled_hpo, 'rb') as f:
+        sampled_hpoIDs_for_variants = pickle.load(f)
+
+    if add_fix_num_phen_embedding > 0:
+        global neutral_embedding
+        # calculate the neutral embedding as the root embedding
+        neutral_embedding = calculate_neutral_embedding_as_root_embedding(node_embeddings, hpo_dict)
+
+    if add_scaled_average_dot_product:
+        df_variants['scaled_average_dot_product'] = np.nan
+    if add_scaled_min_dot_product:
+        df_variants['scaled_min_dot_product'] = np.nan
+    if add_scaled_max_dot_product:
+        df_variants['scaled_max_dot_product'] = np.nan
+    if add_average_dot_product:
+        df_variants['average_dot_product'] = np.nan
+    if add_min_dot_product:
+        df_variants['min_dot_product'] = np.nan
+    if add_max_dot_product:
+        df_variants['max_dot_product'] = np.nan
+    if add_std_dot_product:
+        df_variants['std_dot_product'] = np.nan
+    if add_gene_embedding:
+        df_variants['gene_embedding'] = np.nan
+    if add_fix_num_phen_embedding > 0:
+        for i in range(add_fix_num_phen_embedding):
+            df_variants[f'phen_embedding_{i}'] = np.nan
+
+
+
+
+    # for every row add neccessary columns to the dataframe
+    for i, row in df_variants.iterrows():
+
+        gene = row['SYMBOL']
+
+        if gene not in gene_dict:
+            continue
+
+        # get the gene embedding
+        gene_embedding = node_embeddings[gene_dict[gene]]
+
+        # if variant has no sampled HPO terms, continue to the next iteration
+        if row['#Uploaded_variation'] not in sampled_hpoIDs_for_variants:
+            continue
+
+        #  get the sampled HPO terms for the variant
+        sampled_hpo = sampled_hpoIDs_for_variants[row['#Uploaded_variation']]
+
+        # get the embeddings of the HPO terms
+        hpo_embeddings = [node_embeddings[hpo_dict[hpo]] for hpo in sampled_hpo]
+
+        dot_products = [np.dot(gene_embedding, hpo_embedding) for hpo_embedding in hpo_embeddings]
+
+        # scaled dot products of vectors
+        scaled_dot_products = [dot_product / (np.linalg.norm(gene_embedding) * np.linalg.norm(hpo_embedding)) for dot_product, hpo_embedding in zip(dot_products, hpo_embeddings)]
+
+        if add_scaled_average_dot_product:
+            df_variants.at[i, 'scaled_average_dot_product'] = np.mean(scaled_dot_products)
+
+        if add_scaled_min_dot_product:
+            df_variants.at[i, 'scaled_min_dot_product'] = np.min(scaled_dot_products)
+
+        if add_scaled_max_dot_product:
+            df_variants.at[i, 'scaled_max_dot_product'] = np.max(scaled_dot_products)
+
+
+        # if asked, add average dot product between gene and hpo embeddings
+        if add_average_dot_product:
+            df_variants.at[i, 'average_dot_product'] = np.mean(dot_products)
+
+        # if asked, add min dot product between gene and hpo embeddings
+        if add_min_dot_product:
+            df_variants.at[i, 'min_dot_product'] = np.min(dot_products)
+
+        # if asked, add max dot product between gene and hpo embeddings
+        if add_max_dot_product:
+            df_variants.at[i, 'max_dot_product'] = np.max(dot_products)
+
+        # if asked, add std dot product between gene and hpo embeddings
+        if add_std_dot_product:
+            df_variants.at[i, 'std_dot_product'] = np.std(dot_products)
+
+        if add_gene_embedding:
+            df_variants.at[i, 'gene_embedding'] = gene_embedding
+
+        if add_fix_num_phen_embedding > 0:
+            # add the neutral embedding to the list until the list has fix_num_phen_embedding elements
+            hpo_embeddings = hpo_embeddings + [neutral_embedding] * (add_fix_num_phen_embedding - len(hpo_embeddings))
+            # add the embeddings to the dataframe
+            for j in range(add_fix_num_phen_embedding):
+                df_variants.at[i, f'phen_embedding_{j}'] = hpo_embeddings[j]
+
+    return df_variants
+
+
+
+
+
+
+
+
+print("Startanzi")
+# add embedding info to the dataframe
+
+df_variants = pd.read_pickle('dataframe.pkl')
+
+# print first 10 rows of the dataframe
+print(df_variants.head(10))
+
+# add embedding info to the dataframe
+df_variants = add_embedding_info(df_variants, path_to_embedding='../data/node_embeddings.txt', path_to_gene_dict='../data/gene_dict.pkl', path_to_hpo_dict='../data/hpo_dict.pkl', path_to_sampled_hpo='sampled_hpoIDs_for_variants.pkl',
+                                    add_scaled_average_dot_product=True, add_scaled_min_dot_product=True, add_scaled_max_dot_product=True, add_average_dot_product=True, add_min_dot_product=True, add_max_dot_product=True)
+
+
+print(df_variants.head(10))
+# eliminate the rows that has none as average_dot_product
+df_variants = df_variants.dropna(subset=['average_dot_product'])
+print(df_variants.head(10))
+# save df_variants to a new file in data folder outside the repository
+df_variants.to_pickle('../data/dataframe_with_embedding.pkl')
+print("Dataframe with embedding is saved to dataframe_with_embedding.pkl")
+
+
+
+
+
+
+
 
 
 
 #run_binary_classification()
-run_multilabel()
+#run_multilabel()
