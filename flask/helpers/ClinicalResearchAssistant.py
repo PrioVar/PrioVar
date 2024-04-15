@@ -1,4 +1,6 @@
 import os
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from Bio import Entrez
 import re
 from Bio import Medline
@@ -8,13 +10,17 @@ import torch
 import faiss
 import numpy as np
 
+app = Flask(__name__)
+CORS(app)
+
+
 class ClinicalResearchAssistant:
     def __init__(self):
         # Open AI API Key
         os.environ["OPENAI_API_KEY"] = "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"
 
         # Configure your email so that the NCBI service knows who you are
-        Entrez.email = "alperengozeten@gmail.com"
+        Entrez.email = "dummy@dummy.com"
 
         # Define the ChatGPT model
         self.client = OpenAI()
@@ -89,74 +95,90 @@ class ClinicalResearchAssistant:
         D, I = index.search(query_vector, k)
         return [articles[i] for i in I[0]]
 
-    def main(self):
-        # Question that is to be asked by the clinician. Will be converted to PICO format by the ChatGPT
-        clinical_question = "How should the treatment be of a patient with tennis elbow?"
-        print("Original Clinical Question: \n" + clinical_question)
-        print("\n")
 
-        # Rewrite the Clinical Question in PICO format
-        pico_clinical_question = self.chat(
-            'Rewrite the following clinical question below according to the PICO model using (P), (I) , (C), (O) notation to the right of the clause. For example: '
-            + 'In patients with a fractured tibia (P) does surgical intervention (I) result in better outcomes compared to non-surgical management (C) in terms of healing time and functional recovery (O)?\n'
-            + 'Above example is only for demonstrating format. Please rewrite the following clinical question in PICO format:'
-            + clinical_question
+@app.route('/ai-help', methods=['POST'])
+def analyze():
+    data = request.get_json()
+    # Question that is to be asked by the clinician. Will be converted to PICO format by the ChatGPT
+    clinical_question = data.get('clinical_question')
+    if not clinical_question:
+        return jsonify({'error': 'No clinical question provided'}), 400
+
+    assistant = ClinicalResearchAssistant()
+    print("Original Clinical Question: \n" + clinical_question)
+    print("\n")
+
+    # Rewrite the Clinical Question in PICO format
+    pico_clinical_question = assistant.chat(
+        'Rewrite the following clinical question below according to the PICO model using (P), (I) , (C), (O) notation to the right of the clause. For example: '
+        + 'In patients with a fractured tibia (P) does surgical intervention (I) result in better outcomes compared to non-surgical management (C) in terms of healing time and functional recovery (O)?\n'
+        + 'Above example is only for demonstrating format. Please rewrite the following clinical question in PICO format:'
+        + clinical_question
+    )
+    print("PICO Clinical Question: \n" + pico_clinical_question)
+    print("\n")
+
+    # Parse the PICO question into its components
+    # Regular expression to capture PICO components
+    pico_string = pico_clinical_question
+    # Refined regular expression to capture PICO components
+
+    pattern = r"In (?P<Patient>.*?) \(P\), (?P<Intervention>.*?) \(I\) (?P<Comparison>.*?) \(C\) (?P<Outcome>.*?) \(O\)\?"
+
+    match = re.match(pattern, pico_string)
+    if match:
+        pico_variables = match.groupdict()
+    else:
+        pico_variables = "No match found!"
+    print("PICO Variables: ")
+    print(pico_variables)
+    print("\n")
+
+    final_query = assistant.construct_query(pico_variables)
+    print("Final Query: \n" + final_query + "\n")
+
+    idlist = assistant.perform_article_search(final_query)
+    print("length of idlist: " + str(len(idlist)) + "\n")
+
+    articles = assistant.fetch_article_details(idlist)
+    vectors = np.vstack([assistant.embed_text(article.get('AB', '')) for article in articles if article.get('AB')])
+    nearest_articles = assistant.search_vector_database(pico_clinical_question, vectors, articles)
+
+    # Print the nearest articles
+    result = "\n"
+    for article in nearest_articles:
+        result += "Title: {}\nAbstract: {}\nJournal: {}\nAuthor: {}\nDate of publication: {}\nKeywords: {}\nMesh terms: {}\n\n".format(
+            article.get("TI", "?"), article.get("AB", "?"), article.get("TA", "?"),
+            ", ".join(article.get("AU", ["?"])), article.get("DP", "?"),
+            ", ".join(article.get("OT", ["?"])), ", ".join(article.get("MH", ["?"]))
         )
-        print("PICO Clinical Question: \n" + pico_clinical_question)
-        print("\n")
+    print(result)
 
-        # Parse the PICO question into its components
-        # Regular expression to capture PICO components
-        pico_string = pico_clinical_question
-        # Refined regular expression to capture PICO components
+    # Generate reports
+    print("RAG GPT output:\n")
+    research_res = assistant.chat(
+        "Act as an evidenced-based clinical researcher. Using only the following PubMed Abstracts to guide your content ("
+        + result + "), create an evidence based medicine report that answers the following question: "
+        + pico_clinical_question)
+    print("Output:\n" + research_res + "\n")
 
-        pattern = r"In (?P<Patient>.*?) \(P\), (?P<Intervention>.*?) \(I\) (?P<Comparison>.*?) \(C\) (?P<Outcome>.*?) \(O\)\?"
+    print("Pure GPT output:\n")
+    research_res_pure = assistant.chat(
+        "Act as an evidence-based clinical researcher. Create an evidence based medicine report that answers the following question: "
+        + pico_clinical_question + " Provide references to support your content.")
+    print("Output:\n" + research_res_pure + "\n")
 
-        match = re.match(pattern, pico_string)
-        if match:
-            pico_variables = match.groupdict()
-        else:
-            pico_variables = "No match found!"
-        print("PICO Variables: ")
-        print(pico_variables)
-        print("\n")
+    print("Done")
 
-        final_query = self.construct_query(pico_variables)
-        print("Final Query: \n" + final_query + "\n")
+    response_data = {
+        'pico_clinical_question': pico_clinical_question,
+        'article_count': len(nearest_articles),
+        'article_titles': [article.get('TI', '?') for article in nearest_articles],
+        'RAG_GPT_output': research_res,
+        'Pure_GPT_output': research_res_pure
+    }
 
-        idlist = self.perform_article_search(final_query)
-        print("length of idlist: " + str(len(idlist)) + "\n")
+    return jsonify(response_data), 200
 
-        articles = self.fetch_article_details(idlist)
-        vectors = np.vstack([self.embed_text(article.get('AB', '')) for article in articles if article.get('AB')])
-        nearest_articles = self.search_vector_database(pico_clinical_question, vectors, articles)
-
-        # Print the nearest articles
-        result = "\n"
-        for article in nearest_articles:
-            result += "Title: {}\nAbstract: {}\nJournal: {}\nAuthor: {}\nDate of publication: {}\nKeywords: {}\nMesh terms: {}\n\n".format(
-                article.get("TI", "?"), article.get("AB", "?"), article.get("TA", "?"),
-                ", ".join(article.get("AU", ["?"])), article.get("DP", "?"),
-                ", ".join(article.get("OT", ["?"])), ", ".join(article.get("MH", ["?"]))
-            )
-        print(result)
-
-        # Generate reports
-        print("RAG GPT output:\n")
-        research_res = self.chat(
-            "Act as an evidenced-based clinical researcher. Using only the following PubMed Abstracts to guide your content ("
-            + result + "), create an evidence based medicine report that answers the following question: "
-            + pico_clinical_question)
-        print("Output:\n" + research_res + "\n")
-
-        print("Pure GPT output:\n")
-        research_res_pure = self.chat(
-            "Act as an evidence-based clinical researcher. Create an evidence based medicine report that answers the following question: "
-            + pico_clinical_question + " Provide references to support your content.")
-        print("Output:\n" + research_res_pure + "\n")
-
-        print("Done")
-
-# Example of running the refactored code
-assistant = ClinicalResearchAssistant()
-assistant.main()
+if __name__ == '__main__':
+    app.run(debug=True, port=5001)
