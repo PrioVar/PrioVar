@@ -1,0 +1,18 @@
+{
+  "HIGH": [
+    { "value": "pathogenic", "label": "Pathogenic" }, 
+    { "value": "likely_pathogenic", "label":"Likely Pathogenic"}, 
+    { "value": "risk_factor", "label":"Risk Factor"}
+  ],
+  "MODERATE": [
+    { "value": "uncertain_significance", "label":"Uncertain Significance"}, 
+    { "value": "protective", "label":"Protective"}, 
+    { "value": "association", "label":"Association"}, 
+    { "value": "drug_response", "label":"Drug Response"},
+    { "value": "conflicting_interpretations_of_pathogenicity", "label": "Conflicting Interpretations"}
+  ],
+  "LOW": [
+    { "value":"benign", "label":"Benign"}, 
+    { "value": "likely_benign", "label":"Likely Benign"}
+  ]
+}
