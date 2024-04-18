@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PriovarApplication<priovar>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.bio.priovar.PriovarApplication",
+            "projectName": "priovar",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
