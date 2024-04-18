@@ -28,11 +28,23 @@ AuthLayout.propTypes = {
 export default function AuthLayout({ children }) {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'));
+  const LogoContainer = styled('div')(({ theme }) => ({
+    position: 'fixed',
+    left: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    padding: theme.spacing(3),
+    left: theme.spacing(10),
+  }));
 
   return (
    <>
    <RouterLink to="/">
-      <Logo size={isSmallScreen ? 'small' : 'large'} />
+        <LogoContainer>
+            <RouterLink to="/">
+            <Logo size={isSmallScreen ? 'small' : 'large'} />
+            </RouterLink>
+        </LogoContainer>
       </RouterLink>
 
       <MHidden width="smUp">
