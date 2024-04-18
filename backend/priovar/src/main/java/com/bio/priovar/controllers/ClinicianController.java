@@ -48,6 +48,7 @@ public class ClinicianController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginObject> loginClinician(@RequestParam String email, @RequestParam String password ) {
+        System.out.println(email + " " + password);
         return clinicianService.loginClinician(email,password);
     }
 
