@@ -98,10 +98,14 @@ export default function Router() {
     {
       path: 'libra',
       element: (
-        <AuthGuard>
+        //login pass-by
+        // <AuthGuard>
+        <>
           <SideNav />
           <DashboardLayout />
-        </AuthGuard>
+        </>
+          
+        // </AuthGuard>
       ),
       children: [
         { path: '/', element: <Navigate to="/libra/files" replace /> },
