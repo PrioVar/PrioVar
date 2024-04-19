@@ -17,6 +17,15 @@ services:
       - $HOME/neo4j/import:/var/lib/neo4j/import
       - $HOME/neo4j/plugins:/plugins
   
+  spring-boot-backend:
+    build:
+      context: ./backend/priovar
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - neo4j
+  
   flask-backend:
     build:
       context: ./flask
@@ -30,7 +39,7 @@ services:
   
   react-frontend:
     build:
-      context: ./  # Replace with the path to your React app
+      context: ./frontend_cs491_org  # Replace with the path to your React app
       dockerfile: Dockerfile
     ports:
       - "3000:80"  # Map port 3000 on the host to port 80 in the container
