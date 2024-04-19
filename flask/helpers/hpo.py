@@ -4,7 +4,7 @@ from os import path
 from config import uri, username, password
 
 def read_hpo_from_json():
-    with open(path.join('../data', 'hp.json'), 'r') as file:
+    with open(path.join('data', 'hp.json'), 'r') as file:
         data = json.load(file)
 
     graphs = data["graphs"]
@@ -116,3 +116,6 @@ def save_edges(edge_items):
 
         for item in edge_items:
             session.write_transaction(add_relationship, item[0], item[1])
+
+a = read_hpo_from_json()
+b = 5
