@@ -25,6 +25,11 @@ services:
       - "8080:8080"
     depends_on:
       - neo4j
+    environment:
+      - SPRING_NEO4J_URI=bolt://neo4j:7687
+      - SPRING_NEO4J_AUTHENTICATION_USERNAME=neo4j
+      - SPRING_NEO4J_AUTHENTICATION_PASSWORD=priovar.
+      - FLASK_URL=http://flask-backend:5000
   
   flask-backend:
     build:
