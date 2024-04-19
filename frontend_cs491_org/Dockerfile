@@ -2,8 +2,8 @@
 FROM node:14 AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
 COPY . ./
+RUN npm install
 RUN npm run build
 
 # Step 2: Serve the React application with Nginx
