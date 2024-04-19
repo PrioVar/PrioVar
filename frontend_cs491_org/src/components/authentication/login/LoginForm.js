@@ -51,6 +51,7 @@ export default function LoginForm({ callerPage }) {
     },
     //validationSchema: LoginSchema, uncomment this line to enable validation
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
+      /*
       try {
         //await login(values.email, values.password)
         await login(emailFix, passwordFix)
@@ -72,7 +73,7 @@ export default function LoginForm({ callerPage }) {
           setSubmitting(false)
           setErrors({ afterSubmit: error.response.data?.non_field_errors?.[0] ?? error.message })
         }
-      }
+      }*/
       try {
         // get the email from formik
         // get the password from formik
