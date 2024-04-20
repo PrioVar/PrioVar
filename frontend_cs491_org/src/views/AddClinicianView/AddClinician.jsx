@@ -50,21 +50,34 @@ export default function AddNewClinician() {
   );
 
   useEffect(() => {
-    const fetch = async () => {
-
-    // Ali Veli patient id: 17700
-    axios.get(`http://localhost:8080/clinician/byMedicalCenter/${healthCenterId}`)
-      .then(response => {
-        console.log("SUCCESS")
-        console.log(response.data)
-        setDetails(response.data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-    }
-    fetch();
-
-    console.log(details);
-  }, []);
+    const fetchCliniciansAndPatients = async () => {
+      try {
+        const clinicianResponse = await axios.get(`${ROOTS_PrioVar}/clinician/byMedicalCenter/${healthCenterId}`);
+        const clinicians = clinicianResponse.data;
+        console.log("SUCCESS", clinicians);
+  
+        const patientCountsPromises = clinicians.map(clinician =>
+          axios.get(`${ROOTS_PrioVar}/clinician/allPatients/${clinician.id}`)
+            .then(response => ({ clinicianId: clinician.id, patientCount: response.data.length }))
+        );
+  
+        const patientCounts = await Promise.all(patientCountsPromises);
+  
+        const detailedClinicians = clinicians.map(clinician => {
+          const patientInfo = patientCounts.find(info => info.clinicianId === clinician.id);
+          return { ...clinician, patientCount: patientInfo ? patientInfo.patientCount : 0 };
+        });
+  
+        if (isMountedRef.current) {
+          setDetails(detailedClinicians);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchCliniciansAndPatients();
+  }, [healthCenterId, isMountedRef]);
 
   const AddClinicianSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -137,12 +150,12 @@ export default function AddNewClinician() {
   }
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg">
         <Grid container spacing={3}>
             {/* Left Half: Table (adjust the content of this part as needed) */}
             <Grid item xs={6}>
-                <Box p={2} bgcolor="background.paper" style={{marginTop:"50px"}}>
-                    <Typography variant="h6" gutterBottom align="center">
+                <Box p={2} bgcolor="background.paper" style={{ marginTop: '50px' }}>
+                    <Typography variant="h4" gutterBottom align="center">
                     Clinicians
                     </Typography>
                     <TableContainer>
@@ -152,7 +165,7 @@ export default function AddNewClinician() {
                             <TableCell>ID</TableCell>
                             <TableCell>Name</TableCell>
                             <TableCell>Email</TableCell>
-                            {/* Add more table headers as needed */}
+                            <TableCell>Patient Count</TableCell> {/* Added header for patient count */}
                         </TableRow>
                         </TableHead>
                         <TableBody>
@@ -162,6 +175,7 @@ export default function AddNewClinician() {
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell>{row?.name}</TableCell>
                                 <TableCell>{row?.email}</TableCell>
+                                <TableCell>{row?.patientCount}</TableCell>
                                 {/* Add more table cells as needed */}
                                 </TableRow>
                             )): null}
