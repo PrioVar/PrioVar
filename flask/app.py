@@ -6,10 +6,16 @@ from helpers.clinvar import read_clinvar, save_clinvar
 from helpers.hpo_annotations import initiate_disease_database, initiate_gene_database
 from helpers.annotation import annotate_variants, get_all_annotated_variants
 from helpers.knowledge_graph import get_answer
+from helpers.ClinicalResearchAssistant import analyze
 
 app = Flask(__name__)
 CORS(app)
 
+
+@app.route('/ai-help', methods=['POST'])
+def ai_support():
+    data = request.get_json()
+    return analyze(data)
 
 # write an endpoint that takes a question as an input and queries the knowledge graph
 # to return an answer
