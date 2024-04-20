@@ -97,8 +97,7 @@ class ClinicalResearchAssistant:
 
 
 @app.route('/ai-help', methods=['POST'])
-def analyze():
-    data = request.get_json()
+def analyze(data):
     # Question that is to be asked by the clinician. Will be converted to PICO format by the ChatGPT
     clinical_question = data.get('clinical_question')
     if not clinical_question:
@@ -162,11 +161,11 @@ def analyze():
         + pico_clinical_question)
     print("Output:\n" + research_res + "\n")
 
-    print("Pure GPT output:\n")
+    ''' print("Pure GPT output:\n")
     research_res_pure = assistant.chat(
         "Act as an evidence-based clinical researcher. Create an evidence based medicine report that answers the following question: "
         + pico_clinical_question + " Provide references to support your content.")
-    print("Output:\n" + research_res_pure + "\n")
+    print("Output:\n" + research_res_pure + "\n") '''
 
     print("Done")
 
@@ -175,10 +174,9 @@ def analyze():
         'article_count': len(nearest_articles),
         'article_titles': [article.get('TI', '?') for article in nearest_articles],
         'RAG_GPT_output': research_res,
-        'Pure_GPT_output': research_res_pure
     }
 
     return jsonify(response_data), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5152)
