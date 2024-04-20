@@ -122,6 +122,9 @@ export default function SideNav() {
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.addClinician} sx={{ mt: 5 }}>
                   Add Clinician
               </Button>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.aiSupport} sx={{ mt: 5 }}>
+                  AI Support
+              </Button>
               </Stack>
 
               {/*              <Stack spacing={1.5}>
