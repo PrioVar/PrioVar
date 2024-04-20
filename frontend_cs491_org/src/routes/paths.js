@@ -8,6 +8,7 @@ const ROOTS_AUTH = '/'
 const ROOTS_DASHBOARD = '/libra'
 const ROOTS_SAMPLE = '/sample'
 export const ROOTS_PrioVar = 'http://localhost:8080'
+export const ROOTS_Flask = 'http://127.0.0.1:5001'
 // ----------------------------------------------------------------------
 
 export const PATH_PrioVar = {
@@ -97,6 +98,7 @@ export const PATH_DASHBOARD = {
     similarPatients: path(ROOTS_DASHBOARD, '/similarPatients'),
     addClinician: path(ROOTS_DASHBOARD, '/addClinician'),
     patientDetails: path(ROOTS_DASHBOARD, '/patientDetails/:patientId'),
+    aiSupport: path(ROOTS_DASHBOARD, '/aiSupport')
   },
   mail: {
     root: path(ROOTS_DASHBOARD, '/mail'),
