@@ -38,6 +38,7 @@ public class ClinicianController {
 
     @GetMapping("/allPatients/{clinicianId}")
     public List<Patient> getAllPatientsByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
+        System.out.println("Clinician ID " + clinicianId + " requested all patients in controller");
         return clinicianService.getAllPatientsByClinicianId(clinicianId);
     }
 

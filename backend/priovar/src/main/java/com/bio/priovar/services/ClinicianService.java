@@ -101,9 +101,10 @@ public class ClinicianService {
         Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
 
         if ( clinician == null ) {
+            System.out.println("Clinician with id " + clinicianId + " does not exist");
             return null;
         }
-
+        System.out.println("Clinician ID " + clinicianId + " requested all patients in service");
         return clinician.getPatients();
     }
 

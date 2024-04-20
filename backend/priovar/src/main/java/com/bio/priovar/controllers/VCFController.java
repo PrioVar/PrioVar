@@ -1,7 +1,12 @@
 package com.bio.priovar.controllers;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.bio.priovar.services.VCFService;
 
 @RestController
@@ -15,11 +20,13 @@ public class VCFController {
         this.vcfService = vcfService;
     }
 
-    @PostMapping()
-    public String uploadVCF(@RequestBody String base64EncodedFile) {
-        // Decode the Base64 file and process
-        System.out.println("File received in Base64 format");
-        // You would typically decode this and process as a file here
-        return "File uploaded successfully";
+    @PostMapping("/upload")
+    public String uploadVCF(@RequestParam("vcfFile") String base64File) {
+        // Remove the Base64 prefix if present (e.g., "data:image/png;base64,")
+        String base64Data = base64File.substring(base64File.indexOf(",") + 1);
+        System.out.println(base64Data);
+        return "File uploaded and saved successfully";
+
     }
+
 }
