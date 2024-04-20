@@ -124,8 +124,20 @@ export default function AddNewClinician() {
           })
       }
       catch (error) {
+        let errorMessage = 'An unexpected error occurred';
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx, and the response has a direct string body.
+            errorMessage = error.response.data || error.message;
+        } else if (error.request) {
+            // The request was made but no response was received
+            errorMessage = 'No response received from the server';
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            errorMessage = error.message;
+        }
         // print the error details, response is a JSON and has field 'message'
-        enqueueSnackbar(error.response.data.message, {
+        enqueueSnackbar(errorMessage, {
             variant: 'error',
             action: (key) => (
               <MIconButton size="small" onClick={() => closeSnackbar(key)}>
