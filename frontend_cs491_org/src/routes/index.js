@@ -21,6 +21,7 @@ import SubscriptionPlans from 'src/views/SubscriptionPlans'
 import SimilarPatients from 'src/views/SimilarPatients'
 import AddClinician from 'src/views/AddClinicianView'
 import PatientDetails from 'src/views/PatientDetails'
+import AISupport from 'src/views/AISupport'
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) =>
@@ -121,6 +122,7 @@ export default function Router() {
         { path: '/similarPatients', element: < SimilarPatients/>},
         { path: '/addClinician', element: < AddClinician/>},
         { path: '/patientDetails/:patiendId', element: < PatientDetails/>},
+        { path: '/aiSupport', element: < AISupport/>},
         {
           path: 'user',
           children: [
