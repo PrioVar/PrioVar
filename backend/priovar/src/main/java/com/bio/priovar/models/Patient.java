@@ -24,6 +24,7 @@ public class Patient {
     private int age;
     private String sex;
     private String genesusId;
+    private String name;
 
     // vectorized form of the patient's phenotype (float array)
     private float[] phenotypeVector;
