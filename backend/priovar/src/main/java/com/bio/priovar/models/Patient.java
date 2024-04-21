@@ -8,6 +8,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+
 import java.util.List;
 
 @Getter
@@ -20,11 +21,10 @@ public class Patient {
     @GeneratedValue
     private Long id;
 
-    private String name;
     private int age;
     private String sex;
-    private String clinicalHistory;
     private String genesusId;
+    private String name;
 
     // vectorized form of the patient's phenotype (float array)
     private float[] phenotypeVector;
@@ -43,5 +43,9 @@ public class Patient {
 
     @Relationship(type = "HAS_GENE", direction = Relationship.Direction.OUTGOING)
     private List<Gene> genes;
+
+    @Relationship(type = "HAS_VCF_FILE", direction = Relationship.Direction.OUTGOING)
+    private VCFFile vcfFile;
+
 
 }

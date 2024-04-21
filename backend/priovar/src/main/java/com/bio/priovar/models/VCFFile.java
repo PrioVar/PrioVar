@@ -7,27 +7,24 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
-
 import java.util.List;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Node("Clinician")
-public class Clinician {
-    @Id
+@Node("VCFFile")
+public class VCFFile {
+
     @GeneratedValue
+    @Id
     private Long id;
+    private String content;
+    private String fileName;
 
-    private String name;
-    private String email;
-    private String password;
+    @Relationship(type = "HAS_COMMENTS", direction = Relationship.Direction.OUTGOING)
+    private List<ClinicianComment> clinicanComments;
 
-    @Relationship(type="HAS_PATIENT")
-    private List<Patient> patients;
-
-    @Relationship(type="WORKS_AT")
-    private MedicalCenter medicalCenter;
 
 
 
