@@ -17,6 +17,7 @@ def ai_support():
     data = request.get_json()
     return analyze(data)
 
+
 # write an endpoint that takes a question as an input and queries the knowledge graph
 # to return an answer
 @app.route('/search-graph', methods=['POST'])
