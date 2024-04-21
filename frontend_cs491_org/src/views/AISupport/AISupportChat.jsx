@@ -51,7 +51,8 @@ function AISupportChat() {
 
         try {
             const response = await axios.post(`${ROOTS_Flask}/ai-help`, {
-                clinical_question: clinicianMessage.content
+                clinical_question: clinicianMessage.content,
+                healthCenterId: localStorage.getItem('healthCenterId')
             });
     
             // Construct separate messages for each part of the bot's response
