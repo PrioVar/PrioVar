@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,6 +55,31 @@ public class ClinicianService {
     public Clinician getClinicianById(Long id) {
         return clinicianRepository.findById(id).orElse(null);
     }
+
+    public void addPatientToClinician(Long clinicianId, Patient patient) {
+        Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
+        if ( clinician == null ) {
+            System.out.println("Clinician with id " + clinicianId + " does not exist");
+            return;
+        }
+        //Check if the patient list of clinician is null, else create it then add the patient and save the clinician
+        if ( clinician.getPatients() == null ) {
+            List<Patient> patients = new ArrayList<>();
+            clinician.setPatients(patients);
+        }
+        clinician.getPatients().add(patient);
+        clinicianRepository.save(clinician);
+    }
+
+    public MedicalCenter getClinicianMedicalCenterByClinicianId(Long clinicianId) {
+        Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
+        if ( clinician == null ) {
+            System.out.println("Clinician with id " + clinicianId + " does not exist");
+            return null;
+        }
+        return clinician.getMedicalCenter();
+    }
+
 
     public ResponseEntity<LoginObject> loginClinician(String email, String password) {
         Clinician clinician = clinicianRepository.findByEmail(email);

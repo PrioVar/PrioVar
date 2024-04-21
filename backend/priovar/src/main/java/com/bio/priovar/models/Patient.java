@@ -21,7 +21,6 @@ public class Patient {
     @GeneratedValue
     private Long id;
 
-    private String name;
     private int age;
     private String sex;
     private String genesusId;
@@ -45,7 +44,7 @@ public class Patient {
     private List<Gene> genes;
 
     @Relationship(type = "HAS_VCF_FILE", direction = Relationship.Direction.OUTGOING)
-    private List<VCFFile> vcfFiles;
+    private VCFFile vcfFile;
 
 
 }
