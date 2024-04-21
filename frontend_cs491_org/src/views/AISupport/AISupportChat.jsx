@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, CircularProgress, Typography, Paper } from '@mui/material';
 import axios from 'axios';
 import { ROOTS_Flask } from '../../routes/paths'
@@ -8,6 +8,31 @@ function AISupportChat() {
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const welcomeMessage = {
+            author: 'bot',
+            content: (
+                <Typography variant="body1">
+                    Welcome to the Clinician AI Support Chat! 👋
+                    <br /><br />
+                    Here's how I can assist you:
+                    <br />
+                    - You can ask me clinical questions, and I will interpret them using the PICO framework (Patient, Intervention, Comparison, Outcome).
+                    <br />
+                    - Then, I'll search the PubMed database to find relevant articles and present you with a summary.
+                    <br />
+                    - I utilize a vector database to understand the context of your question and provide the most accurate AI-generated suggestions based on RAG (Retriever-Augmented Generation) technology.
+                    <br /><br />
+                    Please note: I'm designed to respond to clinical questions like "How should the treatment be of a patient with tennis elbow?" So make sure to phrase your inquiries accordingly!
+                    <br />
+                    Just type your question below and press "Send" to begin our conversation 😊
+                </Typography>
+            ),
+            type: 'jsx'
+        };
+        setMessages([welcomeMessage]);
+    }, []);
 
     const handleInputChange = (event) => {
         setInput(event.target.value);
