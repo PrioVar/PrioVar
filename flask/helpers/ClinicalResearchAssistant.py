@@ -5,10 +5,14 @@ import re
 from Bio import Medline
 from openai import OpenAI
 from transformers import BertTokenizer, BertModel
-from config import API_KEY
+from config import API_KEY, uri, username, password
+from neo4j import GraphDatabase
+from datetime import datetime
 import torch
 import faiss
 import numpy as np
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
 class ClinicalResearchAssistant:
@@ -24,6 +28,11 @@ class ClinicalResearchAssistant:
         self.model_name = "gpt-3.5-turbo-0125"
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         self.model = BertModel.from_pretrained('bert-base-uncased')
+        self.driver = GraphDatabase.driver(uri, auth=(username, password))
+
+    def close(self):
+        # Close the Neo4j connection
+        self.driver.close()
 
     def chat(self, message):
         response = self.client.chat.completions.create(
@@ -92,10 +101,44 @@ class ClinicalResearchAssistant:
         D, I = index.search(query_vector, k)
         return [articles[i] for i in I[0]]
 
+    def create_chat_in_db(self, medical_center_id, message, response_data):
+        with self.driver.session() as session:
+            result = session.write_transaction(
+                self._create_and_link_chat, medical_center_id, message, response_data
+            )
+            return result
+
+    @staticmethod
+    def _create_and_link_chat(tx, medical_center_id, question, response_data):
+        timestamp = datetime.utcnow().isoformat()  # ISO 8601 format
+        print("medical_center_id: ", medical_center_id)
+        query = (
+            "MATCH (mc:MedicalCenter) WHERE ID(mc) = $medical_center_id "
+            "CREATE (c:Chat {question: $question, timestamp: $timestamp, "
+            "pico_clinical_question: $pico_clinical_question, "
+            "article_count: $article_count, "
+            "article_titles: $article_titles, "
+            "RAG_GPT_output: $RAG_GPT_output}) "
+            "MERGE (mc)-[:HAS_CHAT]->(c) "
+            "RETURN c"
+        )
+        parameters = {
+            "medical_center_id": int(medical_center_id),
+            "question": question,
+            "timestamp": timestamp,
+            "pico_clinical_question": response_data.get('pico_clinical_question', ''),
+            "article_count": response_data.get('article_count', 0),
+            "article_titles": response_data.get('article_titles', []),
+            "RAG_GPT_output": response_data.get('RAG_GPT_output', '')
+        }
+        result = tx.run(query, parameters)
+        return result.single()[0]
+
 
 def analyze(data):
     # Question that is to be asked by the clinician. Will be converted to PICO format by the ChatGPT
     clinical_question = data.get('clinical_question')
+    medical_center_id = data.get('healthCenterId')
     if not clinical_question:
         return jsonify({'error': 'No clinical question provided'}), 400
 
@@ -152,7 +195,7 @@ def analyze(data):
     # Generate reports
     print("RAG GPT output:\n")
     research_res = assistant.chat(
-        "Act as an evidenced-based clinical researcher. Using only the following PubMed Abstracts to guide your content ("
+        "Act as an evidence-based clinical researcher. Using only the following PubMed Abstracts to guide your content ("
         + result + "), create an evidence based medicine report that answers the following question: "
         + pico_clinical_question)
     print("Output:\n" + research_res + "\n")
@@ -162,7 +205,6 @@ def analyze(data):
         "Act as an evidence-based clinical researcher. Create an evidence based medicine report that answers the following question: "
         + pico_clinical_question + " Provide references to support your content.")
     print("Output:\n" + research_res_pure + "\n") '''
-
     print("Done")
 
     response_data = {
@@ -171,5 +213,8 @@ def analyze(data):
         'article_titles': [article.get('TI', '?') for article in nearest_articles],
         'RAG_GPT_output': research_res,
     }
+
+    assistant.create_chat_in_db(medical_center_id, clinical_question, response_data)
+    assistant.close()
 
     return jsonify(response_data), 200
