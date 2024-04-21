@@ -9,14 +9,13 @@ export const uploadFile = async (file, onUploadProgress, cancelToken) => {
     reader.readAsDataURL(file);
 
     reader.onload = async () => {
-      const base64EncodedFile = reader.result;
-
+      const vcfFile = reader.result;
+      const formData = new FormData();
+      formData.append('vcfFile', vcfFile);
       try {
         console.log("Im tryn.s.d.sdsa")
-        const response = await axios.post(`${ROOTS_PrioVar}/vcf/`, JSON.stringify(base64EncodedFile), {
-          headers: {
-            'Content-Type': 'application/json'
-          },
+        const response = await axios.post(`${ROOTS_PrioVar}/vcf/upload`, formData, {
+          
           onUploadProgress: progressEvent => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             onUploadProgress(percentCompleted);
