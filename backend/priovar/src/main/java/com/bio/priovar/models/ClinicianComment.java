@@ -8,26 +8,22 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Node("Clinician")
-public class Clinician {
-    @Id
+@Node("ClinicianComment")
+public class ClinicianComment {
+
     @GeneratedValue
+    @Id
     private Long id;
+    private String comment;
 
-    private String name;
-    private String email;
-    private String password;
+    @Relationship(type="COMMENTED", direction = Relationship.Direction.INCOMING)
+    private Clinician clinician;
 
-    @Relationship(type="HAS_PATIENT")
-    private List<Patient> patients;
 
-    @Relationship(type="WORKS_AT")
-    private MedicalCenter medicalCenter;
 
 
 
