@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, CircularProgress, Typography, Paper } from '@mui/material';
 import axios from 'axios';
+import { ROOTS_Flask } from '../../routes/paths'
 
 function InformationRetrievalChat() {
     const [input, setInput] = useState('');
@@ -39,7 +40,7 @@ function InformationRetrievalChat() {
         setLoading(true);
 
         try {
-            const endpoint = `http://127.0.0.1:5001/search-graph?question=${encodeURIComponent(input)}`;
+            const endpoint = `${ROOTS_Flask}/search-graph?question=${encodeURIComponent(input)}`;
             const response = await axios.post(endpoint);
 
             const botMessage = {
@@ -49,7 +50,7 @@ function InformationRetrievalChat() {
             };
             setMessages(messages => [...messages, botMessage]);
         } catch (error) {
-            setMessages(messages => [...messages, { author: 'bot', content: 'Sorry, I could not retrieve the information. Please try again.', type: 'text' }]);
+            setMessages(messages => [...messages, { author: 'bot', content: "I'm sorry, I can only provide assistance with generating a Cypher statement for querying a graph database based on the provided schema. Please try again.", type: 'text' }]);
         } finally {
             setLoading(false);
         }
