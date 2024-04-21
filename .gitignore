@@ -31,3 +31,4 @@ flask/helpers/__pycache__/clinvar.cpython-312.pyc
 flask/helpers/__pycache__/hpo_annotations.cpython-312.pyc
 flask/helpers/__pycache__/hpo.cpython-312.pyc
 flask/helpers/__pycache__/knowledge_graph.cpython-312.pyc
+flask/helpers/__pycache__/ClinicalResearchAssistant.cpython-312.pyc
