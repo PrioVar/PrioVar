@@ -18,13 +18,13 @@ import { LoadingButton } from '@material-ui/lab'
 import { Form, FormikProvider, useFormik } from 'formik'
 import { useSnackbar } from 'notistack5'
 import { useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 // hooks
 import useAuth from '../../../hooks/useAuth'
 import useIsMountedRef from '../../../hooks/useIsMountedRef'
 // routes
-import { PATH_AUTH, PATH_PrioVar, ROOTS_PrioVar } from '../../../routes/paths'
+import { PATH_AUTH, PATH_PrioVar, ROOTS_PrioVar, PATH_DASHBOARD } from '../../../routes/paths'
 //
 import { MIconButton } from '../../@material-extend'
 //
@@ -33,11 +33,11 @@ const passwordFix = "erkinaydin"
 // ----------------------------------------------------------------------
 
 export default function LoginForm({ callerPage }) {
-  const { login } = useAuth()
+  // const { login } = useAuth()
   const isMountedRef = useIsMountedRef()
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [showPassword, setShowPassword] = useState(false)
-
+  const navigate = useNavigate()
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -90,14 +90,17 @@ export default function LoginForm({ callerPage }) {
           console.log("aaaaaaaa")
           clinicianId = data.id
           healthCenterId = data.relatedId
+          navigate(PATH_DASHBOARD.root)
         }
         else if(callerPage === 'LoginHealthCenter') {
           const { data } = await axios.post(`${ROOTS_PrioVar}/medicalCenter/login?email=${emailPrioVar}&password=${passwordPrioVar}`)
           healthCenterId = data.id
+          navigate(PATH_DASHBOARD.root)
         }
         else if(callerPage === 'LoginAdmin') {
           const { data } = await axios.post(`${ROOTS_PrioVar}/admin/login?email=${emailPrioVar}&password=${passwordPrioVar}`)
           adminId = data.id
+          navigate(PATH_DASHBOARD.root)
         }
         
         localStorage.setItem('clinicianId', clinicianId)
