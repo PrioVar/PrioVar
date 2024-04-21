@@ -27,15 +27,16 @@ public class VCFService {
         this.vcfRepository = vcfRepository;
     }
 
-    public ResponseEntity<String> uploadVCF(String base64Data, Long clinicianId, int patientAge, String patientGender) {
+    public ResponseEntity<String> uploadVCF(String base64Data, Long clinicianId, String patientName, int patientAge, String patientGender) {
         //First create a new patient
         Patient patient = new Patient();
         patient.setAge(patientAge);
         patient.setSex(patientGender);
+        patient.setName(patientName);
 
         VCFFile vcfFile = new VCFFile();
         vcfFile.setContent(base64Data);
-        String fileName = patientAge + patientGender + ".vcf";
+        String fileName = patientName + "_" + patientAge + "_" + patientGender + ".vcf";
         vcfFile.setFileName(fileName);
 
         List<ClinicianComment> clinicianComments = new ArrayList<>();

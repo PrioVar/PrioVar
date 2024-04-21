@@ -21,11 +21,11 @@ public class VCFController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadVCF(@RequestParam("vcfFile") String base64File, @RequestParam("clinicianId") Long clinicianId,
-                                            @RequestParam("patientAge") int patientAge, @RequestParam("patientGender") String patientGender) {
+    public ResponseEntity<String> uploadVCF(@RequestParam("vcfFile") String base64File, @RequestParam("clinicianId") Long clinicianId, 
+    @RequestParam("patientName") String patientName, @RequestParam("patientAge") int patientAge, @RequestParam("patientGender") String patientGender) {
         // Remove the Base64 prefix if present (e.g., "data:image/png;base64,")
         String base64Data = base64File.substring(base64File.indexOf(",") + 1);
-        return vcfService.uploadVCF(base64Data, clinicianId, patientAge, patientGender);
+        return vcfService.uploadVCF(base64Data, clinicianId, patientName, patientAge, patientGender);
 
     }
 
