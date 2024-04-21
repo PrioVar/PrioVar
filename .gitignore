@@ -25,3 +25,9 @@ yarn-error.log*
 flask/helpers/data/orphanet_disease_to_gene.xml
 flask/helpers/data/orphanet_disease_to_phenotype.xml
 flask/data/COMBINED.DEFAULT_NETWORKS.BP_COMBINING.txt
+flask/__pycache__/config.cpython-312.pyc
+flask/helpers/__pycache__/annotation.cpython-312.pyc
+flask/helpers/__pycache__/clinvar.cpython-312.pyc
+flask/helpers/__pycache__/hpo_annotations.cpython-312.pyc
+flask/helpers/__pycache__/hpo.cpython-312.pyc
+flask/helpers/__pycache__/knowledge_graph.cpython-312.pyc
