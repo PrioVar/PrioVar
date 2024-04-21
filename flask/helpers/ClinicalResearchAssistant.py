@@ -1,23 +1,20 @@
 import os
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import jsonify
 from Bio import Entrez
 import re
 from Bio import Medline
 from openai import OpenAI
 from transformers import BertTokenizer, BertModel
+from config import API_KEY
 import torch
 import faiss
 import numpy as np
-
-app = Flask(__name__)
-CORS(app)
 
 
 class ClinicalResearchAssistant:
     def __init__(self):
         # Open AI API Key
-        os.environ["OPENAI_API_KEY"] = "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"
+        os.environ["OPENAI_API_KEY"] = API_KEY
 
         # Configure your email so that the NCBI service knows who you are
         Entrez.email = "dummy@dummy.com"
@@ -96,7 +93,6 @@ class ClinicalResearchAssistant:
         return [articles[i] for i in I[0]]
 
 
-@app.route('/ai-help', methods=['POST'])
 def analyze(data):
     # Question that is to be asked by the clinician. Will be converted to PICO format by the ChatGPT
     clinical_question = data.get('clinical_question')
@@ -177,6 +173,3 @@ def analyze(data):
     }
 
     return jsonify(response_data), 200
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5152)
