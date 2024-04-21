@@ -22,7 +22,7 @@ function AISupportChat() {
                     <br />
                     - Then, I'll search the PubMed database to find relevant articles and present you with a summary.
                     <br />
-                    - I utilize a vector database to understand the context of your question and provide the most accurate AI-generated suggestions based on RAG (Retriever-Augmented Generation) technology.
+                    - I utilize a vector database to understand the context of your question and provide the most accurate AI-generated suggestions based on RAG (Retrieval-Augmented Generation) method.
                     <br /><br />
                     Please note: I'm designed to respond to clinical questions like "How should the treatment be of a patient with tennis elbow?" So make sure to phrase your inquiries accordingly!
                     <br />
