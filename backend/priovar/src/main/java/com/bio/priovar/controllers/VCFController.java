@@ -19,7 +19,7 @@ public class VCFController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadVCF(@RequestParam("vcfFile") String base64File, @RequestParam("clinicianId") Long clinicianId) {
+    public ResponseEntity<Long> uploadVCF(@RequestParam("vcfFile") String base64File, @RequestParam("clinicianId") Long clinicianId) {
         // Remove the Base64 prefix if present (e.g., "data:image/png;base64,")
         String base64Data = base64File.substring(base64File.indexOf(",") + 1);
         return vcfService.uploadVCF(base64Data, clinicianId);

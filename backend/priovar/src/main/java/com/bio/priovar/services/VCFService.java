@@ -3,6 +3,7 @@ package com.bio.priovar.services;
 import com.bio.priovar.models.*;
 import com.bio.priovar.repositories.VCFRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class VCFService {
         this.vcfRepository = vcfRepository;
     }
 
-    public ResponseEntity<String> uploadVCF(String base64Data, Long clinicianId) {
+    public ResponseEntity<Long> uploadVCF(String base64Data, Long clinicianId) {
 
         VCFFile vcfFile = new VCFFile();
         vcfFile.setContent(base64Data);
@@ -37,8 +38,16 @@ public class VCFService {
         List<ClinicianComment> clinicianComments = new ArrayList<>();
         vcfFile.setClinicianComments(clinicianComments);
 
-        vcfRepository.save(vcfFile);
+        // Save the vcf file and get the saved entity with ID populated
+        VCFFile savedVcfFile = vcfRepository.save(vcfFile);
 
-        return ResponseEntity.ok("VCF File uploaded successfully");
+        // Check if the saved entity is not null and has an ID
+        if (savedVcfFile != null && savedVcfFile.getId() != null) {
+            // Return the ID of the newly created file in the response
+            return ResponseEntity.ok(savedVcfFile.getId());
+        } else {
+            // Handle the error case where the file wasn't saved correctly
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
