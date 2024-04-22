@@ -57,6 +57,45 @@ def get_gene_phenotype_relations() -> List[List]:
     # return the list of gene-phenotype relations by getting only gene_symbol and hpo_id columns
     return df[["gene_symbol", "hpo_id"]].values.tolist()
 
+def get_gene_phenotype_relations_and_frequency() -> List[List]:
+    """
+    :return: List of gene-phenotype relations. Each relation is a list of two
+    elements: gene_symbol (HPO format) and hpo_id and frequency
+    example: [['A1BG', 1234567], ['B3GALT6', 15]]
+    """
+
+    # read ../data/genes_to_phenotype.txt into dataframe
+    df = pd.read_csv("../data/genes_to_phenotype.txt", sep='\t', comment='#')
+
+    # process hpo_id column to get the last 7 characters and convert to int
+    df["hpo_id"] = df["hpo_id"].str[-7:].astype(int)
+
+    def convert_to_float(x):
+        if '/' in x:
+            return (float(x.split('/')[0]) + 1) / (float(x.split('/')[1]) + 2)
+        elif "%" in x:
+            return float(x.split('%')[0])/100
+        elif x == 'HP:0040285':
+            return 0.0
+        elif x == 'HP:0040284':
+            return 0.025
+        elif x == 'HP:0040282':
+            return 0.55
+        elif x == 'HP:0040283':
+            return 0.17
+        elif x == 'HP:0040281':
+            return 0.9
+        else:
+            return None
+
+
+    df["frequency"] = df["frequency"].apply(lambda x: convert_to_float(str(x)))
+
+
+    # return the list of gene-phenotype relations by getting only gene_symbol and hpo_id columns
+    return df[["gene_symbol", "hpo_id", "frequency"]].values.tolist()
+
+
 
 def get_gene_disease_relations() -> List[List]:
     """
