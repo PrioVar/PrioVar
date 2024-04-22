@@ -1,6 +1,7 @@
 package com.bio.priovar.controllers;
 
 import com.bio.priovar.models.Patient;
+import com.bio.priovar.models.dto.PatientDTO;
 import com.bio.priovar.models.dto.PatientWithPhenotype;
 import com.bio.priovar.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/patient")
@@ -42,7 +46,7 @@ public class PatientController {
     }
 
     @GetMapping("/byClinician/{clinicianId}")
-    public List<Patient> getPatientsByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
+    public List<PatientDTO> getPatientsByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
         return patientService.getPatientsByClinicianId(clinicianId);
     }
 
@@ -92,6 +96,17 @@ public class PatientController {
     public ResponseEntity<String> addGeneToPatient(@PathVariable("patientId") Long patientId, @PathVariable("geneId") Long geneId) {
         return new ResponseEntity<>(patientService.addGeneToPatient(patientId, geneId), org.springframework.http.HttpStatus.OK);
     }
+
+    @PostMapping("/setVCF")
+    public ResponseEntity<String> setVCFFileOfPatient(@RequestParam("patientId") Long patientId, 
+                                                    @RequestParam("vcfFileId") Long vcfFileId) {   
+        System.out.println("patientId: " + patientId + " vcfFileId: " + vcfFileId);
+        System.out.println("patientId: " + patientId + " vcfFileId: " + vcfFileId);
+        System.out.println("patientId: " + patientId + " vcfFileId: " + vcfFileId);
+
+        return patientService.setVCFFileOfPatient(patientId, vcfFileId);
+    }
+    
 
     // Delete Requests
 
