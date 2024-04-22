@@ -5,6 +5,7 @@ import { MIconButton } from '../../components/@material-extend';
 import { useSnackbar } from 'notistack5';
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill'
+import { ROOTS_PrioVar } from '../../routes/paths'
 
 
 const SubscriptionPlansTable = () => {
@@ -15,7 +16,7 @@ const SubscriptionPlansTable = () => {
   useEffect(() => {
     const fetchRemainingAnalyses = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/medicalCenter/${healthCenterId}`);
+        const response = await axios.get(`${ROOTS_PrioVar}/medicalCenter/${healthCenterId}`);
         setRemainingAnalyses(response.data.remainingAnalyses); 
       } catch (error) {
         console.error('Error fetching remaining analyses:', error);
@@ -46,7 +47,7 @@ const SubscriptionPlansTable = () => {
   ];
 
   const HandleSelectPlan = async (subscriptionId) => {
-    const url = `http://localhost:8080/medicalCenter/addSubscription/${healthCenterId}/${subscriptionId}`;
+    const url = `${ROOTS_PrioVar}/addSubscription/${healthCenterId}/${subscriptionId}`;
     try {
       const response = await axios.post(url);
       console.log("SUCCESS")
@@ -73,10 +74,10 @@ const SubscriptionPlansTable = () => {
 
   return (
     <Box p={4} bgcolor="background.default">
-      <Typography variant="h4" gutterBottom align="center" mt={4}>
+      <Typography variant="h4" gutterBottom align="center" mt={2}>
         Subscription Plans
       </Typography>
-      <Grid container spacing={4} justifyContent="center" mt={4}>
+      <Grid container spacing={2} justifyContent="center" mt={2}>
         {plans.map((plan, index) => (
           <Grid item key={index} xs={12} sm={4}>
             <Card raised>
@@ -111,6 +112,9 @@ const SubscriptionPlansTable = () => {
         <Typography variant="subtitle1">
           Number of remaining analyses for your plan: {remainingAnalyses !== null ? remainingAnalyses : 'Loading...'}
         </Typography>
+      </Box>
+      <Box align="center" mt={0} display="flex" justifyContent="center" alignItems="center">
+        <img src={'/static/new_images/dna-helix-removebg.png'} alt="DNA Helix" style={{ maxWidth: '1000px', height: 'auto' }} />
       </Box>
     </Box>
   );
