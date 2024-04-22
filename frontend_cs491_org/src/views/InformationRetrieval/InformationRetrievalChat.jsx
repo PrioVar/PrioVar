@@ -16,7 +16,7 @@ function InformationRetrievalChat() {
                     <br />
                     Example question: "How many patients have disease White-Kernohan syndrome?"
                     <br />
-                    Please phrase your questions clearly to get the best results!
+                    Please phrase each of your questions clearly to get the best results!
                 </Typography>
             ),
             type: 'jsx'
