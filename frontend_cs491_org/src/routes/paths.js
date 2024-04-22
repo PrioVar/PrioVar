@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------
 
+import NewVariantDashboard from "src/views/NewVariantDashboard"
+
 function path(root, sublink) {
   return `${root}${sublink}`
 }
@@ -99,7 +101,8 @@ export const PATH_DASHBOARD = {
     addClinician: path(ROOTS_DASHBOARD, '/addClinician'),
     patientDetails: path(ROOTS_DASHBOARD, '/patientDetails/:patientId'),
     aiSupport: path(ROOTS_DASHBOARD, '/aiSupport'),
-    informationRetrieval: path(ROOTS_DASHBOARD, '/informationRetrieval')
+    informationRetrieval: path(ROOTS_DASHBOARD, '/informationRetrieval'),
+    NewVariantDashboard: path(ROOTS_DASHBOARD, '/sample/:fileName')
   },
   mail: {
     root: path(ROOTS_DASHBOARD, '/mail'),
