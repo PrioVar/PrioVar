@@ -33,7 +33,7 @@ import AnalysedCheckbox from '../common/AnalysedCheckbox'
 
 import VariantDasboard2 from '../common/VariantDasboard2'
 
-const setFileNotes = (vcfFileId, note) => {
+const addNewNote = (vcfFileId, note) => {
   updateFileNotes(vcfFileId, note).then(() => {
     //filesApi.refresh()
   })
@@ -183,6 +183,11 @@ const SamplesView = function () {
     fetchData()
   }, [])
 
+  const handleAnnotationModelOpen = (row) => {
+    setSelectedFile(row)
+    setAnnotationModalOpen(true)
+  }
+
   const COLUMNS = [
     {
       name: 'delete',
@@ -225,16 +230,21 @@ const SamplesView = function () {
         filter: false,
         sort: false,
         customBodyRenderLite(dataIndex) {
-          const row = data[dataIndex]
-          console.log(row.clinicianComments)
+          const row = data[dataIndex];
+          const clinicianComments = row ? row.clinicianComments : null;
+    
           return row ? (
             <ExpandOnClick
               expanded={
-                <EditableNote
-                  note={row.clinicianComments}
-                  onSave={(notes) => setFileNotes(row.vcfFileId, notes)}
-                  details={{ person: row.clinicianName }}
-                />
+                <div>
+                  {clinicianComments.map((comment, index) => (
+                      <p>{row.clinicianName + ": " + comment}</p>
+                  ))}
+                  <EditableNote
+                      onSave={(notes) => addNewNote(row.vcfFileId, notes)}
+                      details={{ person: row.clinicianName }}
+                  />
+                </div>
               }
             >
               {({ ref, onClick }) => (
@@ -243,7 +253,29 @@ const SamplesView = function () {
                 </IconButton>
               )}
             </ExpandOnClick>
-          ) : null
+          ) : null;
+        },
+      },
+    },
+    {
+      name: 'go',
+      label: 'Go',
+      options: {
+        filter: false,
+        sort: false,
+        customBodyRenderLite: (dataIndex) => {
+          const row = data[dataIndex]
+          const status = getStatusLabel(row)
+          if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
+          if (status.includes('ANNO') || status === 'WAITING')
+            return (
+              <Button variant="contained" color="info" onClick={() => handleAnnotationModelOpen(row)} size="small">
+                <Info />
+              </Button>
+            )
+          return (
+            <GoToSampleDashboard fileId={row.vcfFileId ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
+          )
         },
       },
     },
