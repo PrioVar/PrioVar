@@ -226,12 +226,12 @@ const SamplesView = function () {
         sort: false,
         customBodyRenderLite(dataIndex) {
           const row = data[dataIndex]
-          console.log(row.vcfFileId)
+          console.log(row.clinicianComments)
           return row ? (
             <ExpandOnClick
               expanded={
                 <EditableNote
-                  note={row.clinianComments}
+                  note={row.clinicianComments}
                   onSave={(notes) => setFileNotes(row.vcfFileId, notes)}
                   details={{ person: row.clinicianName }}
                 />
