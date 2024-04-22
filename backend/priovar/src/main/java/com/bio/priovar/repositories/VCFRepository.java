@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VCFRepository extends Neo4jRepository<VCFFile, Long> {    
     List<VCFFile> findAllByMedicalCenterId(Long medicalCenterId);
-    List<VCFFile> findAllByClinicianId(Long medicalCenterId);
+    List<VCFFile> findAllByClinicianId(Long clinicianIdId);
 }
 

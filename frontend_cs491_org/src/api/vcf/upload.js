@@ -15,7 +15,6 @@ export const uploadFile = async (file, onUploadProgress, cancelToken) => {
       formData.append('clinicianId', localStorage.getItem('clinicianId'))
       formData.append('medicalCenterId', localStorage.getItem('healthCenterId'))
       try {
-        console.log("Im tryn.s.d.sdsa")
         const response = await axios.post(`${ROOTS_PrioVar}/vcf/upload`, formData, {
           
           onUploadProgress: progressEvent => {
