@@ -183,6 +183,11 @@ const SamplesView = function () {
     fetchData()
   }, [])
 
+  const handleAnnotationModelOpen = (row) => {
+    setSelectedFile(row)
+    setAnnotationModalOpen(true)
+  }
+
   const COLUMNS = [
     {
       name: 'delete',
@@ -261,6 +266,13 @@ const SamplesView = function () {
         customBodyRenderLite: (dataIndex) => {
           const row = data[dataIndex]
           const status = getStatusLabel(row)
+          if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
+          if (status.includes('ANNO') || status === 'WAITING')
+            return (
+              <Button variant="contained" color="info" onClick={() => handleAnnotationModelOpen(row)} size="small">
+                <Info />
+              </Button>
+            )
           return (
             <GoToSampleDashboard fileId={row.vcfFileId ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
           )
