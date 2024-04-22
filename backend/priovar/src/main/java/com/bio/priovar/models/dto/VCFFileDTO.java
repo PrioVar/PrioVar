@@ -1,5 +1,6 @@
 package com.bio.priovar.models.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.bio.priovar.models.ClinicianComment;
@@ -22,8 +23,17 @@ public class VCFFileDTO {
                     String clinicianName) {
         this.vcfFileId = vcfFileId;
         this.fileName = fileName;
-        for (ClinicianComment comment : clinicianComments) {
-            this.clinicianComments.add(comment.getComment());
+        if(clinicianComments != null) {
+            this.clinicianComments = new ArrayList<>();
+            for (ClinicianComment comment : clinicianComments) {
+                this.clinicianComments.add(comment.getComment());
+            }
+        }
+        else {
+            System.out.println("clinicianComments is null");
+            System.out.println("clinicianComments is null");
+            System.out.println("clinicianComments is null");
+            this.clinicianComments = null;
         }
         this.clinicianName = clinicianName;
     }

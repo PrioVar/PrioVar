@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -75,5 +76,26 @@ public class VCFService {
         }
         return vcfFileDTOs;
     }
+
+    public ResponseEntity<String> addNoteToVCF(Long vcfFileId, Long clinicianId, String notes) {
+        Optional<VCFFile> vcfFileOptional = vcfRepository.findById(vcfFileId);
+        if (vcfFileOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("VCF File with id " + vcfFileId + " does not exist");
+        }
+        
+        VCFFile vcfFile = vcfFileOptional.get();
+        ClinicianComment clinicianComment = new ClinicianComment();
+        clinicianComment.setComment(notes);
+        clinicianComment.setClinician(clinicianService.getClinicianById(clinicianId));
+        
+        // Add clinician comment to the VCF file
+        vcfFile.addClinicianComment(clinicianComment);
+        
+        // Save the updated VCF file
+        vcfRepository.save(vcfFile);
+        
+        return ResponseEntity.ok("Note added successfully");
+    }
+    
 
 }

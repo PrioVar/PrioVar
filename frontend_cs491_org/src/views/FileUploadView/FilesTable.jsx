@@ -26,13 +26,18 @@ import { deleteVcfFile } from '../../api/vcf'
 import { deleteFastqFile } from '../../api/fastq'
 import axios from '../../utils/axios'
 //import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-import { fecthClinicianFiles } from '../../api/file'
+import { fecthClinicianFiles, updateFileNotes } from '../../api/file'
 
 import ExpandOnClick from 'src/components/ExpandOnClick'
 import AnalysedCheckbox from '../common/AnalysedCheckbox'
 
 import VariantDasboard2 from '../common/VariantDasboard2'
 
+const setFileNotes = (vcfFileId, note) => {
+  updateFileNotes(vcfFileId, note).then(() => {
+    //filesApi.refresh()
+  })
+}
 
 const EditableNote = ({ note, onSave, details }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -166,6 +171,7 @@ const SamplesView = function () {
       setIsLoading(true)
       try {
         const data = await fecthClinicianFiles()
+        console.log(data)
         setData(data)
       } catch (error) {
         console.error('Error fetching clinician files:', error)
@@ -216,8 +222,29 @@ const SamplesView = function () {
       name: 'clinicianComments',
       label: 'Clinician Comments',
       options: {
-        filter: true,
-        sort: true,
+        filter: false,
+        sort: false,
+        customBodyRenderLite(dataIndex) {
+          const row = data[dataIndex]
+          console.log(row.vcfFileId)
+          return row ? (
+            <ExpandOnClick
+              expanded={
+                <EditableNote
+                  note={row.clinianComments}
+                  onSave={(notes) => setFileNotes(row.vcfFileId, notes)}
+                  details={{ person: row.clinicianName }}
+                />
+              }
+            >
+              {({ ref, onClick }) => (
+                <IconButton variant="contained" ref={ref} onClick={onClick}>
+                  <Note />
+                </IconButton>
+              )}
+            </ExpandOnClick>
+          ) : null
+        },
       },
     },
     // Define additional columns as needed based on the keys in the data objects
