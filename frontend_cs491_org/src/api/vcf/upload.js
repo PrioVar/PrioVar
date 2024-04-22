@@ -12,6 +12,7 @@ export const uploadFile = async (file, onUploadProgress, cancelToken) => {
       const vcfFile = reader.result;
       const formData = new FormData();
       formData.append('vcfFile', vcfFile);
+      formData.append('clinicianId', localStorage.getItem('clinicianId'))
       try {
         console.log("Im tryn.s.d.sdsa")
         const response = await axios.post(`${ROOTS_PrioVar}/vcf/upload`, formData, {
