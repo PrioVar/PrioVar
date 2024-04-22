@@ -4,6 +4,12 @@ import { API_BASE_URL,  } from '../../constants'
 import { ROOTS_PrioVar } from '../../routes/paths'
 
 // NEW ADDITION ERKIN
+export const fetchClinicianPatients = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/patient/byClinician/${localStorage.getItem('clinicianId')}`)
+  return data
+}
+
+// NEW ADDITION ERKIN
 export const fecthClinicianFiles = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byClinician/${localStorage.getItem('clinicianId')}`)
   return data
