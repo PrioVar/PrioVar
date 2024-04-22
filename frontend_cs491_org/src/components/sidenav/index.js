@@ -123,7 +123,7 @@ export default function SideNav() {
                   AI Support
               </Button>
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.informationRetrieval} sx={{ mt: 5 }}>
-                  Information Retrieval
+                  AI Information Retrieval
               </Button>
               <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.addClinician} sx={{ mt: 5 }}>
                   Manage Clinicans
