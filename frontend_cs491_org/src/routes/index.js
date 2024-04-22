@@ -23,6 +23,7 @@ import AddClinician from 'src/views/AddClinicianView'
 import PatientDetails from 'src/views/PatientDetails'
 import AISupport from 'src/views/AISupport'
 import InformationRetrieval from 'src/views/InformationRetrieval'
+import NewVariantDashboard from 'src/views/NewVariantDashboard'
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) =>
@@ -125,6 +126,7 @@ export default function Router() {
         { path: '/patientDetails/:patiendId', element: < PatientDetails/>},
         { path: '/aiSupport', element: < AISupport/>},
         { path: '/informationRetrieval', element: < InformationRetrieval/>},
+        { path: '/sample/:fileName', element: <NewVariantDashboard /> },
         {
           path: 'user',
           children: [

@@ -139,11 +139,11 @@ import {
     )
   }
   
-  const GoToSampleDashboard = function ({ fileId, sampleName }) {
+  const GoToSampleDashboard = function ({ fileName }) {
     const navigate = useNavigate()
   
     const handleClick = () => {
-      navigate(`/libra/sample/${fileId}/${sampleName}`)
+      navigate(`/libra/sample/${fileName}`)
     }
   
     return (
@@ -401,12 +401,10 @@ import {
               if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
               if (status.includes('ANNO') || status === 'WAITING')
                 return (
-                  <Button variant="contained" color="info" onClick={() => handleAnnotationModelOpen(row)} size="small">
-                    <Info />
-                  </Button>
+                    <GoToSampleDashboard fileId={row.file.fileName} />
                 )
               return (
-                <GoToSampleDashboard fileId={row.vcf_id ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
+                <GoToSampleDashboard fileId={row.file.fileName} />
               )
             },
           },
