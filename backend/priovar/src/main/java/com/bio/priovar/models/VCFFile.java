@@ -23,9 +23,8 @@ public class VCFFile {
     private String fileName;
 
     @Relationship(type = "HAS_COMMENTS", direction = Relationship.Direction.OUTGOING)
-    private List<ClinicianComment> clinicanComments;
+    private List<ClinicianComment> clinicianComments;
 
-
-
-
+    @Relationship(type = "UPLOADED_BY", direction = Relationship.Direction.OUTGOING)
+    private Clinician clinician;
 }
