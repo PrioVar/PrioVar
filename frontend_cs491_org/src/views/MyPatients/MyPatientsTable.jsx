@@ -24,7 +24,7 @@ import {
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
   import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
+  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fetchClinicianPatients } from '../../api/file'
   import { PATH_DASHBOARD, PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
@@ -160,9 +160,10 @@ import {
       return;
     }
     try {
-      const allPatients = await axios.get(`${ROOTS_PrioVar}/clinician/allPatients/${clinicianId}`);
+      //const allPatients = await axios.get(`${ROOTS_PrioVar}/clinician/allPatients/${clinicianId}`);
+      const allPatients = await fetchClinicianPatients()
       hasBeenCalled = true;
-      return allPatients.data;
+      return allPatients;
   
     } catch (error) {
       console.error(error);
@@ -257,16 +258,9 @@ import {
               if (!row) return null
     
               const handleClickConfirm = () => {
-                if (row.vcf_id) {
-                  deleteVcfFile(row.vcf_id)
-                } else if (row.fastq_pair_id) {
-                  deleteFastqFile(row.fastq_file_1.fastq_file_id)
-                  deleteFastqFile(row.fastq_file_2.fastq_file_id)
-                } else {
-                  deleteFastqFile(row.fastq_file_id)
-                }
-    
-                filesApi.refresh()
+                deleteVcfFile(row.vcfFileId).then(() => {
+                  filesApi.refresh()
+                });
               }
     
               return <DeleteFileButton onClickConfirm={handleClickConfirm} />

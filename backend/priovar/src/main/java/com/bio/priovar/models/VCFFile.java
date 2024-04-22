@@ -7,6 +7,8 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,4 +29,14 @@ public class VCFFile {
 
     @Relationship(type = "UPLOADED_BY", direction = Relationship.Direction.OUTGOING)
     private Clinician clinician;
+
+    @Relationship(type="FILE_BELONGS_TO_MEDICAL_CENTER")
+    private MedicalCenter medicalCenter;
+
+    public void addClinicianComment(ClinicianComment clinicianComment) {
+        if(clinicianComments == null) {
+            clinicianComments = new ArrayList<>();
+        }
+        clinicianComments.add(clinicianComment);
+    }
 }
