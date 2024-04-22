@@ -25,26 +25,14 @@ import JobStateStatus from '../common/JobStateStatus'
 import { deleteVcfFile } from '../../api/vcf'
 import { deleteFastqFile } from '../../api/fastq'
 import axios from '../../utils/axios'
-import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-import { ROOTS_PrioVar } from '../../routes/paths'
+//import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
+import { fecthClinicianFiles } from '../../api/file'
 
 import ExpandOnClick from 'src/components/ExpandOnClick'
 import AnalysedCheckbox from '../common/AnalysedCheckbox'
 
 import VariantDasboard2 from '../common/VariantDasboard2'
 
-
-// NEW ADDITION ERKIN
-export const fecthMedicalCenterFiles = async () => {
-  const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byMedicalCenter/${localStorage.getItem('healthCenterId')}`)
-  return data
-}
-
-// NEW ADDITION ERKIN
-export const fecthClinicianFiles = async () => {
-  const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byClinician/${localStorage.getItem('clinicianId')}`)
-  return data
-}
 
 const EditableNote = ({ note, onSave, details }) => {
   const [isEditing, setIsEditing] = useState(false)
