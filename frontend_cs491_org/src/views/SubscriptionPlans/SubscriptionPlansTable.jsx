@@ -73,11 +73,22 @@ const SubscriptionPlansTable = () => {
   };
 
   return (
-    <Box p={4} bgcolor="background.default">
-      <Typography variant="h4" gutterBottom align="center" mt={2}>
+    <Box p={4} style={{
+      position: 'absolute', 
+      top: 0, 
+      left: 0, 
+      width: '100%', 
+      height: '100vh', 
+      backgroundImage: 'url("/static/new_images/dna-helix-removebg.png")', 
+      backgroundSize: 'cover', 
+      backgroundPosition: 'center center',
+      backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adds white transparency
+      backgroundBlendMode: 'overlay' // This blends the background color with the image
+    }}>
+      <Typography variant="h4" gutterBottom align="center" mt={8}>
         Subscription Plans
       </Typography>
-      <Grid container spacing={2} justifyContent="center" mt={2}>
+      <Grid container spacing={2} justifyContent="center" mt={4}>
         {plans.map((plan, index) => (
           <Grid item key={index} xs={12} sm={4}>
             <Card raised>
@@ -112,9 +123,6 @@ const SubscriptionPlansTable = () => {
         <Typography variant="subtitle1">
           Number of remaining analyses for your plan: {remainingAnalyses !== null ? remainingAnalyses : 'Loading...'}
         </Typography>
-      </Box>
-      <Box align="center" mt={0} display="flex" justifyContent="center" alignItems="center">
-        <img src={'/static/new_images/dna-helix-removebg.png'} alt="DNA Helix" style={{ maxWidth: '1000px', height: 'auto' }} />
       </Box>
     </Box>
   );
