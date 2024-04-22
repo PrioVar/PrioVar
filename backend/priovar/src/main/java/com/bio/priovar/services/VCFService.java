@@ -1,6 +1,7 @@
 package com.bio.priovar.services;
 
 import com.bio.priovar.models.*;
+import com.bio.priovar.models.dto.VCFFileDTO;
 import com.bio.priovar.repositories.VCFRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,9 +54,26 @@ public class VCFService {
         }
     }
 
-    public List<VCFFile> getVCFFilesByMedicalCenterId(Long medicalCenterId) {
+    public List<VCFFileDTO> getVCFFilesByMedicalCenterId(Long medicalCenterId) {
 
-        return vcfRepository.findAllByMedicalCenterId(medicalCenterId);
+        List<VCFFile> vcfFiles =  vcfRepository.findAllByMedicalCenterId(medicalCenterId);
+        List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
+        for (VCFFile vcfFile : vcfFiles) {
+            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), vcfFile.getFileName(), vcfFile.getClinicianComments(), vcfFile.getClinician().getName());
+            vcfFileDTOs.add(vcfFileDTO);
+        }
+        return vcfFileDTOs;
+    }
+
+    public List<VCFFileDTO> getVCFFilesByClinicianId(Long clinicianId) {
+
+        List<VCFFile> vcfFiles =   vcfRepository.findAllByClinicianId(clinicianId);
+        List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
+        for (VCFFile vcfFile : vcfFiles) {
+            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), vcfFile.getFileName(), vcfFile.getClinicianComments(), vcfFile.getClinician().getName());
+            vcfFileDTOs.add(vcfFileDTO);
+        }
+        return vcfFileDTOs;
     }
 
 }

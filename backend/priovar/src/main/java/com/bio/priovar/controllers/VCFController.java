@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.bio.priovar.models.VCFFile;
+import com.bio.priovar.models.dto.VCFFileDTO;
 import com.bio.priovar.services.VCFService;
 
 import java.util.List;
@@ -32,8 +33,12 @@ public class VCFController {
     }
 
     @GetMapping("/byMedicalCenter/{medicalCenterId}")
-    public List<VCFFile> getVCFFilesByMedicalCenterId(@PathVariable("medicalCenterId") Long medicalCenterId) {
-        System.out.println("medicalCenterId: " + medicalCenterId);
+    public List<VCFFileDTO> getVCFFilesByMedicalCenterId(@PathVariable("medicalCenterId") Long medicalCenterId) {
         return vcfService.getVCFFilesByMedicalCenterId(medicalCenterId);
+    }
+
+    @GetMapping("/byClinician/{clinicianId}")
+    public List<VCFFileDTO> getVCFFilesByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
+        return vcfService.getVCFFilesByClinicianId(clinicianId);
     }
 }
