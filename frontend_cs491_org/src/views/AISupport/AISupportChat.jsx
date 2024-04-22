@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, CircularProgress, Typography, Paper } from '@mui/material';
 import axios from 'axios';
-import { ROOTS_Flask } from '../../routes/paths'
+import { ROOTS_Flask, ROOTS_PrioVar } from '../../routes/paths'
 
 
 function AISupportChat() {
@@ -32,7 +32,68 @@ function AISupportChat() {
             type: 'jsx'
         };
         setMessages([welcomeMessage]);
+        retrieveChatHistory();
     }, []);
+
+    const retrieveChatHistory = async () => {
+        const medicalCenterId = localStorage.getItem('healthCenterId');
+        if (!medicalCenterId) {
+            console.log('No medical center ID found in local storage');
+            return;
+        }
+        try {
+            setLoading(true);
+            const response = await axios.get(`${ROOTS_PrioVar}/chat/getChatsByMedicalCenterId/${medicalCenterId}`);
+            const chatHistoryMessages = response.data.flatMap(chat => [
+                {
+                    author: 'clinician',
+                    content: chat.question,
+                    type: 'text'
+                },
+                {
+                    author: 'bot',
+                    content: (<Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                                PICO version of the question:
+                              </Typography>),
+                    contentDetail: (<span>{chat.pico_clinical_question}</span>),
+                    type: 'jsx'
+                },
+                {
+                    author: 'bot',
+                    content: (<Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                                Number of relevant articles found in the PubMed database:
+                              </Typography>),
+                    contentDetail: (<span>{chat.article_count}</span>),
+                    type: 'jsx'
+                },
+                {
+                    author: 'bot',
+                    content: (<Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                                Titles of the relevant articles:
+                              </Typography>),
+                    contentDetail: (<ul>{chat.article_titles.map((title, index) => (
+                                        <li key={index}>{title}</li>
+                                    ))}</ul>),
+                    type: 'jsx'
+                },
+                {
+                    author: 'bot',
+                    content: (<Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                                AI suggestion:
+                              </Typography>),
+                    contentDetail: (<span>{chat.rag_GPT_output}</span>),
+                    type: 'jsx'
+                }
+            ]);
+    
+            setMessages(messages => [...messages, ...chatHistoryMessages]);
+        } catch (error) {
+            console.error('Failed to retrieve chat history:', error);
+            // You might want to handle this error more gracefully in a user-facing app
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleInputChange = (event) => {
         setInput(event.target.value);

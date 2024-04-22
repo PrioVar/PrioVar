@@ -111,7 +111,6 @@ class ClinicalResearchAssistant:
     @staticmethod
     def _create_and_link_chat(tx, medical_center_id, question, response_data):
         timestamp = datetime.utcnow().isoformat()  # ISO 8601 format
-        print("medical_center_id: ", medical_center_id)
         query = (
             "MATCH (mc:MedicalCenter) WHERE ID(mc) = $medical_center_id "
             "CREATE (c:Chat {question: $question, timestamp: $timestamp, "
