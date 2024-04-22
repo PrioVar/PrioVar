@@ -1,6 +1,19 @@
 import { useQuery, useQueryClient } from 'react-query'
 import axios from '../../utils/axios'
 import { API_BASE_URL,  } from '../../constants'
+import { ROOTS_PrioVar } from '../../routes/paths'
+
+// NEW ADDITION ERKIN
+export const fecthClinicianFiles = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byClinician/${localStorage.getItem('clinicianId')}`)
+  return data
+}
+
+// NEW ADDITION ERKIN
+export const fecthMedicalCenterFiles = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byMedicalCenter/${localStorage.getItem('healthCenterId')}`)
+  return data
+}
 
 const fetchAllFiles = async () => {
   const { data } = await axios.get(`${API_BASE_URL}/file/list`)
