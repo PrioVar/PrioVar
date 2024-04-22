@@ -17,7 +17,7 @@ import {
   import { makeStyles } from '@material-ui/styles'
   import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
   import MUIDataTable from 'mui-datatables'
-  import React, { useState } from 'react'
+  import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
   import DeleteIcon from '@material-ui/icons/Delete'
   import { fDateTime } from 'src/utils/formatTime'
@@ -155,36 +155,34 @@ import {
 
   let hasBeenCalled = false;
 
-  const fetchAllPatients = async (clinicianId) => {
-    if(hasBeenCalled) {
-      return;
-    }
-    try {
-      //const allPatients = await axios.get(`${ROOTS_PrioVar}/clinician/allPatients/${clinicianId}`);
-      const allPatients = await fetchClinicianPatients()
-      hasBeenCalled = true;
-      return allPatients;
-  
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
-  
-
   const MyPatientsTable = function () {
     //const classes = useStyles()
     let navigate = useNavigate()
     const filesApi = useFiles()
     const bedFilesApi = useBedFiles()
-    const clinicianId = localStorage.getItem('clinicianId');
-    const patients = fetchAllPatients(clinicianId);
-    console.log(patients);
-    const { status, data = [] } = filesApi.query
+    const [data, setData] = useState([])
+    console.log("ğaaaaaaaaaaaaaaaaaaaaaa");
+    console.log(data);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    //const { status, data = [] } = filesApi.query
     const { data: bedFiles = [] } = bedFilesApi.query
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
   
+    const fetchAllPatients = async () => {
+      try {
+        //const allPatients = await axios.get(`${ROOTS_PrioVar}/clinician/allPatients/${clinicianId}`);
+        const data = await fetchClinicianPatients()
+        hasBeenCalled = true;
+        setData(data)
+        return data;
+    
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+
     const setFinishedInfo = (row) => {
       const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
       updateFinishInfo(id).then(() => {
@@ -245,7 +243,11 @@ import {
     const handleDetails = (row) => {
         // TODO
     }
-  
+    
+    useEffect(() => {
+      fetchAllPatients()
+    }, [])
+
     const COLUMNS = [
         {
           name: 'delete',
@@ -258,7 +260,7 @@ import {
               if (!row) return null
     
               const handleClickConfirm = () => {
-                deleteVcfFile(row.vcfFileId).then(() => {
+                deleteVcfFile(row.patientId).then(() => {
                   filesApi.refresh()
                 });
               }
@@ -267,6 +269,7 @@ import {
             },
           },
         },
+        
         {
           name: 'created_at',
           label: 'Uploaded At',
@@ -275,10 +278,11 @@ import {
             sort: true,
             customBodyRenderLite(dataIndex) {
               const row = data[dataIndex]
-              return row ? fDateTime(row.created_at) : null
+              return row ? fDateTime(row.file.createdAt) : null
             },
           },
         },
+        
         {
           name: 'finished_at',
           label: 'Completed',
@@ -289,7 +293,7 @@ import {
               const row = data[dataIndex]
               return row ? (
                 <AnalysedCheckbox
-                  checked={row.is_finished}
+                  checked={row.file.finishedAt != null}
                   onChange={(e) => setFinishedInfo(row)}
                   details={{ date: row.finish_time, person: row.finish_person }}
                 />
@@ -297,6 +301,7 @@ import {
             },
           },
         },
+        
         {
           name: 'notes',
           label: 'Notes',
@@ -309,7 +314,7 @@ import {
                 <ExpandOnClick
                   expanded={
                     <EditableNote
-                      note={row.file_notes}
+                      note={row.file.clinicianComments}
                       onSave={(notes) => setFileNotes(row, notes)}
                       details={{ date: row.notes_time, person: row.notes_person }}
                     />
@@ -334,15 +339,7 @@ import {
             customBodyRenderLite: (dataIndex) => {
               const row = data[dataIndex]
               if (!row) return null
-              if (row?.fastq_pair_id) {
-                return (
-                  <Stack direction="row" spacing={1}>
-                    <Chip label={row.fastq_file_1.name} />
-                    <Chip label={row.fastq_file_2.name} />
-                  </Stack>
-                )
-              }
-              return <Chip label={row.name} />
+              return <Chip label={row.file.fileName} />
             },
           },
         },
@@ -415,8 +412,46 @@ import {
           },
         },
       ]
-    
-      switch (status) {
+
+      return (
+        <>
+          <Box display="flex" justifyContent="flex-end" mt={2}> 
+          <Button 
+              variant="contained" 
+              color="info" 
+              component={RouterLink} to={PATH_DASHBOARD.general.files}
+              size="small"
+          >
+              <Add /> 
+              Add Patient 
+          </Button>
+          </Box>
+          <VariantDasboard2
+          open={isAnnotationModalOpen}
+          handleButtonChange = {handleButtonChange}
+          onClose={() => setAnnotationModalOpen()}
+          />
+          <MUIDataTable
+            title="All patients of clinician ABC"
+            data={data}
+            columns={COLUMNS}
+            options={{
+              selectableRows: 'none',
+              sortOrder: { name: 'created_at', direction: 'desc' },
+              expandableRows: false,
+              print: false,
+              viewColumns: true,
+              download: false,
+            }}
+          />
+        </>
+      )
+    }
+  
+  export default MyPatientsTable
+  
+/*
+switch (status) {
         case 'success':
           return (
             <>
@@ -454,7 +489,4 @@ import {
         default:
           return <CircularProgress />
       }
-    }
-  
-  export default MyPatientsTable
-  
+*/
