@@ -252,6 +252,21 @@ const SamplesView = function () {
         },
       },
     },
+    {
+      name: 'go',
+      label: 'Go',
+      options: {
+        filter: false,
+        sort: false,
+        customBodyRenderLite: (dataIndex) => {
+          const row = data[dataIndex]
+          const status = getStatusLabel(row)
+          return (
+            <GoToSampleDashboard fileId={row.vcfFileId ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
+          )
+        },
+      },
+    },
     // Define additional columns as needed based on the keys in the data objects
   ]
 
