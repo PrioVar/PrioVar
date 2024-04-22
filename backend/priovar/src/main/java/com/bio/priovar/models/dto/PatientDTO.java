@@ -9,15 +9,19 @@ public class PatientDTO {
     
     private Long patientId;
     private String patientName;
-    private String clinicianName;
+    private int age;
+    private String sex;
     private VCFFileDTO file;
 
     public PatientDTO(Long patientId, 
                     String patientName, 
-                    String clinicianName,
+                    int age,
+                    String sex,
                     VCFFileDTO file) {
         this.patientId = patientId;
         this.patientName = patientName;
-        this.clinicianName = clinicianName;
+        this.age = age;
+        this.sex = sex;
+        this.file = file;
     }
 }

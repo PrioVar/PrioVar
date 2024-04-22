@@ -1,10 +1,13 @@
 package com.bio.priovar.services;
 
 import com.bio.priovar.models.*;
+import com.bio.priovar.models.dto.PatientDTO;
 import com.bio.priovar.models.dto.PatientWithPhenotype;
+import com.bio.priovar.models.dto.VCFFileDTO;
 import com.bio.priovar.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +27,19 @@ public class PatientService {
     private final ClinicianRepository clinicianRepository;
     private final PhenotypeTermRepository phenotypeTermRepository;
     private final GeneRepository geneRepository;
-
+    private final VCFRepository vcfRepository;
 
 
 
     @Autowired
-    public PatientService(PatientRepository patientRepository, DiseaseRepository diseaseRepository, MedicalCenterRepository medicalCenterRepository, VariantRepository variantRepository, ClinicianRepository clinicianRepository, PhenotypeTermRepository phenotypeTermRepository, GeneRepository geneRepository) {
+    public PatientService(PatientRepository patientRepository, 
+                        DiseaseRepository diseaseRepository, 
+                        MedicalCenterRepository medicalCenterRepository, 
+                        VariantRepository variantRepository, 
+                        ClinicianRepository clinicianRepository, 
+                        PhenotypeTermRepository phenotypeTermRepository, 
+                        GeneRepository geneRepository, 
+                        VCFRepository vcfRepository) {
 
         this.patientRepository = patientRepository;
         this.diseaseRepository = diseaseRepository;
@@ -38,6 +48,7 @@ public class PatientService {
         this.clinicianRepository = clinicianRepository;
         this.phenotypeTermRepository = phenotypeTermRepository;
         this.geneRepository = geneRepository;
+        this.vcfRepository = vcfRepository;
     }
 
     public String addPatient(Patient patient) {
@@ -151,14 +162,31 @@ public class PatientService {
         return "Patient added successfully";
     }
 
-    public List<Patient> getPatientsByClinicianId(Long clinicianId) {
+    public List<PatientDTO> getPatientsByClinicianId(Long clinicianId) {
         Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
 
         if ( clinician == null ) {
             return null;
         }
 
-        return clinician.getPatients();
+        List<Patient> patients = clinician.getPatients();
+        List<PatientDTO> patientDTOs = new ArrayList<>();
+        for( Patient patient : patients ) {
+            VCFFile vcfFile = patient.getVcfFile();
+            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
+                                            vcfFile.getFileName(), vcfFile.getClinicianComments(), 
+                                            vcfFile.getClinician().getName(), 
+                                            vcfFile.getFileStatus(),
+                                            vcfFile.getCreatedAt(),
+                                            vcfFile.getFinishedAt());
+            PatientDTO patientDTO = new PatientDTO(patient.getId(), 
+                                                patient.getName(), 
+                                                patient.getAge(),
+                                                patient.getSex(), 
+                                                vcfFileDTO);
+            patientDTOs.add(patientDTO);
+        }
+        return patientDTOs;
     }
 
     public String addPhenotypeTermToPatient(Long patientId, Long phenotypeTermId) {
@@ -384,5 +412,21 @@ public class PatientService {
     public Patient getPatientForDetailedView() {
         Patient patient = patientRepository.findByName("Ali Veli").get(0);
         return patient;
+    }
+
+    public ResponseEntity<String> setVCFFileOfPatient(Long patientId, Long vcfFileId) {
+        try {
+            Patient patient = patientRepository.findById(patientId)
+                    .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " does not exist"));
+            VCFFile vcfFile = vcfRepository.findById(vcfFileId)
+                    .orElseThrow(() -> new IllegalArgumentException("VCF File with id " + vcfFileId + " does not exist"));        
+            patient.setVcfFile(vcfFile);
+            patientRepository.save(patient);
+            return ResponseEntity.ok("VCF file set successfully");
+        } catch (Exception e) {
+            // Log the exception or handle it as needed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to set VCF file: " + e.getMessage());
+        }
+        
     }
 }
