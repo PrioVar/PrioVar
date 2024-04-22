@@ -8,6 +8,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,9 @@ public class VCFFile {
     }
 
     private FileStatus fileStatus;
+
+    LocalDate createdAt;
+    LocalDate finishedAt;
 
     public void addClinicianComment(ClinicianComment clinicianComment) {
         if(clinicianComments == null) {

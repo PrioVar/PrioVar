@@ -42,7 +42,9 @@ public class VCFService {
 
         List<ClinicianComment> clinicianComments = new ArrayList<>();
         vcfFile.setClinicianComments(clinicianComments);
-
+        vcfFile.setCreatedAt(java.time.LocalDate.now());
+        vcfFile.setFinishedAt(null);
+        
         // Save the vcf file and get the saved entity with ID populated
         VCFFile savedVcfFile = vcfRepository.save(vcfFile);
 
@@ -61,7 +63,12 @@ public class VCFService {
         List<VCFFile> vcfFiles =  vcfRepository.findAllByMedicalCenterId(medicalCenterId);
         List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
         for (VCFFile vcfFile : vcfFiles) {
-            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), vcfFile.getFileName(), vcfFile.getClinicianComments(), vcfFile.getClinician().getName(), vcfFile.getFileStatus());
+            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
+                                            vcfFile.getFileName(), vcfFile.getClinicianComments(), 
+                                            vcfFile.getClinician().getName(), 
+                                            vcfFile.getFileStatus(),
+                                            vcfFile.getCreatedAt(),
+                                            vcfFile.getFinishedAt());
             vcfFileDTOs.add(vcfFileDTO);
         }
         return vcfFileDTOs;
@@ -72,7 +79,13 @@ public class VCFService {
         List<VCFFile> vcfFiles =   vcfRepository.findAllByClinicianId(clinicianId);
         List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
         for (VCFFile vcfFile : vcfFiles) {
-            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), vcfFile.getFileName(), vcfFile.getClinicianComments(), vcfFile.getClinician().getName(), vcfFile.getFileStatus());
+            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
+                                        vcfFile.getFileName(), 
+                                        vcfFile.getClinicianComments(), 
+                                        vcfFile.getClinician().getName(), 
+                                        vcfFile.getFileStatus(),
+                                        vcfFile.getCreatedAt(),
+                                        vcfFile.getFinishedAt());
             vcfFileDTOs.add(vcfFileDTO);
         }
         return vcfFileDTOs;
