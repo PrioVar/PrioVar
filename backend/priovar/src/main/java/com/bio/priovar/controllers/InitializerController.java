@@ -74,6 +74,7 @@ public class InitializerController {
         clinicianRepository.save(clinician1);
 
         Patient patient1 = new Patient();
+        patient1.setName("Ali Veli");
         patient1.setAge(25);
         patient1.setSex("Male");
         patient1.setMedicalCenter(liva);
@@ -96,6 +97,7 @@ public class InitializerController {
         patientRepository.save(patient1);
 
         Patient patient2 = new Patient();
+        patient2.setName("Ayşe Fatma");
         patient2.setAge(40);
         patient2.setSex("Female");
         PhenotypeTerm phenotypeTerm5 = phenotypeTermRepository.findById(929L).get(); //from group 1
@@ -116,6 +118,7 @@ public class InitializerController {
         patientRepository.save(patient2);
 
         Patient patient3 = new Patient();
+        patient3.setName("Ahmet Meriç");
         patient3.setAge(33);
         patient3.setSex("Male");
         PhenotypeTerm phenotypeTerm3 = phenotypeTermRepository.findById(40085L).get(); //from group 2
@@ -134,6 +137,7 @@ public class InitializerController {
         patientRepository.save(patient3);
 
         Patient patient4 = new Patient();
+        patient4.setName("Ece Nur");
         patient4.setAge(20);
         patient4.setSex("Female");
         PhenotypeTerm phenotypeTerm9 = phenotypeTermRepository.findById(3351L).get(); //from group 2
@@ -174,6 +178,7 @@ public class InitializerController {
         clinicianRepository.save(clinician2);
 
         Patient patient5 = new Patient();
+        patient5.setName("Mehmet Ali");
         List<PhenotypeTerm> phenotypeTerms4 = new ArrayList<>();
         phenotypeTerms4.add(phenotypeTerm9);//g2
         patient5.setPhenotypeTerms(phenotypeTerms4);
