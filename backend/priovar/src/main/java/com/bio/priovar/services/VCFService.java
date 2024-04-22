@@ -1,6 +1,7 @@
 package com.bio.priovar.services;
 
 import com.bio.priovar.models.*;
+import com.bio.priovar.models.VCFFile.FileStatus;
 import com.bio.priovar.models.dto.VCFFileDTO;
 import com.bio.priovar.repositories.VCFRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class VCFService {
 
         VCFFile vcfFile = new VCFFile();
         vcfFile.setContent(base64Data);
-
+        vcfFile.setFileStatus(FileStatus.FILE_WAITING);
         // generate an uuid file name
         String fileName = UUID.randomUUID().toString();
         vcfFile.setFileName(fileName);
@@ -60,7 +61,7 @@ public class VCFService {
         List<VCFFile> vcfFiles =  vcfRepository.findAllByMedicalCenterId(medicalCenterId);
         List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
         for (VCFFile vcfFile : vcfFiles) {
-            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), vcfFile.getFileName(), vcfFile.getClinicianComments(), vcfFile.getClinician().getName());
+            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), vcfFile.getFileName(), vcfFile.getClinicianComments(), vcfFile.getClinician().getName(), vcfFile.getFileStatus());
             vcfFileDTOs.add(vcfFileDTO);
         }
         return vcfFileDTOs;
@@ -71,7 +72,7 @@ public class VCFService {
         List<VCFFile> vcfFiles =   vcfRepository.findAllByClinicianId(clinicianId);
         List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
         for (VCFFile vcfFile : vcfFiles) {
-            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), vcfFile.getFileName(), vcfFile.getClinicianComments(), vcfFile.getClinician().getName());
+            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), vcfFile.getFileName(), vcfFile.getClinicianComments(), vcfFile.getClinician().getName(), vcfFile.getFileStatus());
             vcfFileDTOs.add(vcfFileDTO);
         }
         return vcfFileDTOs;

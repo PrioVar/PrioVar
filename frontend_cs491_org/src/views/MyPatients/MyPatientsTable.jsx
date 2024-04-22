@@ -347,14 +347,6 @@ import {
           },
         },
         {
-          name: 'sample_name',
-          label: 'Sample',
-          options: {
-            filter: true,
-            sort: true,
-          },
-        },
-        {
           name: 'status',
           label: 'Status',
           options: {

@@ -33,6 +33,15 @@ public class VCFFile {
     @Relationship(type="FILE_BELONGS_TO_MEDICAL_CENTER")
     private MedicalCenter medicalCenter;
 
+    // Enum to represent file status
+    public enum FileStatus {
+        ANNOTATION_RUNNING,
+        FILE_ANNOTATED,
+        FILE_WAITING
+    }
+
+    private FileStatus fileStatus;
+
     public void addClinicianComment(ClinicianComment clinicianComment) {
         if(clinicianComments == null) {
             clinicianComments = new ArrayList<>();
