@@ -16,15 +16,16 @@ import java.util.UUID;
 public class VCFService {
     private final VCFRepository vcfRepository;
     private final ClinicianService clinicianService;
-
+    private final MedicalCenterService medicalCenterService;
 
     @Autowired
-    public VCFService(VCFRepository vcfRepository, ClinicianService clinicianService) {
+    public VCFService(VCFRepository vcfRepository, ClinicianService clinicianService, MedicalCenterService medicalCenterService) {
         this.clinicianService = clinicianService;
         this.vcfRepository = vcfRepository;
+        this.medicalCenterService = medicalCenterService;
     }
 
-    public ResponseEntity<Long> uploadVCF(String base64Data, Long clinicianId) {
+    public ResponseEntity<Long> uploadVCF(String base64Data, Long clinicianId, Long medicalCenterId) {
 
         VCFFile vcfFile = new VCFFile();
         vcfFile.setContent(base64Data);
@@ -34,6 +35,7 @@ public class VCFService {
         vcfFile.setFileName(fileName);
 
         vcfFile.setClinician(clinicianService.getClinicianById(clinicianId));
+        vcfFile.setMedicalCenter(medicalCenterService.getMedicalCenterById(medicalCenterId));
 
         List<ClinicianComment> clinicianComments = new ArrayList<>();
         vcfFile.setClinicianComments(clinicianComments);
@@ -50,4 +52,10 @@ public class VCFService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    public List<VCFFile> getVCFFilesByMedicalCenterId(Long medicalCenterId) {
+
+        return vcfRepository.findAllByMedicalCenterId(medicalCenterId);
+    }
+
 }

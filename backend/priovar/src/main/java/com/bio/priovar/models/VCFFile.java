@@ -27,4 +27,7 @@ public class VCFFile {
 
     @Relationship(type = "UPLOADED_BY", direction = Relationship.Direction.OUTGOING)
     private Clinician clinician;
+
+    @Relationship(type="FILE_BELONGS_TO_MEDICAL_CENTER")
+    private MedicalCenter medicalCenter;
 }
