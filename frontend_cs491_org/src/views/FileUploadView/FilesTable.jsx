@@ -33,11 +33,6 @@ import AnalysedCheckbox from '../common/AnalysedCheckbox'
 
 import VariantDasboard2 from '../common/VariantDasboard2'
 
-const addNewNote = (vcfFileId, note) => {
-  updateFileNotes(vcfFileId, note).then(() => {
-    //filesApi.refresh()
-  })
-}
 
 const EditableNote = ({ note, onSave, details }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -166,20 +161,26 @@ const SamplesView = function () {
   const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
-      try {
-        const data = await fecthClinicianFiles()
-        console.log(data)
-        setData(data)
-      } catch (error) {
-        console.error('Error fetching clinician files:', error)
-      } finally {
-        setIsLoading(false)
-      }
+  const fetchData = async () => {
+    setIsLoading(true)
+    try {
+      const data = await fecthClinicianFiles()
+      console.log(data)
+      setData(data)
+    } catch (error) {
+      console.error('Error fetching clinician files:', error)
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  const addNewNote = (vcfFileId, note) => {
+    updateFileNotes(vcfFileId, note).then(() => {
+      fetchData();
+    })
+  }
+
+  useEffect(() => {
     fetchData()
   }, [])
 
