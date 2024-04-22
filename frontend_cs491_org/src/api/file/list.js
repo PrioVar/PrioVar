@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient } from 'react-query'
 import axios from '../../utils/axios'
 import { API_BASE_URL,  } from '../../constants'
-import { ROOTS_PrioVar } from '../../routes/paths'
 
 const fetchAllFiles = async () => {
   const { data } = await axios.get(`${API_BASE_URL}/file/list`)
@@ -13,13 +12,6 @@ const fetchBedFiles = async () => {
   const { data } = await axios.get(`${API_BASE_URL}/bed/list`)
   return data
 }
-
-// NEW ADDITION ERKIN
-const fecthMedicalCenterFiles = async () => {
-  const { data } = await axios.get(`${ROOTS_PrioVar}/file/list/medical-center`)
-  return data
-}
-
 
 export const useFiles = () => {
   const queryClient = useQueryClient()
