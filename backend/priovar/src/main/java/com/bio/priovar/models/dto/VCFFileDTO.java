@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bio.priovar.models.ClinicianComment;
+import com.bio.priovar.models.VCFFile.FileStatus;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,11 +17,15 @@ public class VCFFileDTO {
     private String fileName;
     private List<String> clinicianComments;
     private String clinicianName;
+    // Enum to represent file status
+    
+    private FileStatus fileStatus;
 
     public VCFFileDTO(Long vcfFileId, 
                     String fileName, 
                     List<ClinicianComment> clinicianComments, 
-                    String clinicianName) {
+                    String clinicianName,
+                    FileStatus fileStatus) {
         this.vcfFileId = vcfFileId;
         this.fileName = fileName;
         if(clinicianComments != null) {
@@ -36,5 +41,6 @@ public class VCFFileDTO {
             this.clinicianComments = null;
         }
         this.clinicianName = clinicianName;
+        this.fileStatus = fileStatus;
     }
 }
