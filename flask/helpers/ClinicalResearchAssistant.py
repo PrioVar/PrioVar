@@ -119,7 +119,7 @@ class ClinicalResearchAssistant:
             "article_count: $article_count, "
             "article_titles: $article_titles, "
             "RAG_GPT_output: $RAG_GPT_output}) "
-            "MERGE (mc)-[:HAS_CHAT]->(c) "
+            "MERGE (c)-[:HAS_CHAT]->(mc) "
             "RETURN c"
         )
         parameters = {
@@ -218,3 +218,10 @@ def analyze(data):
     assistant.close()
 
     return jsonify(response_data), 200
+
+
+def get_chat_history(medical_center_id):
+    assistant = ClinicalResearchAssistant()
+    chats = assistant.get_chats_by_medical_center(medical_center_id)
+    assistant.close()
+    return jsonify(chats), 200
