@@ -10,7 +10,7 @@ import numpy as np
 import torch
 import helpers.hpo_sample
 from helpers import hpo_sample
-from helpers.gene_mapping import get_gene_phenotype_relations
+from helpers.gene_mapping import get_gene_phenotype_relations, get_gene_phenotype_relations_and_frequency
 
 path_variants = '../data/5bc6f943-66e0-4254-94f5-ed3888f05d0a.vep.tsv'
 
@@ -49,7 +49,6 @@ def read_dicts(gene_path = path_gene_dict, hpo_path = path_hpo_dict):
     hpo_dict = torch.load(path_hpo_dict)
     return gene_dict, hpo_dict
 
-#symbols = df['SYMBOL']
 
 important_noticeIII_some_genes_in_the_annotation_is_not_in_graph = """# check if symbols are in gene_dict
 not_in_gene_dict = []
@@ -64,7 +63,7 @@ print(len(not_in_gene_dict))
 4029961 in the gene dict
 """
 
-# get phenetype gene relations
+
 
 
 def add_sampled_hpo_terms_full_precise(df_variants, node_embeddings ,gene_dict, hpo_dict, number_of_phenotypes):
@@ -130,6 +129,7 @@ if False:
 
 
 
+
 #example row
 #Uploaded_variation	Allele	Gene	Feature	Consequence	Existing_variation	SYMBOL	CANONICAL	SIFT	PolyPhen	HGVSc	HGVSp	AF	gnomADe_AF	CLIN_SIG	REVEL	SpliceAI_pred	DANN_score	MetaLR_score	CADD_raw_rankscore	ExAC_AF	ALFA_Total_AF	AlphaMissense_score	AlphaMissense_pred	turkishvariome_TV_AF
 #2205837	G	ENSG00000186092	ENST00000641515	missense_variant	rs781394307	OR4F5	YES	tolerated(0.08)	benign(0.007)	ENST00000641515.2:c.107A>G	ENSP00000493376.2:p.Glu36Gly	-	0.02667	likely_benign	0.075	OR4F5|0.00|0.00|0.02|0.03|45|-1|-19|-1	0.95777141322514492	0.0013	0.24798	1.655e-03	0.0011802394199966278	0.0848,0.0854	B,B	-
@@ -160,51 +160,39 @@ if False:
 ## AlphaMissense_score : (from dbNSFP4.5a_grch38) AlphaMissense is a unsupervised model for predicting the pathogenicity of human missense variants by incorporating structural context of an AlphaFold-derived system. The AlphaMissense score ranges from 0 to 1. The larger the score, the more likely the variant is pathogenic. Detals see https://doi.org/10.1126/science.adg7492. License information: "AlphaMissense Database Copyright (2023) DeepMind Technologies Limited. All predictions are provided for non-commercial research use only under CC BY-NC-SA license." This distribution of AlphaMissense_score, AlphaMissense_rankscore, and AlphaMissense_pred are also under CC BY-NC-SA license. A copy of CC BY-NC-SA license can be found at https://creativecommons.org/licenses/by-nc-sa/4.0/.
 ## AlphaMissense_pred : (from dbNSFP4.5a_grch38) The AlphaMissense classification of likely (B)enign, (A)mbiguous, or likely (P)athogenic with 90% expected precision estimated from ClinVar for likely benign and likely pathogenic classes.
 ## turkishvariome_TV_AF : TV_AF field from [PATH]/TurkishVariome.vcf.gz
-def clean_data(df_variants):
+def clean_data(df_variants, output_pickle_file, labels = ['pathogenic', 'benign', 'likely_benign', 'likely_pathogenic']):
     # only get the rows with pathogenic or benign, likely_benign, likely_pathogenic values in CLIN_SIG column
-    df_variants = df_variants[df_variants['CLIN_SIG'].isin(['pathogenic', 'benign', 'likely_benign', 'likely_pathogenic'])]
-    # divide  Hgvsc  columns into two columns by splitting the values by ':'
+    df_variants = df_variants[df_variants['CLIN_SIG'].isin(labels)]
+
+
+    # divide  HGVSc  columns into two columns by splitting the values by ':' 	ENST00000616125.5:c.11G>A
     df_variants[['HGVSc', 'HGVSc2']] = df_variants['HGVSc'].str.split(':', expand=True)
-    # divide  Hgvsp  columns into two columns by splitting the values by ':'
+
+    # extract the info from the HGVSc2 column so that we have the 2 more columns 11, G>A # ENST00000616125.5:c.11G>A
+    df_variants[['HGVSc_number', 'HGVSc_change']] = df_variants['HGVSc2'].str.extract(r'c\.(\d+)([A-Z]>.*)')
+
+    # divide  Hgvsp  columns into two columns by splitting the values by ':' 	ENSP00000484643.1:p.Gly4Glu
     df_variants[['HGVSp', 'HGVSp2']] = df_variants['HGVSp'].str.split(':', expand=True)
+    # extract the info from the HGVSp2 column so that we have the 2 more columns 4, GlyGlu namely number in the middle and the change
+    # pay attention that there should be 2 columns
+    df_variants[['HGVSp_from', 'HGVSp_number', 'HGVSp_to']] = df_variants['HGVSp2'].str.extract(
+        r'p\.([A-Z][a-z]+)(\d+)([A-Z][a-z]+)')
+
+    # combine from and to columns to get the change
+    df_variants['HGVSp_change'] = df_variants['HGVSp_from'] + df_variants['HGVSp_to']
+
+    # drop the columns that are not needed
+    df_variants = df_variants.drop(columns=['HGVSc', 'HGVSc2', 'HGVSp2', 'HGVSp_from', 'HGVSp_to'])
+
+
+
 
     # divide  SpliceAI_pred  columns into 8 columns by splitting the values by '|' and drop the first column
     df_variants[['SpliceAI_pred_symbol', 'DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']] = df_variants['SpliceAI_pred'].str.split('|', expand=True)
     df_variants = df_variants.drop(columns=['SpliceAI_pred', 'SpliceAI_pred_symbol'])
 
-    # divide alpha missense columns has several (different) values seperated by commas, replace the values as mean of the values and standard deviation of the values (pay attention to "-" values)
-    # note that number of values are not the same for each row, so we cannot use str.
-    """
-    df[['mean', 'std_dev']] = df['values'].apply(
-        lambda x: (np.nan, np.nan) if x == "-" else 
-        ((mean := np.mean(numbers := np.array(x.split(',')).astype(float))), np.std(numbers))
-    ).apply(pd.Series)
-    """
-
-    """
-    def find_problematic_rows(df):
-        problematic_rows = []
-        for index, row in df.iterrows():
-            try:
-                # Attempt to convert each value in the 'values' column to float, after splitting by comma
-                [float(num) for num in row['AlphaMissense_score'].split(',') if num != "-"]
-            except ValueError:
-                # If a ValueError occurs, add the row index to the problematic_rows list
-                problematic_rows.append(index)
-        return problematic_rows
-    
-    # Find and print problematic rows
-    problematic_rows = find_problematic_rows(df_variants)
-    if problematic_rows:
-        print("Problematic rows found at indices:", problematic_rows)
-        print("Problematic data:", df_variants.loc[problematic_rows])
-    else:
-        print("No problematic rows found.")"""
-
-
 
     # alpha missense scorelarda . lar var
-
     # eliminate ,., values for example 0.0848,.,0.0854 -> 0.0848,0.0854 or .,0.5 -> 0.5  or 0.5,. -> 0.5 so, repleca . , pairs that is adjacent to each other
 
     df_variants[['AlphaMissense_score_mean', 'AlphaMissense_std_dev']] = df_variants['AlphaMissense_score'].apply(
@@ -223,13 +211,18 @@ def clean_data(df_variants):
         lambda x: (np.nan, np.nan, np.nan) if x == "-" or sum(x) == 0 else (x[0] / sum(x), x[1] / sum(x), x[2] / sum(x))).apply(pd.Series)
 
 
-    # for each column print the different values in the first 100 rows and number of different values in the column (as a whole)
-    for column in df_variants.columns:
-        print("--------------------")
-        print(column)
-        for value in df_variants[column].head(100):
-            print(value)
-        print(df_variants[column].nunique())
+    # HGSV.. columns
+    # make the column HGVSc_number a numerical column for model (pay attention to "-" values)
+    df_variants['HGVSc_number'] = df_variants['HGVSc_number'].replace('-', np.nan).astype('float')
+
+    # make the column HGVSp_number a numerical column for model (pay attention to "-" values)
+    df_variants['HGVSp_number'] = df_variants['HGVSp_number'].replace('-', np.nan).astype('float')
+
+    # make the column HGVSp_change a categorical column for model
+    df_variants['HGVSp_change'] = df_variants['HGVSp_change'].astype('category')
+
+    # make the column HGVSc_change a categorical column for model
+    df_variants['HGVSc_change'] = df_variants['HGVSc_change'].astype('category')
 
     # make the column canonical a categorical column for model
     df_variants['CANONICAL'] = df_variants['CANONICAL'].astype('category')
@@ -244,7 +237,6 @@ def clean_data(df_variants):
     # make the column SIFT a numerical column and categorical for model by extracting the number from the string and taking the string before by looking for the '(number)'
     df_variants['SIFT_number'] = df_variants['SIFT'].str.extract(r'\((\d+\.\d+)\)').astype('float')
     df_variants['SIFT'] = df_variants['SIFT'].str.extract(r'(\w+)').astype('category')
-
 
     # make the gene column a categorical column for model
     df_variants['SYMBOL'] = df_variants['SYMBOL'].astype('category')
@@ -289,27 +281,30 @@ def clean_data(df_variants):
     df_variants['turkishvariome_TV_AF'] = df_variants['turkishvariome_TV_AF'].replace('-', np.nan).astype('float')
 
     # check the columns again
+    debug = """
     for column in df_variants.columns:
         print("-NEWWWWW-------------------")
         print(column)
         for value in df_variants[column].head(100):
             print(value)
         print(df_variants[column].nunique())
-
+    """
     # save the dataframe to a new file that preseves data types (category, numerical etc for each column)
     # pickle the dataframe
-    df_variants.to_pickle('multilabel_clean.pkl')
+    df_variants.to_pickle(output_pickle_file)
 
 
 # call
 #df_variants = read_variants()
-#clean_data(df_variants)
-#exit(0)
+# output to data folder
+#clean_data(df_variants, '../data/variants_cleaned.pkl')
+#exit()
+
 
 
 
 # triplets of strategyies for hpo_sample.sample_from_random_strategy like (precise, imprecise, noisy)
-hpo_sample_strategies = [(2, 1, 0), (2, 0, 0), (3, 0, 1), (1, 2, 0), (2, 2, 0)]
+hpo_sample_strategies = [(3, 2, 1), (4, 2, 1), (2, 1, 0), (1, 2, 0), (2, 2, 0)]
 
 def sample_hpo_terms_for_variants_optimized(df_variants, gene_dict, max_ancesteral_depth = 10 , put_in_the_df = False):
 
@@ -391,6 +386,94 @@ def sample_hpo_terms_for_variants_optimized(df_variants, gene_dict, max_ancester
     print("Sampled HPO terms for variants are saved to sampled_hpoIDs_for_variants.pkl")
     return sampled_hpoIDs_for_variants, df_variants
 
+
+
+def sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, output_pickle_file ,max_ancesteral_depth = 10 , put_in_the_df = False):
+    # order df_variants by SYMBOL
+    df_variants = df_variants.sort_values(by='SYMBOL')
+
+    # add new column to the dataframe to store the sampled HPO terms
+    if put_in_the_df:
+        # np.nan is used to represent missing values
+        df_variants['sampled_hpo'] = np.nan
+
+    # get the gene-phenotype relations
+    gene_phenotype_relations = get_gene_phenotype_relations_and_frequency()
+
+    # create a network object from hpo_sample
+    network = hpo_sample.Network()
+
+    # create dictionary named: sampled_hpoIDs_for_variants
+    # key: variant name (e.g. 'rs12345'), value: list of sampled HPO terms
+    sampled_hpoIDs_for_variants = {}
+
+    # proccessed variants
+    count = 0
+    j = 0
+    print("Loop for phenotypes started")
+    # for each gene in the dataframe (ordered) , sample hpo terms using get_pool function
+    # dont calulate the hpo terms for the same gene again
+    last_gene = None
+    last_hpo_terms = []
+    last_hpo_pool = []
+    # among hpo_sample_strategies get the max of sum of precise and imprecise not noisy
+    max_number_of_relevant_phenotypes = max([sum(strategy[:2]) for strategy in hpo_sample_strategies])
+    for i, row in df_variants.iterrows():
+        if j % 1000 == 0:
+            print("Row: ", j)
+        j += 1
+
+        # get the gene
+        gene = row['SYMBOL']
+
+        # if the gene is not in the gene_dict, continue to the next iteration
+        if gene not in gene_dict:
+            continue
+
+        # get the HPO terms for the gene from the gene-phenotype relations
+        if gene != last_gene:
+            hpo_terms_and_frequencies = [relation[1:] for relation in gene_phenotype_relations if relation[0] == gene]
+
+            # get the terms with the highest frequencies (top 10) pay attention to None values consider them as 0
+            hpo_terms_and_frequencies = sorted(hpo_terms_and_frequencies, key = lambda x: x[1] if x[1] is not None else 0, reverse = True)
+
+            # get the most frequent max_number_of_relevant_phenotypes HPO terms if there are less than max_number_of_relevant_phenotypes, get all
+            hpo_terms = [relation[0] for relation in hpo_terms_and_frequencies[:max_number_of_relevant_phenotypes]]
+
+            last_gene = gene
+            last_hpo_terms = hpo_terms
+            last_hpo_pool = network.get_imprecision_pool(hpo_terms, max_ancesteral_depth)
+
+        if len(last_hpo_terms) == 0:
+            continue
+
+        count += 1
+        if count % 100 == 0:
+            print("Processed variants (sample pheno) : ", count)
+
+        strategy = random.choice(hpo_sample_strategies)
+        precision = min(strategy[0], len(last_hpo_terms))
+        imprecision = min(strategy[1], len(last_hpo_pool))
+
+        precise_samples = random.sample(last_hpo_terms, precision)
+        imprecise_samples = random.sample(last_hpo_pool, imprecision)
+
+        combined = precise_samples + imprecise_samples
+
+        # no noisy for now
+
+        # add the sampled HPO terms to the dictionary
+        sampled_hpoIDs_for_variants[row['#Uploaded_variation']] = combined
+
+        if put_in_the_df:
+            df_variants.at[i, 'sampled_hpo'] = ','.join([str(hpo) for hpo in combined])
+
+    # save dictionary to a file
+    with open(output_pickle_file, 'wb') as f:
+        pickle.dump(sampled_hpoIDs_for_variants, f)
+
+    print("Sampled HPO terms for variants are saved to ", output_pickle_file)
+    return sampled_hpoIDs_for_variants, df_variants
 
 
 def test_sample_hpo_terms_for_variants_optimized():
@@ -582,31 +665,26 @@ def run_binary_classification():
     model.save_model('../data/modelinzi.xgb')
 
 
-def run_multilabel():
+def run_multilabel(data_path, output_path):
     print("Startanzi")
     # read clean data
     # mostly clean
     # df_clean = pd.read_pickle('dataframe.pkl')
-    df_clean = pd.read_pickle('multilabel_clean.pkl')
+    df_clean = pd.read_pickle(data_path)
 
-    # sample 5 HPO terms for each gene and add the embeddings to the dataframe
-    # get the embeddings of the HPO terms
-    # node_embeddings = read_embedding()
-    # read the gene and hpo dictionaries
-    # gene_dict, hpo_dict = read_dicts()
-    # calculate the neutral embedding as the root embedding
-    # neutral_embedding = calculate_neutral_embedding_as_root_embedding(node_embeddings, hpo_dict)
+    # make HGvsp categorical
+    df_clean['HGVSp'] = df_clean['HGVSp'].astype('category')
+
 
     # ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:Allele: category, Gene: object, Feature: category, Consequence: category, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object, DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
     # drop :Gene, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object,
     df_clean = df_clean.drop(
-        columns=['Gene', 'Existing_variation', 'SYMBOL', 'CANONICAL', 'SIFT', 'PolyPhen', 'HGVSc', 'HGVSp',
-                 'AlphaMissense_score', 'AlphaMissense_pred', 'HGVSc2', 'HGVSp2'])
+        columns=['Gene', 'Existing_variation', 'CANONICAL', 'AlphaMissense_score', 'AlphaMissense_pred'])
     # make float or nan :  DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
 
     # drop uploaded_variation
     df_clean = df_clean.drop(columns=['#Uploaded_variation'])
-    df_clean = df_clean.drop(columns=['Feature'])
+    #df_clean = df_clean.drop(columns=['Feature'])
 
     # convert the columns to float (pay attention to "None" values)
     # there are some None values in the columns, so we need to replace them with np.nan
@@ -615,9 +693,9 @@ def run_multilabel():
         'float')
 
     # print data types and classes of the columns
-    print(df_clean.dtypes)
-    print(df_clean.select_dtypes(include=['category']).columns)
-    print(df_clean.select_dtypes(include=['object']).columns)
+    #print(df_clean.dtypes)
+    #print(df_clean.select_dtypes(include=['category']).columns)
+    #print(df_clean.select_dtypes(include=['object']).columns)
 
     # separate the data into features and target (label is CLIN_SIG)
     y = df_clean['CLIN_SIG']
@@ -647,17 +725,52 @@ def run_multilabel():
     dtrain = xgb.DMatrix(X_train, label=y_train, enable_categorical=True)
     dtest = xgb.DMatrix(X_test, label=y_test, enable_categorical=True)
 
+    # print columns of dtrain
+    print(dtrain.feature_names)
+
+
+
     # print columns of the dataframe
     print(X_train.columns)
 
     # Train XGBoost model
-    params = {
+    """params = {
         "objective": "multi:softmax",
         "eval_metric": 'mlogloss',  # 'logloss' is for binary classification. Use 'mlogloss' for multi-class.
         "num_class": 4  # Assuming there are 4 classes. Adjust according to your dataset.
     }
     num_rounds = 500
-    model = xgb.train(params, dtrain, num_rounds)
+    model = xgb.train(params, dtrain, num_rounds)"""
+
+    params = {
+        "objective": "multi:softmax",
+        "eval_metric": "mlogloss",
+        "num_class": 4,  # Assuming there are 4 classes. Adjust according to your dataset.
+        #"max_depth": 8,  # Control the depth of the tree to prevent overfitting
+        #"min_child_weight": 1,  # Minimum sum of instance weight (hessian) needed in a child
+        #"gamma": 0.1,  # Minimum loss reduction required to make a further partition on a leaf node
+        #"subsample": 0.8,  # Subsample ratio of the training instances.
+        #"colsample_bytree": 0.8,  # Subsample ratio of columns when constructing each tree.
+        #"lambda": 1,  # L2 regularization term on weights
+        #"alpha": 0  # L1 regularization term on weights
+    }
+
+    num_rounds = 1000
+    early_stopping_rounds = 50  # Stop if no improvement after this many rounds
+
+    # Training with early stopping
+    evals_result = {}
+    model = xgb.train(
+        params,
+        dtrain,
+        num_boost_round=num_rounds,
+        evals=[(dtrain, 'train'), (dtest, 'eval')],
+        early_stopping_rounds=early_stopping_rounds,
+        evals_result=evals_result,
+        verbose_eval=True
+    )
+
+    print(f"Best iteration: {model.best_iteration + 1}")
 
     # Predict probabilities
     y_pred_proba = model.predict(dtest)
@@ -677,8 +790,8 @@ def run_multilabel():
 
     print("Sample predicted probabilities and answers:", list(zip(y_pred[:100], y_test[:100])))
 
-    # save the model
-    model.save_model('../data/multilabal_modelinzi.xgb')
+    # save the model best iteration
+    model.save_model(output_path)
 
 
 def add_embedding_info(df_variants, path_to_embedding, path_to_gene_dict, path_to_hpo_dict, path_to_sampled_hpo,
@@ -789,30 +902,72 @@ def add_embedding_info(df_variants, path_to_embedding, path_to_gene_dict, path_t
 
 
 
+# read the cleaned datadf_variants = pd.read_pickle('../data/variants_cleaned.pkl')
+
+# read dictionaries
+#gene_dict, hpo_dict = read_dicts()
+
+# add the sampled HPO terms to the dataframe (frequency based)
+#sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, '../data/sampled_hpoIDs__with_freq_for_variants.pkl', put_in_the_df=False)
+
+
+def print_num_unique_values_of_categorical_columns(df):
+    print("Categorical columns")
+    for column in df.select_dtypes(include=['category']).columns:
+        print(column, ":", len(df[column].unique()))
+
+    print("Non-categorical columns")
+    # for the ones that are not categorical columns
+    for column in df.select_dtypes(exclude=['category']).columns:
+        print(column, ":", len(df[column].unique()))
 
 
 
 
-print("Startanzi")
-# add embedding info to the dataframe
-
-df_variants = pd.read_pickle('dataframe.pkl')
-
-# print first 10 rows of the dataframe
-print(df_variants.head(10))
-
-# add embedding info to the dataframe
-df_variants = add_embedding_info(df_variants, path_to_embedding='../data/node_embeddings.txt', path_to_gene_dict='../data/gene_dict.pkl', path_to_hpo_dict='../data/hpo_dict.pkl', path_to_sampled_hpo='sampled_hpoIDs_for_variants.pkl',
-                                    add_scaled_average_dot_product=True, add_scaled_min_dot_product=True, add_scaled_max_dot_product=True, add_average_dot_product=True, add_min_dot_product=True, add_max_dot_product=True)
 
 
-print(df_variants.head(10))
-# eliminate the rows that has none as average_dot_product
-df_variants = df_variants.dropna(subset=['average_dot_product'])
-print(df_variants.head(10))
-# save df_variants to a new file in data folder outside the repository
-df_variants.to_pickle('../data/dataframe_with_embedding.pkl')
-print("Dataframe with embedding is saved to dataframe_with_embedding.pkl")
+# run multilabel classification
+
+#run_multilabel('../data/df_with_first_embedding_freq_based.pkl', '../data/model_with_first_embedding_freq_based.xgb')
+
+
+
+
+#df = pd.read_pickle('../data/df_with_first_embedding_freq_based.pkl')
+
+"""print("len of df: ", len(df))
+
+print_num_unique_values_of_categorical_columns(df)
+
+# print some values of the dataframe from every column
+for column in df.select_dtypes(include=['category']).columns:
+    print(column, ":", df[column].unique()[:10])
+
+
+
+exit()"""
+
+
+def add_embo():
+    print("Startanzi")
+
+
+    df_variants = pd.read_pickle('../data/variants_cleaned.pkl')
+
+
+
+    # add embedding info to the dataframe
+    df_variants = add_embedding_info(df_variants, path_to_embedding='../data/node_embeddings.txt', path_to_gene_dict='../data/gene_dict.pkl', path_to_hpo_dict='../data/hpo_dict.pkl', path_to_sampled_hpo='../data/sampled_hpoIDs__with_freq_for_variants.pkl',
+                                        add_scaled_average_dot_product=True, add_scaled_min_dot_product=True, add_scaled_max_dot_product=True, add_average_dot_product=True, add_min_dot_product=True, add_max_dot_product=True)
+
+
+    print(df_variants.head(10))
+    # eliminate the rows that has none as average_dot_product
+    df_variants = df_variants.dropna(subset=['average_dot_product'])
+    print(df_variants.head(10))
+    # save df_variants to a new file in data folder outside the repository
+    df_variants.to_pickle('../data/df_with_first_embedding_freq_based.pkl')
+    print("Dataframe with embedding is saved to dataframe_with_embedding.pkl")
 
 
 
