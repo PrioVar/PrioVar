@@ -1,6 +1,19 @@
 import { useQuery, useQueryClient } from 'react-query'
 import axios from '../../utils/axios'
-import { API_BASE_URL } from '../../constants'
+import { API_BASE_URL,  } from '../../constants'
+import { ROOTS_PrioVar } from '../../routes/paths'
+
+// NEW ADDITION ERKIN
+export const fecthClinicianFiles = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byClinician/${localStorage.getItem('clinicianId')}`)
+  return data
+}
+
+// NEW ADDITION ERKIN
+export const fecthMedicalCenterFiles = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byMedicalCenter/${localStorage.getItem('healthCenterId')}`)
+  return data
+}
 
 const fetchAllFiles = async () => {
   const { data } = await axios.get(`${API_BASE_URL}/file/list`)
@@ -67,10 +80,23 @@ export const updateFinishInfo = async (fileId) => {
   return data
 }
 
-export const updateFileNotes = async (fileId, notes) => {
+export const updateFileNotes = async (vcfFileId, notes) => {
+  const formData = new FormData();
+  formData.append('vcfFileId', vcfFileId);
+  formData.append('clinicianId', localStorage.getItem('clinicianId'))
+  formData.append('clinicianNotes', notes)
+  try {
+    const { data } = await axios.post(`${ROOTS_PrioVar}/vcf/addNote`, formData);
+    return data
+
+  } catch (error) {
+    console.log(error)
+  }
+  /*
   const { data } = await axios.put(`${API_BASE_URL}/file/${fileId}`, {
     type: 'notes',
     notes,
   })
   return data
+  */
 }
