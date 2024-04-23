@@ -24,7 +24,14 @@ export const uploadFile = async (file, onUploadProgress, cancelToken) => {
           cancelToken: cancelToken
         });
 
-        resolve(response.data);
+        // Assuming response.data contains the ID of the uploaded VCF file as a Long
+        if (response && response.data) {
+            localStorage.setItem('vcfFileId', response.data.toString()); 
+            console.log(response.data.toString());
+            resolve(response.data);
+        } else {
+        reject(new Error('No data in response'));
+        }
       } catch (error) {
         if (!isCancel(error)) {
           reject(error);
