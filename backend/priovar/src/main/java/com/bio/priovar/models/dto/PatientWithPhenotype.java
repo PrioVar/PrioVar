@@ -14,4 +14,5 @@ import java.util.List;
 public class PatientWithPhenotype {
     private Patient patient;
     private List<PhenotypeTerm> phenotypeTerms;
+    private Long vcfFileId;
 }

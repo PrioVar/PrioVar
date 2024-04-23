@@ -342,7 +342,8 @@ import {
                 id: localStorage.getItem('healthCenterId'),
             }
           },
-        phenotypeTerms: phenotypeTerms
+        phenotypeTerms: phenotypeTerms,
+        vcfFileId: vcfFileId
       }
       console.log("request:")
       console.log(request)
@@ -355,9 +356,9 @@ import {
         console.error('add patient error:', error.response);
       }
       const { id, type } = { id: vcfFileId, type: 'VCF' }
-      updateDetails(id, details, type)
+      //updateDetails(id, details, type)
       //handle button change
-      filesApi.refresh()
+      //filesApi.refresh()
     }
   
     const [hpoList, setHpoList] = useHpo({ fileId })
