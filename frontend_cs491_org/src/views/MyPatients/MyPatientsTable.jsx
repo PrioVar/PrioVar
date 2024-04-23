@@ -176,10 +176,7 @@ import {
       try {
           const response = await fetchCurrentClinicianName();
           setClinicianName(response.data); // Assuming the response contains the clinician object with a name attribute
-          console.log("name:")
 
-          console.log(response.data.name)
-          console.log("nameaasasas")
         } catch (error) {
           console.error('Failed to fetch clinician data:', error);
       }
@@ -265,202 +262,203 @@ import {
     }, [])
 
     const COLUMNS = [
-        {
-          name: 'delete',
-          label: 'Delete',
-          options: {
-            filter: false,
-            sort: false,
-            customBodyRenderLite(dataIndex) {
-              const row = data[dataIndex]
-              if (!row) return null
-    
-              const handleClickConfirm = () => {
-                deleteVcfFile(row.patientId).then(() => {
-                  filesApi.refresh()
-                });
-              }
-    
-              return <DeleteFileButton onClickConfirm={handleClickConfirm} />
-            },
+      {
+        name: 'delete',
+        label: 'Delete',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex]
+            if (!row) return null
+  
+            const handleClickConfirm = () => {
+              deleteVcfFile(row.patientId).then(() => {
+              });
+            }
+  
+            return <DeleteFileButton onClickConfirm={handleClickConfirm} />
           },
         },
-        
-        {
-          name: 'created_at',
-          label: 'Uploaded At',
-          options: {
-            filter: false,
-            sort: true,
-            customBodyRenderLite(dataIndex) {
-              const row = data[dataIndex]
-              return row ? fDateTime(row.file.createdAt) : null
-            },
+      },
+      
+      {
+        name: 'created_at',
+        label: 'Uploaded At',
+        options: {
+          filter: false,
+          sort: true,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex]
+            return row && row.file ? fDateTime(row.file.createdAt) : null;
+
           },
         },
-        
-        {
-          name: 'finished_at',
-          label: 'Completed',
-          options: {
-            filter: true,
-            sort: false,
-            customBodyRenderLite(dataIndex) {
-              const row = data[dataIndex]
-              return row ? (
-                <AnalysedCheckbox
-                  checked={row.file.finishedAt != null}
-                  onChange={(e) => setFinishedInfo(row)}
-                  details={{ date: row.finish_time, person: row.finish_person }}
-                />
-              ) : null
-            },
+      },
+      {
+        name: 'finished_at',
+        label: 'Completed',
+        options: {
+          filter: true,
+          sort: false,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex]
+            return row ? (
+              <AnalysedCheckbox
+                checked={row.file?.finishedAt != null}
+                onChange={(e) => setFinishedInfo(row)}
+                details={{ date: row.finish_time, person: row.finish_person }}
+              />
+            ) : null
           },
         },
-        
-        {
-          name: 'notes',
-          label: 'Notes',
-          options: {
-            filter: false,
-            sort: false,
-            customBodyRenderLite(dataIndex) {
-              const row = data[dataIndex]
-              return row ? (
-                <ExpandOnClick
-                  expanded={
-                    <EditableNote
-                      note={row.file.clinicianComments}
-                      onSave={(notes) => setFileNotes(row, notes)}
-                      details={{ date: row.notes_time, person: row.notes_person }}
-                    />
-                  }
-                >
-                  {({ ref, onClick }) => (
-                    <IconButton variant="contained" ref={ref} onClick={onClick}>
-                      <Note />
-                    </IconButton>
-                  )}
-                </ExpandOnClick>
-              ) : null
-            },
+      },
+      
+      {
+        name: 'notes',
+        label: 'Notes',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex];
+            return row && row.file ? (
+              <ExpandOnClick
+                expanded={
+                  <EditableNote
+                    note={row.file.clinicianComments}
+                    onSave={(notes) => setFileNotes(row, notes)}
+                    details={{ date: row.notes_time, person: row.notes_person }}
+                  />
+                }
+              >
+                {({ ref, onClick }) => (
+                  <IconButton variant="contained" ref={ref} onClick={onClick}>
+                    <Note />
+                  </IconButton>
+                )}
+              </ExpandOnClick>
+            ) : null;
           },
         },
-        {
-          name: 'name',
-          label: 'Filename',
-          options: {
-            filter: true,
-            sort: true,
-            customBodyRenderLite: (dataIndex) => {
-              const row = data[dataIndex]
-              if (!row) return null
-              return <Chip label={row.file.fileName} />
-            },
+      },
+      {
+        name: 'name',
+        label: 'Filename',
+        options: {
+          filter: true,
+          sort: true,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            if (!row) return null
+            if (!row.file) return null
+            return <Chip label={row.file.fileName} />
           },
         },
-        {
-          name: 'status',
-          label: 'Status',
-          options: {
-            filter: false,
-            sort: true,
-            customBodyRenderLite: (dataIndex) => {
-              const row = data[dataIndex]
-              const status = getStatusLabel(row)
-              return status ? <JobStateStatus status={status} /> : null
-            },
+      },
+      {
+        name: 'status',
+        label: 'Status',
+        options: {
+          filter: false,
+          sort: true,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            const status = getStatusLabel(row)
+            return status ? <JobStateStatus status={status} /> : null
           },
         },
-        {
-          name: 'similar_patients',
-          label: 'See similar patients',
-          options: {
-            filter: false,
-            sort: true,
-            customBodyRenderLite(dataIndex) {
-              const row = data[dataIndex]
-              return (
-                  <Button variant="contained" color="info" onClick={() => handleSeeSimilarPatients(row)} size="small">
-                    <Info />
-                  </Button>
-                )
-            },
+      },
+      {
+        name: 'similar_patients',
+        label: 'See similar patients',
+        options: {
+          filter: false,
+          sort: true,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex]
+            return (
+                <Button variant="contained" color="info" onClick={() => handleSeeSimilarPatients(row)} size="small">
+                  <Info />
+                </Button>
+              )
           },
         },
-        {
-          name: 'details',
-          label: 'Details',
-          options: {
-            filter: false,
-            sort: true,
-            customBodyRenderLite(dataIndex) {
-              const row = data[dataIndex]
-              return (
-                  <Button variant="contained" color="info" onClick={() => handleDetails(row)} 
-                  component={RouterLink} to={PATH_DASHBOARD.general.patientDetails} size="small">
-                    <Info />
-                  </Button>
-                )
-            },
+      },
+      {
+        name: 'details',
+        label: 'Details',
+        options: {
+          filter: false,
+          sort: true,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex]
+            return (
+                <Button variant="contained" color="info" onClick={() => handleDetails(row)} 
+                component={RouterLink} to={PATH_DASHBOARD.general.patientDetails} size="small">
+                  <Info />
+                </Button>
+              )
           },
         },
-        {
-          name: 'go',
-          label: 'Go',
-          options: {
-            filter: false,
-            sort: false,
-            customBodyRenderLite: (dataIndex) => {
-              const row = data[dataIndex]
-              const status = getStatusLabel(row)
-              if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
-              if (status.includes('ANNO') || status === 'WAITING')
-                return (
-                    <GoToSampleDashboard fileId={row.file.fileName} />
-                )
+      },
+      {
+        name: 'go',
+        label: 'Go',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            const status = getStatusLabel(row)
+            if(!row.file) return null
+            if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
+            if (status.includes('ANNO') || status === 'WAITING')
               return (
                 <GoToSampleDashboard fileId={row.file.fileName} />
               )
-            },
+            return (
+              <GoToSampleDashboard fileId={row.file.fileName} />
+            )
           },
         },
-      ]
-
-      return (
-        <>
-          <Box display="flex" justifyContent="flex-end" mt={2}> 
-          <Button 
-              variant="contained" 
-              color="info" 
-              component={RouterLink} to={PATH_DASHBOARD.general.files}
-              size="small"
-          >
-              <Add /> 
-              Add Patient 
-          </Button>
-          </Box>
-          <VariantDasboard2
-          open={isAnnotationModalOpen}
-          handleButtonChange = {handleButtonChange}
-          onClose={() => setAnnotationModalOpen()}
-          />
-          <MUIDataTable
-            title={`All patients of clinician ${clinicianName || '...'}`} // Dynamically update the title
-            data={data}
-            columns={COLUMNS}
-            options={{
-              selectableRows: 'none',
-              sortOrder: { name: 'created_at', direction: 'desc' },
-              expandableRows: false,
-              print: false,
-              viewColumns: true,
-              download: false,
-            }}
-          />
-        </>
-      )
-    }
+      },
+    ]
+    
+    return (
+      <>
+        <Box display="flex" justifyContent="flex-end" mt={2}> 
+        <Button 
+            variant="contained" 
+            color="info" 
+            component={RouterLink} to={PATH_DASHBOARD.general.files}
+            size="small"
+        >
+            <Add /> 
+            Add Patient 
+        </Button>
+        </Box>
+        <VariantDasboard2
+        open={isAnnotationModalOpen}
+        handleButtonChange = {handleButtonChange}
+        onClose={() => setAnnotationModalOpen()}
+        />
+        <MUIDataTable
+          title={`All patients of ${clinicianName || '...'} health center`}
+          data={data}
+          columns={COLUMNS}
+          options={{
+            selectableRows: 'none',
+            sortOrder: { name: 'created_at', direction: 'desc' },
+            expandableRows: false,
+            print: false,
+            viewColumns: true,
+            download: false,
+          }}
+        />
+      </>
+    )
+  }
   
   export default MyPatientsTable
   

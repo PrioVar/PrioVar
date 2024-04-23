@@ -14,7 +14,7 @@ export const fetchCurrentClinicianName = async () => {
 
 // NEW ADDITION ERKIN
 export const fetchClinicianPatients = async () => {
-  const data = await axios.get(`${ROOTS_PrioVar}/patient/byClinician/${localStorage.getItem('clinicianId')}`)
+  const { data } = await axios.get(`${ROOTS_PrioVar}/patient/byClinician/${localStorage.getItem('clinicianId')}`)
   return data
 }
 

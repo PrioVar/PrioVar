@@ -270,16 +270,8 @@ import {
             if (!row) return null
   
             const handleClickConfirm = () => {
-              if (row.vcf_id) {
-                deleteVcfFile(row.vcf_id)
-              } else if (row.fastq_pair_id) {
-                deleteFastqFile(row.fastq_file_1.fastq_file_id)
-                deleteFastqFile(row.fastq_file_2.fastq_file_id)
-              } else {
-                deleteFastqFile(row.fastq_file_id)
-              }
-  
-              //filesApi.refresh()
+              deleteVcfFile(row.patientId).then(() => {
+              });
             }
   
             return <DeleteFileButton onClickConfirm={handleClickConfirm} />
@@ -295,7 +287,8 @@ import {
           sort: true,
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex]
-            return row ? fDateTime(row.file.createdAt) : null
+            return row && row.file ? fDateTime(row.file.createdAt) : null;
+
           },
         },
       },
@@ -309,7 +302,7 @@ import {
             const row = data[dataIndex]
             return row ? (
               <AnalysedCheckbox
-                checked={row.file.finishedAt != null}
+                checked={row.file?.finishedAt != null}
                 onChange={(e) => setFinishedInfo(row)}
                 details={{ date: row.finish_time, person: row.finish_person }}
               />
@@ -325,8 +318,8 @@ import {
           filter: false,
           sort: false,
           customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? (
+            const row = data[dataIndex];
+            return row && row.file ? (
               <ExpandOnClick
                 expanded={
                   <EditableNote
@@ -342,7 +335,7 @@ import {
                   </IconButton>
                 )}
               </ExpandOnClick>
-            ) : null
+            ) : null;
           },
         },
       },
@@ -355,6 +348,7 @@ import {
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex]
             if (!row) return null
+            if (!row.file) return null
             return <Chip label={row.file.fileName} />
           },
         },
@@ -414,6 +408,7 @@ import {
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex]
             const status = getStatusLabel(row)
+            if(!row.file) return null
             if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
             if (status.includes('ANNO') || status === 'WAITING')
               return (
