@@ -97,8 +97,31 @@ public class PatientService {
         return "Disease added to patient successfully";
     }
 
-    public List<Patient> getPatientsByMedicalCenterId(Long medicalCenterId) {
-        return patientRepository.findByMedicalCenterId(medicalCenterId);
+    public List<PatientDTO> getPatientsByMedicalCenterId(Long medicalCenterId) {
+        MedicalCenter medicalCenter = medicalCenterRepository.findById(medicalCenterId).orElse(null);
+        
+        if( medicalCenter == null ) {
+            return null;
+        }
+
+        List<Patient> patients = patientRepository.findByMedicalCenterId(medicalCenterId);
+        List<PatientDTO> patientDTOs = new ArrayList<>();
+        for( Patient patient : patients ) {
+            VCFFile vcfFile = patient.getVcfFile();
+            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
+                                            vcfFile.getFileName(), vcfFile.getClinicianComments(), 
+                                            vcfFile.getClinician().getName(), 
+                                            vcfFile.getFileStatus(),
+                                            vcfFile.getCreatedAt(),
+                                            vcfFile.getFinishedAt());
+            PatientDTO patientDTO = new PatientDTO(patient.getId(), 
+                                                patient.getName(), 
+                                                patient.getAge(),
+                                                patient.getSex(), 
+                                                vcfFileDTO);
+            patientDTOs.add(patientDTO);
+        }
+        return patientDTOs;
     }
 
     public String addVariantToPatient(Long patientId, Long variantId) {
