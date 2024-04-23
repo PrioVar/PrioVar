@@ -110,9 +110,10 @@ public class PatientService {
             VCFFile vcfFile = patient.getVcfFile();
             VCFFileDTO vcfFileDTO = null;
             if( vcfFile != null) {
+                String clinicianName = (vcfFile.getClinician() != null) ? vcfFile.getClinician().getName() : "";
                 vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                             vcfFile.getFileName(), vcfFile.getClinicianComments(), 
-                                            vcfFile.getClinician().getName(), 
+                                            clinicianName,
                                             vcfFile.getFileStatus(),
                                             vcfFile.getCreatedAt(),
                                             vcfFile.getFinishedAt());
