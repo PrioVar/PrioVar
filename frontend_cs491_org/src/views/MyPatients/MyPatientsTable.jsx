@@ -141,6 +141,7 @@ import {
   
   const GoToSampleDashboard = function ({ fileName }) {
     const navigate = useNavigate()
+    console.log(fileName)
   
     const handleClick = () => {
       navigate(`/libra/sample/${fileName}`)
@@ -415,10 +416,10 @@ import {
             if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
             if (status.includes('ANNO') || status === 'WAITING')
               return (
-                <GoToSampleDashboard fileId={row.file.fileName} />
+                <GoToSampleDashboard fileName={row.file.fileName} />
               )
             return (
-              <GoToSampleDashboard fileId={row.file.fileName} />
+              <GoToSampleDashboard fileName={row.file.fileName} />
             )
           },
         },
