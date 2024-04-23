@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/initialize")
@@ -25,9 +30,10 @@ public class InitializerController {
     private final PhenotypeTermRepository phenotypeTermRepository;
     private final DiseaseRepository diseaseRepository;
     private final GeneRepository geneRepository;
+    private final VCFRepository vcfRepository;
 
     @Autowired
-    public InitializerController(MedicalCenterRepository medicalCenterRepository, ClinicianRepository clinicianRepository, AdminRepository adminRepository, GraphLoaderService graphLoaderService, PatientRepository patientRepository, PhenotypeTermRepository phenotypeTermRepository, DiseaseRepository diseaseRepository, GeneRepository geneRepository) {
+    public InitializerController(MedicalCenterRepository medicalCenterRepository, ClinicianRepository clinicianRepository, AdminRepository adminRepository, GraphLoaderService graphLoaderService, PatientRepository patientRepository, PhenotypeTermRepository phenotypeTermRepository, DiseaseRepository diseaseRepository, GeneRepository geneRepository, VCFRepository vcfRepository) {
         this.medicalCenterRepository = medicalCenterRepository;
         this.clinicianRepository = clinicianRepository;
         this.adminRepository = adminRepository;
@@ -36,6 +42,7 @@ public class InitializerController {
         this.phenotypeTermRepository = phenotypeTermRepository;
         this.diseaseRepository = diseaseRepository;
         this.geneRepository = geneRepository;
+        this.vcfRepository = vcfRepository;
     }
 
     @PostMapping()
@@ -94,6 +101,19 @@ public class InitializerController {
         genes1.add(gene2);
         patient1.setPhenotypeTerms(phenotypeTerms);
         patient1.setGenes(genes1);
+        VCFFile vcfFile1 = new VCFFile();
+        File file = new File("src/main/resources/tinyy.vcf");
+        String base64File = encodeFileToBase64(file);
+        vcfFile1.setContent(base64File);
+        vcfFile1.setFileName(UUID.randomUUID().toString());
+        vcfFile1.setClinician(clinician1);
+        vcfFile1.setMedicalCenter(liva);
+        vcfFile1.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
+        vcfFile1.setCreatedAt(java.time.LocalDate.now());
+        vcfFile1.setFinishedAt(null);
+        vcfFile1.setClinicianComments(new ArrayList<>());
+        patient1.setVcfFile(vcfFile1);
+        vcfRepository.save(vcfFile1);
         patientRepository.save(patient1);
 
         Patient patient2 = new Patient();
@@ -115,6 +135,17 @@ public class InitializerController {
         patient2.setGenes(genes2);
         patient2.setPhenotypeTerms(phenotypeTerms1);
         patient2.setMedicalCenter(liva);
+        VCFFile vcfFile2 = new VCFFile();
+        vcfFile2.setContent(base64File);
+        vcfFile2.setFileName(UUID.randomUUID().toString());
+        vcfFile2.setClinician(clinician1);
+        vcfFile2.setMedicalCenter(liva);
+        vcfFile2.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
+        vcfFile2.setCreatedAt(java.time.LocalDate.now());
+        vcfFile2.setFinishedAt(null);
+        vcfFile2.setClinicianComments(new ArrayList<>());
+        patient2.setVcfFile(vcfFile2);
+        vcfRepository.save(vcfFile2);
         patientRepository.save(patient2);
 
         Patient patient3 = new Patient();
@@ -134,6 +165,17 @@ public class InitializerController {
         patient3.setGenes(genes3);
         patient3.setPhenotypeTerms(phenotypeTerms2);
         patient3.setMedicalCenter(liva);
+        VCFFile vcfFile3 = new VCFFile();
+        vcfFile3.setContent(base64File);
+        vcfFile3.setFileName(UUID.randomUUID().toString());
+        vcfFile3.setClinician(null);
+        vcfFile3.setMedicalCenter(liva);
+        vcfFile3.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
+        vcfFile3.setCreatedAt(java.time.LocalDate.now());
+        vcfFile3.setFinishedAt(null);
+        vcfFile3.setClinicianComments(new ArrayList<>());
+        patient3.setVcfFile(vcfFile3);
+        vcfRepository.save(vcfFile3);
         patientRepository.save(patient3);
 
         Patient patient4 = new Patient();
@@ -146,8 +188,18 @@ public class InitializerController {
         phenotypeTerms3.add(phenotypeTerm9);
         phenotypeTerms3.add(phenotypeTerm10);
         patient4.setPhenotypeTerms(phenotypeTerms3);
-
         patient4.setMedicalCenter(liva);
+        VCFFile vcfFile4 = new VCFFile();
+        vcfFile4.setContent(base64File);
+        vcfFile4.setFileName(UUID.randomUUID().toString());
+        vcfFile4.setClinician(null);
+        vcfFile4.setMedicalCenter(liva);
+        vcfFile4.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
+        vcfFile4.setCreatedAt(java.time.LocalDate.now());
+        vcfFile4.setFinishedAt(null);
+        vcfFile4.setClinicianComments(new ArrayList<>());
+        patient4.setVcfFile(vcfFile4);
+        vcfRepository.save(vcfFile4);
         patientRepository.save(patient4);
 
         List<Patient> patients = clinician1.getPatients();
@@ -196,5 +248,14 @@ public class InitializerController {
         adminRepository.save(admin);
 
         return ResponseEntity.ok("Initialized Succesfully!");
+    }
+
+    private static String encodeFileToBase64(File file) {
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            return Base64.getEncoder().encodeToString(fileContent);
+        } catch (IOException e) {
+            throw new IllegalStateException("could not read file " + file, e);
+        }
     }
 }
