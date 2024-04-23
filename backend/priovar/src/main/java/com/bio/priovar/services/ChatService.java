@@ -5,6 +5,7 @@ import com.bio.priovar.repositories.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -18,6 +19,11 @@ public class ChatService {
     }
 
     public List<Chat> getChatsByMedicalCenterId(Long medicalCenterId) {
-        return chatRepository.findAllByMedicalCenterId(medicalCenterId);
+        List<Chat> chats = chatRepository.findAllByMedicalCenterId(medicalCenterId);
+
+        // sort the chats by String timestamp, oldest first
+        chats.sort(Comparator.comparing(Chat::getTimestamp));
+
+        return chats;
     }
 }
