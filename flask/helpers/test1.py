@@ -187,6 +187,11 @@ def evaluate_model(model_file, patients_file):
         # get the scores of model for every variant
         scores = model.predict(dtest)
 
+        # scores is probability of 4 classes
+        # score : p3 + p2 x 0.4 - p0 - p1 x 0.4
+        scores = scores[:, 3] + scores[:, 2] * 0.6 - scores[:, 0] - scores[:, 1] * 0.6
+
+
         # sort the variants according to the scores
         variants['scores'] = scores
         #target_score = variants.loc[target_row_index, 'scores']
@@ -279,5 +284,10 @@ scores = evaluate_model('../data/model_with_first_embedding_freq_based.xgb', '..
 # visualize the scores
 ranks = [score[0] for score in scores]
 
+print('Mean rank:', np.mean(ranks))
 
 plt.hist(ranks, bins=100)
+plt.xlabel('Rank of the target variant')
+plt.ylabel('Frequency')
+plt.title('Distribution of the ranks of the target variant')
+plt.show()

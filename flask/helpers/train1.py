@@ -743,7 +743,7 @@ def run_multilabel(data_path, output_path):
     model = xgb.train(params, dtrain, num_rounds)"""
 
     params = {
-        "objective": "multi:softmax",
+        "objective": "multi:softprob",
         "eval_metric": "mlogloss",
         "num_class": 4,  # Assuming there are 4 classes. Adjust according to your dataset.
         #"max_depth": 8,  # Control the depth of the tree to prevent overfitting
@@ -771,24 +771,6 @@ def run_multilabel(data_path, output_path):
     )
 
     print(f"Best iteration: {model.best_iteration + 1}")
-
-    # Predict probabilities
-    y_pred_proba = model.predict(dtest)
-
-    # round the probabilities to get the predicted class
-    y_pred = np.round(y_pred_proba)
-
-    # accuracy
-    accuracy = (y_pred == y_test).mean()
-    print("Accuracy ::", accuracy)
-
-    # print accuracy of each class
-    print("Accuracy of each class:", (y_pred == y_test).groupby(y_test).mean())
-
-    # print precision, recall, and F1 score
-    print(classification_report(y_test, y_pred))
-
-    print("Sample predicted probabilities and answers:", list(zip(y_pred[:100], y_test[:100])))
 
     # save the model best iteration
     model.save_model(output_path)
@@ -928,8 +910,10 @@ def print_num_unique_values_of_categorical_columns(df):
 
 # run multilabel classification
 
-#run_multilabel('../data/df_with_first_embedding_freq_based.pkl', '../data/model_with_first_embedding_freq_based.xgb')
 
+
+#run_multilabel('../data/df_with_first_embedding_freq_based.pkl', '../data/model_with_first_embedding_freq_based.xgb')
+#exit()
 
 
 
