@@ -277,7 +277,181 @@ import {
     selected: {},
   }))((props) => <Tab disableRipple {...props} />)
   
-  const VariantDasboard2 = function ({ open, onClose, handleButtonChange }) {
+  const VariantDasboard2 = function ({ open, onClose, handleButtonChange, vcfFileId }) {
+    const { fileId, sampleName } = useParams()
+  
+    useEffect(() => {
+      if (localStorage.getItem('dashboardSampleID') !== fileId) {
+        localStorage.setItem('dashboardSampleID', fileId)
+      }
+    }, [fileId])
+  
+    const filesApi = useFiles()
+    const { status, data = [] } = filesApi.query
+    const fileDetails = useMemo(
+      () => data.find((f) => f.vcf_id === fileId || f.fastq_pair_id === fileId),
+      [data, fileId, filesApi],
+    )
+  
+    const [isAnalysisOpen, setAnalysisOpen] = useState(false)
+    const [tab, setTab] = useState(0)
+    const handleTabChange = (event, newValue) => {
+      setTab(newValue)
+    }
+  
+    const [gender, setGender] = useState(fileDetails?.details?.sex)
+    const [startAge, setStartAge] = useState(fileDetails?.details?.symptoms_start_age)
+    const [age, setAge] = useState(fileDetails?.details?.age)
+    const [is_inbred, setIsInbred] = useState(fileDetails?.details?.is_inbred)
+    const [is_progressing, setProgressing] = useState(fileDetails?.details?.is_progressing)
+    const [notes, setNotes] = useState(fileDetails?.details?.notes)
+    const [name, setName] = useState(fileDetails?.details?.name)
+    const [healthCenterId, setHealthCenterId] = useState(localStorage.getItem('healthCenterId') || '');
+  
+    const handleGenderChange = (e) => setGender(e.target.value)
+    const handleAgeChange = (e) => setAge(e.target.value)
+    const handleNameChange = (e) => setName(e.target.value)
+    useEffect(() => {
+        localStorage.setItem('healthCenterId', healthCenterId);
+      }, [healthCenterId]);
+    /*  const handleIsInbredChange = (e) => setIsInbred(e.target.checked)
+    const handleIsProgressingChange = (e) => setProgressing(e.target.checked) */
+    const handleSetNotes = (e) => setNotes(e.target.value)
+  
+    const handleSave = async () => {
+      const details = {
+        gender,
+        start_age: Number(startAge),
+        age: Number(age),
+        is_inbred,
+        is_progressing,
+        notes,
+      }
+      const phenotypeTerms = hpoList.map(item => {
+        // Extract the numeric part of the HP code and remove leading zeros
+        const id = parseInt(item.value.split(':')[1], 10);
+        return { id };
+      });
+      let request = {
+        patient: {
+            name: name,
+            age: age,
+            sex: gender,
+            clinicalHistory: notes,
+            medicalCenter: {
+                id: localStorage.getItem('healthCenterId'),
+            }
+          },
+        phenotypeTerms: phenotypeTerms,
+        vcfFileId: vcfFileId
+      }
+      console.log("request:")
+      console.log(request)
+      try {
+        const response = await axios.post('http://localhost:8080/patient/addPatientWithPhenotype', request);
+        console.log("SUCCESS!")
+
+      } catch (error) {
+        console.log("FAIL!")
+        console.error('add patient error:', error.response);
+      }
+      const { id, type } = { id: vcfFileId, type: 'VCF' }
+      //updateDetails(id, details, type)
+      //handle button change
+      //filesApi.refresh()
+    }
+  
+    const [hpoList, setHpoList] = useHpo({ fileId })
+    return (
+        <Dialog open={open} onClose={onClose}>
+            <Box flexDirection="column" spacing={3} mt={2}>
+
+              <Typography textAlign="center" variant="h4">
+                File: VCF
+              </Typography>
+
+              <Tabs
+                value={tab}
+                onChange={handleTabChange}
+                aria-label="basic tabs example"
+                variant="fullWidth"
+                scrollButtons="auto"
+              >
+                {sampleName && TABS.map((table) => <VarTab label={table} />)}
+              </Tabs>
+  
+                <Stack key={`dashboard-tabPanel-${1}`}>
+                  <Grid item sx={{ minWidth: '65%', flexGrow: 1 }}>
+                    <CardHeader title="Symptoms (HPO)" titleTypographyProps={{ variant: 'subtitle1' }} />
+                    <CardContent>
+                      <ManageHpo fileId={fileId} sampleName={sampleName} hpoList={hpoList} setHpoList={setHpoList} />
+                    </CardContent>
+                  </Grid>
+                  <Grid item container direction="row" xs={12}>
+                    <Grid item xs={6}></Grid>
+                    <Grid item xs={6}>
+                      <CardHeader title="Clinical History"titleTypographyProps={{ variant: 'subtitle1' }} sx={{ paddingLeft: 0 }} />
+                    </Grid>
+                  </Grid>
+                    <Grid item container xs={12}>
+                      <Grid container item xs={6} sx={{ flexGrow: 1 }}>
+                        <Grid item xs={12} sx={{ flexGrow: 1 }}>
+                          <CardHeader title="Details" titleTypographyProps={{ variant: 'subtitle1' }} sx={{ paddingTop: 0 }} />
+                        </Grid>
+                          <Grid container item xs={6} >
+                            <CardContent>
+                              <FormControl fullWidth>
+                                <InputLabel id="select-name">Name</InputLabel>
+                                <Input type="text" value={name} onChange={handleNameChange}></Input>
+                              </FormControl>
+                            </CardContent>
+                            <Grid item xs={12}>
+                              <CardContent>
+                                <FormControl fullWidth>
+                                  <InputLabel id="select-age">Age</InputLabel>
+                                  <Input type="number" value={age} onChange={handleAgeChange}></Input>
+                                </FormControl>
+                              </CardContent>
+                            </Grid>
+                          </Grid>
+                          <Grid container item xs={6} direction={'row'}>
+                            <Grid xs={12} item>
+                              <CardContent>
+                                <FormControl fullWidth>
+                                  <InputLabel id="select-gender">Sex</InputLabel>
+                                  <Select labelId="select-gender" value={gender} onChange={handleGenderChange} label="Gender" >
+                                    <MenuItem value={'Male'}>Male</MenuItem>
+                                    <MenuItem value={'Female'}>Female</MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </CardContent>
+                            </Grid>
+                          </Grid>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <CardContent sx={{ height: '100%', paddingLeft: 0 }}>
+                          <TextField fullWidth id="details-notes" value={notes} onChange={handleSetNotes} multiline rows={11} ></TextField>
+                        </CardContent>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12} sx={{ flexGrow: 1 }} alignSelf="end" mr={3}>
+                      <DialogActions>
+                      <Button color="primary" variant="contained" onClick={handleSave}>
+                        Save Details
+                      </Button>
+                      </DialogActions>
+                </Grid>
+              </Stack>
+            </Box>
+
+      </Dialog>
+    )
+  }
+  
+  export default VariantDasboard2
+
+/*
+const VariantDasboard2 = function ({ open, onClose, handleButtonChange }) {
     const { fileId, sampleName } = useParams()
   
     useEffect(() => {
@@ -316,8 +490,6 @@ import {
     React.useEffect(() => {
         localStorage.setItem('healthCenterId', healthCenterId);
       }, [healthCenterId]);
-    /*  const handleIsInbredChange = (e) => setIsInbred(e.target.checked)
-    const handleIsProgressingChange = (e) => setProgressing(e.target.checked) */
     const handleSetNotes = (e) => setNotes(e.target.value)
   
     const handleSave = async () => {
@@ -374,9 +546,7 @@ import {
       setAnalysisOpen(false)
       if (activeFileCopy.vcf_id) {
         await startJobsForVcfFile(activeFileCopy.vcf_id)
-      } /*else if (activeFileCopy.fastq_pair_id) {
-        await startJobsForFastqFile(activeFileCopy.fastq_pair_id, { cnv, snp, alignment })
-      }*/
+      } 
       await filesApi.refresh()
     }
   
@@ -497,4 +667,4 @@ import {
   }
   
   export default VariantDasboard2
-  
+*/
