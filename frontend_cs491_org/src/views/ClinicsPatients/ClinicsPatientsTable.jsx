@@ -17,14 +17,14 @@ import {
   import { makeStyles } from '@material-ui/styles'
   import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
   import MUIDataTable from 'mui-datatables'
-  import React, { useState } from 'react'
+  import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
   import DeleteIcon from '@material-ui/icons/Delete'
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
   import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
+  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients } from '../../api/file'
   import { PATH_DASHBOARD } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
@@ -156,24 +156,45 @@ import {
   const SamplesView = function () {
     //const classes = useStyles()
     let navigate = useNavigate()
-    const filesApi = useFiles()
-    const bedFilesApi = useBedFiles()
-    const { status, data = [] } = filesApi.query
-    const { data: bedFiles = [] } = bedFilesApi.query
+    //const filesApi = useFiles()
+    //const bedFilesApi = useBedFiles()
+    //const { status, data = [] } = filesApi.query
+    //const { data: bedFiles = [] } = bedFilesApi.query
+    const [data, setData] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
-  
+    
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        const data = await fecthMedicalCenterPatients()
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        console.log(data)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        setData(data)
+      } catch (error) {
+        console.error('Error fetching clinician files:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    useEffect(() => {
+      fetchData()
+    }, [])
+
     const setFinishedInfo = (row) => {
       const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
       updateFinishInfo(id).then(() => {
-        filesApi.refresh()
+        //filesApi.refresh()
       })
     }
   
     const setFileNotes = (row, notes) => {
       const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
       updateFileNotes(id, notes).then(() => {
-        filesApi.refresh()
+        //filesApi.refresh()
       })
     }
   
@@ -182,7 +203,7 @@ import {
         ? { id: selectedFile.vcf_id, type: 'VCF' }
         : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
       annotateFile(id, annotation, type).then((res) => {
-        filesApi.refresh()
+        //filesApi.refresh()
         setAnnotationModalOpen(false)
       })
     }
@@ -204,7 +225,7 @@ import {
             cnvAnalysis: 'xhmm+decont',
         }
         annotateFile(id, annotation, type).then((res) => {
-            filesApi.refresh()
+            //filesApi.refresh()
             //setAnnotationModalOpen(false)
         })
     }
@@ -245,13 +266,14 @@ import {
                 deleteFastqFile(row.fastq_file_id)
               }
   
-              filesApi.refresh()
+              //filesApi.refresh()
             }
   
             return <DeleteFileButton onClickConfirm={handleClickConfirm} />
           },
         },
       },
+      
       {
         name: 'created_at',
         label: 'Uploaded At',
@@ -260,7 +282,7 @@ import {
           sort: true,
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex]
-            return row ? fDateTime(row.created_at) : null
+            return row ? fDateTime(row.file.createdAt) : null
           },
         },
       },
@@ -274,7 +296,7 @@ import {
             const row = data[dataIndex]
             return row ? (
               <AnalysedCheckbox
-                checked={row.is_finished}
+                checked={row.file.finishedAt != null}
                 onChange={(e) => setFinishedInfo(row)}
                 details={{ date: row.finish_time, person: row.finish_person }}
               />
@@ -282,6 +304,7 @@ import {
           },
         },
       },
+      
       {
         name: 'notes',
         label: 'Notes',
@@ -294,7 +317,7 @@ import {
               <ExpandOnClick
                 expanded={
                   <EditableNote
-                    note={row.file_notes}
+                    note={row.file.clinicianComments}
                     onSave={(notes) => setFileNotes(row, notes)}
                     details={{ date: row.notes_time, person: row.notes_person }}
                   />
@@ -319,24 +342,8 @@ import {
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex]
             if (!row) return null
-            if (row?.fastq_pair_id) {
-              return (
-                <Stack direction="row" spacing={1}>
-                  <Chip label={row.fastq_file_1.name} />
-                  <Chip label={row.fastq_file_2.name} />
-                </Stack>
-              )
-            }
-            return <Chip label={row.name} />
+            return <Chip label={row.file.fileName} />
           },
-        },
-      },
-      {
-        name: 'sample_name',
-        label: 'Sample',
-        options: {
-          filter: true,
-          sort: true,
         },
       },
       {
@@ -397,19 +404,55 @@ import {
             if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
             if (status.includes('ANNO') || status === 'WAITING')
               return (
-                <Button variant="contained" color="info" onClick={() => handleAnnotationModelOpen(row)} size="small">
-                  <Info />
-                </Button>
+                <GoToSampleDashboard fileId={row.file.fileName} />
               )
             return (
-              <GoToSampleDashboard fileId={row.vcf_id ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
+              <GoToSampleDashboard fileId={row.file.fileName} />
             )
           },
         },
       },
     ]
   
-    switch (status) {
+    return (
+      <>
+        <Box display="flex" justifyContent="flex-end" mt={2}> 
+        <Button 
+            variant="contained" 
+            color="info" 
+            component={RouterLink} to={PATH_DASHBOARD.general.files}
+            size="small"
+        >
+            <Add /> 
+            Add Patient 
+        </Button>
+        </Box>
+        <VariantDasboard2
+        open={isAnnotationModalOpen}
+        handleButtonChange = {handleButtonChange}
+        onClose={() => setAnnotationModalOpen()}
+        />
+        <MUIDataTable
+          title="All patients of clinic ABC"
+          data={data}
+          columns={COLUMNS}
+          options={{
+            selectableRows: 'none',
+            sortOrder: { name: 'created_at', direction: 'desc' },
+            expandableRows: false,
+            print: false,
+            viewColumns: true,
+            download: false,
+          }}
+        />
+      </>
+    )
+  }
+  
+  export default SamplesView
+  
+/*
+switch (status) {
       case 'success':
         return (
           <>
@@ -447,7 +490,4 @@ import {
       default:
         return <CircularProgress />
     }
-  }
-  
-  export default SamplesView
-  
+    */

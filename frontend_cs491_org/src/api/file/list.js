@@ -10,6 +10,12 @@ export const fetchClinicianPatients = async () => {
 }
 
 // NEW ADDITION ERKIN
+export const fecthMedicalCenterPatients = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/patient/byMedicalCenter/${localStorage.getItem('healthCenterId')}`)
+  return data
+}
+
+// NEW ADDITION ERKIN
 export const fecthClinicianFiles = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byClinician/${localStorage.getItem('clinicianId')}`)
   return data
