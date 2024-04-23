@@ -110,7 +110,8 @@ public class PatientService {
             VCFFile vcfFile = patient.getVcfFile();
             VCFFileDTO vcfFileDTO = null;
             if( vcfFile != null) {
-                String clinicianName = (vcfFile.getClinician() != null) ? vcfFile.getClinician().getName() : "";
+                Clinician clinician = clinicianRepository.findByVcfFilesId(vcfFile.getId()).orElse(null);
+                String clinicianName = (clinician != null) ? clinician.getName() : "";
                 vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                             vcfFile.getFileName(), vcfFile.getClinicianComments(), 
                                             clinicianName,
@@ -204,7 +205,7 @@ public class PatientService {
             if( vcfFile != null) {
                 vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                             vcfFile.getFileName(), vcfFile.getClinicianComments(), 
-                                            vcfFile.getClinician().getName(), 
+                                            clinician.getName(),
                                             vcfFile.getFileStatus(),
                                             vcfFile.getCreatedAt(),
                                             vcfFile.getFinishedAt());

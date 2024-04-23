@@ -3,6 +3,7 @@ package com.bio.priovar.services;
 import com.bio.priovar.models.*;
 import com.bio.priovar.models.VCFFile.FileStatus;
 import com.bio.priovar.models.dto.VCFFileDTO;
+import com.bio.priovar.repositories.ClinicianRepository;
 import com.bio.priovar.repositories.VCFRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,14 @@ public class VCFService {
     private final VCFRepository vcfRepository;
     private final ClinicianService clinicianService;
     private final MedicalCenterService medicalCenterService;
+    private final ClinicianRepository clinicianRepository;
 
     @Autowired
-    public VCFService(VCFRepository vcfRepository, ClinicianService clinicianService, MedicalCenterService medicalCenterService) {
+    public VCFService(VCFRepository vcfRepository, ClinicianService clinicianService, MedicalCenterService medicalCenterService, ClinicianRepository clinicianRepository) {
         this.clinicianService = clinicianService;
         this.vcfRepository = vcfRepository;
         this.medicalCenterService = medicalCenterService;
+        this.clinicianRepository = clinicianRepository;
     }
 
     public ResponseEntity<Long> uploadVCF(String base64Data, Long clinicianId, Long medicalCenterId) {
@@ -37,13 +40,20 @@ public class VCFService {
         String fileName = UUID.randomUUID().toString();
         vcfFile.setFileName(fileName);
 
-        vcfFile.setClinician(clinicianService.getClinicianById(clinicianId));
         vcfFile.setMedicalCenter(medicalCenterService.getMedicalCenterById(medicalCenterId));
 
         List<ClinicianComment> clinicianComments = new ArrayList<>();
         vcfFile.setClinicianComments(clinicianComments);
         vcfFile.setCreatedAt(java.time.LocalDate.now());
         vcfFile.setFinishedAt(null);
+
+        // add it to files of clinician
+        Clinician clinician = clinicianService.getClinicianById(clinicianId);
+        if (clinician == null) {
+            return ResponseEntity.badRequest().body(-1L);
+        }
+        clinician.getVcfFiles().add(vcfFile);
+        clinicianRepository.save(clinician);
         
         // Save the vcf file and get the saved entity with ID populated
         VCFFile savedVcfFile = vcfRepository.save(vcfFile);
@@ -63,9 +73,12 @@ public class VCFService {
         List<VCFFile> vcfFiles =  vcfRepository.findAllByMedicalCenterId(medicalCenterId);
         List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
         for (VCFFile vcfFile : vcfFiles) {
+            Clinician clinician = clinicianRepository.findByVcfFilesId(vcfFile.getId()).orElse(null);
+            String clinicianName = (clinician != null) ? clinician.getName() : "";
+
             VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                             vcfFile.getFileName(), vcfFile.getClinicianComments(), 
-                                            vcfFile.getClinician().getName(), 
+                                            clinicianName,
                                             vcfFile.getFileStatus(),
                                             vcfFile.getCreatedAt(),
                                             vcfFile.getFinishedAt());
@@ -75,14 +88,15 @@ public class VCFService {
     }
 
     public List<VCFFileDTO> getVCFFilesByClinicianId(Long clinicianId) {
-
-        List<VCFFile> vcfFiles =   vcfRepository.findAllByClinicianId(clinicianId);
+        Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
+        List<VCFFile> vcfFiles =   vcfRepository.findAllByMedicalCenterId(clinician.getMedicalCenter().getId());
         List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
+
         for (VCFFile vcfFile : vcfFiles) {
             VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                         vcfFile.getFileName(), 
                                         vcfFile.getClinicianComments(), 
-                                        vcfFile.getClinician().getName(), 
+                                        clinician.getName(),
                                         vcfFile.getFileStatus(),
                                         vcfFile.getCreatedAt(),
                                         vcfFile.getFinishedAt());

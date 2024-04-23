@@ -78,6 +78,7 @@ public class InitializerController {
         clinician1.setPassword("123");
         clinician1.setMedicalCenter(liva);
         clinician1.setPatients(new ArrayList<>());
+        clinician1.setVcfFiles(new ArrayList<>());
         clinicianRepository.save(clinician1);
 
         Patient patient1 = new Patient();
@@ -106,7 +107,6 @@ public class InitializerController {
         String base64File = encodeFileToBase64(file);
         vcfFile1.setContent(base64File);
         vcfFile1.setFileName(UUID.randomUUID().toString());
-        vcfFile1.setClinician(clinician1);
         vcfFile1.setMedicalCenter(liva);
         vcfFile1.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
         vcfFile1.setCreatedAt(java.time.LocalDate.now());
@@ -114,6 +114,7 @@ public class InitializerController {
         vcfFile1.setClinicianComments(new ArrayList<>());
         patient1.setVcfFile(vcfFile1);
         vcfRepository.save(vcfFile1);
+        clinician1.getVcfFiles().add(vcfFile1);
         patientRepository.save(patient1);
 
         Patient patient2 = new Patient();
@@ -138,7 +139,6 @@ public class InitializerController {
         VCFFile vcfFile2 = new VCFFile();
         vcfFile2.setContent(base64File);
         vcfFile2.setFileName(UUID.randomUUID().toString());
-        vcfFile2.setClinician(clinician1);
         vcfFile2.setMedicalCenter(liva);
         vcfFile2.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
         vcfFile2.setCreatedAt(java.time.LocalDate.now());
@@ -146,6 +146,7 @@ public class InitializerController {
         vcfFile2.setClinicianComments(new ArrayList<>());
         patient2.setVcfFile(vcfFile2);
         vcfRepository.save(vcfFile2);
+        clinician1.getVcfFiles().add(vcfFile2);
         patientRepository.save(patient2);
 
         Patient patient3 = new Patient();
@@ -168,7 +169,6 @@ public class InitializerController {
         VCFFile vcfFile3 = new VCFFile();
         vcfFile3.setContent(base64File);
         vcfFile3.setFileName(UUID.randomUUID().toString());
-        vcfFile3.setClinician(null);
         vcfFile3.setMedicalCenter(liva);
         vcfFile3.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
         vcfFile3.setCreatedAt(java.time.LocalDate.now());
@@ -192,7 +192,6 @@ public class InitializerController {
         VCFFile vcfFile4 = new VCFFile();
         vcfFile4.setContent(base64File);
         vcfFile4.setFileName(UUID.randomUUID().toString());
-        vcfFile4.setClinician(null);
         vcfFile4.setMedicalCenter(liva);
         vcfFile4.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
         vcfFile4.setCreatedAt(java.time.LocalDate.now());
