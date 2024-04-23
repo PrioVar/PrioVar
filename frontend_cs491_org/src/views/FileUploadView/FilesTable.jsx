@@ -26,12 +26,13 @@ import { deleteVcfFile } from '../../api/vcf'
 import { deleteFastqFile } from '../../api/fastq'
 import axios from '../../utils/axios'
 //import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-import { fecthClinicianFiles, updateFileNotes } from '../../api/file'
+import { fecthClinicianFiles, annotateFile, updateFileNotes } from '../../api/file'
 
 import ExpandOnClick from 'src/components/ExpandOnClick'
 import AnalysedCheckbox from '../common/AnalysedCheckbox'
 
 import VariantDasboard2 from '../common/VariantDasboard2'
+import { ROOTS_PrioVar } from 'src/routes/paths'
 
 
 const EditableNote = ({ note, onSave, details }) => {
@@ -145,7 +146,9 @@ const GoToSampleDashboard = function ({ fileId, sampleName }) {
   const navigate = useNavigate()
 
   const handleClick = () => {
+    console.log("muhahahaha I am the melon lorrrrd")
     navigate(`/libra/sample/${fileId}/${sampleName}`)
+    console.log("muhahahaha I am the melon lorrrrd")
   }
 
   return (
@@ -160,7 +163,6 @@ const SamplesView = function () {
   const [isLoading, setIsLoading] = useState(true)
   const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
-
   const fetchData = async () => {
     setIsLoading(true)
     try {
@@ -188,7 +190,28 @@ const SamplesView = function () {
     setSelectedFile(row)
     setAnnotationModalOpen(true)
   }
-
+  const handleButtonChange = () => {
+    //do the change here
+    const { id, type } = selectedFile?.vcf_id
+    ? { id: selectedFile.vcf_id, type: 'VCF' }
+    : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
+    let annotation = {
+        type: 'Exome',
+        machine: 'Illumina',
+        kit: 0,
+        panel: '',
+        germline: true,
+        alignment: 'BWA',
+        reference: 'GRCh38',
+        isSnp: false,
+        isCnv: false,
+        cnvAnalysis: 'xhmm+decont',
+      }
+    annotateFile(id, annotation, type).then((res) => {
+        //filesApi.refresh()
+        setAnnotationModalOpen(false)
+      })
+  }
   const COLUMNS = [
     {
       name: 'delete',
@@ -289,6 +312,12 @@ const SamplesView = function () {
 
   return (
     <>
+      <VariantDasboard2
+        open={isAnnotationModalOpen}
+        handleButtonChange = {handleButtonChange}
+        onClose={() => setAnnotationModalOpen()}
+        vcfFileId={selectedFile?.vcfFileId}
+      />
       <MUIDataTable
         title="Files"
         data={data}
