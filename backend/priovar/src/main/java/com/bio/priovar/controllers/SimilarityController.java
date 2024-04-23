@@ -7,7 +7,6 @@ import com.bio.priovar.models.SimilarityReport;
 import com.bio.priovar.services.PatientService;
 import com.bio.priovar.services.SimilarityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,8 +58,5 @@ public class SimilarityController {
     public List<SimilarityReport> getMostSimilarPatients(@PathVariable("patientId") Long id, @PathVariable("numberOfPatients") int numberOfPatients) {
         return similarityService.findMostSimilarPatientsByCosine(id, numberOfPatients);
     }
-
-
-
 
 }

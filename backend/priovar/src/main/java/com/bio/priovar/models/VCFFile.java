@@ -28,9 +28,6 @@ public class VCFFile {
     @Relationship(type = "HAS_COMMENTS", direction = Relationship.Direction.OUTGOING)
     private List<ClinicianComment> clinicianComments;
 
-    @Relationship(type = "UPLOADED_BY", direction = Relationship.Direction.OUTGOING)
-    private Clinician clinician;
-
     @Relationship(type="FILE_BELONGS_TO_MEDICAL_CENTER")
     private MedicalCenter medicalCenter;
 

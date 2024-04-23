@@ -29,6 +29,7 @@ public class Clinician {
     @Relationship(type="WORKS_AT")
     private MedicalCenter medicalCenter;
 
-
+    @Relationship(type = "UPLOADED_FILE", direction = Relationship.Direction.OUTGOING)
+    private List<VCFFile> vcfFiles;
 
 }
