@@ -161,9 +161,7 @@ import {
     const filesApi = useFiles()
     const bedFilesApi = useBedFiles()
     const [data, setData] = useState([])
-    console.log("ğaaaaaaaaaaaaaaaaaaaaaa");
     console.log(data);
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     //const { status, data = [] } = filesApi.query
     const { data: bedFiles = [] } = bedFilesApi.query
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
@@ -171,7 +169,6 @@ import {
   
     const fetchAllPatients = async () => {
       try {
-        //const allPatients = await axios.get(`${ROOTS_PrioVar}/clinician/allPatients/${clinicianId}`);
         const data = await fetchClinicianPatients()
         hasBeenCalled = true;
         setData(data)
