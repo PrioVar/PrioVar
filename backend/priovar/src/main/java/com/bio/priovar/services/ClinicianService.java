@@ -143,7 +143,6 @@ public class ClinicianService {
         if (clinician == null) {
             return null;
         }
-        System.out.println("We have found " + clinician.getName() + " herte in backend");
         return clinician.getName();
     }
 }
