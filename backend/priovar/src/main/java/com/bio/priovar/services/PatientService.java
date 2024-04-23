@@ -415,6 +415,8 @@ public class PatientService {
 
     public ResponseEntity<String> addPatientWithPhenotype(PatientWithPhenotype patientDto) {
         Patient patient = patientDto.getPatient();
+        Long vcfFileId = patientDto.getVcfFileId();
+        
         List<PhenotypeTerm> phenotypeTerms = patientDto.getPhenotypeTerms();
 
         if ( patient.getMedicalCenter() == null ) {
@@ -433,7 +435,9 @@ public class PatientService {
         }
 
         patient.setPhenotypeTerms(newPhenotypeTerms);
-        patientRepository.save(patient);
+        patient = patientRepository.save(patient);
+        Long patientId = patient.getId();
+        setVCFFileOfPatient(patientId, vcfFileId);
         return new ResponseEntity<>("Patient added successfully", org.springframework.http.HttpStatus.OK);
     }
 
