@@ -24,7 +24,7 @@ import {
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
   import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fetchClinicianPatients } from '../../api/file'
+  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
   import { PATH_DASHBOARD, PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
@@ -168,6 +168,23 @@ import {
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
   
+    const fetchClinicianName = async () => {
+      /*
+      const clinicianId = localStorage.getItem('clinicianId');
+      if (clinicianId) {
+      */
+      try {
+          const response = await fetchCurrentClinicianName();
+          setClinicianName(response.data); // Assuming the response contains the clinician object with a name attribute
+          console.log("name:")
+
+          console.log(response.data.name)
+          console.log("nameaasasas")
+        } catch (error) {
+          console.error('Failed to fetch clinician data:', error);
+      }
+    };
+
     const fetchAllPatients = async () => {
       try {
         const data = await fetchClinicianPatients()
@@ -241,18 +258,6 @@ import {
     const handleDetails = (row) => {
         // TODO
     }
-
-    const fetchClinicianName = async () => {
-        const clinicianId = localStorage.getItem('clinicianId');
-        if (clinicianId) {
-            try {
-                const response = await axios.get(`${ROOTS_PrioVar}/clinician/${clinicianId}`);
-                setClinicianName(response.data.name); // Assuming the response contains the clinician object with a name attribute
-            } catch (error) {
-                console.error('Failed to fetch clinician data:', error);
-            }
-        }
-    };
     
     useEffect(() => {
       fetchClinicianName();  

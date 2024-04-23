@@ -137,4 +137,13 @@ public class ClinicianService {
     public List<Clinician> getAllCliniciansByMedicalCenterId(Long medicalCenterId) {
         return clinicianRepository.findAllByMedicalCenterId(medicalCenterId);
     }
+
+    public String getClinicianNameById(Long id) {
+        Clinician clinician = clinicianRepository.findById(id).orElse(null);
+        if (clinician == null) {
+            return null;
+        }
+        System.out.println("We have found " + clinician.getName() + " herte in backend");
+        return clinician.getName();
+    }
 }
