@@ -25,7 +25,8 @@ import {
   import { deleteVcfFile } from '../../api/vcf'
   import { deleteFastqFile } from '../../api/fastq'
   import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients } from '../../api/file'
-  import { PATH_DASHBOARD } from '../../routes/paths'
+  import { PATH_DASHBOARD, ROOTS_PrioVar } from '../../routes/paths'
+  import axios from '../../utils/axios'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
@@ -161,6 +162,7 @@ import {
     //const { status, data = [] } = filesApi.query
     //const { data: bedFiles = [] } = bedFilesApi.query
     const [data, setData] = useState([])
+    const [medicalCenterName, setMedicalCenterName] = useState('');
     const [isLoading, setIsLoading] = useState(true)
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
@@ -169,9 +171,7 @@ import {
       setIsLoading(true)
       try {
         const data = await fecthMedicalCenterPatients()
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         console.log(data)
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         setData(data)
       } catch (error) {
         console.error('Error fetching clinician files:', error)
@@ -180,8 +180,21 @@ import {
       }
     }
 
+    const fetchMedicalCenterName = async () => {
+        const medicalCenterId = localStorage.getItem('healthCenterId');
+        if (medicalCenterId) {
+            try {
+                const response = await axios.get(`${ROOTS_PrioVar}/medicalCenter/${medicalCenterId}`);
+                setMedicalCenterName(response.data.name); // Assuming the response contains an object with a name property
+            } catch (error) {
+                console.error('Failed to fetch medical center name:', error);
+            }
+        }
+    };
+
     useEffect(() => {
-      fetchData()
+      fetchMedicalCenterName();
+      fetchData();
     }, [])
 
     const setFinishedInfo = (row) => {
@@ -433,7 +446,7 @@ import {
         onClose={() => setAnnotationModalOpen()}
         />
         <MUIDataTable
-          title="All patients of clinic ABC"
+          title={`All patients of ${medicalCenterName || '...'} health center`}
           data={data}
           columns={COLUMNS}
           options={{
