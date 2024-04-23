@@ -161,6 +161,7 @@ import {
     const filesApi = useFiles()
     const bedFilesApi = useBedFiles()
     const [data, setData] = useState([])
+    const [clinicianName, setClinicianName] = useState('');
     console.log(data);
     //const { status, data = [] } = filesApi.query
     const { data: bedFiles = [] } = bedFilesApi.query
@@ -240,9 +241,22 @@ import {
     const handleDetails = (row) => {
         // TODO
     }
+
+    const fetchClinicianName = async () => {
+        const clinicianId = localStorage.getItem('clinicianId');
+        if (clinicianId) {
+            try {
+                const response = await axios.get(`${ROOTS_PrioVar}/clinician/${clinicianId}`);
+                setClinicianName(response.data.name); // Assuming the response contains the clinician object with a name attribute
+            } catch (error) {
+                console.error('Failed to fetch clinician data:', error);
+            }
+        }
+    };
     
     useEffect(() => {
-      fetchAllPatients()
+      fetchClinicianName();  
+      fetchAllPatients();
     }, [])
 
     const COLUMNS = [
@@ -427,7 +441,7 @@ import {
           onClose={() => setAnnotationModalOpen()}
           />
           <MUIDataTable
-            title="All patients of clinician ABC"
+            title={`All patients of clinician ${clinicianName || '...'}`} // Dynamically update the title
             data={data}
             columns={COLUMNS}
             options={{
