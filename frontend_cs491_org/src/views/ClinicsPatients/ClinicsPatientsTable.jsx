@@ -140,11 +140,11 @@ import {
     )
   }
   
-  const GoToSampleDashboard = function ({ fileId, sampleName }) {
+  const GoToSampleDashboard = function ({ fileName }) {
     const navigate = useNavigate()
   
     const handleClick = () => {
-      navigate(`/libra/sample/${fileId}/${sampleName}`)
+      navigate(`/libra/sample/${fileName}`)
     }
   
     return (

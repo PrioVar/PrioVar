@@ -343,7 +343,8 @@ import {
             }
           },
         phenotypeTerms: phenotypeTerms,
-        vcfFileId: vcfFileId
+        vcfFileId: vcfFileId,
+        clinicianId: localStorage.getItem('clinicianId')
       }
       console.log("request:")
       console.log(request)
