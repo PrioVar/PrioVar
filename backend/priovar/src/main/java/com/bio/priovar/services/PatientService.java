@@ -108,12 +108,15 @@ public class PatientService {
         List<PatientDTO> patientDTOs = new ArrayList<>();
         for( Patient patient : patients ) {
             VCFFile vcfFile = patient.getVcfFile();
-            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
+            VCFFileDTO vcfFileDTO = null;
+            if( vcfFile != null) {
+                vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                             vcfFile.getFileName(), vcfFile.getClinicianComments(), 
                                             vcfFile.getClinician().getName(), 
                                             vcfFile.getFileStatus(),
                                             vcfFile.getCreatedAt(),
                                             vcfFile.getFinishedAt());
+            }
             PatientDTO patientDTO = new PatientDTO(patient.getId(), 
                                                 patient.getName(), 
                                                 patient.getAge(),
@@ -196,12 +199,16 @@ public class PatientService {
         List<PatientDTO> patientDTOs = new ArrayList<>();
         for( Patient patient : patients ) {
             VCFFile vcfFile = patient.getVcfFile();
-            VCFFileDTO vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
+            VCFFileDTO vcfFileDTO = null;
+            if( vcfFile != null) {
+                vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                             vcfFile.getFileName(), vcfFile.getClinicianComments(), 
                                             vcfFile.getClinician().getName(), 
                                             vcfFile.getFileStatus(),
                                             vcfFile.getCreatedAt(),
                                             vcfFile.getFinishedAt());
+            }
+            
             PatientDTO patientDTO = new PatientDTO(patient.getId(), 
                                                 patient.getName(), 
                                                 patient.getAge(),
