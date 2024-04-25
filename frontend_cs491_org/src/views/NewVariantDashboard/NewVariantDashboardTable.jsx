@@ -133,7 +133,7 @@ const NewVariantDashboardTable = () => {
 
     return (
         <>
-            <Button onClick={() => navigate(-1)} sx={{ ml:1, mt: 2 }}>Go back to files</Button>
+            <Button onClick={() => navigate(-1)} sx={{ ml:1, mt: 3 }}>Go back to files</Button>
 
             <Dialog open={filterOpen} onClose={closeFilter}>
                 <DialogTitle>Filter Options</DialogTitle>
@@ -214,7 +214,7 @@ const NewVariantDashboardTable = () => {
 
 
             <TableContainer component={Paper}>
-                <Typography variant="h6" sx={{ padding: 2, mt: 5 }}>
+                <Typography variant="h6" sx={{  mt: 4, ml:2 }}>
                     All detected variants of '{fileName}'
                 </Typography>
                 <Button onClick={openFilter} sx={{ float: 'right' }}>Filter</Button>
