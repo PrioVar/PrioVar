@@ -317,8 +317,8 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
       },
     },
     {
-      name: 'go',
-      label: 'Go',
+      name: 'annotate',
+      label: 'Annotate VCF File',
       options: {
         filter: false,
         sort: false,
