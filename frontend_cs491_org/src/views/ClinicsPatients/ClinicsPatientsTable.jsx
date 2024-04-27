@@ -179,6 +179,12 @@ import {
       }
     }
 
+    const addNewNote = (vcfFileId, note) => {
+      updateFileNotes(vcfFileId, note).then(() => {
+        fetchData();
+      })
+    }
+
     const fetchMedicalCenterName = async () => {
         const medicalCenterId = localStorage.getItem('healthCenterId');
         if (medicalCenterId) {
@@ -324,21 +330,27 @@ import {
         },
       },
       {
-        name: 'notes',
-        label: 'Notes',
+        name: 'clinicianComments',
+        label: 'Clinician Comments',
         options: {
           filter: false,
           sort: false,
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex];
-            return row && row.file ? (
+            const clinicianComments = row ? row.file.clinicianComments : null;
+      
+            return row ? (
               <ExpandOnClick
                 expanded={
-                  <EditableNote
-                    note={row.file.clinicianComments}
-                    onSave={(notes) => setFileNotes(row, notes)}
-                    details={{ date: row.notes_time, person: row.notes_person }}
-                  />
+                  <div>
+                    {clinicianComments.map((comment, index) => (
+                        <p>{row.file.clinicianName + ": " + comment}</p>
+                    ))}
+                    <EditableNote
+                        onSave={(notes) => addNewNote(row.file.vcfFileId, notes)}
+                        details={{ person: row.file.clinicianName }}
+                    />
+                  </div>
                 }
               >
                 {({ ref, onClick }) => (
