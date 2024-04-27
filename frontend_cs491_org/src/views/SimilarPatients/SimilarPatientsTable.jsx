@@ -39,8 +39,6 @@ import {
     //const classes = useStyles()
     const bedFilesApi = useBedFiles()
     const { data: bedFiles = [] } = bedFilesApi.query
-    const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null)
     const { fileId, sampleName } = useParams()
     const filesApi = useFiles()
     const { status, data = [] } = filesApi.query

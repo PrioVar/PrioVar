@@ -12,6 +12,11 @@ export const fetchCurrentClinicianName = async () => {
   return data
 }
 
+export const deletePatient = async (patientId) => {
+  const data = await axios.delete(`${ROOTS_PrioVar}/patient/${patientId}`)
+  return data
+}
+
 export const addPatientWithPhenotype = async (request) => {
   const data = await axios.post(`${ROOTS_PrioVar}/patient/addPatientWithPhenotype`, request);
   return data
