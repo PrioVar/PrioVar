@@ -23,8 +23,8 @@ import {
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
-  //import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
-  import { useFiles, annotateFile, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
+  import { useFiles, annotateFile, updateFinishInfo, updateFileNotes, fetchClinicianPatients, 
+            fetchCurrentClinicianName } from '../../api/file'
   import { PATH_DASHBOARD, } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
