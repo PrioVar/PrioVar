@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { ArrowForward, Info, Note } from '@material-ui/icons'
+import Tooltip from '@mui/material/Tooltip';
 import MUIDataTable from 'mui-datatables'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -327,17 +328,19 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
         sort: false,
         customBodyRenderLite: (dataIndex) => {
           const row = data[dataIndex]
-          const status = getStatusLabel(row)
+          //const status = getStatusLabel(row)
+          const status = row?.fileStatus
+          const isAnnotated = status === 'FILE_ANNOTATED'
           if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
-          if (status.includes('ANNO') || status === 'WAITING')
-            return (
-              <Button variant="contained" color="info" onClick={() => handleAnnotationModelOpen(row)} size="small">
-                <Info />
-              </Button>
-            )
           return (
-            <GoToSampleDashboard fileId={row.vcfFileId ? row.vcf_id : row.fastq_pair_id} sampleName={row.sample_name} />
-          )
+            <Tooltip title={isAnnotated ? "File already annotated" : "Click to annotate file"}>
+                <span> {/* Tooltip children need to be able to hold a ref */}
+                    <Button disabled={isAnnotated} onClick={() => handleAnnotationModelOpen(row)} size="small" variant="contained" color="info">
+                        <Info />  Annotate File
+                    </Button>
+                </span>
+            </Tooltip>
+         )
         },
       },
     },
