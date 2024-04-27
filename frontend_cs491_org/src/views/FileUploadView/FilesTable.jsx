@@ -23,7 +23,6 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { fDateTime } from 'src/utils/formatTime'
 import JobStateStatus from '../common/JobStateStatus'
 import { deleteVcfFile } from '../../api/vcf'
-import { deleteFastqFile } from '../../api/fastq'
 import axios from '../../utils/axios'
 //import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
 import { fecthClinicianFiles, annotateFile, updateFileNotes } from '../../api/file'
@@ -146,9 +145,7 @@ const GoToSampleDashboard = function ({ fileId, sampleName }) {
   const navigate = useNavigate()
 
   const handleClick = () => {
-    console.log("muhahahaha I am the melon lorrrrd")
     navigate(`/libra/sample/${fileId}/${sampleName}`)
-    console.log("muhahahaha I am the melon lorrrrd")
   }
 
   return (
@@ -310,34 +307,36 @@ const SamplesView = function () {
     return <CircularProgress />
   }
 */
-  switch (isLoading) {
-      case false:
-        return (
-          <>
-            <VariantDasboard2
-              open={isAnnotationModalOpen}
-              handleButtonChange = {handleButtonChange}
-              onClose={() => setAnnotationModalOpen()}
-              vcfFileId={selectedFile?.vcfFileId}
-            />
-            <MUIDataTable
-              title="Files"
-              data={data}
-              columns={COLUMNS}
-              options={{
-                selectableRows: 'none',
-                sortOrder: { name: 'created_at', direction: 'desc' },
-                expandableRows: false,
-                print: false,
-                viewColumns: true,
-                download: false,
-              }}
-            />
-          </>
-        )
-      default:
-        return <CircularProgress />
-    }
+  return (
+    <>
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <VariantDasboard2
+            open={isAnnotationModalOpen}
+            handleButtonChange={handleButtonChange}
+            onClose={() => setAnnotationModalOpen()}
+            vcfFileId={selectedFile?.vcfFileId}
+          />
+          <MUIDataTable
+            title="Files"
+            data={data}
+            columns={COLUMNS}
+            options={{
+              selectableRows: 'none',
+              sortOrder: { name: 'created_at', direction: 'desc' },
+              expandableRows: false,
+              print: false,
+              viewColumns: true,
+              download: false,
+            }}
+          />
+        </>
+      )}
+    </>
+  );
+
   
 }
 

@@ -171,7 +171,6 @@ import {
       setIsLoading(true)
       try {
         const data = await fecthMedicalCenterPatients()
-        console.log(data)
         setData(data)
       } catch (error) {
         console.error('Error fetching clinician files:', error)
@@ -421,38 +420,45 @@ import {
         },
       },
     ]
-  
+    
     return (
       <>
-        <Box display="flex" justifyContent="flex-end" mt={2}> 
-        <Button 
-            variant="contained" 
-            color="info" 
-            component={RouterLink} to={PATH_DASHBOARD.general.files}
-            size="small"
-        >
-            <Add /> 
-            Add Patient 
-        </Button>
-        </Box>
-        <VariantDasboard2
-        open={isAnnotationModalOpen}
-        handleButtonChange = {handleButtonChange}
-        onClose={() => setAnnotationModalOpen()}
-        />
-        <MUIDataTable
-          title={`All patients of ${medicalCenterName || '...'} health center`}
-          data={data}
-          columns={COLUMNS}
-          options={{
-            selectableRows: 'none',
-            sortOrder: { name: 'created_at', direction: 'desc' },
-            expandableRows: false,
-            print: false,
-            viewColumns: true,
-            download: false,
-          }}
-        />
+        { isLoading ? 
+          (<CircularProgress />) : 
+          (
+            <>
+            <Box display="flex" justifyContent="flex-end" mt={2}> 
+            <Button 
+                variant="contained" 
+                color="info" 
+                component={RouterLink} to={PATH_DASHBOARD.general.files}
+                size="small"
+            >
+                <Add /> 
+                Add Patient 
+            </Button>
+            </Box>
+            <VariantDasboard2
+            open={isAnnotationModalOpen}
+            handleButtonChange = {handleButtonChange}
+            onClose={() => setAnnotationModalOpen()}
+            />
+            <MUIDataTable
+              title={`All patients of ${medicalCenterName || '...'} health center`}
+              data={data}
+              columns={COLUMNS}
+              options={{
+                selectableRows: 'none',
+                sortOrder: { name: 'created_at', direction: 'desc' },
+                expandableRows: false,
+                print: false,
+                viewColumns: true,
+                download: false,
+              }}
+            />
+          </>
+          )
+        }
       </>
     )
   }
