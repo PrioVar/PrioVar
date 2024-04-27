@@ -162,6 +162,7 @@ import {
     const filesApi = useFiles()
     const bedFilesApi = useBedFiles()
     const [data, setData] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     const [clinicianName, setClinicianName] = useState('');
     console.log(data);
     //const { status, data = [] } = filesApi.query
@@ -184,6 +185,7 @@ import {
     };
 
     const fetchAllPatients = async () => {
+      setIsLoading(true);
       try {
         const data = await fetchClinicianPatients()
         hasBeenCalled = true;
@@ -193,6 +195,9 @@ import {
       } catch (error) {
         console.error(error);
         throw error;
+      }
+      finally {
+        setIsLoading(false);
       }
     };
 
