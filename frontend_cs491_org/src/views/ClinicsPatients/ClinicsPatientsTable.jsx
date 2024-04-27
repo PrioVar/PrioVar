@@ -21,7 +21,7 @@ import {
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
-  import { annotateFile, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients } from '../../api/file'
+  import { annotateFile, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients, deletePatient } from '../../api/file'
   import { PATH_DASHBOARD, ROOTS_PrioVar } from '../../routes/paths'
   import axios from '../../utils/axios'
   import { Link as RouterLink } from 'react-router-dom'
@@ -242,7 +242,7 @@ import {
             if (!row) return null
   
             const handleClickConfirm = () => {
-              deleteVcfFile(row.patientId).then(() => {
+              deletePatient(row.patientId).then(() => {
               });
             }
   
