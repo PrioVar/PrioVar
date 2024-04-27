@@ -12,6 +12,11 @@ export const fetchCurrentClinicianName = async () => {
   return data
 }
 
+export const addPatientWithPhenotype = async (request) => {
+  const data = await axios.post(`${ROOTS_PrioVar}/patient/addPatientWithPhenotype`, request);
+  return data
+}
+
 // NEW ADDITION ERKIN
 export const fetchClinicianPatients = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/patient/byClinician/${localStorage.getItem('clinicianId')}`)

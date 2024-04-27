@@ -33,7 +33,7 @@ import {
   import { useFiles } from 'src/api/file/list'
   import { updateDetails } from 'src/api/file'
   import ReactDOM from 'react-dom'
-  
+  import { addPatientWithPhenotype } from '../../api/file'
   // constants
   import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
   
@@ -347,7 +347,7 @@ import {
         clinicianId: localStorage.getItem('clinicianId')
       }
       try {
-        const response = await axios.post('http://localhost:8080/patient/addPatientWithPhenotype', request);
+        const response = await addPatientWithPhenotype( request);
         console.log("SUCCESS!")
 
       } catch (error) {

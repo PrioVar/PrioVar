@@ -195,6 +195,9 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
     setSelectedFile(row)
     setAnnotationModalOpen(true)
   }
+  const handleAnnotationModalClose = (newOpenValue) => {
+    setAnnotationModalOpen(newOpenValue);
+  };
   const handleButtonChange = () => {
     //do the change here
     const { id, type } = selectedFile?.vcf_id
