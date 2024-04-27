@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +46,7 @@ public class VCFService {
 
         List<ClinicianComment> clinicianComments = new ArrayList<>();
         vcfFile.setClinicianComments(clinicianComments);
-        vcfFile.setCreatedAt(java.time.LocalDate.now());
+        vcfFile.setCreatedAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         vcfFile.setFinishedAt(null);
 
         // add it to files of clinician
@@ -89,7 +91,7 @@ public class VCFService {
 
     public List<VCFFileDTO> getVCFFilesByClinicianId(Long clinicianId) {
         Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
-        List<VCFFile> vcfFiles =   vcfRepository.findAllByMedicalCenterId(clinician.getMedicalCenter().getId());
+        List<VCFFile> vcfFiles = vcfRepository.findAllByMedicalCenterId(clinician.getMedicalCenter().getId());
         List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
 
         for (VCFFile vcfFile : vcfFiles) {

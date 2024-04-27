@@ -1,6 +1,6 @@
 package com.bio.priovar.models.dto;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +21,17 @@ public class VCFFileDTO {
     // Enum to represent file status
     
     private FileStatus fileStatus;
-    private LocalDate createdAt;
-    private LocalDate finishedAt;
-    public VCFFileDTO(Long vcfFileId, 
-                    String fileName, 
-                    List<ClinicianComment> clinicianComments, 
-                    String clinicianName,
-                    FileStatus fileStatus,
-                    LocalDate createdAt,
-                    LocalDate finishedAt) {
+    private OffsetDateTime createdAt;
+    private OffsetDateTime finishedAt;
+    public VCFFileDTO(
+            Long vcfFileId,
+            String fileName,
+            List<ClinicianComment> clinicianComments,
+            String clinicianName,
+            FileStatus fileStatus,
+            OffsetDateTime createdAt,
+            OffsetDateTime finishedAt
+    ) {
         this.vcfFileId = vcfFileId;
         this.fileName = fileName;
         if(clinicianComments != null) {
