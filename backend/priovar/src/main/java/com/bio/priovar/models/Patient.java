@@ -1,5 +1,6 @@
 package com.bio.priovar.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,6 +46,7 @@ public class Patient {
     private List<Gene> genes;
 
     @Relationship(type = "HAS_VCF_FILE", direction = Relationship.Direction.OUTGOING)
+    @JsonIgnore
     private VCFFile vcfFile;
 
 
