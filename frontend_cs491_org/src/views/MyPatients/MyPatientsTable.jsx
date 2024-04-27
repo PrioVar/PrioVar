@@ -23,9 +23,9 @@ import {
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
-  import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
-  import { PATH_DASHBOARD, PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
+  //import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
+  import { useFiles, annotateFile, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
+  import { PATH_DASHBOARD, } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
@@ -154,19 +154,16 @@ import {
     )
   }
 
-  let hasBeenCalled = false;
-
   const MyPatientsTable = function () {
     //const classes = useStyles()
     let navigate = useNavigate()
     const filesApi = useFiles()
-    const bedFilesApi = useBedFiles()
+    //const bedFilesApi = useBedFiles()
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [clinicianName, setClinicianName] = useState('');
-    console.log(data);
     //const { status, data = [] } = filesApi.query
-    const { data: bedFiles = [] } = bedFilesApi.query
+    //const { data: bedFiles = [] } = bedFilesApi.query
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
   
@@ -188,7 +185,7 @@ import {
       setIsLoading(true);
       try {
         const data = await fetchClinicianPatients()
-        hasBeenCalled = true;
+        console.log(data)
         setData(data)
         return data;
     
@@ -200,6 +197,12 @@ import {
         setIsLoading(false);
       }
     };
+    
+    const addNewNote = (vcfFileId, note) => {
+      updateFileNotes(vcfFileId, note).then(() => {
+        fetchAllPatients();
+      })
+    }
 
     const setFinishedInfo = (row) => {
       const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
@@ -319,23 +322,42 @@ import {
           },
         },
       },
-      
       {
-        name: 'notes',
-        label: 'Notes',
+        name: 'patientName',
+        label: 'Patient Name',
+        options: {
+          filter: true,
+          sort: true,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            if (!row) return null
+            if (!row.file) return null
+            return <Chip label={row.patientName} />
+          },
+        },
+      },
+      {
+        name: 'clinicianComments',
+        label: 'Clinician Comments',
         options: {
           filter: false,
           sort: false,
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex];
-            return row && row.file ? (
+            const clinicianComments = row ? row.file.clinicianComments : null;
+      
+            return row ? (
               <ExpandOnClick
                 expanded={
-                  <EditableNote
-                    note={row.file.clinicianComments}
-                    onSave={(notes) => setFileNotes(row, notes)}
-                    details={{ date: row.notes_time, person: row.notes_person }}
-                  />
+                  <div>
+                    {clinicianComments.map((comment, index) => (
+                        <p>{row.file.clinicianName + ": " + comment}</p>
+                    ))}
+                    <EditableNote
+                        onSave={(notes) => addNewNote(row.file.vcfFileId, notes)}
+                        details={{ person: row.file.clinicianName }}
+                    />
+                  </div>
                 }
               >
                 {({ ref, onClick }) => (
@@ -430,39 +452,57 @@ import {
         },
       },
     ]
-    
     return (
       <>
-        <Box display="flex" justifyContent="flex-end" mt={2}> 
-        <Button 
-            variant="contained" 
-            color="info" 
-            component={RouterLink} to={PATH_DASHBOARD.general.files}
-            size="small"
-        >
-            <Add /> 
-            Add Patient 
-        </Button>
-        </Box>
-        <VariantDasboard2
-        open={isAnnotationModalOpen}
-        handleButtonChange = {handleButtonChange}
-        onClose={() => setAnnotationModalOpen()}
-        />
-        <MUIDataTable
-          title={`All patients of clinician ${clinicianName || '...'}`}
-          data={data}
-          columns={COLUMNS}
-          options={{
-            selectableRows: 'none',
-            sortOrder: { name: 'created_at', direction: 'desc' },
-            expandableRows: false,
-            print: false,
-            viewColumns: true,
-            download: false,
-          }}
-        />
+        {isLoading ? 
+          (<CircularProgress/>) : 
+          (
+            <>
+            <Box display="flex" justifyContent="flex-end" mt={2}> 
+              <Box mr={2}>
+                <Button 
+                    variant="contained" 
+                    color="info" 
+                    size="small"
+                >
+                    <Add /> 
+                    Add Patient NOT IMPLEMENTED YET
+                </Button>
+              </Box>
+              <Box mr={2}>
+                <Button 
+                    variant="contained" 
+                    color="info" 
+                    component={RouterLink} to={PATH_DASHBOARD.general.files}
+                    size="small"
+                >
+                    <ArrowForward /> 
+                    Upload VCF File 
+                </Button>
+              </Box>
+            </Box>
+            <VariantDasboard2
+            open={isAnnotationModalOpen}
+            handleButtonChange = {handleButtonChange}
+            onClose={() => setAnnotationModalOpen()}
+            />
+            <MUIDataTable
+              title={`All patients of clinician ${clinicianName || '...'}`}
+              data={data}
+              columns={COLUMNS}
+              options={{
+                selectableRows: 'none',
+                sortOrder: { name: 'created_at', direction: 'desc' },
+                expandableRows: false,
+                print: false,
+                viewColumns: true,
+                download: false,
+              }}
+            />
+          </>
+          ) }
       </>
+
     )
   }
   
