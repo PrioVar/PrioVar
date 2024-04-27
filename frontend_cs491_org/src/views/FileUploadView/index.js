@@ -19,6 +19,10 @@ const UploadView = function () {
         setIsFileUploaded(uploaded);
     };
 
+    const resetFileUploaded = () => {
+        setIsFileUploaded(false);
+    };
+
   return (
     <Page title="Upload File | PrioVar">
       <Grid container spacing={5}>
@@ -32,7 +36,7 @@ const UploadView = function () {
         </Grid>
 
         <Grid item xs={12}>
-          <FilesTable />
+          <FilesTable isFileUploaded={isFileUploaded} resetFileUploaded={resetFileUploaded} />
         </Grid>
       </Grid>
     </Page>

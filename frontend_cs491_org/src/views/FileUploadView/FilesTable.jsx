@@ -155,7 +155,7 @@ const GoToSampleDashboard = function ({ fileId, sampleName }) {
   )
 }
 
-const SamplesView = function () {
+const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
@@ -170,6 +170,7 @@ const SamplesView = function () {
       console.error('Error fetching clinician files:', error)
     } finally {
       setIsLoading(false)
+      resetFileUploaded();  // Call to reset the upload state
     }
   }
 
@@ -179,9 +180,16 @@ const SamplesView = function () {
     })
   }
 
+    // Effect for initial data load
+    useEffect(() => {
+        fetchData();
+    }, []); // Empty dependency array to run only once on mount
+
   useEffect(() => {
-    fetchData()
-  }, [])
+    if (isFileUploaded) {
+        fetchData();
+    }
+  }, [isFileUploaded]);
 
   const handleAnnotationModelOpen = (row) => {
     setSelectedFile(row)
