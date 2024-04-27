@@ -24,7 +24,7 @@ import {
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
   import { useFiles, annotateFile, updateFinishInfo, updateFileNotes, fetchClinicianPatients, 
-            fetchCurrentClinicianName } from '../../api/file'
+            fetchCurrentClinicianName, deletePatient } from '../../api/file'
   import { PATH_DASHBOARD, } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
@@ -284,7 +284,7 @@ import {
             if (!row) return null
   
             const handleClickConfirm = () => {
-              deleteVcfFile(row.patientId).then(() => {
+              deletePatient(row.patientId).then(() => {
               });
             }
   
