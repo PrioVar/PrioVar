@@ -38,6 +38,7 @@ public class VCFService {
         VCFFile vcfFile = new VCFFile();
         vcfFile.setContent(base64Data);
         vcfFile.setFileStatus(FileStatus.FILE_WAITING);
+
         // generate an uuid file name
         String fileName = UUID.randomUUID().toString();
         vcfFile.setFileName(fileName);
