@@ -185,6 +185,7 @@ import {
       setIsLoading(true);
       try {
         const data = await fetchClinicianPatients()
+        console.log(data)
         setData(data)
         return data;
     
@@ -315,7 +316,20 @@ import {
           },
         },
       },
-      
+      {
+        name: 'patientName',
+        label: 'Patient Name',
+        options: {
+          filter: true,
+          sort: true,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            if (!row) return null
+            if (!row.file) return null
+            return <Chip label={row.patientName} />
+          },
+        },
+      },
       {
         name: 'notes',
         label: 'Notes',
@@ -433,15 +447,27 @@ import {
           (
             <>
             <Box display="flex" justifyContent="flex-end" mt={2}> 
-            <Button 
-                variant="contained" 
-                color="info" 
-                component={RouterLink} to={PATH_DASHBOARD.general.files}
-                size="small"
-            >
-                <Add /> 
-                Add Patient 
-            </Button>
+              <Box mr={2}>
+                <Button 
+                    variant="contained" 
+                    color="info" 
+                    size="small"
+                >
+                    <Add /> 
+                    Add Patient NOT IMPLEMENTED YET
+                </Button>
+              </Box>
+              <Box mr={2}>
+                <Button 
+                    variant="contained" 
+                    color="info" 
+                    component={RouterLink} to={PATH_DASHBOARD.general.files}
+                    size="small"
+                >
+                    <ArrowForward /> 
+                    Upload VCF File 
+                </Button>
+              </Box>
             </Box>
             <VariantDasboard2
             open={isAnnotationModalOpen}
