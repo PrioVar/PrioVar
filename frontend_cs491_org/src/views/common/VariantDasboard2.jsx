@@ -346,8 +346,6 @@ import {
         vcfFileId: vcfFileId,
         clinicianId: localStorage.getItem('clinicianId')
       }
-      console.log("request:")
-      console.log(request)
       try {
         const response = await axios.post('http://localhost:8080/patient/addPatientWithPhenotype', request);
         console.log("SUCCESS!")
@@ -356,10 +354,6 @@ import {
         console.log("FAIL!")
         console.error('add patient error:', error.response);
       }
-      const { id, type } = { id: vcfFileId, type: 'VCF' }
-      //updateDetails(id, details, type)
-      //handle button change
-      //filesApi.refresh()
     }
   
     const [hpoList, setHpoList] = useHpo({ fileId })
