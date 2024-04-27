@@ -149,7 +149,7 @@ import {
   
     return (
       <Button variant="contained" onClick={handleClick} size="small">
-        <ArrowForward />
+        <ArrowForward/>
       </Button>
     )
   }
@@ -309,7 +309,20 @@ import {
           },
         },
       },
-      
+      {
+        name: 'patientName',
+        label: 'Patient Name',
+        options: {
+          filter: true,
+          sort: true,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            if (!row) return null
+            if (!row.file) return null
+            return <Chip label={row.patientName} />
+          },
+        },
+      },
       {
         name: 'notes',
         label: 'Notes',
@@ -434,8 +447,8 @@ import {
                 component={RouterLink} to={PATH_DASHBOARD.general.files}
                 size="small"
             >
-                <Add /> 
-                Add Patient 
+                <ArrowForward /> 
+                Upload VCF File 
             </Button>
             </Box>
             <VariantDasboard2
