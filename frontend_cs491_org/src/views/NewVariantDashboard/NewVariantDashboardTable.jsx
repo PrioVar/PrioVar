@@ -224,8 +224,8 @@ const NewVariantDashboardTable = () => {
                 <Table sx={{ padding: 2, mt: 5 }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell onClick={() => handleSort('acmgScore')}>ACMG Score</TableCell>
                             <TableCell onClick={() => handleSort('variantPosition')}>Variant Position</TableCell>
+                            <TableCell onClick={() => handleSort('acmgScore')}>ACMG Score</TableCell>
                             <TableCell>Related diseases</TableCell>
                             <TableCell>Gene symbol</TableCell>
                             <TableCell>GT</TableCell>
@@ -250,8 +250,8 @@ const NewVariantDashboardTable = () => {
                                     backgroundColor: '#f5f5f5' // hover highlight
                                 }
                             }}>
-                                <TableCell>{row.acmgScore}</TableCell>
                                 <TableCell>{row.variantPosition}</TableCell>
+                                <TableCell>{row.acmgScore}</TableCell>
                                 <TableCell>{row.diseases}</TableCell>
                                 <TableCell>{row.geneSymbol}</TableCell>
                                 <TableCell>{row.gt}</TableCell>
