@@ -305,34 +305,40 @@ const SamplesView = function () {
     },
     // Define additional columns as needed based on the keys in the data objects
   ]
-
+/*
   if (isLoading) {
     return <CircularProgress />
   }
-
-  return (
-    <>
-      <VariantDasboard2
-        open={isAnnotationModalOpen}
-        handleButtonChange = {handleButtonChange}
-        onClose={() => setAnnotationModalOpen()}
-        vcfFileId={selectedFile?.vcfFileId}
-      />
-      <MUIDataTable
-        title="Files"
-        data={data}
-        columns={COLUMNS}
-        options={{
-          selectableRows: 'none',
-          sortOrder: { name: 'created_at', direction: 'desc' },
-          expandableRows: false,
-          print: false,
-          viewColumns: true,
-          download: false,
-        }}
-      />
-    </>
-  )
+*/
+  switch (isLoading) {
+      case false:
+        return (
+          <>
+            <VariantDasboard2
+              open={isAnnotationModalOpen}
+              handleButtonChange = {handleButtonChange}
+              onClose={() => setAnnotationModalOpen()}
+              vcfFileId={selectedFile?.vcfFileId}
+            />
+            <MUIDataTable
+              title="Files"
+              data={data}
+              columns={COLUMNS}
+              options={{
+                selectableRows: 'none',
+                sortOrder: { name: 'created_at', direction: 'desc' },
+                expandableRows: false,
+                print: false,
+                viewColumns: true,
+                download: false,
+              }}
+            />
+          </>
+        )
+      default:
+        return <CircularProgress />
+    }
+  
 }
 
 export default SamplesView
