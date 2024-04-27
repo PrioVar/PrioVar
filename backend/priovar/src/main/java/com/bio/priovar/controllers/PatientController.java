@@ -110,6 +110,10 @@ public class PatientController {
 
     // Delete Requests
 
+    @DeleteMapping("/{patientId}")
+    public ResponseEntity<String> deletePatient(@PathVariable("patientId") Long patientId) {
+        return new ResponseEntity<>(patientService.deletePatient(patientId), org.springframework.http.HttpStatus.OK);
+    }
     // delete phenotypeTerm from the patient
     @DeleteMapping("/{patientId}/deletePhenotypeTerm/{phenotypeTermId}")
     public ResponseEntity<String> deletePhenotypeTermFromPatient(@PathVariable("patientId") Long patientId, @PathVariable("phenotypeTermId") Long phenotypeTermId) {

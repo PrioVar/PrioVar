@@ -21,7 +21,7 @@ import {
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
-  import { annotateFile, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients } from '../../api/file'
+  import { annotateFile, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients, deletePatient } from '../../api/file'
   import { PATH_DASHBOARD, ROOTS_PrioVar } from '../../routes/paths'
   import axios from '../../utils/axios'
   import { Link as RouterLink } from 'react-router-dom'
@@ -240,13 +240,29 @@ import {
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex]
             if (!row) return null
-  
+            // eslint-disable-next-line eqeqeq
+            const isClinicianSame = row?.clinicianId == localStorage.getItem('clinicianId')
+            console.log(isClinicianSame)
+            console.log(row?.clinicianId)
+            console.log(localStorage.getItem('clinicianId'))
             const handleClickConfirm = () => {
-              deleteVcfFile(row.patientId).then(() => {
+              deletePatient(row.patientId).then(() => {
               });
             }
   
-            return <DeleteFileButton onClickConfirm={handleClickConfirm} />
+            return (
+              <>
+                  {isClinicianSame ? (
+                      <DeleteFileButton onClickConfirm={handleClickConfirm} />
+                  ) : (
+                      <button disabled={true} style={{ opacity: 0.5 }}>
+                          Unauthorized
+                      </button>
+                  )}
+              </>
+          );
+          
+               
           },
         },
       },
