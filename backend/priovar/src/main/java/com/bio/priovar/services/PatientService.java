@@ -109,9 +109,11 @@ public class PatientService {
         for( Patient patient : patients ) {
             VCFFile vcfFile = patient.getVcfFile();
             VCFFileDTO vcfFileDTO = null;
+            Long clinicianId = null;
             if( vcfFile != null) {
                 Clinician clinician = clinicianRepository.findByVcfFilesId(vcfFile.getId()).orElse(null);
                 String clinicianName = (clinician != null) ? clinician.getName() : "";
+                clinicianId = (clinician != null) ? clinician.getId() : null;
                 vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                             vcfFile.getFileName(), vcfFile.getClinicianComments(), 
                                             clinicianName,
@@ -123,7 +125,8 @@ public class PatientService {
                                                 patient.getName(), 
                                                 patient.getAge(),
                                                 patient.getSex(), 
-                                                vcfFileDTO);
+                                                vcfFileDTO,
+                                                clinicianId);
             patientDTOs.add(patientDTO);
         }
         return patientDTOs;
@@ -203,6 +206,7 @@ public class PatientService {
             VCFFile vcfFile = patient.getVcfFile();
             VCFFileDTO vcfFileDTO = null;
             if( vcfFile != null) {
+
                 vcfFileDTO = new VCFFileDTO(vcfFile.getId(), 
                                             vcfFile.getFileName(), vcfFile.getClinicianComments(), 
                                             clinician.getName(),
@@ -215,7 +219,8 @@ public class PatientService {
                                                 patient.getName(), 
                                                 patient.getAge(),
                                                 patient.getSex(), 
-                                                vcfFileDTO);
+                                                vcfFileDTO,
+                                                clinicianId);
             patientDTOs.add(patientDTO);
         }
         return patientDTOs;

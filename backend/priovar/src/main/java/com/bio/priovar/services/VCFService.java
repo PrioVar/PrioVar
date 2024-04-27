@@ -127,6 +127,20 @@ public class VCFService {
         
         return ResponseEntity.ok("Note added successfully");
     }
+
+    public ResponseEntity<String> deleteVCFFile(Long vcfFileId) {
+        Optional<VCFFile> vcfFileOptional = vcfRepository.findById(vcfFileId);
+        if (vcfFileOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("VCF File with id " + vcfFileId + " does not exist");
+        }
+        
+        VCFFile vcfFile = vcfFileOptional.get();
+        
+        // Delete the VCF file
+        vcfRepository.delete(vcfFile);
+        
+        return ResponseEntity.ok("VCF file deleted successfully");
+    }
     
 
 }
