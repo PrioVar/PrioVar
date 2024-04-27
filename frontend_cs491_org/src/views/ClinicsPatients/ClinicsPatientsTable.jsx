@@ -306,7 +306,6 @@ import {
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex]
             if (!row) return null
-            if (!row.file) return null
             return <Chip label={row.patientName} />
           },
         },
@@ -333,6 +332,7 @@ import {
           sort: false,
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex];
+            if (!row.file) return null;
             const clinicianComments = row ? row.file.clinicianComments : null;
       
             return row ? (
