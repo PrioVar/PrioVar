@@ -464,9 +464,11 @@ public class PatientService {
             Patient patient = patientRepository.findById(patientId)
                     .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " does not exist"));
             VCFFile vcfFile = vcfRepository.findById(vcfFileId)
-                    .orElseThrow(() -> new IllegalArgumentException("VCF File with id " + vcfFileId + " does not exist"));        
+                    .orElseThrow(() -> new IllegalArgumentException("VCF File with id " + vcfFileId + " does not exist"));
+            vcfFile.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
             patient.setVcfFile(vcfFile);
             patientRepository.save(patient);
+            vcfRepository.save(vcfFile);
             return ResponseEntity.ok("VCF file set successfully");
         } catch (Exception e) {
             // Log the exception or handle it as needed
