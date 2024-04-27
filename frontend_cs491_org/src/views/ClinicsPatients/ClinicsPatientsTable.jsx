@@ -330,6 +330,20 @@ import {
         },
       },
       {
+        name: 'clinicianName',
+        label: 'Clinician Name',
+        options: {
+          filter: true,
+          sort: true,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            if (!row) return null
+            if (!row.file) return null
+            return <Chip label={row.file.clinicianName} />
+          },
+        },
+      },
+      {
         name: 'clinicianComments',
         label: 'Clinician Comments',
         options: {
