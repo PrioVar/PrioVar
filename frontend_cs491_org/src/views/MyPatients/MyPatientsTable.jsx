@@ -23,9 +23,9 @@ import {
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
-  import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
-  import { PATH_DASHBOARD, PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
+  //import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
+  import { useFiles, annotateFile, updateFinishInfo, updateFileNotes, fetchClinicianPatients, fetchCurrentClinicianName } from '../../api/file'
+  import { PATH_DASHBOARD, } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
@@ -154,19 +154,16 @@ import {
     )
   }
 
-  let hasBeenCalled = false;
-
   const MyPatientsTable = function () {
     //const classes = useStyles()
     let navigate = useNavigate()
     const filesApi = useFiles()
-    const bedFilesApi = useBedFiles()
+    //const bedFilesApi = useBedFiles()
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [clinicianName, setClinicianName] = useState('');
-    console.log(data);
     //const { status, data = [] } = filesApi.query
-    const { data: bedFiles = [] } = bedFilesApi.query
+    //const { data: bedFiles = [] } = bedFilesApi.query
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
   
@@ -188,7 +185,6 @@ import {
       setIsLoading(true);
       try {
         const data = await fetchClinicianPatients()
-        hasBeenCalled = true;
         setData(data)
         return data;
     
@@ -430,39 +426,45 @@ import {
         },
       },
     ]
-    
     return (
       <>
-        <Box display="flex" justifyContent="flex-end" mt={2}> 
-        <Button 
-            variant="contained" 
-            color="info" 
-            component={RouterLink} to={PATH_DASHBOARD.general.files}
-            size="small"
-        >
-            <Add /> 
-            Add Patient 
-        </Button>
-        </Box>
-        <VariantDasboard2
-        open={isAnnotationModalOpen}
-        handleButtonChange = {handleButtonChange}
-        onClose={() => setAnnotationModalOpen()}
-        />
-        <MUIDataTable
-          title={`All patients of clinician ${clinicianName || '...'}`}
-          data={data}
-          columns={COLUMNS}
-          options={{
-            selectableRows: 'none',
-            sortOrder: { name: 'created_at', direction: 'desc' },
-            expandableRows: false,
-            print: false,
-            viewColumns: true,
-            download: false,
-          }}
-        />
+        {isLoading ? 
+          (<CircularProgress/>) : 
+          (
+            <>
+            <Box display="flex" justifyContent="flex-end" mt={2}> 
+            <Button 
+                variant="contained" 
+                color="info" 
+                component={RouterLink} to={PATH_DASHBOARD.general.files}
+                size="small"
+            >
+                <Add /> 
+                Add Patient 
+            </Button>
+            </Box>
+            <VariantDasboard2
+            open={isAnnotationModalOpen}
+            handleButtonChange = {handleButtonChange}
+            onClose={() => setAnnotationModalOpen()}
+            />
+            <MUIDataTable
+              title={`All patients of clinician ${clinicianName || '...'}`}
+              data={data}
+              columns={COLUMNS}
+              options={{
+                selectableRows: 'none',
+                sortOrder: { name: 'created_at', direction: 'desc' },
+                expandableRows: false,
+                print: false,
+                viewColumns: true,
+                download: false,
+              }}
+            />
+          </>
+          ) }
       </>
+
     )
   }
   
