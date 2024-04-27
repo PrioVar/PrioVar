@@ -51,4 +51,9 @@ public class VCFController {
     public List<VCFFileDTO> getVCFFilesByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
         return vcfService.getVCFFilesByClinicianId(clinicianId);
     }
+
+    @DeleteMapping("/{vcfFileId}")
+    public ResponseEntity<String> deleteVCFFile(@PathVariable("vcfFileId") Long vcfFileId) {
+        return vcfService.deleteVCFFile(vcfFileId);
+    }
 }

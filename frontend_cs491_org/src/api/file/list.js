@@ -17,6 +17,11 @@ export const deletePatient = async (patientId) => {
   return data
 }
 
+export const deleteVCF = async (vcfId) => {
+  const data = await axios.delete(`${ROOTS_PrioVar}/vcf/${vcfId}`)
+  return data
+}
+
 export const addPatientWithPhenotype = async (request) => {
   const data = await axios.post(`${ROOTS_PrioVar}/patient/addPatientWithPhenotype`, request);
   return data

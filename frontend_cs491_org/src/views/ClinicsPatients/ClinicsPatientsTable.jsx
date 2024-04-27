@@ -240,13 +240,29 @@ import {
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex]
             if (!row) return null
-  
+            // eslint-disable-next-line eqeqeq
+            const isClinicianSame = row?.clinicianId == localStorage.getItem('clinicianId')
+            console.log(isClinicianSame)
+            console.log(row?.clinicianId)
+            console.log(localStorage.getItem('clinicianId'))
             const handleClickConfirm = () => {
               deletePatient(row.patientId).then(() => {
               });
             }
   
-            return <DeleteFileButton onClickConfirm={handleClickConfirm} />
+            return (
+              <>
+                  {isClinicianSame ? (
+                      <DeleteFileButton onClickConfirm={handleClickConfirm} />
+                  ) : (
+                      <button disabled={true} style={{ opacity: 0.5 }}>
+                          Unauthorized
+                      </button>
+                  )}
+              </>
+          );
+          
+               
           },
         },
       },

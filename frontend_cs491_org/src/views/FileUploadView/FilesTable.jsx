@@ -26,7 +26,7 @@ import JobStateStatus from '../common/JobStateStatus'
 import { deleteVcfFile } from '../../api/vcf'
 import axios from '../../utils/axios'
 //import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-import { fecthClinicianFiles, annotateFile, updateFileNotes } from '../../api/file'
+import { fecthClinicianFiles, annotateFile, updateFileNotes, deleteVCF } from '../../api/file'
 
 import ExpandOnClick from 'src/components/ExpandOnClick'
 import AnalysedCheckbox from '../common/AnalysedCheckbox'
@@ -233,7 +233,7 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
           if (!row) return null
 
           const handleClickConfirm = () => {
-            // Implementation for handleClickConfirm function
+            deleteVCF(row.vcfFileId)
           }
 
           return <DeleteFileButton onClickConfirm={handleClickConfirm} />
