@@ -37,7 +37,7 @@ import {
   import { deleteVcfFile } from '../../api/vcf'
   import { deleteFastqFile } from '../../api/fastq'
   import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-  import { PATH_DASHBOARD } from '../../routes/paths'
+  import { PATH_DASHBOARD, ROOTS_PrioVar } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
@@ -71,7 +71,7 @@ import { fi } from 'date-fns/locale';
     const handleResultCount = (e) => setResultCount(e.target.value)
 
     const getPatient = async () => {
-        return axios.get(`http://localhost:8080/patient/getPatient`);
+        return axios.get(`${ROOTS_PrioVar}/patient/getPatient`);
     }
 
     const handleSearch = async () => {
@@ -81,7 +81,7 @@ import { fi } from 'date-fns/locale';
             // first get the patient
             const patient = await getPatient()
 
-            const response = await axios.get(`http://localhost:8080/similarityReport/mostSimilarPatients/${patient.data.id}/${resultCount}`);
+            const response = await axios.get(`${ROOTS_PrioVar}/similarityReport/mostSimilarPatients/${patient.data.id}/${resultCount}`);
             console.log("SUCCESS!")
             console.log(patient)
             console.log(response)

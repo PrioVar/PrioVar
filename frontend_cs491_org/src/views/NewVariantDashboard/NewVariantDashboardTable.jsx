@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, TextField, FormGroup, FormControlLabel, Checkbox, RadioGroup, Radio } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { sortRows, filterRows } from './tableUtils.js'; // You need to create this utility file for sorting and filtering logic
+import ArrowBack from '@mui/icons-material/ArrowBack';
 import SortIcon from '@mui/icons-material/Sort';
 
 const NewVariantDashboardTable = () => {
@@ -133,7 +134,9 @@ const NewVariantDashboardTable = () => {
 
     return (
         <>
-            <Button onClick={() => navigate(-1)} sx={{ ml:1, mt: 3 }}>Go back to files</Button>
+            <Button onClick={() => navigate(-1)} sx={{ ml:1, mt: 3 }}>
+                <ArrowBack sx={{ mr: 1 }} /> Go back to files
+            </Button>
 
             <Dialog open={filterOpen} onClose={closeFilter}>
                 <DialogTitle>Filter Options</DialogTitle>
