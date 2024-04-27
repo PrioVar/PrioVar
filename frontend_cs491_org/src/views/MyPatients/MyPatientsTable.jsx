@@ -256,7 +256,9 @@ import {
     }
 
     const handleSeeSimilarPatients = (row) => {
-        navigate(PATH_DASHBOARD.general.similarPatients, { state: { detail: row } });
+      localStorage.setItem('patientId', row.patientId);
+      localStorage.setItem('patientName', row.patientName);
+      navigate(PATH_DASHBOARD.general.similarPatients, { state: { detail: row } });
     }
 
     const handleAddPatient = (row) => {}

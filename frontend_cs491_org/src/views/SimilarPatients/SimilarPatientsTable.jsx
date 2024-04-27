@@ -26,31 +26,16 @@ import {
   } from '@material-ui/core'
   import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
   import axios from 'axios';
-  import { makeStyles } from '@material-ui/styles'
-  import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
-  import MUIDataTable from 'mui-datatables'
+  import { Info } from '@material-ui/icons'
   import React, { useState, useMemo, useEffect } from 'react'
-  import { useNavigate } from 'react-router-dom'
-  import DeleteIcon from '@material-ui/icons/Delete'
-  import { fDateTime } from 'src/utils/formatTime'
-  import JobStateStatus from '../common/JobStateStatus'
-  import { deleteVcfFile } from '../../api/vcf'
-  import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-  import { PATH_DASHBOARD, ROOTS_PrioVar } from '../../routes/paths'
-  import { Link as RouterLink } from 'react-router-dom'
-  import ExpandOnClick from 'src/components/ExpandOnClick'
-  import AnalysedCheckbox from '../common/AnalysedCheckbox'
+  import { useFiles, useBedFiles } from '../../api/file'
+  import { ROOTS_PrioVar } from '../../routes/paths'
   import { useParams } from 'react-router-dom'
-
-  import Tags from 'src/components/Tags'
-  // api utils
-  import { updateTrio, useHpo } from '../../api/vcf'
-  // constants
-  import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
-import { fi } from 'date-fns/locale';
   
   const SimilarPatientsTable = function () {
+
+    const patientId = localStorage.getItem('patientId')
+    const patientName = localStorage.getItem('patientName')
     //const classes = useStyles()
     const bedFilesApi = useBedFiles()
     const { data: bedFiles = [] } = bedFilesApi.query
@@ -70,20 +55,13 @@ import { fi } from 'date-fns/locale';
     const [searching, setSearching] = useState(false);
     const handleResultCount = (e) => setResultCount(e.target.value)
 
-    const getPatient = async () => {
-        return axios.get(`${ROOTS_PrioVar}/patient/getPatient`);
-    }
-
     const handleSearch = async () => {
 
         try {
             setSearching(true);
-            // first get the patient
-            const patient = await getPatient()
 
-            const response = await axios.get(`${ROOTS_PrioVar}/similarityReport/mostSimilarPatients/${patient.data.id}/${resultCount}`);
+            const response = await axios.get(`${ROOTS_PrioVar}/similarityReport/mostSimilarPatients/${patientId}/${resultCount}`);
             console.log("SUCCESS!")
-            console.log(patient)
             console.log(response)
             setRows(response.data);
     
@@ -96,12 +74,11 @@ import { fi } from 'date-fns/locale';
           }
       };
 
-  
     return (
         <>
 
     <Box p={3} mt={4}>
-    <Typography variant="h5">Similar Patients for </Typography>
+    <Typography variant="h5">Similar Patients for {patientName} </Typography>
       <Grid container spacing={2} alignItems="flex-end" mt={4}>
         <Grid item xs={2}>
             <FormControl fullWidth>
