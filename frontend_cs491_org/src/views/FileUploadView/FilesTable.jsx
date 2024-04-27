@@ -252,7 +252,7 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
         sort: true,
         customBodyRenderLite(dataIndex) {
           const row = data[dataIndex]
-          return row && row.file ? fDateTime(row.file.createdAt) : null;
+          return row ? fDateTime(row.createdAt) : null;
 
         },
       },
@@ -267,7 +267,7 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
           const row = data[dataIndex]
           return row ? (
             <AnalysedCheckbox
-              checked={row.file?.finishedAt != null}
+              checked={row.finishedAt != null}
               details={{ date: row.finish_time, person: row.finish_person }}
             />
           ) : null
