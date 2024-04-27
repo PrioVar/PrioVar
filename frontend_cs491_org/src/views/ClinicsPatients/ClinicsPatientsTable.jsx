@@ -149,7 +149,7 @@ import {
   
     return (
       <Button variant="contained" onClick={handleClick} size="small">
-        <ArrowForward />
+        <ArrowForward/>
       </Button>
     )
   }
@@ -171,13 +171,18 @@ import {
       setIsLoading(true)
       try {
         const data = await fecthMedicalCenterPatients()
-        console.log(data)
         setData(data)
       } catch (error) {
         console.error('Error fetching clinician files:', error)
       } finally {
         setIsLoading(false)
       }
+    }
+
+    const addNewNote = (vcfFileId, note) => {
+      updateFileNotes(vcfFileId, note).then(() => {
+        fetchData();
+      })
     }
 
     const fetchMedicalCenterName = async () => {
@@ -310,23 +315,56 @@ import {
           },
         },
       },
-      
       {
-        name: 'notes',
-        label: 'Notes',
+        name: 'patientName',
+        label: 'Patient Name',
+        options: {
+          filter: true,
+          sort: true,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            if (!row) return null
+            if (!row.file) return null
+            return <Chip label={row.patientName} />
+          },
+        },
+      },
+      {
+        name: 'clinicianName',
+        label: 'Clinician Name',
+        options: {
+          filter: true,
+          sort: true,
+          customBodyRenderLite: (dataIndex) => {
+            const row = data[dataIndex]
+            if (!row) return null
+            if (!row.file) return null
+            return <Chip label={row.file.clinicianName} />
+          },
+        },
+      },
+      {
+        name: 'clinicianComments',
+        label: 'Clinician Comments',
         options: {
           filter: false,
           sort: false,
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex];
-            return row && row.file ? (
+            const clinicianComments = row ? row.file.clinicianComments : null;
+      
+            return row ? (
               <ExpandOnClick
                 expanded={
-                  <EditableNote
-                    note={row.file.clinicianComments}
-                    onSave={(notes) => setFileNotes(row, notes)}
-                    details={{ date: row.notes_time, person: row.notes_person }}
-                  />
+                  <div>
+                    {clinicianComments.map((comment, index) => (
+                        <p>{row.file.clinicianName + ": " + comment}</p>
+                    ))}
+                    <EditableNote
+                        onSave={(notes) => addNewNote(row.file.vcfFileId, notes)}
+                        details={{ person: row.file.clinicianName }}
+                    />
+                  </div>
                 }
               >
                 {({ ref, onClick }) => (
@@ -421,38 +459,45 @@ import {
         },
       },
     ]
-  
+    
     return (
       <>
-        <Box display="flex" justifyContent="flex-end" mt={2}> 
-        <Button 
-            variant="contained" 
-            color="info" 
-            component={RouterLink} to={PATH_DASHBOARD.general.files}
-            size="small"
-        >
-            <Add /> 
-            Add Patient 
-        </Button>
-        </Box>
-        <VariantDasboard2
-        open={isAnnotationModalOpen}
-        handleButtonChange = {handleButtonChange}
-        onClose={() => setAnnotationModalOpen()}
-        />
-        <MUIDataTable
-          title={`All patients of ${medicalCenterName || '...'} health center`}
-          data={data}
-          columns={COLUMNS}
-          options={{
-            selectableRows: 'none',
-            sortOrder: { name: 'created_at', direction: 'desc' },
-            expandableRows: false,
-            print: false,
-            viewColumns: true,
-            download: false,
-          }}
-        />
+        { isLoading ? 
+          (<CircularProgress />) : 
+          (
+            <>
+            <Box display="flex" justifyContent="flex-end" mt={2}> 
+            <Button 
+                variant="contained" 
+                color="info" 
+                component={RouterLink} to={PATH_DASHBOARD.general.files}
+                size="small"
+            >
+                <ArrowForward /> 
+                Upload VCF File 
+            </Button>
+            </Box>
+            <VariantDasboard2
+            open={isAnnotationModalOpen}
+            handleButtonChange = {handleButtonChange}
+            onClose={() => setAnnotationModalOpen()}
+            />
+            <MUIDataTable
+              title={`All patients of ${medicalCenterName || '...'} health center`}
+              data={data}
+              columns={COLUMNS}
+              options={{
+                selectableRows: 'none',
+                sortOrder: { name: 'created_at', direction: 'desc' },
+                expandableRows: false,
+                print: false,
+                viewColumns: true,
+                download: false,
+              }}
+            />
+          </>
+          )
+        }
       </>
     )
   }
