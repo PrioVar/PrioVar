@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -109,7 +111,7 @@ public class InitializerController {
         vcfFile1.setFileName(UUID.randomUUID().toString());
         vcfFile1.setMedicalCenter(liva);
         vcfFile1.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
-        vcfFile1.setCreatedAt(java.time.LocalDate.now());
+        vcfFile1.setCreatedAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         vcfFile1.setFinishedAt(null);
         vcfFile1.setClinicianComments(new ArrayList<>());
         patient1.setVcfFile(vcfFile1);
@@ -141,7 +143,7 @@ public class InitializerController {
         vcfFile2.setFileName(UUID.randomUUID().toString());
         vcfFile2.setMedicalCenter(liva);
         vcfFile2.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
-        vcfFile2.setCreatedAt(java.time.LocalDate.now());
+        vcfFile2.setCreatedAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         vcfFile2.setFinishedAt(null);
         vcfFile2.setClinicianComments(new ArrayList<>());
         patient2.setVcfFile(vcfFile2);
@@ -171,7 +173,7 @@ public class InitializerController {
         vcfFile3.setFileName(UUID.randomUUID().toString());
         vcfFile3.setMedicalCenter(liva);
         vcfFile3.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
-        vcfFile3.setCreatedAt(java.time.LocalDate.now());
+        vcfFile3.setCreatedAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         vcfFile3.setFinishedAt(null);
         vcfFile3.setClinicianComments(new ArrayList<>());
         patient3.setVcfFile(vcfFile3);
@@ -194,7 +196,7 @@ public class InitializerController {
         vcfFile4.setFileName(UUID.randomUUID().toString());
         vcfFile4.setMedicalCenter(liva);
         vcfFile4.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
-        vcfFile4.setCreatedAt(java.time.LocalDate.now());
+        vcfFile4.setCreatedAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         vcfFile4.setFinishedAt(null);
         vcfFile4.setClinicianComments(new ArrayList<>());
         patient4.setVcfFile(vcfFile4);
