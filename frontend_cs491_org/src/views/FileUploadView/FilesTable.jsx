@@ -245,6 +245,36 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
       },
     },
     {
+      name: 'created_at',
+      label: 'Uploaded At',
+      options: {
+        filter: false,
+        sort: true,
+        customBodyRenderLite(dataIndex) {
+          const row = data[dataIndex]
+          return row && row.file ? fDateTime(row.file.createdAt) : null;
+
+        },
+      },
+    },
+    {
+      name: 'finished_at',
+      label: 'Completed',
+      options: {
+        filter: true,
+        sort: false,
+        customBodyRenderLite(dataIndex) {
+          const row = data[dataIndex]
+          return row ? (
+            <AnalysedCheckbox
+              checked={row.file?.finishedAt != null}
+              details={{ date: row.finish_time, person: row.finish_person }}
+            />
+          ) : null
+        },
+      },
+    },
+    {
       name: 'fileName',
       label: 'File Name',
       options: {
