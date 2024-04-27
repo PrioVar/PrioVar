@@ -1,7 +1,6 @@
 import { isCancel } from 'axios'
 import axios from '../../utils/axios'
-import { API_BASE_URL } from '../../constants'
-import { PATH_AUTH, PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
+import { PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
 
 export const uploadFile = async (file, onUploadProgress, cancelToken) => {
   return new Promise((resolve, reject) => {
