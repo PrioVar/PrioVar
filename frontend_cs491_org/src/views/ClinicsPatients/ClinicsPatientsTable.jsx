@@ -1,7 +1,6 @@
 import {
     Box,
     CircularProgress,
-    Stack,
     Button,
     Dialog,
     DialogActions,
@@ -14,8 +13,7 @@ import {
     Typography,
     TextField,
   } from '@material-ui/core'
-  import { makeStyles } from '@material-ui/styles'
-  import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
+  import { ArrowForward, Info, Note } from '@material-ui/icons'
   import MUIDataTable from 'mui-datatables'
   import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
@@ -23,8 +21,7 @@ import {
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
   import { deleteVcfFile } from '../../api/vcf'
-  import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients } from '../../api/file'
+  import { annotateFile, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients } from '../../api/file'
   import { PATH_DASHBOARD, ROOTS_PrioVar } from '../../routes/paths'
   import axios from '../../utils/axios'
   import { Link as RouterLink } from 'react-router-dom'
@@ -88,15 +85,6 @@ import {
     if (!annotationStatus || annotationStatus === 'DONE') return analyzeStatus
     return 'ANNO_' + annotationStatus
   }
-  
-  const useStyles = makeStyles((theme) => ({
-    expandedCell: {
-      boxShadow: theme.shadows[3]
-        .split('),')
-        .map((s) => `inset ${s}`)
-        .join('),'),
-    },
-  }))
   
   const DeleteFileButton = ({ onClickConfirm }) => {
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -208,49 +196,28 @@ import {
         //filesApi.refresh()
       })
     }
-  
-    const setFileNotes = (row, notes) => {
-      const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
-      updateFileNotes(id, notes).then(() => {
-        //filesApi.refresh()
-      })
-    }
-  
-    const handleFileAnnotation = (annotation) => {
+
+    const handleButtonChange = () => {
+      //do the change here
       const { id, type } = selectedFile?.vcf_id
-        ? { id: selectedFile.vcf_id, type: 'VCF' }
-        : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
+      ? { id: selectedFile.vcf_id, type: 'VCF' }
+      : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
+      let annotation = {
+          type: 'Exome',
+          machine: 'Illumina',
+          kit: 0,
+          panel: '',
+          germline: true,
+          alignment: 'BWA',
+          reference: 'GRCh38',
+          isSnp: false,
+          isCnv: false,
+          cnvAnalysis: 'xhmm+decont',
+      }
       annotateFile(id, annotation, type).then((res) => {
-        //filesApi.refresh()
-        setAnnotationModalOpen(false)
+          //filesApi.refresh()
+          //setAnnotationModalOpen(false)
       })
-    }
-      const handleButtonChange = () => {
-        //do the change here
-        const { id, type } = selectedFile?.vcf_id
-        ? { id: selectedFile.vcf_id, type: 'VCF' }
-        : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
-        let annotation = {
-            type: 'Exome',
-            machine: 'Illumina',
-            kit: 0,
-            panel: '',
-            germline: true,
-            alignment: 'BWA',
-            reference: 'GRCh38',
-            isSnp: false,
-            isCnv: false,
-            cnvAnalysis: 'xhmm+decont',
-        }
-        annotateFile(id, annotation, type).then((res) => {
-            //filesApi.refresh()
-            //setAnnotationModalOpen(false)
-        })
-    }
-  
-    const handleAnnotationModelOpen = (row) => {
-      setSelectedFile(row)
-      setAnnotationModalOpen(true)
     }
 
     const handleSeeSimilarPatients = (row) => {
@@ -258,8 +225,6 @@ import {
         localStorage.setItem('patientName', row.patientName);
         navigate(PATH_DASHBOARD.general.similarPatients, { state: { detail: row } });
     }
-
-    const handleAddPatient = (row) => {}
 
     const handleDetails = (row) => {
         // TODO
