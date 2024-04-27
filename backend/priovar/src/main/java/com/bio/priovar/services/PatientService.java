@@ -476,4 +476,20 @@ public class PatientService {
         }
         
     }
+
+    public String deletePatient(Long patientId) {
+        try {
+            Patient patient = patientRepository.findById(patientId)
+                    .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " does not exist"));
+            VCFFile vcfFile = patient.getVcfFile();
+            patientRepository.delete(patient);
+            if ( vcfFile != null ) {
+                vcfRepository.delete(vcfFile);
+            }
+            return "Patient deleted successfully";
+        } catch (Exception e) {
+            // Log the exception or handle it as needed
+            return "Failed to delete patient: " + e.getMessage();
+        }
+    }
 }
