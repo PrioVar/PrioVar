@@ -103,29 +103,29 @@ export default function SideNav() {
           <Scrollbar sx={{ height: 1 }}>
             <Stack spacing={4} sx={{ pt: 3, px: 3, pb: 15 }}>
               <Stack direction="column" spacing={1.5}>
-              <Button size="large" color='inherit' variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
+              <Button size="large" color='inherit' variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
                 Dashboard
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.myPatients} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.myPatients} sx={{ mt: 5 }}>
                   My Patients
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.clinicPatients} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.clinicPatients} sx={{ mt: 5 }}>
                   Clinics Patients
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.customQuery} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.customQuery} sx={{ mt: 5 }}>
                   Search Population
               </Button>
               {/**TODO */}
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.subscriptionPlans} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.subscriptionPlans} sx={{ mt: 5 }}>
                   Subscription Plans
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.aiSupport} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.aiSupport} sx={{ mt: 5 }}>
                   AI Support
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.informationRetrieval} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.informationRetrieval} sx={{ mt: 5 }}>
                   AI Information Retrieval
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} to={PATH_DASHBOARD.general.addClinician} sx={{ mt: 5 }}>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.addClinician} sx={{ mt: 5 }}>
                   Manage Clinicans
               </Button>
               </Stack>
