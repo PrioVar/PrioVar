@@ -283,7 +283,6 @@ import {
           },
         },
       },
-      
       {
         name: 'created_at',
         label: 'Uploaded At',
