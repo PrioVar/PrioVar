@@ -51,6 +51,11 @@ export const fecthMedicalCenterFiles = async () => {
   return data
 }
 
+export const fetchDiseases = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/disease`)
+  return data
+}
+
 const fetchAllFiles = async () => {
   const { data } = await axios.get(`${API_BASE_URL}/file/list`)
 
