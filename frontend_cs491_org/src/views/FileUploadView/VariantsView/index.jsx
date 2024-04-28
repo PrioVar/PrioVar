@@ -276,7 +276,7 @@ const TrioView = function () {
   const { mother_file, mother_sample_name, father_file, father_sample_name } = data
 
   const createHandleClick = (fileId, sampleName) => () => {
-    navigate(`/libra/variants/${fileId}/${sampleName}`)
+    navigate(`/priovar/variants/${fileId}/${sampleName}`)
   }
 
   return (

@@ -7,12 +7,9 @@ import { Box, Button, Backdrop, Paper, Tooltip, Divider, Typography, Stack } fro
 //
 import Scrollbar from '../Scrollbar'
 import { MIconButton } from '../@material-extend'
-import SideNavColor from './SideNavColor'
-import SideNavStretch from './SideNavStretch'
-import SideNavDirection from './SideNavDirection'
 
 
-import { PATH_AUTH, PATH_DASHBOARD } from '../../routes/paths'
+import { PATH_DASHBOARD } from '../../routes/paths'
 import { Link as RouterLink } from 'react-router-dom'
 // ----------------------------------------------------------------------
 

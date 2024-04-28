@@ -147,7 +147,7 @@ const GoToSampleDashboard = function ({ fileId, sampleName }) {
   const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate(`/libra/sample/${fileId}/${sampleName}`)
+    navigate(`/priovar/sample/${fileId}/${sampleName}`)
   }
 
   return (
@@ -537,7 +537,7 @@ const GoToSampleDashboard = function ({ fileId, sampleName }) {
   const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate(`/libra/sample/${fileId}/${sampleName}`)
+    navigate(`/priovar/sample/${fileId}/${sampleName}`)
   }
 
   return (

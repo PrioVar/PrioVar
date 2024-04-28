@@ -18,7 +18,7 @@ function MatchmakingCard({ matchmaking, height }) {
           <Grid container item xs={5} direction="column" alignItems="center">
             <Typography variant="h6">In {organisationName}</Typography>
             {ownVcfFiles.map((vcfFile) => (
-              <Link href={`/libra/variants/${vcfFile.id}/${vcfFile.sample}/${chrom}/${pos}`} target="_blank">
+              <Link href={`/priovar/variants/${vcfFile.id}/${vcfFile.sample}/${chrom}/${pos}`} target="_blank">
                 <Typography variant="body2">{vcfFile.sample}</Typography>
               </Link>
             ))}

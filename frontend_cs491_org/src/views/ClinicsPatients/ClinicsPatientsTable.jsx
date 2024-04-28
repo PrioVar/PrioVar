@@ -131,7 +131,7 @@ import {
     const navigate = useNavigate()
   
     const handleClick = () => {
-      navigate(`/libra/sample/${fileName}`)
+      navigate(`/priovar/sample/${fileName}`)
     }
   
     return (

@@ -336,7 +336,7 @@ const VariantsTable = function ({
           const handleGoToVariantDetails = () => {
             const icon = document.getElementById(`icon-${chrom}-${pos}`)
             icon.setAttribute('color', '#C58AF9')
-            window.open(`/libra/variants/${fileId}/${sampleName}/${chrom}/${pos}`, '_blank').focus()
+            window.open(`/priovar/variants/${fileId}/${sampleName}/${chrom}/${pos}`, '_blank').focus()
           }
 
           return (

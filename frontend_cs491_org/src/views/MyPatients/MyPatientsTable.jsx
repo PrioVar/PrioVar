@@ -144,7 +144,7 @@ import {
     console.log(fileName)
   
     const handleClick = () => {
-      navigate(`/libra/sample/${fileName}`)
+      navigate(`/priovar/sample/${fileName}`)
     }
   
     return (
