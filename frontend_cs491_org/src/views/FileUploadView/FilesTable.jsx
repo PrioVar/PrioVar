@@ -161,6 +161,7 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
   const [isLoading, setIsLoading] = useState(true)
   const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
+  const [isFileDeleted, setIsFileDeleted] = useState(false)
   const fetchData = async () => {
     setIsLoading(true)
     try {
@@ -181,16 +182,22 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
     })
   }
 
-    // Effect for initial data load
-    useEffect(() => {
-        fetchData();
-    }, []); // Empty dependency array to run only once on mount
+  // Effect for initial data load
+  useEffect(() => {
+      fetchData();
+  }, []); // Empty dependency array to run only once on mount
 
   useEffect(() => {
     if (isFileUploaded) {
         fetchData();
     }
   }, [isFileUploaded]);
+
+  useEffect(() => {
+    if (isFileDeleted) {
+        fetchData();
+    }
+  }, [isFileDeleted]);
 
   const handleAnnotationModelOpen = (row) => {
     setSelectedFile(row)
@@ -234,6 +241,7 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
 
           const handleClickConfirm = () => {
             deleteVCF(row.vcfFileId)
+            setIsFileDeleted(true);
           }
 
           return <DeleteFileButton onClickConfirm={handleClickConfirm} />
