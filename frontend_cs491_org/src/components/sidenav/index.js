@@ -20,6 +20,8 @@ const DRAWER_WIDTH = 260
 
 export default function SideNav() {
   const [open, setOpen] = useState(false)
+  // Assuming you have access to localStorage and handleClose function
+  const clinicianId = parseInt(localStorage.getItem('clinicianId'));
 
   useEffect(() => {
     if (open) {
@@ -106,9 +108,11 @@ export default function SideNav() {
               <Button size="large" color='inherit' variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.files} sx={{ mt: 5 }}>
                 Dashboard
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.myPatients} sx={{ mt: 5 }}>
+              {clinicianId !== -1 && (
+                <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.myPatients} sx={{ mt: 5 }}>
                   My Patients
-              </Button>
+                </Button>
+              )}
               <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.clinicPatients} sx={{ mt: 5 }}>
                   Clinics Patients
               </Button>
