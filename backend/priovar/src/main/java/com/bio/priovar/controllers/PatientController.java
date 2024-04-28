@@ -1,6 +1,7 @@
 package com.bio.priovar.controllers;
 
 import com.bio.priovar.models.Patient;
+import com.bio.priovar.models.PhenotypeTerm;
 import com.bio.priovar.models.dto.PatientDTO;
 import com.bio.priovar.models.dto.PatientWithPhenotype;
 import com.bio.priovar.services.PatientService;
@@ -53,6 +54,11 @@ public class PatientController {
     @GetMapping("/byGenesusId/{genesusId}")
     public Patient getPatientByGenesusId(@PathVariable("genesusId") String genesusId) {
         return patientService.getPatientByGenesusId(genesusId);
+    }
+
+    @GetMapping("/termsByFileName/{fileName}")
+    public List<String> getPatientPhenotypeTermsByFileName(@PathVariable("fileName") String fileName) {
+        return patientService.getPatientByFileName(fileName);
     }
 
     @GetMapping("/getPatient")

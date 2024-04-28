@@ -459,6 +459,16 @@ public class PatientService {
         return patientRepository.findByGenesusId(genesusId);
     }
 
+    public List<String> getPatientByFileName(String fileName) {
+        Patient patient =  patientRepository.findByVcfFileFileName(fileName);
+        List<PhenotypeTerm> terms = patient.getPhenotypeTerms();
+        List<String> termNames = new ArrayList<>();
+        for (PhenotypeTerm term : terms) {
+            termNames.add(term.getName());
+        }
+        return termNames;
+    }
+
     public Patient getPatientForDetailedView() {
         Patient patient = patientRepository.findByName("Ali Veli").get(0);
         return patient;
