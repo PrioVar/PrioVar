@@ -6,11 +6,8 @@ import axios from 'axios'
 // material
 import {
   Alert,
-  Checkbox,
-  FormControlLabel,
   IconButton,
   InputAdornment,
-  Link,
   Stack,
   TextField,
   Box,
@@ -28,12 +25,11 @@ import { LoadingButton } from '@material-ui/lab'
 import { Form, FormikProvider, useFormik } from 'formik'
 import { useSnackbar } from 'notistack5'
 import { useState, useEffect } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
 import * as Yup from 'yup'
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef'
 // routes
-import { PATH_AUTH, PATH_PrioVar, ROOTS_PrioVar } from '../../routes/paths'
+import { ROOTS_PrioVar } from '../../routes/paths'
 //
 import { MIconButton } from '../../components/@material-extend'
 //

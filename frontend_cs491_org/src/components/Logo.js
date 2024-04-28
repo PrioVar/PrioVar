@@ -1,7 +1,6 @@
 // material
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import { mt } from 'date-fns/locale'
 
 import PropTypes from 'prop-types'
 
