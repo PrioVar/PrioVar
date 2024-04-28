@@ -16,14 +16,6 @@ const PatientDetails = function () {
         <Grid item xs={12}>
           <PatientDetailsTable />
         </Grid>
-
-        {/*<Grid item xs={12}>*/}
-        {/*  <UploadFastq />*/}
-        {/*</Grid>*/}
-
-        {/*<Grid item xs={12}>*/}
-        {/*  <FastqFilesTable />*/}
-        {/*</Grid>*/}
       </Grid>
     </Page>
   )

@@ -429,13 +429,15 @@ import {
           filter: false,
           sort: true,
           customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
+            const row = data[dataIndex];
+            const patientDetailPath = PATH_DASHBOARD.general.patientDetails.replace(':patientId', row.patientId);
+      
             return (
-                <Button variant="contained" color="info" onClick={() => handleDetails(row)} 
-                component={RouterLink} to={PATH_DASHBOARD.general.patientDetails} size="small">
-                  <Info />
-                </Button>
-              )
+              <Button variant="contained" color="info" onClick={() => handleDetails(row)} 
+                      component={RouterLink} to={patientDetailPath} size="small">
+                <Info />
+              </Button>
+            );
           },
         },
       },
