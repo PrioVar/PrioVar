@@ -27,7 +27,7 @@ import JobStateStatus from '../common/JobStateStatus'
 import { deleteVcfFile } from '../../api/vcf'
 import axios from '../../utils/axios'
 //import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-import { fecthClinicianFiles, annotateFile, updateFileNotes, deleteVCF } from '../../api/file'
+import { fecthClinicianFiles, fecthMedicalCenterFiles, annotateFile, updateFileNotes, deleteVCF } from '../../api/file'
 
 import ExpandOnClick from 'src/components/ExpandOnClick'
 import AnalysedCheckbox from '../common/AnalysedCheckbox'
@@ -166,7 +166,15 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
   const fetchData = async () => {
     setIsLoading(true)
     try {
-      const data = await fecthClinicianFiles()
+      var data = null
+      // eslint-disable-next-line eqeqeq
+      if (localStorage.getItem('clinicianId') == -1) { 
+        console.log("muhahaha")
+        data = await fecthMedicalCenterFiles()
+      }
+      else {
+        data = await fecthClinicianFiles()
+      }
       console.log(data)
       setData(data)
     } catch (error) {
