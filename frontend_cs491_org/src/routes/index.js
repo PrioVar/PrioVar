@@ -6,12 +6,12 @@ import LogoOnlyLayout from 'src/layouts/LogoOnlyLayout'
 import SideNav from 'src/components/sidenav'
 // components
 import LoadingScreen from '../components/LoadingScreen'
-import AuthGuard from '../guards/AuthGuard'
+//import AuthGuard from '../guards/AuthGuard'
 // guards
 import GuestGuard from '../guards/GuestGuard'
 import DashboardLayout from '../layouts/dashboard'
 // layouts
-import MainLayout from '../layouts/main'
+//import MainLayout from '../layouts/main'
 import FileUploadView from '../views/FileUploadView'
 
 import ClinicsPatients from '../views/ClinicsPatients'
@@ -193,6 +193,7 @@ const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')))
 const Page500 = Loadable(lazy(() => import('../pages/Page500')))
 const NotFound = Loadable(lazy(() => import('../pages/Page404')))
 // Components
+/*
 const ComponentsOverview = Loadable(lazy(() => import('../pages/ComponentsOverview')))
 const Color = Loadable(lazy(() => import('../pages/components-overview/foundations/FoundationColors')))
 const Typography = Loadable(lazy(() => import('../pages/components-overview/foundations/FoundationTypography')))
@@ -241,7 +242,7 @@ const MultiLanguage = Loadable(lazy(() => import('../pages/components-overview/e
 const Animate = Loadable(lazy(() => import('../pages/components-overview/extra/animate')))
 const MegaMenu = Loadable(lazy(() => import('../pages/components-overview/extra/MegaMenu')))
 const FormValidation = Loadable(lazy(() => import('../pages/components-overview/extra/form-validation')))
-
+*/
 const VariantsView = Loadable(lazy(() => import('../views/VariantsView')))
 const VariantDetailsView = Loadable(lazy(() => import('../views/VariantDetailsView')))
 const VariantDashboard = Loadable(lazy(() => import('../views/VariantDashboard')))

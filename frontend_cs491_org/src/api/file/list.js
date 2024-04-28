@@ -6,9 +6,6 @@ import { ROOTS_PrioVar } from '../../routes/paths'
 // Carried Here from MyPatients.jsx
 export const fetchCurrentClinicianName = async () => {
   const data = await axios.get(`${ROOTS_PrioVar}/clinician/getName/${localStorage.getItem('clinicianId')}`)
-  console.log(localStorage.getItem('clinicianId'))
-  console.log("is undefined really mate?")
-  console.log(data)
   return data
 }
 

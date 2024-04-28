@@ -1,22 +1,50 @@
-import { styled, alpha } from '@material-ui/core/styles'
-import { useTheme } from '@material-ui/styles'
+//import { styled, alpha } from '@material-ui/core/styles'
+//import { useTheme } from '@material-ui/styles'
 
-import { useMemo } from 'react'
+//import { useMemo } from 'react'
 import {
   Card,
-  Typography,
+//  Typography,
   Stack,
   Box,
   CircularProgress,
-  Paper,
+//  Paper,
   CardHeader,
-  Tooltip,
-  TextField,
+//  Tooltip,
+//  TextField,
 } from '@material-ui/core'
-import { ResponsiveBar } from '@nivo/bar'
-import { fShortenNumber } from 'src/utils/formatNumber'
+//import { ResponsiveBar } from '@nivo/bar'
+//import { fShortenNumber } from 'src/utils/formatNumber'
 import FrequencyCell from '../VariantsView/Cells/FrequencyCell'
 
+const FrequencyCard = function ({ variant, height }) {
+  const { Frequency: frequency = {} } = variant || {}
+
+  return (
+    <Card>
+      <CardHeader title="Population Frequency" />
+      <Box sx={{ height }} p={1}>
+        {variant === undefined ? (
+          <Stack direction="column" justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
+            <CircularProgress size={150} />
+          </Stack>
+        ) : (
+          <FrequencyCell
+            libraAf={frequency.AF}
+            gnomAdAf={frequency.GnomAd_Af}
+            oneKgAf={frequency.One_Kg_Af}
+            exAcAf={frequency.ExAC_AF}
+            tvAf={frequency.TV_AF}
+          />
+        )}
+      </Box>
+    </Card>
+  )
+}
+
+export default FrequencyCard
+
+/*
 const formatValue = (value) => fShortenNumber(value * 100)
 
 const getChartData = (variant = {}) => {
@@ -80,30 +108,4 @@ const FrequencyCard2 = function ({ variant, height }) {
     </Card>
   )
 }
-
-const FrequencyCard = function ({ variant, height }) {
-  const { Frequency: frequency = {} } = variant || {}
-
-  return (
-    <Card>
-      <CardHeader title="Population Frequency" />
-      <Box sx={{ height }} p={1}>
-        {variant === undefined ? (
-          <Stack direction="column" justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
-            <CircularProgress size={150} />
-          </Stack>
-        ) : (
-          <FrequencyCell
-            libraAf={frequency.AF}
-            gnomAdAf={frequency.GnomAd_Af}
-            oneKgAf={frequency.One_Kg_Af}
-            exAcAf={frequency.ExAC_AF}
-            tvAf={frequency.TV_AF}
-          />
-        )}
-      </Box>
-    </Card>
-  )
-}
-
-export default FrequencyCard
+*/

@@ -1,11 +1,12 @@
 import plusFill from '@iconify/icons-eva/plus-fill'
 import { Icon } from '@iconify/react'
 import {
-  Avatar,
+//  Avatar,
   Button,
-  Card,
-  Checkbox,
+//  Card,
+//  Checkbox,
   Container,
+/*
   Stack,
   Table,
   TableBody,
@@ -15,26 +16,27 @@ import {
   TableRow,
   Typography,
   Box,
+  */
 } from '@material-ui/core'
 // material
-import { useTheme } from '@material-ui/core/styles'
-import { sentenceCase } from 'change-case'
-import { filter } from 'lodash'
-import { useEffect, useState } from 'react'
+//import { useTheme } from '@material-ui/core/styles'
+//import { sentenceCase } from 'change-case'
+//import { filter } from 'lodash'
+//import { useEffect, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import MUIDataTable from 'mui-datatables'
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_dashboard/user/list'
+import { UserMoreMenu } from '../../components/_dashboard/user/list'
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs'
-import Label from '../../components/Label'
+//import Label from '../../components/Label'
 // components
 import Page from '../../components/Page'
-import Scrollbar from '../../components/Scrollbar'
-import SearchNotFound from '../../components/SearchNotFound'
+//import Scrollbar from '../../components/Scrollbar'
+//import SearchNotFound from '../../components/SearchNotFound'
 // hooks
 import useSettings from '../../hooks/useSettings'
-import { deleteUser, getUserList } from '../../redux/slices/user'
+//import { deleteUser, getUserList } from '../../redux/slices/user'
 // redux
-import { useDispatch, useSelector } from '../../redux/store'
+//import { useDispatch, useSelector } from '../../redux/store'
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths'
 import { useUserList } from '../../api/user/list'

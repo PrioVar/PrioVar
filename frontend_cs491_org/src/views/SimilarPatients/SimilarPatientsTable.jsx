@@ -1,33 +1,18 @@
 import {
     Box,
     CircularProgress,
-    Stack,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Chip,
-    IconButton,
-    DialogContentText,
     Typography,
     Grid,
-    TextField,
-    Tab,
-    Tabs,
-    Tooltip,
     InputLabel,
     FormControl,
     Input,
-    Select,
-    MenuItem,
     Snackbar
   } from '@material-ui/core'
   import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
   import axios from 'axios';
   import { Info, ArrowBack } from '@material-ui/icons'
-  import React, { useState, useMemo, useEffect } from 'react'
+  import React, { useState, useMemo } from 'react'
   import { useFiles, useBedFiles } from '../../api/file'
   import { ROOTS_PrioVar } from '../../routes/paths'
   import { useParams, useNavigate } from 'react-router-dom'
@@ -61,7 +46,7 @@ import {
 
             const response = await axios.get(`${ROOTS_PrioVar}/similarityReport/mostSimilarPatients/${patientId}/${resultCount}`);
             console.log("SUCCESS!")
-            console.log(response)
+            //console.log(response)
             setRows(response.data);
     
           } catch (error) {

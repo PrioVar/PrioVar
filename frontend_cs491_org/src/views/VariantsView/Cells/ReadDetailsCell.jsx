@@ -1,4 +1,4 @@
-import { Box, Link, Stack, Tooltip, Typography } from '@material-ui/core'
+import { Stack, Tooltip, Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Label from 'src/components/Label'

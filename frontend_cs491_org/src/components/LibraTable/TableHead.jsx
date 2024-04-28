@@ -1,4 +1,4 @@
-import { Box, TableCell, TableHead, TableRow, TableSortLabel } from '@material-ui/core'
+import { TableCell, TableHead, TableRow, TableSortLabel } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import PropTypes from 'prop-types'
 import { times } from 'ramda'

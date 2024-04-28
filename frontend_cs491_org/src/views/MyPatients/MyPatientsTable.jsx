@@ -1,7 +1,6 @@
 import {
     Box,
     CircularProgress,
-    Stack,
     Button,
     Dialog,
     DialogActions,
@@ -22,14 +21,12 @@ import {
   import DeleteIcon from '@material-ui/icons/Delete'
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
-  import { deleteVcfFile } from '../../api/vcf'
   import { useFiles, annotateFile, updateFinishInfo, updateFileNotes, fetchClinicianPatients, 
             fetchCurrentClinicianName, deletePatient } from '../../api/file'
   import { PATH_DASHBOARD, } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import AnalysedCheckbox from '../common/AnalysedCheckbox'
-  import axios from '../../utils/axios'
   import VariantDasboard2 from '../common/VariantDasboard2'
   
   const EditableNote = ({ note, onSave, details }) => {
@@ -141,7 +138,6 @@ import {
   
   const GoToSampleDashboard = function ({ fileName }) {
     const navigate = useNavigate()
-    console.log(fileName)
   
     const handleClick = () => {
       navigate(`/priovar/sample/${fileName}`)
@@ -185,7 +181,6 @@ import {
       setIsLoading(true);
       try {
         const data = await fetchClinicianPatients()
-        console.log(data)
         setData(data)
         return data;
     

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
-import { LinearProgress, Box, Typography, Divider, Drawer } from '@material-ui/core'
+import { Box, Typography, Divider } from '@material-ui/core'
 import Tags from 'src/components/Tags'
-import { HPO_MAP, HPO_OPTIONS } from 'src/constants'
+import { HPO_OPTIONS } from 'src/constants'
 import { useHpo } from '../../api/vcf'
 
 const HpoPanel = function () {
