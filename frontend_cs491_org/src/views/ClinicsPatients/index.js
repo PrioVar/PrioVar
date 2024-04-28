@@ -1,6 +1,6 @@
 import React from 'react'
 import Page from 'src/components/Page'
-import { Container, Grid } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 import ClinicsPatientsTable from './ClinicsPatientsTable'
 

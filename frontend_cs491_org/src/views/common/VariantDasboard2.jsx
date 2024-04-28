@@ -1,16 +1,11 @@
 // material-ui
 import {
-    Alert,
     Box,
     Button,
     CardHeader,
     CardContent,
-    Checkbox,
-    CircularProgress,
     Dialog,
     DialogActions,
-    DialogContent,
-    DialogTitle,
     Grid,
     MenuItem,
     Select,
@@ -18,7 +13,6 @@ import {
     Tab,
     Tabs,
     TextField,
-    Tooltip,
     Typography,
     InputLabel,
     FormControl,
@@ -41,221 +35,13 @@ import {
   // api utils
   import { useHpo } from '../../api/vcf'
   
-  const Loading = function () {
-    return (
-      <Stack direction="row" justifyContent="center">
-        <CircularProgress size="10vh" />
-      </Stack>
-    )
-  }
-  
-  
-  const createTrioOptions = (rows) => {
-    return rows.map((row) => ({
-      label: row.sample_name,
-      value: { fileId: row.id, sample: row.sample_name },
-    }))
-  }
-  
-  const CreateAnalysisDialog = function ({ open, onClose, onClickCreateAnalysis, fileType, title }) {
-    const [type, setType] = useState('Exome')
-    const [snpChecked, setSnpChecked] = useState(false)
-    const [cnvChecked, setCnvChecked] = useState(false)
-    const [alignmentChecked, setAlignmentChecked] = useState(false)
-    const [cnvAnalysis, setCnvAnalysis] = useState('xhmm+decont')
-  
-    const handleClickCreateAnalysis = () => {
-      onClickCreateAnalysis({
-        cnv: cnvChecked ? cnvAnalysis : null,
-        snp: snpChecked ? 'gatk' : null,
-        alignment: alignmentChecked ? 'bwa' : null,
-      })
-    }
-  
-    return (
-      <Dialog open={open} onClose={onClose} maxWidth={false} PaperProps={{ sx: { width: 600 } }}>
-        {title && (
-          <>
-            <DialogTitle>Create a new analysis for {title}</DialogTitle>
-            <DialogContent>
-              <CardHeader title="Sequence" titleTypographyProps={{ variant: 'subtitle1' }} />
-              <CardContent>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField label="Machine" defaultValue={0} select fullWidth>
-                      <MenuItem value={0}>Illumina</MenuItem>
-                      <MenuItem value={1}>MGISEQ</MenuItem>
-                      <MenuItem value={2}>BGISEQ</MenuItem>
-                    </TextField>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField label="Kit" defaultValue={0} select fullWidth>
-                      <MenuItem value={0}>Agilent SureSelect Human All Exon V5 r2</MenuItem>
-                      <MenuItem value={1}>Agilent SureSelect Human All Exon V5 UTR r2</MenuItem>
-                      <MenuItem value={2}>Agilent SureSelect version 5</MenuItem>
-                    </TextField>
-                  </Grid>
-  
-                  <Grid item xs={6}>
-                    <TextField label="Type" value={type} fullWidth onChange={(e) => setType(e.target.value)} select>
-                      <MenuItem value="Exome">Whole Exome</MenuItem>
-                      <MenuItem value="Genome">Whole Genome</MenuItem>
-                      <MenuItem value="Gene Panel">Capture Kit</MenuItem>
-                    </TextField>
-                  </Grid>
-                  {type === 'Gene Panel' && (
-                    <Grid item xs={6}>
-                      <TextField label="Panel" fullWidth />
-                    </Grid>
-                  )}
-                  <Grid item xs={6}>
-                    <TextField label="Germline/Somatic" defaultValue={0} select fullWidth>
-                      <MenuItem value={0}>Germline</MenuItem>
-                      <MenuItem value={1}>Somatic</MenuItem>
-                    </TextField>
-                  </Grid>
-                </Grid>
-              </CardContent>
-              <CardHeader
-                title={
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="subtitle1">Analysis</Typography>
-                    {fileType === 'VCF' && (
-                      <Box>
-                        <Alert severity="warning" sx={{ px: 1, py: 0 }}>
-                          VCF detected
-                        </Alert>
-                      </Box>
-                    )}
-                  </Stack>
-                }
-              />
-              <CardContent>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Checkbox
-                        disableRipple
-                        disabled={fileType === 'VCF'}
-                        checked={alignmentChecked}
-                        onChange={(e) => {
-                          setAlignmentChecked(e.target.checked)
-                          if (!e.target.checked) {
-                            setSnpChecked(false)
-                            setCnvChecked(false)
-                          }
-                        }}
-                      />
-                      <TextField label="Alignment" defaultValue={0} select fullWidth disabled={!alignmentChecked}>
-                        <MenuItem value={0}>BWA MEM v1</MenuItem>
-                        {/* <MenuItem value={1}>Bowtie</MenuItem> */}
-                      </TextField>
-                    </Stack>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Tooltip
-                        title={
-                          alignmentChecked || fileType === 'VCF' ? '' : 'SNP analysis is not possible without alignment'
-                        }
-                      >
-                        <Box>
-                          <Checkbox
-                            disableRipple
-                            disabled={!alignmentChecked}
-                            checked={snpChecked}
-                            onChange={(e) => setSnpChecked(e.target.checked)}
-                          />
-                        </Box>
-                      </Tooltip>
-                      <TextField label="SNP" defaultValue={0} select fullWidth disabled={!snpChecked}>
-                        <MenuItem value={0}>GATK v4 HaplotypeCaller</MenuItem>
-                        <MenuItem value={1}>Free-bayes</MenuItem>
-                        <MenuItem value={2}>Mutect2</MenuItem>
-                      </TextField>
-                    </Stack>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Tooltip
-                        title={
-                          alignmentChecked || fileType === 'VCF' ? '' : 'CNV analysis is not possible without alignment'
-                        }
-                      >
-                        <Box>
-                          <Checkbox
-                            disableRipple
-                            disabled={!alignmentChecked}
-                            checked={cnvChecked}
-                            onChange={(e) => setCnvChecked(e.target.checked)}
-                          />
-                        </Box>
-                      </Tooltip>
-                      <TextField
-                        label="CNV"
-                        value={cnvAnalysis}
-                        onChange={(e) => setCnvAnalysis(e.target.value)}
-                        select
-                        fullWidth
-                        disabled={!cnvChecked}
-                      >
-                        <MenuItem value={'xhmm+decont'}>XHMM + DECoNT</MenuItem>
-                        <MenuItem value={'xhmm'}>XHMM</MenuItem>
-                      </TextField>
-                    </Stack>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={onClose} color="secondary">
-                Cancel
-              </Button>
-              <Tooltip title={alignmentChecked || fileType === 'VCF' ? '' : 'FASTQ files require alignment'}>
-                <Box>
-                  <Button
-                    onClick={handleClickCreateAnalysis}
-                    color="primary"
-                    disabled={!alignmentChecked && fileType !== 'VCF'}
-                  >
-                    Create
-                  </Button>
-                </Box>
-              </Tooltip>
-            </DialogActions>
-          </>
-        )}
-      </Dialog>
-    )
-  }
-  
   const ManageHpo = function ({ fileId , hpoList, setHpoList}) {
   
     return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
   }
   
   const TABS = ['Sample Details']
-  
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props
-  
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box sx={{ p: 1 }}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    )
-  }
-  
+   
   const VarTab = withStyles((theme) => ({
     root: {
       padding: '5px',
@@ -293,10 +79,7 @@ import {
     }
   
     const [gender, setGender] = useState(fileDetails?.details?.sex)
-    const [startAge, setStartAge] = useState(fileDetails?.details?.symptoms_start_age)
     const [age, setAge] = useState(fileDetails?.details?.age)
-    const [is_inbred, setIsInbred] = useState(fileDetails?.details?.is_inbred)
-    const [is_progressing, setProgressing] = useState(fileDetails?.details?.is_progressing)
     const [notes, setNotes] = useState(fileDetails?.details?.notes)
     const [name, setName] = useState(fileDetails?.details?.name)
     const [healthCenterId, setHealthCenterId] = useState(localStorage.getItem('healthCenterId') || '');
@@ -312,14 +95,6 @@ import {
     const handleSetNotes = (e) => setNotes(e.target.value)
   
     const handleSave = async () => {
-      const details = {
-        gender,
-        start_age: Number(startAge),
-        age: Number(age),
-        is_inbred,
-        is_progressing,
-        notes,
-      }
       const phenotypeTerms = hpoList.map(item => {
         // Extract the numeric part of the HP code and remove leading zeros
         const id = parseInt(item.value.split(':')[1], 10);
@@ -340,7 +115,7 @@ import {
         clinicianId: localStorage.getItem('clinicianId')
       }
       try {
-        const response = await addPatientWithPhenotype( request);
+        await addPatientWithPhenotype( request);
         console.log("SUCCESS!")
 
       } catch (error) {
@@ -437,3 +212,213 @@ import {
   }
   
   export default VariantDasboard2
+
+/*
+const Loading = function () {
+    return (
+      <Stack direction="row" justifyContent="center">
+        <CircularProgress size="10vh" />
+      </Stack>
+    )
+  }
+  
+  
+  const createTrioOptions = (rows) => {
+    return rows.map((row) => ({
+      label: row.sample_name,
+      value: { fileId: row.id, sample: row.sample_name },
+    }))
+  }
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 1 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    )
+  }
+
+const CreateAnalysisDialog = function ({ open, onClose, onClickCreateAnalysis, fileType, title }) {
+    const [type, setType] = useState('Exome')
+    const [snpChecked, setSnpChecked] = useState(false)
+    const [cnvChecked, setCnvChecked] = useState(false)
+    const [alignmentChecked, setAlignmentChecked] = useState(false)
+    const [cnvAnalysis, setCnvAnalysis] = useState('xhmm+decont')
+  
+    const handleClickCreateAnalysis = () => {
+      onClickCreateAnalysis({
+        cnv: cnvChecked ? cnvAnalysis : null,
+        snp: snpChecked ? 'gatk' : null,
+        alignment: alignmentChecked ? 'bwa' : null,
+      })
+    }
+  
+    return (
+      <Dialog open={open} onClose={onClose} maxWidth={false} PaperProps={{ sx: { width: 600 } }}>
+        {title && (
+          <>
+            <DialogTitle>Create a new analysis for {title}</DialogTitle>
+            <DialogContent>
+              <CardHeader title="Sequence" titleTypographyProps={{ variant: 'subtitle1' }} />
+              <CardContent>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField label="Machine" defaultValue={0} select fullWidth>
+                      <MenuItem value={0}>Illumina</MenuItem>
+                      <MenuItem value={1}>MGISEQ</MenuItem>
+                      <MenuItem value={2}>BGISEQ</MenuItem>
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField label="Kit" defaultValue={0} select fullWidth>
+                      <MenuItem value={0}>Agilent SureSelect Human All Exon V5 r2</MenuItem>
+                      <MenuItem value={1}>Agilent SureSelect Human All Exon V5 UTR r2</MenuItem>
+                      <MenuItem value={2}>Agilent SureSelect version 5</MenuItem>
+                    </TextField>
+                  </Grid>
+  
+                  <Grid item xs={6}>
+                    <TextField label="Type" value={type} fullWidth onChange={(e) => setType(e.target.value)} select>
+                      <MenuItem value="Exome">Whole Exome</MenuItem>
+                      <MenuItem value="Genome">Whole Genome</MenuItem>
+                      <MenuItem value="Gene Panel">Capture Kit</MenuItem>
+                    </TextField>
+                  </Grid>
+                  {type === 'Gene Panel' && (
+                    <Grid item xs={6}>
+                      <TextField label="Panel" fullWidth />
+                    </Grid>
+                  )}
+                  <Grid item xs={6}>
+                    <TextField label="Germline/Somatic" defaultValue={0} select fullWidth>
+                      <MenuItem value={0}>Germline</MenuItem>
+                      <MenuItem value={1}>Somatic</MenuItem>
+                    </TextField>
+                  </Grid>
+                </Grid>
+              </CardContent>
+              <CardHeader
+                title={
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="subtitle1">Analysis</Typography>
+                    {fileType === 'VCF' && (
+                      <Box>
+                        <Alert severity="warning" sx={{ px: 1, py: 0 }}>
+                          VCF detected
+                        </Alert>
+                      </Box>
+                    )}
+                  </Stack>
+                }
+              />
+              <CardContent>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Checkbox
+                        disableRipple
+                        disabled={fileType === 'VCF'}
+                        checked={alignmentChecked}
+                        onChange={(e) => {
+                          setAlignmentChecked(e.target.checked)
+                          if (!e.target.checked) {
+                            setSnpChecked(false)
+                            setCnvChecked(false)
+                          }
+                        }}
+                      />
+                      <TextField label="Alignment" defaultValue={0} select fullWidth disabled={!alignmentChecked}>
+                        <MenuItem value={0}>BWA MEM v1</MenuItem>
+                        //{ <MenuItem value={1}>Bowtie</MenuItem> }
+                        </TextField>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Tooltip
+                            title={
+                              alignmentChecked || fileType === 'VCF' ? '' : 'SNP analysis is not possible without alignment'
+                            }
+                          >
+                            <Box>
+                              <Checkbox
+                                disableRipple
+                                disabled={!alignmentChecked}
+                                checked={snpChecked}
+                                onChange={(e) => setSnpChecked(e.target.checked)}
+                              />
+                            </Box>
+                          </Tooltip>
+                          <TextField label="SNP" defaultValue={0} select fullWidth disabled={!snpChecked}>
+                            <MenuItem value={0}>GATK v4 HaplotypeCaller</MenuItem>
+                            <MenuItem value={1}>Free-bayes</MenuItem>
+                            <MenuItem value={2}>Mutect2</MenuItem>
+                          </TextField>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Tooltip
+                            title={
+                              alignmentChecked || fileType === 'VCF' ? '' : 'CNV analysis is not possible without alignment'
+                            }
+                          >
+                            <Box>
+                              <Checkbox
+                                disableRipple
+                                disabled={!alignmentChecked}
+                                checked={cnvChecked}
+                                onChange={(e) => setCnvChecked(e.target.checked)}
+                              />
+                            </Box>
+                          </Tooltip>
+                          <TextField
+                            label="CNV"
+                            value={cnvAnalysis}
+                            onChange={(e) => setCnvAnalysis(e.target.value)}
+                            select
+                            fullWidth
+                            disabled={!cnvChecked}
+                          >
+                            <MenuItem value={'xhmm+decont'}>XHMM + DECoNT</MenuItem>
+                            <MenuItem value={'xhmm'}>XHMM</MenuItem>
+                          </TextField>
+                        </Stack>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={onClose} color="secondary">
+                    Cancel
+                  </Button>
+                  <Tooltip title={alignmentChecked || fileType === 'VCF' ? '' : 'FASTQ files require alignment'}>
+                    <Box>
+                      <Button
+                        onClick={handleClickCreateAnalysis}
+                        color="primary"
+                        disabled={!alignmentChecked && fileType !== 'VCF'}
+                      >
+                        Create
+                      </Button>
+                    </Box>
+                  </Tooltip>
+                </DialogActions>
+              </>
+            )}
+          </Dialog>
+        )
+      }
+*/

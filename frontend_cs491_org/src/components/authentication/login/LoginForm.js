@@ -24,7 +24,7 @@ import * as Yup from 'yup'
 import useAuth from '../../../hooks/useAuth'
 import useIsMountedRef from '../../../hooks/useIsMountedRef'
 // routes
-import { PATH_AUTH, PATH_PrioVar, ROOTS_PrioVar, PATH_DASHBOARD } from '../../../routes/paths'
+import { PATH_AUTH, ROOTS_PrioVar, PATH_DASHBOARD } from '../../../routes/paths'
 //
 import { MIconButton } from '../../@material-extend'
 //
