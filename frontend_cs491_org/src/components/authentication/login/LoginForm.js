@@ -28,8 +28,8 @@ import { PATH_AUTH, PATH_PrioVar, ROOTS_PrioVar, PATH_DASHBOARD } from '../../..
 //
 import { MIconButton } from '../../@material-extend'
 //
-const emailFix = "erkinaydin@morpheus.cs.bilkent.edu.tr"
-const passwordFix = "erkinaydin"
+//const emailFix = "erkinaydin@morpheus.cs.bilkent.edu.tr"
+//const passwordFix = "erkinaydin"
 // ----------------------------------------------------------------------
 
 export default function LoginForm({ callerPage }) {
