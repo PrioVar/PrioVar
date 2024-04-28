@@ -91,25 +91,20 @@ export default function LoginForm({ callerPage }) {
           console.log(data)
           clinicianId = data.id
           healthCenterId = data.relatedId
-          navigate(PATH_DASHBOARD.root)
         }
         else if(callerPage === 'LoginHealthCenter') {
           const { data } = await axios.post(`${ROOTS_PrioVar}/medicalCenter/login?email=${emailPrioVar}&password=${passwordPrioVar}`)
           healthCenterId = data.id
-          navigate(PATH_DASHBOARD.root)
         }
         else if(callerPage === 'LoginAdmin') {
           const { data } = await axios.post(`${ROOTS_PrioVar}/admin/login?email=${emailPrioVar}&password=${passwordPrioVar}`)
           adminId = data.id
-          navigate(PATH_DASHBOARD.root)
         }
         
         localStorage.setItem('clinicianId', clinicianId)
         localStorage.setItem('healthCenterId', healthCenterId)
         localStorage.setItem('adminId', adminId)
-        console.log(localStorage.getItem('clinicianId'))
-        console.log(localStorage.getItem('healthCenterId'))
-        console.log(localStorage.getItem('adminId'))
+        navigate(PATH_DASHBOARD.root)
       }
       catch (error) {
         // print the error details, response is a JSON and has field 'message'
