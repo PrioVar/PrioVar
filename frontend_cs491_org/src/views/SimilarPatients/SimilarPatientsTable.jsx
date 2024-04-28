@@ -68,7 +68,7 @@ import {
       <Grid container spacing={2} alignItems="flex-end" mt={4}>
         <Grid item xs={2}>
             <FormControl fullWidth>
-                <InputLabel id="select-age">No of similar patients</InputLabel>
+                <InputLabel style={{ color: 'black' }} id="select-age">No of similar patients</InputLabel>
                 <Input type="number" value={resultCount} onChange={handleResultCount}></Input>
             </FormControl>
         </Grid>

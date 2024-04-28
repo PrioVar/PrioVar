@@ -7,12 +7,13 @@ import {
     InputLabel,
     FormControl,
     Select,
-    MenuItem
+    MenuItem,
   } from '@material-ui/core'
   import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
   import axios from 'axios';
   import React, { useState } from 'react'
   import { useParams } from 'react-router-dom'
+  import Page from 'src/components/Page'
 
   import Tags from 'src/components/Tags'
   // api utils
@@ -74,19 +75,29 @@ import {
 
     const ManageHpo = function ({ fileId , hpoList, setHpoList}) {
       
-        return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
+        return <Tags title={<span style={{ color: 'black' }}>Symptoms</span>} options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
       }
 
 
       
-  
 
     const [hpoList, setHpoList] = useHpo({ fileId })
     return (
-        <>
+        <Page style={{
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100vh', 
+            backgroundImage: 'url("/static/new_images/things2.png")', 
+            backgroundSize: 'cover', 
+            backgroundPosition: 'center center',
+            backgroundColor: 'rgba(255, 255, 255, 0.8)', // Adds white transparency
+            backgroundBlendMode: 'overlay' // This blends the background color with the image
+          }}>
 
-    <Box p={3} mt={4}>
-    <Typography variant="h5">Search Population</Typography>
+    <Box p={3} mt={4} >
+    <Typography variant="h5" sx={{mt:4}}>Search Population</Typography>
       <Grid container spacing={2} alignItems="flex-end" mt={4}>
         <Grid item xs={6}>
             <ManageHpo fileId={fileId} sampleName={sampleName} hpoList={hpoList} setHpoList={setHpoList}  />
@@ -99,6 +110,12 @@ import {
               type="number"
               value={ageIntervalStart}
               onChange={(e) => setAgeIntervalStart(e.target.value)}
+              InputLabelProps={{
+                style: { color: 'black' }
+              }}
+              InputProps={{
+                style: { color: 'black' },
+              }}
             />
           </Grid>
           <Grid item xs={6}>
@@ -108,13 +125,19 @@ import {
               type="number"
               value={ageIntervalEnd}
               onChange={(e) => setAgeIntervalEnd(e.target.value)}
+              InputLabelProps={{
+                style: { color: 'black' }
+              }}
+              InputProps={{
+                style: { color: 'black' },
+              }}
             />
           </Grid>
         </Grid>
 
         <Grid item xs={6}>
             <FormControl fullWidth>
-                <InputLabel>Gene Specification</InputLabel>
+                <InputLabel style={{ color: 'black' }} >Gene Specification</InputLabel>
                 <Select
                 multiple
                 value={gene}
@@ -122,6 +145,7 @@ import {
                 variant="outlined"
                 label='Gene Specification'
                 renderValue={(selected) => selected.join(', ')}
+                style={{ borderColor: 'black', color: 'black' }}
                 >
                 {geneOptions.map((option) => (
                     <MenuItem key={option} value={option}>
@@ -134,7 +158,7 @@ import {
         <Grid item container xs={6} spacing={2} alignItems="center" >
           <Grid item xs={6}>
           <FormControl fullWidth>
-            <InputLabel id="gender-select-label">Gender</InputLabel>
+            <InputLabel style={{ color: 'black' }} id="gender-select-label">Gender</InputLabel>
             <Select
               labelId="gender-select-label"
               id="gender-select"
@@ -194,7 +218,7 @@ import {
 
         
 
-        </>
+        </Page>
     )
 
   }

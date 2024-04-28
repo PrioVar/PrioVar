@@ -10,10 +10,20 @@ import MyPatientsTable from './MyPatientsTable'
 
 const MyPatients = function () {
   return (
-    <Page title="My Patients | PrioVar">
+    <Page title="My Patients | PrioVar" >
       <Grid container spacing={5}>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100vh', 
+        backgroundImage: 'url("/static/new_images/thinngs.png")', 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center center',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)', // Adds white transparency
+        backgroundBlendMode: 'overlay' // This blends the background color with the image
+      }}>
           <MyPatientsTable />
         </Grid>
 

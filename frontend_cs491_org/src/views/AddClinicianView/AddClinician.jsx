@@ -32,6 +32,8 @@ import useIsMountedRef from '../../hooks/useIsMountedRef'
 import { ROOTS_PrioVar } from '../../routes/paths'
 //
 import { MIconButton } from '../../components/@material-extend'
+import Page from 'src/components/Page'
+
 //
 // ----------------------------------------------------------------------
 
@@ -158,11 +160,22 @@ export default function AddNewClinician() {
   }
 
   return (
-    <Container maxWidth="lg">
-        <Grid container spacing={3}>
+    <Page  style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100vh', 
+        backgroundImage: 'url("/static/new_images/dna3.png")', 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center center',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)', // Adds white transparency
+        backgroundBlendMode: 'overlay' // This blends the background color with the image
+      }}>
+        <Grid container spacing={3} sx={{mt:4}}>
             {/* Left Half: Table (adjust the content of this part as needed) */}
             <Grid item xs={6}>
-                <Box p={2} bgcolor="background.paper" style={{ marginTop: '50px' }}>
+                <Box p={2} style={{ marginTop: '50px' }}>
                     <Typography variant="h4" gutterBottom align="center">
                     Clinicians
                     </Typography>
@@ -194,7 +207,7 @@ export default function AddNewClinician() {
             </Grid>
 
             <Grid item xs={6}>
-                <Box p={4} bgcolor="background.default" display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="%50">
+                <Box p={4}  display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="%50">
                     <Typography variant="h4" gutterBottom align="center" mt={4}>
                     Adding A New Clinician
                     </Typography>
@@ -211,6 +224,12 @@ export default function AddNewClinician() {
                             {...getFieldProps('name')}
                             error={Boolean(touched.name && errors.name)}
                             helperText={touched.name && errors.name}
+                            InputLabelProps={{
+                                style: { color: 'black' }
+                              }}
+                              InputProps={{
+                                style: { color: 'black' },
+                              }}
                         />
 
                         <TextField
@@ -221,6 +240,12 @@ export default function AddNewClinician() {
                             {...getFieldProps('email')}
                             error={Boolean(touched.email && errors.email)}
                             helperText={touched.email && errors.email}
+                            InputLabelProps={{
+                                style: { color: 'black' }
+                              }}
+                              InputProps={{
+                                style: { color: 'black' },
+                              }}
                         />
 
                         <TextField
@@ -230,16 +255,20 @@ export default function AddNewClinician() {
                             label="Password"
                             {...getFieldProps('password')}
                             InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                <IconButton onClick={handleShowPassword} edge="end">
-                                    <Icon icon={showPassword ? eyeFill : eyeOffFill} />
-                                </IconButton>
-                                </InputAdornment>
-                            ),
-                            }}
-                            error={Boolean(touched.password && errors.password)}
-                            helperText={touched.password && errors.password}
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton onClick={handleShowPassword} edge="end">
+                                      <Icon icon={showPassword ? eyeFill : eyeOffFill} />
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                                style: { color: 'black' }
+                              }}
+                              InputLabelProps={{
+                                style: { color: 'black' }
+                              }}
+                              error={Boolean(touched.password && errors.password)}
+                              helperText={touched.password && errors.password}  
                         />
                         </Stack>
                         
@@ -253,6 +282,6 @@ export default function AddNewClinician() {
                 </Box>
             </Grid>
         </Grid>
-    </Container>
+    </Page>
   )
 }
