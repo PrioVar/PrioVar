@@ -67,7 +67,7 @@ public class InitializerController {
         MedicalCenter liva = new MedicalCenter();
         liva.setName("Liva");
         liva.setAddress("Kızılay, Ankara");
-        liva.setEmail("liva-mail@liva");
+        liva.setEmail("liva-mail@liva.com");
         liva.setPassword("123");
         liva.setPhone("05555555555");
         liva.setSubscription(Subscription.BASIC);
@@ -78,7 +78,7 @@ public class InitializerController {
         Clinician clinician1 = new Clinician();
 
         clinician1.setName("Mehmet Kılıç");
-        clinician1.setEmail("mehmet.kilic@acibadem");
+        clinician1.setEmail("mehmet.kilic@liva.com");
         clinician1.setPassword("123");
         clinician1.setMedicalCenter(liva);
         clinician1.setPatients(new ArrayList<>());
@@ -218,7 +218,7 @@ public class InitializerController {
         MedicalCenter acibadem = new MedicalCenter();
         acibadem.setName("Acıbadem");
         acibadem.setAddress("Acıbadem, İstanbul");
-        acibadem.setEmail("acibadem-mail@acibadem");
+        acibadem.setEmail("acibadem-mail@acibadem.com");
         acibadem.setPassword("123");
         acibadem.setPhone("05555555555");
         acibadem.setSubscription(Subscription.PREMIUM);
@@ -229,9 +229,10 @@ public class InitializerController {
         Clinician clinician2 = new Clinician();
 
         clinician2.setName("Ahmet Karaca");
-        clinician2.setEmail("ahmet.karaca@acibadem");
+        clinician2.setEmail("ahmet.karaca@acibadem.com");
         clinician2.setPassword("123");
         clinician2.setMedicalCenter(acibadem);
+        clinician2.setPatients(new ArrayList<>());
         clinicianRepository.save(clinician2);
 
         Patient patient5 = new Patient();
@@ -243,6 +244,19 @@ public class InitializerController {
         patient5.setSex("Male");
         patient5.setMedicalCenter(acibadem);
         patientRepository.save(patient5);
+
+        Clinician clinician3 = new Clinician();
+        clinician3.setName("Ayşe Melek");
+        clinician3.setEmail("ayse.melek@liva.com");
+        clinician3.setPassword("123");
+        clinician3.setMedicalCenter(liva);
+        List<Patient> clinican3Patients = new ArrayList<>();
+        clinican3Patients.add(patient3);
+        clinician3.setPatients(clinican3Patients);
+        List<VCFFile> clinician3VcfFiles = new ArrayList<>();
+        clinician3VcfFiles.add(vcfFile3);
+        clinician3.setVcfFiles(clinician3VcfFiles);
+        clinicianRepository.save(clinician3);
 
 
         // ADMIN
