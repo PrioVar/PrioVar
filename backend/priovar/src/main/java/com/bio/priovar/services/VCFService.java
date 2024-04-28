@@ -97,7 +97,7 @@ public class VCFService {
 
     public List<VCFFileDTO> getVCFFilesByClinicianId(Long clinicianId) {
         Clinician clinician = clinicianRepository.findById(clinicianId).orElse(null);
-        List<VCFFile> vcfFiles = vcfRepository.findAllByMedicalCenterId(clinician.getMedicalCenter().getId());
+        List<VCFFile> vcfFiles = clinician.getVcfFiles();
         List<VCFFileDTO> vcfFileDTOs = new ArrayList<>();
 
         for (VCFFile vcfFile : vcfFiles) {
