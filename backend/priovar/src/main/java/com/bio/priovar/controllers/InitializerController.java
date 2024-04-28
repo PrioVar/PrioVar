@@ -255,7 +255,7 @@ public class InitializerController {
         clinican3Patients.add(patient3);
         clinician3.setPatients(clinican3Patients);
         List<VCFFile> clinician3VcfFiles = new ArrayList<>();
-        clinician3VcfFiles.add(vcfFile3);
+        clinician3VcfFiles.add(vcfFile4);
         clinician3.setVcfFiles(clinician3VcfFiles);
         clinicianRepository.save(clinician3);
 
