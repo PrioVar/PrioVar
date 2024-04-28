@@ -15,7 +15,7 @@ const SampleSelector = function ({ fileId = null, disabled = false }) {
   const navigate = useNavigate()
 
   const createHandleClick = (sampleName) => () => {
-    navigate(`/libra/variants/${fileId}/${sampleName}`)
+    navigate(`/priovar/variants/${fileId}/${sampleName}`)
   }
 
   switch (status) {
