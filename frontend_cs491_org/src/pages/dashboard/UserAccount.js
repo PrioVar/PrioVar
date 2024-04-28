@@ -1,7 +1,7 @@
-import bellFill from '@iconify/icons-eva/bell-fill'
-import shareFill from '@iconify/icons-eva/share-fill'
+//import bellFill from '@iconify/icons-eva/bell-fill'
+//import shareFill from '@iconify/icons-eva/share-fill'
 import roundAccountBox from '@iconify/icons-ic/round-account-box'
-import roundReceipt from '@iconify/icons-ic/round-receipt'
+//import roundReceipt from '@iconify/icons-ic/round-receipt'
 import browserFill from '@iconify/icons-eva/browser-fill'
 import roundVpnKey from '@iconify/icons-ic/round-vpn-key'
 import { Icon } from '@iconify/react'
@@ -10,11 +10,11 @@ import { Box, Container, Stack, Tab, Tabs } from '@material-ui/core'
 import { capitalCase } from 'change-case'
 import { useEffect, useState } from 'react'
 import {
-  AccountBilling,
+//  AccountBilling,
   AccountChangePassword,
   AccountGeneral,
-  AccountNotifications,
-  AccountSocialLinks,
+//  AccountNotifications,
+//  AccountSocialLinks,
   AccountSettings,
 } from '../../components/_dashboard/user/account'
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs'

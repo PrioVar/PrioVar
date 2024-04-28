@@ -72,7 +72,7 @@ import {
       [data, fileId],
     )
   
-    const [isAnalysisOpen, setAnalysisOpen] = useState(false)
+    //const [isAnalysisOpen, setAnalysisOpen] = useState(false)
     const [tab, setTab] = useState(0)
     const handleTabChange = (event, newValue) => {
       setTab(newValue)

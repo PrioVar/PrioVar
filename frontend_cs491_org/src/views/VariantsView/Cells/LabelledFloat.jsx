@@ -1,4 +1,4 @@
-import { Stack, Tooltip, Typography } from '@material-ui/core'
+import { Stack, /*Tooltip,*/ Typography } from '@material-ui/core'
 import React from 'react'
 import ClickAwayTooltip from 'src/components/ClickAwayTooltip'
 import Label from 'src/components/Label'
@@ -37,6 +37,7 @@ export var LabelledFloat = function ({ label, value, color }) {
   // Use double equal sign to compare
   // This is one of the few times where we really want this behaviour
   // e.g compare '0.50' with 0.5
+  // eslint-disable-next-line eqeqeq
   const tooltip = value != formattedValue ? value : ''
 
   return (

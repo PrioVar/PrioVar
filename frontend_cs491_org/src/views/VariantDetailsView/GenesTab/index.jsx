@@ -1,19 +1,19 @@
 import {
-  Box,
+//  Box,
   Divider,
-  FilledInput,
+//  FilledInput,
   Grid,
   MenuItem,
   Select,
   Stack,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Tooltip,
-  Typography,
+//  TextField,
+//  ToggleButton,
+//  ToggleButtonGroup,
+//  Tooltip,
+//  Typography,
 } from '@material-ui/core'
-import { countBy } from 'lodash'
-import { maxBy, reduce } from 'ramda'
+//import { countBy } from 'lodash'
+//import { maxBy, reduce } from 'ramda'
 import React, { useState } from 'react'
 import { GENES_TAB_HEIGHT } from 'src/constants'
 import DiseaseBarChart from 'src/views/VariantDetailsView/GenesTab/DiseasesBarChart'
@@ -21,37 +21,6 @@ import OmimTable from 'src/views/VariantDetailsView/GenesTab/OmimTable'
 import CustomPhenotypes from './CustomPhenotypes'
 import Section from '../Section'
 
-const maxByImpact = maxBy((impact) => ['MODIFIER', 'LOW', 'MODERATE', 'HIGH'].indexOf(impact))
-const getMaxImpact = reduce(maxByImpact, 'MODIFIER')
-
-const getTooltipTitle = (labels) => {
-  const countMap = countBy(labels)
-
-  return Object.entries(countMap)
-    .map(([label, count]) => `${count} ✖ ${label}`)
-    .join(', ')
-}
-
-const ToggleButtonWithTooltip = function ({ tooltipProps, ...props }) {
-  return (
-    <Tooltip {...tooltipProps}>
-      <ToggleButton {...props} />
-    </Tooltip>
-  )
-}
-
-const calculateGeneImpactMap = (transcripts) => {
-  const result = {}
-
-  transcripts.forEach(({ Gene_Symbol: geneSymbol, Impact: impact }) => {
-    if (!result[geneSymbol]) {
-      result[geneSymbol] = []
-    }
-    result[geneSymbol].push(impact)
-  })
-
-  return result
-}
 
 const GenesTab = function ({ disease, transcripts, omim, variantId, activeGene }) {
   const activeDisease = disease[activeGene]
@@ -151,3 +120,37 @@ function GenesTabSection(props) {
 }
 
 export default GenesTabSection
+
+/*
+const maxByImpact = maxBy((impact) => ['MODIFIER', 'LOW', 'MODERATE', 'HIGH'].indexOf(impact))
+const getMaxImpact = reduce(maxByImpact, 'MODIFIER')
+
+const getTooltipTitle = (labels) => {
+  const countMap = countBy(labels)
+
+  return Object.entries(countMap)
+    .map(([label, count]) => `${count} ✖ ${label}`)
+    .join(', ')
+}
+
+const ToggleButtonWithTooltip = function ({ tooltipProps, ...props }) {
+  return (
+    <Tooltip {...tooltipProps}>
+      <ToggleButton {...props} />
+    </Tooltip>
+  )
+}
+
+const calculateGeneImpactMap = (transcripts) => {
+  const result = {}
+
+  transcripts.forEach(({ Gene_Symbol: geneSymbol, Impact: impact }) => {
+    if (!result[geneSymbol]) {
+      result[geneSymbol] = []
+    }
+    result[geneSymbol].push(impact)
+  })
+
+  return result
+}
+*/

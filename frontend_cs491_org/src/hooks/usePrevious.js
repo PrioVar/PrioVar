@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { isEmpty } from 'ramda'
 
 export default function usePrevious(value) {

@@ -1,5 +1,5 @@
-import { Divider, Card, CardHeader, Box, Grid, Tabs, Tab } from '@material-ui/core'
-import useResizeObserver from 'use-resize-observer'
+import { Divider, Card, /*CardHeader,*/ Box, /*Grid,*/ Tabs, Tab } from '@material-ui/core'
+//import useResizeObserver from 'use-resize-observer'
 import ChatMessageList from 'src/components/_dashboard/chat/ChatMessageList'
 import ChatMessageInput from 'src/components/_dashboard/chat/ChatMessageInput'
 import { useState, useEffect } from 'react'
