@@ -1,58 +1,25 @@
 import {
     Box,
-    CircularProgress,
-    Stack,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Chip,
-    IconButton,
-    DialogContentText,
     Typography,
     Grid,
-    TextField,
-    Tab,
-    Tabs,
-    Tooltip,
     InputLabel,
     FormControl,
-    Input,
     Select,
     MenuItem
   } from '@material-ui/core'
   import axios from 'axios';
-  import { makeStyles } from '@material-ui/styles'
-  import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
-  import MUIDataTable from 'mui-datatables'
+  import { ArrowBack, } from '@material-ui/icons'
   import React, { useState, useMemo, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
-  import DeleteIcon from '@material-ui/icons/Delete'
-  import { fDateTime } from 'src/utils/formatTime'
-  import JobStateStatus from '../common/JobStateStatus'
-  import { deleteVcfFile } from '../../api/vcf'
-  import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-  import { PATH_DASHBOARD } from '../../routes/paths'
+  import { useFiles, useBedFiles, fetchDiseases } from '../../api/file'
   import { Link as RouterLink } from 'react-router-dom'
-  import ExpandOnClick from 'src/components/ExpandOnClick'
-  import AnalysedCheckbox from '../common/AnalysedCheckbox'
   import { useParams } from 'react-router-dom'
-
-  import Tags from 'src/components/Tags'
-  // api utils
-  import { updateTrio, useHpo } from '../../api/vcf'
-  // constants
-  import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
   
   const PatientDetailsTable = function () {
     //const classes = useStyles()
     const bedFilesApi = useBedFiles()
     const { data: bedFiles = [] } = bedFilesApi.query
-    const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null)
     const { fileId, sampleName } = useParams()
     const filesApi = useFiles()
     const { status, data = [] } = filesApi.query
@@ -70,18 +37,17 @@ import {
         { name: '', age: '', sex: '', disease: '', assignedClinic: '', phenotypeTerms: [] }
     );
 
+    const fecthData = async () => {
+        try {
+            const fetchedDiseases = await fetchDiseases();
+            setOptions(fetchedDiseases);
+        } catch (error) {
+            console.error('Error fetching options:', error);
+        }
+    };
     // Fetch dropdown options
     useEffect(() => {
-        const fetchOptions = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/disease`);
-                const fetchedOptions = response.data;
-                setOptions(fetchedOptions);
-            } catch (error) {
-                console.error('Error fetching options:', error);
-            }
-        };
-        fetchOptions();
+        fecthData()
     }, []);
 
     // Handle option selection
@@ -134,8 +100,10 @@ import {
 
     return (
         <>
-
-    <Box p={3}>
+        <Button onClick={() => navigate(-1)} sx={{ ml:1, mt: 3 }}>
+            <ArrowBack sx={{ mr: 1 }} /> Go Back To Patients
+        </Button>
+        <Box p={3}>
         <Typography variant="h4" align="center">Patient Details</Typography>
         <Grid container spacing={2} mt={4}>
             {/* Name, Age, Sex, and Assigned Clinic in one row */}

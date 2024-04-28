@@ -26,11 +26,11 @@ import {
   } from '@material-ui/core'
   import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
   import axios from 'axios';
-  import { Info } from '@material-ui/icons'
+  import { Info, ArrowBack } from '@material-ui/icons'
   import React, { useState, useMemo, useEffect } from 'react'
   import { useFiles, useBedFiles } from '../../api/file'
   import { ROOTS_PrioVar } from '../../routes/paths'
-  import { useParams } from 'react-router-dom'
+  import { useParams, useNavigate } from 'react-router-dom'
   
   const SimilarPatientsTable = function () {
 
@@ -41,6 +41,7 @@ import {
     const { data: bedFiles = [] } = bedFilesApi.query
     const { fileId, sampleName } = useParams()
     const filesApi = useFiles()
+    let navigate = useNavigate();
     const { status, data = [] } = filesApi.query
     const fileDetails = useMemo(
       () => data.find((f) => f.vcf_id === fileId || f.fastq_pair_id === fileId),
@@ -74,7 +75,9 @@ import {
 
     return (
         <>
-
+        <Button onClick={() => navigate(-1)} sx={{ ml:1, mt: 3 }}>
+            <ArrowBack sx={{ mr: 1 }} /> Go Back To Patients
+        </Button>
     <Box p={3} mt={4}>
     <Typography variant="h5">Similar Patients for {patientName} </Typography>
       <Grid container spacing={2} alignItems="flex-end" mt={4}>
