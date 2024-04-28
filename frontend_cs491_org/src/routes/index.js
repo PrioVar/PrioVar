@@ -99,7 +99,7 @@ export default function Router() {
       ],
     },
     {
-      path: 'libra',
+      path: 'priovar',
       element: (
         //login pass-by
         // <AuthGuard>
@@ -111,7 +111,7 @@ export default function Router() {
         // </AuthGuard>
       ),
       children: [
-        { path: '/', element: <Navigate to="/libra/files" replace /> },
+        { path: '/', element: <Navigate to="/priovar/files" replace /> },
         { path: 'files', element: <FileUploadView /> },
         // TODO: Make sampleName optional
         { path: '/variants/:fileId/:sampleName', element: <VariantsView /> },
@@ -130,7 +130,7 @@ export default function Router() {
         {
           path: 'user',
           children: [
-            { path: '/', element: <Navigate to="/libra/user/list" replace /> },
+            { path: '/', element: <Navigate to="/priovar/user/list" replace /> },
             //      { path: 'profile', element: <UserProfile /> },
             //    { path: 'cards', element: <UserCards /> },
             { path: 'list', element: <UserList /> },
