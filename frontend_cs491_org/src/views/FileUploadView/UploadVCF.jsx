@@ -60,7 +60,7 @@ const UploadVCF = function ({ onUploadComplete }) {
   }, [state, fileQueue, onUploadComplete])
 
   return (
-    <Card sx={{ mb: 3 }}>
+    <Card sx={{ mt: 1 }}>
       <CardHeader title="Upload VCF File" />
       <CardContent>
         {state === 'UPLOADING' && fileQueue.length > 0 && (

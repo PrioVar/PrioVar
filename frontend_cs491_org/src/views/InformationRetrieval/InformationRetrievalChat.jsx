@@ -98,6 +98,12 @@ function InformationRetrievalChat() {
                     onChange={handleInputChange}
                     onKeyPress={handleKeyPress}
                     disabled={loading}
+                    InputLabelProps={{
+                        style: { color: 'black' }
+                      }}
+                      InputProps={{
+                        style: { color: 'black' },
+                      }}
                 />
                 <Button variant="contained" onClick={sendMessage} disabled={!input.trim() || loading}>
                     Send
