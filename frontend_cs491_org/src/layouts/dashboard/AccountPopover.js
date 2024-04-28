@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 import { useSnackbar } from 'notistack5'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import homeFill from '@iconify/icons-eva/home-fill'
 import personFill from '@iconify/icons-eva/person-fill'
 import settings2Fill from '@iconify/icons-eva/settings-2-fill'
@@ -19,7 +19,8 @@ import { MIconButton } from '../../components/@material-extend'
 import MyAvatar from '../../components/MyAvatar'
 import MenuPopover from '../../components/MenuPopover'
 import Logo from '../../components/Logo'
-
+import { fetchCurrentClinicianName } from '../../api/file/list'
+import { set } from 'lodash'
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -55,14 +56,24 @@ export default function AccountPopover() {
   const isMountedRef = useIsMountedRef()
   const { user, logout } = useAuth()
   const [open, setOpen] = useState(false)
-
+  const [displayName, setDisplayName] = useState({data: ''})
+  
   const handleOpen = () => {
     setOpen(true)
   }
   const handleClose = () => {
     setOpen(false)
   }
-
+  const fetchClinicianName = async () => {
+    try {
+      const response = await fetchCurrentClinicianName()
+      setDisplayName(response.data)
+  
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
   const handleLogout = async () => {
     try {
       await logout()
@@ -76,8 +87,13 @@ export default function AccountPopover() {
     }
   }
 
+  useEffect(() => {
+    fetchClinicianName()
+  }, [])
+
   return (
     <>
+      <Typography color="black" variant="body2">{displayName}</Typography>
       <MIconButton
         ref={anchorRef}
         onClick={handleOpen}
@@ -100,7 +116,7 @@ export default function AccountPopover() {
       >
         <Icon icon={personFill} />
       </MIconButton>
-
+      
       <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ width: 220 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
