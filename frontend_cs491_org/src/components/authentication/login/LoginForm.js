@@ -19,9 +19,9 @@ import { Form, FormikProvider, useFormik } from 'formik'
 import { useSnackbar } from 'notistack5'
 import { useState } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import * as Yup from 'yup'
+//import * as Yup from 'yup'
 // hooks
-import useAuth from '../../../hooks/useAuth'
+//import useAuth from '../../../hooks/useAuth'
 import useIsMountedRef from '../../../hooks/useIsMountedRef'
 // routes
 import { PATH_AUTH, ROOTS_PrioVar, PATH_DASHBOARD } from '../../../routes/paths'
@@ -41,11 +41,12 @@ export default function LoginForm({ callerPage }) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
+  /*
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
   })
-
+  */
   const formik = useFormik({
     initialValues: {
       email: '',

@@ -1,29 +1,29 @@
 import { Box, IconButton, Tooltip, Typography } from '@material-ui/core'
-import FindInPageIcon from '@material-ui/icons/FindInPage'
+//import FindInPageIcon from '@material-ui/icons/FindInPage'
 import InfoIcon from '@material-ui/icons/Info'
-import TurnedInIcon from '@material-ui/icons/TurnedIn'
-import TurnedInNotIcon from '@material-ui/icons/TurnedInNot'
+//import TurnedInIcon from '@material-ui/icons/TurnedIn'
+//import TurnedInNotIcon from '@material-ui/icons/TurnedInNot'
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded'
 import { useTheme } from '@material-ui/styles'
 import PropTypes from 'prop-types'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import ClickAwayTooltip from 'src/components/ClickAwayTooltip'
 import { ACMG_SEVERITY, COLOR_ENCODE_DESCRIPTIONS } from 'src/constants'
 import { getMostSevereColor, getMostSeverePvs1 } from 'src/utils/bio'
-import DatabasesCell from 'src/views/VariantsView/Cells/DatabasesCell'
+//import DatabasesCell from 'src/views/VariantsView/Cells/DatabasesCell'
 import FrequencyCell from 'src/views/VariantsView/Cells/FrequencyCell'
 import GeneSymbolsCell from 'src/views/VariantsView/Cells/GeneSymbolsCell'
-import GtCell from 'src/views/VariantsView/Cells/GtCell'
-import HgvsCCell from 'src/views/VariantsView/Cells/HgvsCCell'
-import HgvsPCell from 'src/views/VariantsView/Cells/HgvsPCell'
+//import GtCell from 'src/views/VariantsView/Cells/GtCell'
+//import HgvsCCell from 'src/views/VariantsView/Cells/HgvsCCell'
+//import HgvsPCell from 'src/views/VariantsView/Cells/HgvsPCell'
 import PathogenicityCell from 'src/views/VariantsView/Cells/PathogenicityCell'
 import PhenotypesCell from 'src/views/VariantsView/Cells/PhenotypesCell'
-import ReadDetailsCell from 'src/views/VariantsView/Cells/ReadDetailsCell'
+//import ReadDetailsCell from 'src/views/VariantsView/Cells/ReadDetailsCell'
 import { useImmer } from 'use-immer'
 
 import LibraTable from '../../components/LibraTable'
-import ImpactCell from './Cells/ImpactCell'
+//import ImpactCell from './Cells/ImpactCell'
 import { useSampleMetadata } from '../../api/vcf'
 import { isHomogeneous } from 'src/utils/bio'
 
@@ -130,20 +130,6 @@ const VariantsTable = function ({
     },
     [currentTable, id, sampleMetadata],
   )
-
-  const handleColumnHide = (_column, columnIndex) => {
-    setDisplayColumns((draft) => {
-      draft[columnIndex].hidden = !draft[columnIndex].hidden
-    })
-  }
-
-  const handleColumnReorder = (sourceIndex, destinationIndex) => {
-    setDisplayColumns((draft) => {
-      // Remove and add the column at specified index
-      const [removedColumn] = draft.splice(sourceIndex, 1)
-      draft.splice(destinationIndex, 0, removedColumn)
-    })
-  }
 
   const iconColumns = useMemo(
     () => [
@@ -336,3 +322,19 @@ VariantsTable.propTypes = {
 }
 
 export default VariantsTable
+
+/*
+const handleColumnHide = (_column, columnIndex) => {
+    setDisplayColumns((draft) => {
+      draft[columnIndex].hidden = !draft[columnIndex].hidden
+    })
+  }
+
+  const handleColumnReorder = (sourceIndex, destinationIndex) => {
+    setDisplayColumns((draft) => {
+      // Remove and add the column at specified index
+      const [removedColumn] = draft.splice(sourceIndex, 1)
+      draft.splice(destinationIndex, 0, removedColumn)
+    })
+  }
+*/

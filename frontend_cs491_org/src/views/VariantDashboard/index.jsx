@@ -1,6 +1,5 @@
 // material-ui
 import {
-  Autocomplete,
   Box,
   Button,
   CircularProgress,
@@ -12,7 +11,6 @@ import {
   Stack,
   Tab,
   Tabs,
-  TextField,
   Tooltip,
   Typography,
 } from '@material-ui/core'
@@ -20,9 +18,7 @@ import { withStyles } from '@material-ui/styles'
 // hooks
 import { useState, useMemo, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import useLazyEffect from 'src/hooks/useLazyEffect'
 import { useFiles } from 'src/api/file/list'
-import { updateDetails } from 'src/api/file'
 import ReactDOM from 'react-dom'
 
 // constants
@@ -35,7 +31,7 @@ import Page from 'src/components/Page'
 import NavbarRoutes from '../VariantsView/NavbarRoutes'
 
 // api utils
-import { updateTrio, useHpo } from '../../api/vcf'
+import { useHpo } from '../../api/vcf'
 import { startJobsForVcfFile } from '../../api/vcf/job'
 import { startJobsForFastqFile } from '../../api/fastq'
 
@@ -47,15 +43,8 @@ const Loading = function () {
   )
 }
 
-const createTrioOptions = (rows) => {
-  return rows.map((row) => ({
-    label: row.sample_name,
-    value: { fileId: row.id, sample: row.sample_name },
-  }))
-}
 
 const CreateAnalysisDialog = function ({ open, onClose, onClickCreateAnalysis, fileType, title }) {
-  const [type, setType] = useState('Exome')
   const [snpChecked, setSnpChecked] = useState(false)
   const [cnvChecked, setCnvChecked] = useState(false)
   const [alignmentChecked, setAlignmentChecked] = useState(false)
@@ -97,12 +86,6 @@ const CreateAnalysisDialog = function ({ open, onClose, onClickCreateAnalysis, f
       )}
     </Dialog>
   )
-}
-
-const ManageHpo = function ({ fileId }) {
-  const [hpoList, setHpoList] = useHpo({ fileId })
-
-  return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
 }
 
 const TABS = ['Analysis']
@@ -225,6 +208,17 @@ const VariantDasboard = () => {
 export default VariantDasboard
 
 /*
+const createTrioOptions = (rows) => {
+  return rows.map((row) => ({
+    label: row.sample_name,
+    value: { fileId: row.id, sample: row.sample_name },
+  }))
+}
+const ManageHpo = function ({ fileId }) {
+  const [hpoList, setHpoList] = useHpo({ fileId })
+
+  return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
+}
 const TrioSelector = function ({ options, trio = {}, sampleName, fileId }) {
   const [motherOption, setMotherOption] = useState({
     label: trio?.mother_sample_name,

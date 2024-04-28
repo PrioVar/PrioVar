@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { paramCase } from 'change-case'
+//import { paramCase } from 'change-case'
 import { useParams, useLocation } from 'react-router-dom'
 // material
 import { Container } from '@material-ui/core'
@@ -7,7 +7,7 @@ import { Container } from '@material-ui/core'
 import { useDispatch, useSelector } from '../../redux/store'
 import { getUserList } from '../../redux/slices/user'
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths'
+//import { PATH_DASHBOARD } from '../../routes/paths'
 // hooks
 import useSettings from '../../hooks/useSettings'
 // components

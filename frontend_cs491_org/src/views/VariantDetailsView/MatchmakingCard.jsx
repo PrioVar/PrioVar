@@ -1,4 +1,4 @@
-import { Card, CardHeader, Typography, Link, Stack, CardContent, Grid, Divider } from '@material-ui/core'
+import { Card, CardHeader, Typography, Link, /*Stack,*/ CardContent, Grid, Divider } from '@material-ui/core'
 import { useParams } from 'react-router-dom'
 
 function MatchmakingCard({ matchmaking, height }) {

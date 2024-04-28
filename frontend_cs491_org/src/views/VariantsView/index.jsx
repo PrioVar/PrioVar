@@ -4,7 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
-  CircularProgress,
+//  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -33,7 +33,7 @@ import { createStyles, makeStyles, withStyles } from '@material-ui/styles'
 
 import React, { useRef, useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
 import { useDispatch, Provider } from 'react-redux'
 import { useFormik } from 'formik'
@@ -45,7 +45,7 @@ import * as yup from 'yup'
 import { HPO_OPTIONS, FILTER_OPTIONS, NAVBAR_CONFIG } from 'src/constants'
 import Page from 'src/components/Page'
 import Tags from 'src/components/Tags'
-import { useTrio } from '../../api/vcf/trio'
+//import { useTrio } from '../../api/vcf/trio'
 import { useHpo, useSampleMetadata } from '../../api/vcf'
 import { useVariants } from 'src/api/variant'
 
@@ -258,57 +258,6 @@ CreateTableDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onClickCreateTable: PropTypes.func.isRequired,
-}
-
-const TrioView = function () {
-  const { fileId } = useParams()
-  const { status, data } = useTrio({ fileId })
-  const navigate = useNavigate()
-
-  if (status !== 'success') {
-    return (
-      <Stack justifyContent="center">
-        <CircularProgress />
-      </Stack>
-    )
-  }
-
-  const { mother_file, mother_sample_name, father_file, father_sample_name } = data
-
-  const createHandleClick = (fileId, sampleName) => () => {
-    navigate(`/priovar/variants/${fileId}/${sampleName}`)
-  }
-
-  return (
-    <Stack direction="row" spacing={2}>
-      <Stack direction="column">
-        <Typography gutterBottom variant="subtitle2" sx={{ color: 'text.secondary' }}>
-          Mother
-        </Typography>
-        <Button
-          variant="outlined"
-          color="error"
-          sx={{ height: '100%' }}
-          onClick={mother_file && createHandleClick(mother_file, mother_sample_name)}
-        >
-          {mother_sample_name || '?'}
-        </Button>
-      </Stack>
-      <Stack direction="column">
-        <Typography gutterBottom variant="subtitle2" sx={{ color: 'text.secondary' }}>
-          Father
-        </Typography>
-        <Button
-          variant="outlined"
-          color="info"
-          sx={{ height: '100%' }}
-          onClick={father_file && createHandleClick(father_file, father_sample_name)}
-        >
-          {father_sample_name || '?'}
-        </Button>
-      </Stack>
-    </Stack>
-  )
 }
 
 const useStyles = makeStyles(
@@ -636,3 +585,58 @@ VariantsViewContainer.propTypes = {
 }
 
 export default VariantsViewContainer
+
+/*
+
+const TrioView = function () {
+  const { fileId } = useParams()
+  const { status, data } = useTrio({ fileId })
+  const navigate = useNavigate()
+
+  if (status !== 'success') {
+    return (
+      <Stack justifyContent="center">
+        <CircularProgress />
+      </Stack>
+    )
+  }
+
+  const { mother_file, mother_sample_name, father_file, father_sample_name } = data
+
+  const createHandleClick = (fileId, sampleName) => () => {
+    navigate(`/priovar/variants/${fileId}/${sampleName}`)
+  }
+
+  return (
+    <Stack direction="row" spacing={2}>
+      <Stack direction="column">
+        <Typography gutterBottom variant="subtitle2" sx={{ color: 'text.secondary' }}>
+          Mother
+        </Typography>
+        <Button
+          variant="outlined"
+          color="error"
+          sx={{ height: '100%' }}
+          onClick={mother_file && createHandleClick(mother_file, mother_sample_name)}
+        >
+          {mother_sample_name || '?'}
+        </Button>
+      </Stack>
+      <Stack direction="column">
+        <Typography gutterBottom variant="subtitle2" sx={{ color: 'text.secondary' }}>
+          Father
+        </Typography>
+        <Button
+          variant="outlined"
+          color="info"
+          sx={{ height: '100%' }}
+          onClick={father_file && createHandleClick(father_file, father_sample_name)}
+        >
+          {father_sample_name || '?'}
+        </Button>
+      </Stack>
+    </Stack>
+  )
+}
+
+*/

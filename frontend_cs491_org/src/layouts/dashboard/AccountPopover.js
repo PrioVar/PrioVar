@@ -16,11 +16,11 @@ import useAuth from '../../hooks/useAuth'
 import useIsMountedRef from '../../hooks/useIsMountedRef'
 // components
 import { MIconButton } from '../../components/@material-extend'
-import MyAvatar from '../../components/MyAvatar'
+//import MyAvatar from '../../components/MyAvatar'
 import MenuPopover from '../../components/MenuPopover'
-import Logo from '../../components/Logo'
+//import Logo from '../../components/Logo'
 import { fetchCurrentClinicianName } from '../../api/file/list'
-import { set } from 'lodash'
+//import { set } from 'lodash'
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -69,6 +69,7 @@ export default function AccountPopover() {
       //console.log("fetching clinician name")
       //console.log(localStorage.getItem('clinicianId'))
       //console.log(-1)
+      // eslint-disable-next-line eqeqeq
       if(localStorage.getItem('clinicianId') != -1) {
         const response = await fetchCurrentClinicianName()
         setDisplayName(response.data)
