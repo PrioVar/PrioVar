@@ -1,14 +1,10 @@
 import { Box, Button, Card, Container, Stack, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 // material
 import { styled } from '@material-ui/core/styles'
-import { MHidden } from '../../components/@material-extend'
 import { LoginForm } from '../../components/authentication/login'
-import { LoadingButton } from '@material-ui/lab'
+
 // components
 import Page from '../../components/Page'
-import Login from './Login'
-import LoginAdmin from './LoginAdmin'
-import {Link} from '@material-ui/core'
 // hooks
 // layouts
 import AuthLayout from '../../layouts/AuthLayout'

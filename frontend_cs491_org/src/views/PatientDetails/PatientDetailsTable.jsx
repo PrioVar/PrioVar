@@ -10,23 +10,13 @@ import {
   } from '@material-ui/core'
   import axios from 'axios';
   import { ArrowBack, } from '@material-ui/icons'
-  import React, { useState, useMemo, useEffect } from 'react'
+  import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
-  import { useFiles, useBedFiles, fetchDiseases } from '../../api/file'
-  import { Link as RouterLink } from 'react-router-dom'
+  import { fetchDiseases } from '../../api/file'
   import { useParams } from 'react-router-dom'
   
   const PatientDetailsTable = function () {
     //const classes = useStyles()
-    const bedFilesApi = useBedFiles()
-    const { data: bedFiles = [] } = bedFilesApi.query
-    const { fileId, sampleName } = useParams()
-    const filesApi = useFiles()
-    const { status, data = [] } = filesApi.query
-    const fileDetails = useMemo(
-      () => data.find((f) => f.vcf_id === fileId || f.fastq_pair_id === fileId),
-      [data, fileId, filesApi],
-    )
     const [options, setOptions] = useState([]); // Store dropdown options
     const [selectedOption, setSelectedOption] = useState('')
     const { patientId } = useParams();
