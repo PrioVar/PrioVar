@@ -29,7 +29,7 @@ import {
     )
     const [options, setOptions] = useState([]); // Store dropdown options
     const [selectedOption, setSelectedOption] = useState('')
-    const [patientId, setPatientId] = useState('')
+    const { patientId } = useParams();
     let navigate = useNavigate();
 
     //
@@ -59,8 +59,7 @@ import {
     const handleSubmit = async () => {
         try {
             console.log(selectedOption)
-            const patient = await getPatient()
-            const response = await axios.post(`http://localhost:8080/patient/${patient.data.id}/addDisease/${selectedOption}`);
+            const response = await axios.post(`http://localhost:8080/patient/${patientId}/addDisease/${selectedOption}`);
             console.log(response.data);
             // Handle response or success notification
             navigate(0)
@@ -70,32 +69,17 @@ import {
         }
     };
 
-    const getPatient = async () => {
-
-        try {
-            return axios.get(`http://localhost:8080/patient/getPatient`);
-        } catch (error) {
-            console.log(error.response)
-        }
-    }
-
     useEffect(() => {
         const fetch = async () => {
-        // first get the patient
-        const patient = await getPatient()
-        setPatientId(patient.data.id)
-
-        // Ali Veli patient id: 17700
-        axios.get(`http://localhost:8080/patient/${patient.data.id}`)
-          .then(response => {
-            console.log("SUCCESS")
-            console.log(response.data)
-            setDetails(response.data);
-          })
-          .catch(error => console.error('Error fetching data:', error));
-        }
-        fetch();
-
+            axios.get(`http://localhost:8080/patient/${patientId}`)
+            .then(response => {
+                console.log("SUCCESS")
+                console.log(response.data)
+                setDetails(response.data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+            }
+            fetch();
       }, []);
 
     return (
