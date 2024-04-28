@@ -46,7 +46,7 @@ import {
 
             const response = await axios.get(`${ROOTS_PrioVar}/similarityReport/mostSimilarPatients/${patientId}/${resultCount}`);
             console.log("SUCCESS!")
-            console.log(response)
+            //console.log(response)
             setRows(response.data);
     
           } catch (error) {

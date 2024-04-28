@@ -66,9 +66,9 @@ export default function AccountPopover() {
   }
   const fetchClinicianName = async () => {
     try {
-      console.log("fetching clinician name")
-      console.log(localStorage.getItem('clinicianId'))
-      console.log(-1)
+      //console.log("fetching clinician name")
+      //console.log(localStorage.getItem('clinicianId'))
+      //console.log(-1)
       if(localStorage.getItem('clinicianId') != -1) {
         const response = await fetchCurrentClinicianName()
         setDisplayName(response.data)

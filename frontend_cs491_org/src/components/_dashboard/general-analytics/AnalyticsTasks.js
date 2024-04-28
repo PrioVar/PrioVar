@@ -131,7 +131,7 @@ export default function AnalyticsTasks() {
       checked: [TASKS[2]],
     },
     onSubmit: (values) => {
-      console.log(values)
+      //console.log(values)
     },
   })
 

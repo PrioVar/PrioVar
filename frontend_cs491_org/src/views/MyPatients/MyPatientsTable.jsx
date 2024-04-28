@@ -138,7 +138,6 @@ import {
   
   const GoToSampleDashboard = function ({ fileName }) {
     const navigate = useNavigate()
-    console.log(fileName)
   
     const handleClick = () => {
       navigate(`/priovar/sample/${fileName}`)
@@ -182,7 +181,6 @@ import {
       setIsLoading(true);
       try {
         const data = await fetchClinicianPatients()
-        console.log(data)
         setData(data)
         return data;
     

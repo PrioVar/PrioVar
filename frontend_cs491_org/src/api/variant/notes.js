@@ -42,6 +42,7 @@ const populateSelfMessages = (userId, notes) => {
       ...note.person,
       user: {
         ...note.person.user,
+        // eslint-disable-next-line eqeqeq
         id: userId == note.person.user.id ? 'me' : note.person.user.id,
       },
     },

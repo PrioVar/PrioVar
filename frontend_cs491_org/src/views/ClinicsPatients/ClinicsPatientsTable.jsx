@@ -239,9 +239,9 @@ import {
             if (!row) return null
             // eslint-disable-next-line eqeqeq
             const isClinicianSame = row?.clinicianId == localStorage.getItem('clinicianId')
-            console.log(isClinicianSame)
-            console.log(row?.clinicianId)
-            console.log(localStorage.getItem('clinicianId'))
+            //console.log(isClinicianSame)
+            //console.log(row?.clinicianId)
+            //console.log(localStorage.getItem('clinicianId'))
             const handleClickConfirm = () => {
               deletePatient(row.patientId).then(() => {
                 setIsPatientDeleted(true);

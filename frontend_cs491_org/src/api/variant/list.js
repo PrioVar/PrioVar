@@ -14,10 +14,10 @@ const translateApiFiltersToBackend = (apiFilters) => {
     }))
 }
 const fetchVariants = async (fileId, sampleName, page, pageSize, sortBy, sortDirection, filters) => {
-  console.log(1)
-  console.log(sortBy)
-  console.log(sortDirection)
-  console.log(filters)
+  //console.log(1)
+  //console.log(sortBy)
+  //console.log(sortDirection)
+  //console.log(filters)
   const { data } = await axios.post(`${API_BASE_URL}/variants/${fileId}/${sampleName}`, {
     page: page + 1,
     page_size: pageSize,
