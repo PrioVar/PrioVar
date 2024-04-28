@@ -1,14 +1,14 @@
-import { Box, Button, Card, Container, Stack, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { Box, Button, /*Card,*/ Container, Stack, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 // material
 import { styled } from '@material-ui/core/styles'
-import { MHidden } from '../../components/@material-extend'
+//import { MHidden } from '../../components/@material-extend'
 import { LoginForm } from '../../components/authentication/login'
-import { LoadingButton } from '@material-ui/lab'
+//import { LoadingButton } from '@material-ui/lab'
 // components
 import Page from '../../components/Page'
-import LoginHealthCenter from './LoginHealthCenter'
-import Login from './Login'
-import {Link} from '@material-ui/core'
+//import LoginHealthCenter from './LoginHealthCenter'
+//import Login from './Login'
+//import {Link} from '@material-ui/core'
 // hooks
 // layouts
 import AuthLayout from '../../layouts/AuthLayout'
@@ -21,16 +21,6 @@ const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     display: 'flex',
   },
-}));
-
-const SectionStyle = styled(Card)(({ theme }) => ({
-  width: '100%',
-  maxWidth: 464,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-end',
-  margin: theme.spacing(2, 0, 2, 2),
-  padding: theme.spacing(0, 0, 3),
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
@@ -98,3 +88,15 @@ export default function LoginAdmin() {
     </RootStyle>
   );
 }
+
+/*
+const SectionStyle = styled(Card)(({ theme }) => ({
+  width: '100%',
+  maxWidth: 464,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-end',
+  margin: theme.spacing(2, 0, 2, 2),
+  padding: theme.spacing(0, 0, 3),
+}));
+*/

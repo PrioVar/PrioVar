@@ -3,19 +3,10 @@ import { makeStyles } from '@material-ui/styles'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { hpoIdtoGeneName } from 'src/api/gene'
-
-import GenotypeFilter from 'src/views/VariantsView/Toolbar/FiltersPanelMenu/GenotypeFilter'
-
 import FiltersAccordion from './FiltersAccordion'
 import FrequencyFilters from './FrequencyFilters'
-import ImpactFilters from './ImpactFilters'
-import LocationFilters from './LocationFilters'
 import PathogenicityFilters from './PathogenicityFilters'
-import QualityFilters from './QualityFilters'
-import GeneSetFilters from './GeneSetFilters'
 import PhenotypeFilter from './PhenotypeFilter'
-import HPOFilter from './HPOFilter'
-import ReadFilters from './ReadFilters'
 
 import { actions as variantFiltersActions } from 'src/redux/slices/variantFilters'
 import SavedFilters from './SavedFiltersFilters'
@@ -41,7 +32,7 @@ function FiltersPanelMenu(props) {
   const [listOfGeneNames, setListOfGeneNames] = useState('')
   const state = useSelector((state) => state)
 
-  const [toggleSelectorChrom, setToggleSelectorChrom] = useState(false)
+  //const [toggleSelectorChrom, setToggleSelectorChrom] = useState(false)
   const [toggleSelectorPos, setToggleSelectorPos] = useState(false)
   const [toggleSelectorGene, setToggleSelectorGene] = useState(false)
   const [isToggleChangedLoc, setIsToggleChangedLoc] = useState([false, false, false])
@@ -202,9 +193,6 @@ function FiltersPanelMenu(props) {
   const [qualFEvent, setQuallFEvent] = useState(qualFilter.value)
   const [fsFEvent, setFsFEvent] = useState(fsFilter.value)
   const [filterFEvent, setfilterFEvent] = useState(filterFilter.value)
-
-  const [toggleSelectorQualF, setToggleSelectorQualF] = useState(false)
-  const [toggleSelectorFsF, setToggleSelectorFsF] = useState(false)
   const [isToggleChangedQuality, setIsToggleChangedQuality] = useState([false, false])
 
   // quality filter functions

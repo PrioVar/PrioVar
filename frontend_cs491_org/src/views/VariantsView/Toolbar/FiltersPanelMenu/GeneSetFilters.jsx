@@ -8,9 +8,7 @@ import {
   DialogActions,
   TextField,
   Divider,
-  Grid,
   Stack,
-  Typography,
   IconButton,
 } from '@material-ui/core'
 import Delete from '@material-ui/icons/Delete'
@@ -73,21 +71,6 @@ function AddSetModal({ open, onClose, uploadGeneSet }) {
         </Button>
       </DialogActions>
     </Dialog>
-  )
-}
-
-function ToggleBase({ enabled, onToggle, label }) {
-  return (
-    <Grid container direction="row" alignItems="center">
-      <Grid item xs={1}>
-        <Checkbox checked={enabled} onChange={onToggle} />
-      </Grid>
-      <Grid item xs={4}>
-        <Typography variant="body1" color={enabled ? undefined : 'text.disabled'}>
-          {label}
-        </Typography>
-      </Grid>
-    </Grid>
   )
 }
 
@@ -164,3 +147,20 @@ function GeneSetFilters({ geneSets, ...props }) {
 }
 
 export default GeneSetFilters
+
+/*
+function ToggleBase({ enabled, onToggle, label }) {
+  return (
+    <Grid container direction="row" alignItems="center">
+      <Grid item xs={1}>
+        <Checkbox checked={enabled} onChange={onToggle} />
+      </Grid>
+      <Grid item xs={4}>
+        <Typography variant="body1" color={enabled ? undefined : 'text.disabled'}>
+          {label}
+        </Typography>
+      </Grid>
+    </Grid>
+  )
+}
+*/

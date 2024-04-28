@@ -6,7 +6,6 @@ import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
 import { VariableSizeList } from 'react-window'
 import { matchSorter } from 'match-sorter'
-import { chain as flatMap } from 'ramda'
 
 const LISTBOX_PADDING = 8 // px
 

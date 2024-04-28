@@ -1,4 +1,4 @@
-import { Card, Paper, Stack, Typography } from '@material-ui/core'
+import { /*Card,*/ Paper, Stack, Typography } from '@material-ui/core'
 import { useState } from 'react'
 import Scrollbar from 'src/components/Scrollbar'
 import SettingFullscreen from 'src/components/settings/SettingFullscreen'

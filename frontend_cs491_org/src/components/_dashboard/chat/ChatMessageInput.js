@@ -1,16 +1,16 @@
-import { v4 as uuidv4 } from 'uuid'
+//import { v4 as uuidv4 } from 'uuid'
 import PropTypes from 'prop-types'
 import { Icon } from '@iconify/react'
 import { useRef, useState } from 'react'
-import micFill from '@iconify/icons-eva/mic-fill'
+//import micFill from '@iconify/icons-eva/mic-fill'
 import roundSend from '@iconify/icons-ic/round-send'
-import attach2Fill from '@iconify/icons-eva/attach-2-fill'
-import roundAddPhotoAlternate from '@iconify/icons-ic/round-add-photo-alternate'
+//import attach2Fill from '@iconify/icons-eva/attach-2-fill'
+//import roundAddPhotoAlternate from '@iconify/icons-ic/round-add-photo-alternate'
 // material
 import { styled } from '@material-ui/core/styles'
-import { Input, Divider, IconButton, InputAdornment, Stack, Checkbox } from '@material-ui/core'
+import { Input, Divider, IconButton } from '@material-ui/core'
 //
-import EmojiPicker from '../../EmojiPicker'
+//import EmojiPicker from '../../EmojiPicker'
 
 // ----------------------------------------------------------------------
 
@@ -33,10 +33,6 @@ ChatMessageInput.propTypes = {
 export default function ChatMessageInput({ disabled, conversationId, onSend, ...other }) {
   const fileInputRef = useRef(null)
   const [message, setMessage] = useState('')
-
-  const handleAttach = () => {
-    fileInputRef.current.click()
-  }
 
   const handleChangeMessage = (event) => {
     setMessage(event.target.value)
@@ -105,3 +101,9 @@ export default function ChatMessageInput({ disabled, conversationId, onSend, ...
     </RootStyle>
   )
 }
+
+/*
+const handleAttach = () => {
+    fileInputRef.current.click()
+  }
+*/

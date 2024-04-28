@@ -142,12 +142,7 @@ import {
   }
   
   const SamplesView = function () {
-    //const classes = useStyles()
     let navigate = useNavigate()
-    //const filesApi = useFiles()
-    //const bedFilesApi = useBedFiles()
-    //const { status, data = [] } = filesApi.query
-    //const { data: bedFiles = [] } = bedFilesApi.query
     const [data, setData] = useState([])
     const [medicalCenterName, setMedicalCenterName] = useState('');
     const [isLoading, setIsLoading] = useState(true)
@@ -198,7 +193,6 @@ import {
     const setFinishedInfo = (row) => {
       const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
       updateFinishInfo(id).then(() => {
-        //filesApi.refresh()
       })
     }
 
@@ -220,8 +214,6 @@ import {
           cnvAnalysis: 'xhmm+decont',
       }
       annotateFile(id, annotation, type).then((res) => {
-          //filesApi.refresh()
-          //setAnnotationModalOpen(false)
       })
     }
 
@@ -247,9 +239,9 @@ import {
             if (!row) return null
             // eslint-disable-next-line eqeqeq
             const isClinicianSame = row?.clinicianId == localStorage.getItem('clinicianId')
-            console.log(isClinicianSame)
-            console.log(row?.clinicianId)
-            console.log(localStorage.getItem('clinicianId'))
+            //console.log(isClinicianSame)
+            //console.log(row?.clinicianId)
+            //console.log(localStorage.getItem('clinicianId'))
             const handleClickConfirm = () => {
               deletePatient(row.patientId).then(() => {
                 setIsPatientDeleted(true);

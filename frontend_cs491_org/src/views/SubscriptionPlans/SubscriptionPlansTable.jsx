@@ -51,7 +51,7 @@ const SubscriptionPlansTable = () => {
     try {
       const response = await axios.post(url);
       console.log("SUCCESS")
-      console.log(response.data);
+      //console.log(response.data);
       // handle response
       enqueueSnackbar('Subscription added successfully!', {
         variant: 'success',

@@ -1,26 +1,11 @@
-import { Box, Card, CircularProgress, Divider, Grid, Stack, Tooltip, Typography } from '@material-ui/core'
+import { /*Box,*/ Card, CircularProgress, Divider, Grid, Stack, /*Tooltip,*/ Typography } from '@material-ui/core'
 import React from 'react'
-import Label from 'src/components/Label'
-import { getImpactDescription, groupImpacts } from 'src/utils/bio'
-import GeneSymbolsCell from 'src/views/VariantsView/Cells/GeneSymbolsCell'
+//import Label from 'src/components/Label'
+//import { getImpactDescription, groupImpacts } from 'src/utils/bio'
+//import GeneSymbolsCell from 'src/views/VariantsView/Cells/GeneSymbolsCell'
 import HgvsCCell from 'src/views/VariantsView/Cells/HgvsCCell'
 
-const renderImpactGroup = ({ values, color }) => {
-  if (values.length === 0) {
-    return null
-  }
 
-  const labels = values.map(({ label }) => label)
-  const descriptions = getImpactDescription(labels)
-
-  return descriptions.map((d) => (
-    <Grid item key={d}>
-      <Label color={color} variant="ghost">
-        {d}
-      </Label>
-    </Grid>
-  ))
-}
 
 const HgvsCBlock = function ({ hgvsC }) {
   return (
@@ -62,3 +47,22 @@ const HgvsCard = function ({ variant }) {
 }
 
 export default HgvsCard
+
+/*
+const renderImpactGroup = ({ values, color }) => {
+  if (values.length === 0) {
+    return null
+  }
+
+  const labels = values.map(({ label }) => label)
+  const descriptions = getImpactDescription(labels)
+
+  return descriptions.map((d) => (
+    <Grid item key={d}>
+      <Label color={color} variant="ghost">
+        {d}
+      </Label>
+    </Grid>
+  ))
+}
+*/

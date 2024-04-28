@@ -1,7 +1,7 @@
 import React from 'react'
-import Page from 'src/components/Page'
-import { Container, Grid } from '@material-ui/core'
-import ReactDOM from 'react-dom';
+//import Page from 'src/components/Page'
+//import { Container, Grid } from '@material-ui/core'
+//import ReactDOM from 'react-dom';
 import { CssBaseline } from '@mui/material';
 import InformationRetrievalChat from './InformationRetrievalChat'
 

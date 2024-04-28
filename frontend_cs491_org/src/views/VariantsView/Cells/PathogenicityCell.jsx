@@ -5,7 +5,6 @@ import ResponsiveGrid from 'src/components/ResponsiveGrid'
 import { isValid } from 'src/utils/validation'
 import ClinVarCell from 'src/views/VariantsView/Cells/ClinVarCell'
 import { LabelledFloat } from 'src/views/VariantsView/Cells/LabelledFloat'
-import LibraPathogenicityCell from 'src/views/VariantsView/Cells/LibraPathogenicityCell'
 import GroupedItems from 'src/components/GroupedItems'
 
 // TODO: Refactor LabelledFloat and stuff into one common component

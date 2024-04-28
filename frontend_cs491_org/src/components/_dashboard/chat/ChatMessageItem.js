@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 // material
 import { styled } from '@material-ui/core/styles'
-import { Avatar, Box, Typography } from '@material-ui/core'
+import { /*Avatar,*/ Box, Typography } from '@material-ui/core'
 
 // ----------------------------------------------------------------------
 

@@ -1,37 +1,24 @@
 // material-ui
 import {
-  Alert,
-  Autocomplete,
   Box,
   Button,
-  CardHeader,
-  CardContent,
-  Checkbox,
   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
-  MenuItem,
-  Select,
   Stack,
   Tab,
   Tabs,
-  TextField,
   Tooltip,
   Typography,
-  InputLabel,
-  FormControl,
-  Input,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
 // hooks
 import { useState, useMemo, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import useLazyEffect from 'src/hooks/useLazyEffect'
 import { useFiles } from 'src/api/file/list'
-import { updateDetails } from 'src/api/file'
 import ReactDOM from 'react-dom'
 
 // constants
@@ -39,14 +26,12 @@ import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
 
 // components
 import AnalysesTable from './AnalysesTable'
-import VariantOverview from './VariantOverview'
 import Tags from 'src/components/Tags'
 import Page from 'src/components/Page'
 import NavbarRoutes from '../VariantsView/NavbarRoutes'
-import GeneCov from './GeneCov'
 
 // api utils
-import { updateTrio, useHpo } from '../../api/vcf'
+import { useHpo } from '../../api/vcf'
 import { startJobsForVcfFile } from '../../api/vcf/job'
 import { startJobsForFastqFile } from '../../api/fastq'
 
@@ -58,77 +43,8 @@ const Loading = function () {
   )
 }
 
-const TrioSelector = function ({ options, trio = {}, sampleName, fileId }) {
-  const [motherOption, setMotherOption] = useState({
-    label: trio?.mother_sample_name,
-    value: { fileId: trio?.mother_file, sample: trio?.mother_sample_name },
-  })
-  const [fatherOption, setFatherOption] = useState({
-    label: trio?.father_sample_name,
-    value: { fileId: trio?.father_file, sample: trio?.father_sample_name },
-  })
-
-  useLazyEffect(() => {
-    updateTrio(fileId, { mother: motherOption.value, father: fatherOption.value })
-  }, [fileId, motherOption, fatherOption])
-
-  return (
-    <Grid container direction="row" spacing={1}>
-      <Grid item xs={6}>
-        <Autocomplete
-          options={options?.filter(
-            (o) =>
-              ![trio?.mother_sample_name, trio?.father_sample_name, sampleName, fatherOption.value.sample].includes(
-                o.value.sample,
-              ),
-          )}
-          renderInput={(params) => <TextField {...params} label="Mother" variant="outlined" />}
-          value={motherOption}
-          getOptionLabel={(option) => option.label || ''}
-          onChange={(_e, newMother) => {
-            newMother = newMother || {
-              label: '',
-              value: { fileId: undefined, sample: undefined },
-            }
-
-            setMotherOption(newMother)
-          }}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <Autocomplete
-          options={options.filter(
-            (o) =>
-              ![trio?.mother_sample_name, trio?.father_sample_name, sampleName, motherOption.value.sample].includes(
-                o.value.sample,
-              ),
-          )}
-          renderInput={(params) => <TextField {...params} label="Father" variant="outlined" />}
-          value={fatherOption}
-          getOptionLabel={(option) => option.label || ''}
-          onChange={(_e, newFather) => {
-            newFather = newFather || {
-              label: '',
-              value: { fileId: undefined, sample: undefined },
-            }
-
-            setFatherOption(newFather)
-          }}
-        />
-      </Grid>
-    </Grid>
-  )
-}
-
-const createTrioOptions = (rows) => {
-  return rows.map((row) => ({
-    label: row.sample_name,
-    value: { fileId: row.id, sample: row.sample_name },
-  }))
-}
 
 const CreateAnalysisDialog = function ({ open, onClose, onClickCreateAnalysis, fileType, title }) {
-  const [type, setType] = useState('Exome')
   const [snpChecked, setSnpChecked] = useState(false)
   const [cnvChecked, setCnvChecked] = useState(false)
   const [alignmentChecked, setAlignmentChecked] = useState(false)
@@ -172,33 +88,7 @@ const CreateAnalysisDialog = function ({ open, onClose, onClickCreateAnalysis, f
   )
 }
 
-const ManageHpo = function ({ fileId }) {
-  const [hpoList, setHpoList] = useHpo({ fileId })
-
-  return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
-}
-
 const TABS = ['Analysis']
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 1 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
 
 const VarTab = withStyles((theme) => ({
   root: {
@@ -236,37 +126,20 @@ const VariantDasboard = () => {
     setTab(newValue)
   }
 
+  /*
   const [gender, setGender] = useState(fileDetails?.details?.sex)
   const [startAge, setStartAge] = useState(fileDetails?.details?.symptoms_start_age)
   const [age, setAge] = useState(fileDetails?.details?.age)
   const [is_inbred, setIsInbred] = useState(fileDetails?.details?.is_inbred)
   const [is_progressing, setProgressing] = useState(fileDetails?.details?.is_progressing)
   const [notes, setNotes] = useState(fileDetails?.details?.notes)
-
-  const handleGenderChange = (e) => setGender(e.target.value)
-  const handleStartAgeChange = (e) => setStartAge(e.target.value)
-  const handleAgeChange = (e) => setAge(e.target.value)
+  */
+  //const handleGenderChange = (e) => setGender(e.target.value)
+  //const handleStartAgeChange = (e) => setStartAge(e.target.value)
+  //const handleAgeChange = (e) => setAge(e.target.value)
   /*  const handleIsInbredChange = (e) => setIsInbred(e.target.checked)
   const handleIsProgressingChange = (e) => setProgressing(e.target.checked) */
-  const handleSetNotes = (e) => setNotes(e.target.value)
-
-  const handleSave = () => {
-    const details = {
-      gender,
-      start_age: Number(startAge),
-      age: Number(age),
-      is_inbred,
-      is_progressing,
-      notes,
-    }
-    const { id, type } = fileDetails.vcf_id
-      ? { id: fileDetails.vcf_id, type: 'VCF' }
-      : { id: fileDetails.fastq_pair_id, type: 'FASTQ' }
-    updateDetails(id, details, type)
-    filesApi.refresh()
-  }
-
-  const trioOptions = createTrioOptions(data)
+  //const handleSetNotes = (e) => setNotes(e.target.value)
 
   const handleCreateAnalysis = async ({ cnv, snp, alignment }) => {
     const activeFileCopy = { ...fileDetails }
@@ -333,3 +206,121 @@ const VariantDasboard = () => {
 }
 
 export default VariantDasboard
+
+/*
+const createTrioOptions = (rows) => {
+  return rows.map((row) => ({
+    label: row.sample_name,
+    value: { fileId: row.id, sample: row.sample_name },
+  }))
+}
+const ManageHpo = function ({ fileId }) {
+  const [hpoList, setHpoList] = useHpo({ fileId })
+
+  return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
+}
+const TrioSelector = function ({ options, trio = {}, sampleName, fileId }) {
+  const [motherOption, setMotherOption] = useState({
+    label: trio?.mother_sample_name,
+    value: { fileId: trio?.mother_file, sample: trio?.mother_sample_name },
+  })
+  const [fatherOption, setFatherOption] = useState({
+    label: trio?.father_sample_name,
+    value: { fileId: trio?.father_file, sample: trio?.father_sample_name },
+  })
+
+  useLazyEffect(() => {
+    updateTrio(fileId, { mother: motherOption.value, father: fatherOption.value })
+  }, [fileId, motherOption, fatherOption])
+
+  return (
+    <Grid container direction="row" spacing={1}>
+      <Grid item xs={6}>
+        <Autocomplete
+          options={options?.filter(
+            (o) =>
+              ![trio?.mother_sample_name, trio?.father_sample_name, sampleName, fatherOption.value.sample].includes(
+                o.value.sample,
+              ),
+          )}
+          renderInput={(params) => <TextField {...params} label="Mother" variant="outlined" />}
+          value={motherOption}
+          getOptionLabel={(option) => option.label || ''}
+          onChange={(_e, newMother) => {
+            newMother = newMother || {
+              label: '',
+              value: { fileId: undefined, sample: undefined },
+            }
+
+            setMotherOption(newMother)
+          }}
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <Autocomplete
+          options={options.filter(
+            (o) =>
+              ![trio?.mother_sample_name, trio?.father_sample_name, sampleName, motherOption.value.sample].includes(
+                o.value.sample,
+              ),
+          )}
+          renderInput={(params) => <TextField {...params} label="Father" variant="outlined" />}
+          value={fatherOption}
+          getOptionLabel={(option) => option.label || ''}
+          onChange={(_e, newFather) => {
+            newFather = newFather || {
+              label: '',
+              value: { fileId: undefined, sample: undefined },
+            }
+
+            setFatherOption(newFather)
+          }}
+        />
+      </Grid>
+    </Grid>
+  )
+}
+*/
+
+/*
+function TabPanel(props) {
+  const { children, value, index, ...other } = props
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 1 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  )
+}
+*/
+/*
+
+const handleSave = () => {
+    const details = {
+      gender,
+      start_age: Number(startAge),
+      age: Number(age),
+      is_inbred,
+      is_progressing,
+      notes,
+    }
+    const { id, type } = fileDetails.vcf_id
+      ? { id: fileDetails.vcf_id, type: 'VCF' }
+      : { id: fileDetails.fastq_pair_id, type: 'FASTQ' }
+    updateDetails(id, details, type)
+    filesApi.refresh()
+  }
+
+  const trioOptions = createTrioOptions(data)
+
+  */
