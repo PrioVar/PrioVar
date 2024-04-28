@@ -120,18 +120,22 @@ export default function SideNav() {
                   Search Population
               </Button>
               {/**TODO */}
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.subscriptionPlans} sx={{ mt: 5 }}>
+              {clinicianId === -1 && (
+                <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.subscriptionPlans} sx={{ mt: 5 }}>
                   Subscription Plans
-              </Button>
+                </Button>
+              )}
               <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.aiSupport} sx={{ mt: 5 }}>
                   AI Support
               </Button>
               <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.informationRetrieval} sx={{ mt: 5 }}>
                   AI Information Retrieval
               </Button>
-              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.addClinician} sx={{ mt: 5 }}>
-                  Manage Clinicans
-              </Button>
+              {clinicianId === -1 && (
+                <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.addClinician} sx={{ mt: 5 }}>
+                  Manage Clinicians
+                </Button>
+              )}
               </Stack>
 
               {/*              <Stack spacing={1.5}>
