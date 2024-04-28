@@ -163,6 +163,8 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
   const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
   const [isFileDeleted, setIsFileDeleted] = useState(false)
+  const navigate = useNavigate()
+
   const fetchData = async () => {
     setIsLoading(true)
     try {
@@ -207,6 +209,10 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
         fetchData();
     }
   }, [isFileDeleted]);
+
+  const navigateToVariantDashboard = (fileName) => {
+    navigate(`/priovar/sample/${fileName}`)
+  }
 
   const handleAnnotationModelOpen = (row) => {
     setSelectedFile(row)
@@ -353,7 +359,7 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
             return (
               <Tooltip title="Analysis complete. Click to view results.">
                 <span> {/* Tooltip children need to be able to hold a ref */}
-                  <Button size="small" variant="contained" color="primary">
+                  <Button size="small" variant="contained" color="primary" onClick={() => navigateToVariantDashboard(row.fileName)}>
                     <AssessmentIcon /> View Results
                   </Button>
                 </span>
