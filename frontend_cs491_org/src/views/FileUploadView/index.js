@@ -1,11 +1,10 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Page from 'src/components/Page'
-import { Container, Grid, Box } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
 
 import FilesTable from './FilesTable'
 import UploadVCF from './UploadVCF'
-import VariantDashboard from './VariantDashboard'
 
 
 // TODO: UploadVCF and UploadFastq should be abstracted into a single component

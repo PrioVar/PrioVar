@@ -32,14 +32,12 @@ import {
   import useLazyEffect from 'src/hooks/useLazyEffect'
   import { useFiles } from 'src/api/file/list'
   import { updateDetails } from 'src/api/file'
-  import ReactDOM from 'react-dom'
   
   // constants
-  import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
+  import { HPO_OPTIONS } from 'src/constants'
   
   // components
   import Tags from 'src/components/Tags'
-  import Page from 'src/components/Page'
   
   
   // api utils

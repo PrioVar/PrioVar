@@ -1,29 +1,20 @@
 // material-ui
 import {
-  Alert,
   Autocomplete,
   Box,
   Button,
-  CardHeader,
-  CardContent,
-  Checkbox,
   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
-  MenuItem,
-  Select,
   Stack,
   Tab,
   Tabs,
   TextField,
   Tooltip,
   Typography,
-  InputLabel,
-  FormControl,
-  Input,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
 // hooks
@@ -39,11 +30,9 @@ import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
 
 // components
 import AnalysesTable from './AnalysesTable'
-import VariantOverview from './VariantOverview'
 import Tags from 'src/components/Tags'
 import Page from 'src/components/Page'
 import NavbarRoutes from '../VariantsView/NavbarRoutes'
-import GeneCov from './GeneCov'
 
 // api utils
 import { updateTrio, useHpo } from '../../api/vcf'

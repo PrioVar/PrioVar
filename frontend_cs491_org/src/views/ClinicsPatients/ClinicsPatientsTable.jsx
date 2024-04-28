@@ -193,7 +193,6 @@ import {
     const setFinishedInfo = (row) => {
       const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
       updateFinishInfo(id).then(() => {
-        //filesApi.refresh()
       })
     }
 
@@ -215,8 +214,6 @@ import {
           cnvAnalysis: 'xhmm+decont',
       }
       annotateFile(id, annotation, type).then((res) => {
-          //filesApi.refresh()
-          //setAnnotationModalOpen(false)
       })
     }
 
