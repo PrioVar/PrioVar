@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, TextField, FormGroup, FormControlLabel, Checkbox, RadioGroup, Radio } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { sortRows, filterRows } from './tableUtils.js'; // You need to create this utility file for sorting and filtering logic
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import SortIcon from '@mui/icons-material/Sort';
+import axios from 'axios';
+
 
 const NewVariantDashboardTable = () => {
     const { fileName } = useParams();
@@ -11,6 +13,8 @@ const NewVariantDashboardTable = () => {
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
     const [filterConfig, setFilterConfig] = useState({ gts: [], freqRange: [0, 1], scoreRange: [0, 1], strengths: [] });
     const [filterOpen, setFilterOpen] = useState(false);
+    const [termsOpen, setTermsOpen] = useState(false);
+    const [phenotypeTerms, setPhenotypeTerms] = useState([]);
 
     const data = useMemo(() => [
         { acmgScore: "ACMG: PM1, Strength: Pathogenic", variantPosition: "chr16:8654329", diseases: "Alzheimer's Disease, Dementia", geneSymbol: "APOE", gt: "het", frequency: 0.02, priovarScore: 0.95 },
@@ -34,6 +38,29 @@ const NewVariantDashboardTable = () => {
         { acmgScore: "ACMG: BP5, Strength: Pathogenic", variantPosition: "chr1:154073546", diseases: "Sickle Cell Disease, Huntington's Disease", geneSymbol: "APOE", gt: "het", frequency: 0.15, priovarScore: 0.8 },
         { acmgScore: "ACMG: PS2, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Amyotrophic Lateral Sclerosis, Sickle Cell Disease", geneSymbol: "HBB", gt: "hom", frequency: 0.3, priovarScore: 0.5 },
     ], []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/patient/termsByFileName/${fileName}`);
+                setPhenotypeTerms(response.data); // assuming the response is the list of strings directly
+            } catch (error) {
+                console.error('Failed to fetch phenotype terms', error);
+            }
+        };
+
+        if (termsOpen) {
+            fetchData();
+        }
+    }, [termsOpen, fileName]);
+
+    const handleOpenTerms = () => {
+        setTermsOpen(true);
+    };
+
+    const handleCloseTerms = () => {
+        setTermsOpen(false);
+    };
 
     const sortedData = useMemo(() => {
         let sortableData = filterRows(data, filterConfig);
@@ -137,7 +164,6 @@ const NewVariantDashboardTable = () => {
             <Button onClick={() => navigate(-1)} sx={{ ml:1, mt: 3 }}>
                 <ArrowBack sx={{ mr: 1 }} /> Go back to files
             </Button>
-
             <Dialog open={filterOpen} onClose={closeFilter}>
                 <DialogTitle>Filter Options</DialogTitle>
                 <DialogContent>
@@ -221,6 +247,28 @@ const NewVariantDashboardTable = () => {
                     All detected variants of '{fileName}'
                 </Typography>
                 <Button onClick={openFilter} sx={{ float: 'right' }}>Filter</Button>
+
+                <Button onClick={handleOpenTerms} sx={{ float: 'right', mr: 2 }}>See Phenotype Terms</Button>
+                <Dialog open={termsOpen} onClose={handleCloseTerms}>
+                    <DialogTitle> {phenotypeTerms.length} Phenotype Terms</DialogTitle>
+                    <DialogContent sx={{mt:2}}>
+                        <Typography variant="body1" component="div">
+                            {phenotypeTerms.length > 0 ? (
+                                <ul>
+                                    {phenotypeTerms.map((term, index) => (
+                                        <li key={index}>{term}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <Typography variant="subtitle1">No terms available</Typography>
+                            )}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseTerms}>Close</Button>
+                    </DialogActions>
+                </Dialog>
+
                 <Table sx={{ padding: 2, mt: 5 }}>
                     <TableHead>
                         <TableRow>
