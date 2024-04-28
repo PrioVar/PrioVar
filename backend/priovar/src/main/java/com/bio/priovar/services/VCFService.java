@@ -4,6 +4,7 @@ import com.bio.priovar.models.*;
 import com.bio.priovar.models.VCFFile.FileStatus;
 import com.bio.priovar.models.dto.VCFFileDTO;
 import com.bio.priovar.repositories.ClinicianRepository;
+import com.bio.priovar.repositories.PatientRepository;
 import com.bio.priovar.repositories.VCFRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,13 +25,17 @@ public class VCFService {
     private final ClinicianService clinicianService;
     private final MedicalCenterService medicalCenterService;
     private final ClinicianRepository clinicianRepository;
+    private final PatientRepository patientRepository;
 
     @Autowired
-    public VCFService(VCFRepository vcfRepository, ClinicianService clinicianService, MedicalCenterService medicalCenterService, ClinicianRepository clinicianRepository) {
+    public VCFService(VCFRepository vcfRepository, ClinicianService clinicianService, 
+                    MedicalCenterService medicalCenterService, ClinicianRepository clinicianRepository, 
+                    PatientRepository patientRepository) {
         this.clinicianService = clinicianService;
         this.vcfRepository = vcfRepository;
         this.medicalCenterService = medicalCenterService;
         this.clinicianRepository = clinicianRepository;
+        this.patientRepository = patientRepository;
     }
 
     public ResponseEntity<Long> uploadVCF(String base64Data, Long clinicianId, Long medicalCenterId) {
@@ -135,10 +140,10 @@ public class VCFService {
         }
         
         VCFFile vcfFile = vcfFileOptional.get();
-        
+        Patient patient = patientRepository.findByVcfFileId(vcfFileId);
         // Delete the VCF file
         vcfRepository.delete(vcfFile);
-        
+        patientRepository.delete(patient);
         return ResponseEntity.ok("VCF file deleted successfully");
     }
     

@@ -15,6 +15,7 @@ public interface PatientRepository extends Neo4jRepository<Patient, Long> {
     List<Patient> findByMedicalCenterId(Long medicalCenterId);
     List<Patient> findByName(String name);
     Patient findByGenesusId(String genesusId);
+    Patient findByVcfFileId(Long vcfFileId);
 
     @Query(
             "MATCH (p:Patient) " +
