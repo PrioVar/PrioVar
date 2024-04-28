@@ -20,7 +20,6 @@ import {
   import DeleteIcon from '@material-ui/icons/Delete'
   import { fDateTime } from 'src/utils/formatTime'
   import JobStateStatus from '../common/JobStateStatus'
-  import { deleteVcfFile } from '../../api/vcf'
   import { annotateFile, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients, deletePatient } from '../../api/file'
   import { PATH_DASHBOARD, ROOTS_PrioVar } from '../../routes/paths'
   import axios from '../../utils/axios'
