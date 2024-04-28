@@ -211,6 +211,7 @@ public class InitializerController {
         List<Patient> patients = clinician1.getPatients();
         patients.add(patient1);
         patients.add(patient2);
+        patients.add(patient3);
         clinician1.setPatients(patients);
         clinicianRepository.save(clinician1);
 
@@ -251,9 +252,9 @@ public class InitializerController {
         clinician3.setEmail("ayse.melek@liva.com");
         clinician3.setPassword("123");
         clinician3.setMedicalCenter(liva);
-        List<Patient> clinican3Patients = new ArrayList<>();
-        clinican3Patients.add(patient3);
-        clinician3.setPatients(clinican3Patients);
+        List<Patient> clinician3Patients = new ArrayList<>();
+        clinician3Patients.add(patient3);
+        clinician3.setPatients(clinician3Patients);
         List<VCFFile> clinician3VcfFiles = new ArrayList<>();
         clinician3VcfFiles.add(vcfFile4);
         clinician3.setVcfFiles(clinician3VcfFiles);
