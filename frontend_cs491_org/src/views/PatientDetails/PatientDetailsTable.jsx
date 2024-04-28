@@ -106,7 +106,7 @@ import {
 
             {/* Disease and Phenotype Terms in the next row */}
             <Grid item xs={4} mt={4}>
-            <Typography variant="h6">Disease: </Typography> {details.disease.diseaseName}
+            <Typography variant="h6">Disease: </Typography> {details.disease?.diseaseName}
             </Grid>
             <Grid item xs={4} mt={4}>
             <Typography variant="h6">Phenotype Terms:</Typography>

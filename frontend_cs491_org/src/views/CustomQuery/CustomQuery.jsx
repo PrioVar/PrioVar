@@ -1,66 +1,28 @@
 import {
     Box,
-    CircularProgress,
-    Stack,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Chip,
-    IconButton,
-    DialogContentText,
     Typography,
     Grid,
     TextField,
-    Tab,
-    Tabs,
-    Tooltip,
     InputLabel,
     FormControl,
-    Input,
     Select,
     MenuItem
   } from '@material-ui/core'
   import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
   import axios from 'axios';
-  import { makeStyles } from '@material-ui/styles'
-  import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
-  import MUIDataTable from 'mui-datatables'
-  import React, { useState, useMemo, useEffect } from 'react'
-  import { useNavigate } from 'react-router-dom'
-  import DeleteIcon from '@material-ui/icons/Delete'
-  import { fDateTime } from 'src/utils/formatTime'
-  import JobStateStatus from '../common/JobStateStatus'
-  import { deleteVcfFile } from '../../api/vcf'
-  import { deleteFastqFile } from '../../api/fastq'
-  import { useFiles, annotateFile, useBedFiles, updateFinishInfo, updateFileNotes } from '../../api/file'
-  import { PATH_DASHBOARD } from '../../routes/paths'
-  import { Link as RouterLink } from 'react-router-dom'
-  import ExpandOnClick from 'src/components/ExpandOnClick'
-  import AnalysedCheckbox from '../common/AnalysedCheckbox'
+  import React, { useState } from 'react'
   import { useParams } from 'react-router-dom'
 
   import Tags from 'src/components/Tags'
   // api utils
-  import { updateTrio, useHpo } from '../../api/vcf'
+  import { useHpo } from '../../api/vcf'
   // constants
-  import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
+  import { HPO_OPTIONS } from 'src/constants'
   
   const CustomQueryTable = function () {
     //const classes = useStyles()
-    const bedFilesApi = useBedFiles()
-    const { data: bedFiles = [] } = bedFilesApi.query
-    const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null)
     const { fileId, sampleName } = useParams()
-    const filesApi = useFiles()
-    const { status, data = [] } = filesApi.query
-    const fileDetails = useMemo(
-      () => data.find((f) => f.vcf_id === fileId || f.fastq_pair_id === fileId),
-      [data, fileId, filesApi],
-    )
 
     //
     const [gene, setGene] = useState([]);
