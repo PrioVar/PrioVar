@@ -142,12 +142,7 @@ import {
   }
   
   const SamplesView = function () {
-    //const classes = useStyles()
     let navigate = useNavigate()
-    //const filesApi = useFiles()
-    //const bedFilesApi = useBedFiles()
-    //const { status, data = [] } = filesApi.query
-    //const { data: bedFiles = [] } = bedFilesApi.query
     const [data, setData] = useState([])
     const [medicalCenterName, setMedicalCenterName] = useState('');
     const [isLoading, setIsLoading] = useState(true)
