@@ -166,7 +166,7 @@ import {
     //const { data: bedFiles = [] } = bedFilesApi.query
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
-  
+    const [isPatientDeleted, setIsPatientDeleted] = useState(false)
     const fetchClinicianName = async () => {
       /*
       const clinicianId = localStorage.getItem('clinicianId');
@@ -272,6 +272,12 @@ import {
       fetchAllPatients();
     }, [])
 
+    useEffect(() => {
+      if (isPatientDeleted) {
+        fetchAllPatients();
+      }
+    }, [isPatientDeleted]);
+
     const COLUMNS = [
       {
         name: 'delete',
@@ -285,6 +291,7 @@ import {
   
             const handleClickConfirm = () => {
               deletePatient(row.patientId).then(() => {
+                setIsPatientDeleted(true);
               });
             }
   

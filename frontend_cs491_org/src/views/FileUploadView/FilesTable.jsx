@@ -240,8 +240,9 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
           if (!row) return null
 
           const handleClickConfirm = () => {
-            deleteVCF(row.vcfFileId)
-            setIsFileDeleted(true);
+            deleteVCF(row.vcfFileId).then(() => {
+              setIsFileDeleted(true);
+            });
           }
 
           return <DeleteFileButton onClickConfirm={handleClickConfirm} />
