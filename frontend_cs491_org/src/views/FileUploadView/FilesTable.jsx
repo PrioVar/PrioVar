@@ -22,6 +22,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { fDateTime } from 'src/utils/formatTime'
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import JobStateStatus from '../common/JobStateStatus'
 import { deleteVcfFile } from '../../api/vcf'
 import axios from '../../utils/axios'
@@ -340,7 +341,27 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
           //const status = getStatusLabel(row)
           const status = row?.fileStatus
           const isAnnotated = status === 'FILE_ANNOTATED'
-          if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
+          if (status === 'ANALYSIS_DONE') {
+            return (
+              <Tooltip title="Analysis complete. Click to view results.">
+                <span> {/* Tooltip children need to be able to hold a ref */}
+                  <Button size="small" variant="contained" color="primary">
+                    <AssessmentIcon /> View Results
+                  </Button>
+                </span>
+              </Tooltip>
+            );
+          }
+          if (status === 'ANALYSIS_IN_PROGRESS') {
+            return (
+                <Tooltip title="Analysis in progress">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <CircularProgress size={24} />
+                    <Typography variant="body2" style={{ marginLeft: 8 }}>Analysis in progress</Typography>
+                    </div>
+                </Tooltip>
+            );
+          }
           return (
             <Tooltip title={isAnnotated ? "File already annotated" : "Click to annotate file"}>
                 <span> {/* Tooltip children need to be able to hold a ref */}

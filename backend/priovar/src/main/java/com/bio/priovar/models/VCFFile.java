@@ -33,7 +33,8 @@ public class VCFFile {
 
     // Enum to represent file status
     public enum FileStatus {
-        ANNOTATION_RUNNING,
+        ANALYSIS_DONE,
+        ANALYSIS_IN_PROGRESS,
         FILE_ANNOTATED,
         FILE_WAITING
     }
