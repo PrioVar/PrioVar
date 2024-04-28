@@ -56,7 +56,7 @@ export default function AccountPopover() {
   const isMountedRef = useIsMountedRef()
   const { user, logout } = useAuth()
   const [open, setOpen] = useState(false)
-  const [displayName, setDisplayName] = useState({data: ''})
+  const [displayName, setDisplayName] = useState(null)
   
   const handleOpen = () => {
     setOpen(true)
@@ -66,8 +66,16 @@ export default function AccountPopover() {
   }
   const fetchClinicianName = async () => {
     try {
-      const response = await fetchCurrentClinicianName()
-      setDisplayName(response.data)
+      console.log("fetching clinician name")
+      console.log(localStorage.getItem('clinicianId'))
+      console.log(-1)
+      if(localStorage.getItem('clinicianId') != -1) {
+        const response = await fetchCurrentClinicianName()
+        setDisplayName(response.data)
+      }
+      else {
+        setDisplayName("")
+      }
   
     } catch (error) {
       console.error(error);

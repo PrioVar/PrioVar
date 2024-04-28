@@ -34,6 +34,9 @@ import { MIconButton } from '../../@material-extend'
 
 export default function LoginForm({ callerPage }) {
   // const { login } = useAuth()
+  localStorage.setItem('clinicianId', -1)
+  localStorage.setItem('healthCenterId', -1)
+  localStorage.setItem('adminId', -1)
   const isMountedRef = useIsMountedRef()
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [showPassword, setShowPassword] = useState(false)
