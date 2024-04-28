@@ -464,7 +464,7 @@ import {
           (<CircularProgress/>) : 
           (
             <>
-            <Box display="flex" justifyContent="flex-end" mt={2}> 
+            <Box display="flex" justifyContent="flex-end" mt={4}> 
               <Box mr={2}>
                 <Button 
                     variant="contained" 

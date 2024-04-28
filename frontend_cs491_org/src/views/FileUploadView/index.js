@@ -23,15 +23,23 @@ const UploadView = function () {
     };
 
   return (
-    <Page title="Upload VCF | PrioVar">
-      <Grid container spacing={5}>
+    <Page title="Upload VCF | PrioVar" style={{
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100vh', 
+        backgroundImage: 'url("/static/new_images/another_dna.png")', 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center center',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adds white transparency
+        backgroundBlendMode: 'overlay' // This blends the background color with the image
+      }}>
+      <Grid container spacing={5} >
         <Grid item xs={6}>
           <UploadVCF onUploadComplete={handleFileUploadComplete}/>
         </Grid>
         <Grid item xs={6}>
-        <Box width={330} mt={1} ml={25}>
-            <img src="/static/new_images/dna-removebg-preview.png"/>
-          </Box>
+
         </Grid>
 
         <Grid item xs={12}>
