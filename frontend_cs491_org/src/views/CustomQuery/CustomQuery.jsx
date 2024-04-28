@@ -50,12 +50,12 @@ import {
             ageIntervalEnd: ageIntervalEnd
         };
 
-        console.log("body:")
-        console.log(requestBody)
+        //console.log("body:")
+        //console.log(requestBody)
         try {
             const response = await axios.post('http://localhost:8080/customQuery', requestBody);
             console.log("SUCCESS!")
-            console.log(response)
+            //console.log(response)
             setRows(response.data);
     
           } catch (error) {

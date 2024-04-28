@@ -29,7 +29,7 @@ const GeneCov = ({ fileId }) => {
     setLoading(true)
     const data = await getCoverage(fileId, gene, coverage)
     setChartData(data)
-    console.log(data)
+    //console.log(data)
     const biggest = data.reduce((prev, current) =>
       prev.transcript_result.length > current.transcript_result.length ? prev : current,
     )

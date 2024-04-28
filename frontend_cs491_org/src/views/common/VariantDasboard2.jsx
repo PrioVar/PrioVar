@@ -1,7 +1,6 @@
 // material-ui
 import {
     Alert,
-    Autocomplete,
     Box,
     Button,
     CardHeader,
@@ -29,24 +28,18 @@ import {
   // hooks
   import React, { useState, useMemo, useEffect } from 'react'
   import { useParams } from 'react-router-dom'
-  import useLazyEffect from 'src/hooks/useLazyEffect'
   import { useFiles } from 'src/api/file/list'
-  import { updateDetails } from 'src/api/file'
-  import ReactDOM from 'react-dom'
   import { addPatientWithPhenotype } from '../../api/file'
   // constants
-  import { HPO_OPTIONS, DASHBOARD_CONFIG } from 'src/constants'
+  import { HPO_OPTIONS } from 'src/constants'
   
   // components
   import Tags from 'src/components/Tags'
-  import Page from 'src/components/Page'
-  import axios from 'axios';
 
   
   
   // api utils
-  import { updateTrio, useHpo } from '../../api/vcf'
-  import { startJobsForVcfFile } from '../../api/vcf/job'
+  import { useHpo } from '../../api/vcf'
   
   const Loading = function () {
     return (
@@ -290,7 +283,7 @@ import {
     const { status, data = [] } = filesApi.query
     const fileDetails = useMemo(
       () => data.find((f) => f.vcf_id === fileId || f.fastq_pair_id === fileId),
-      [data, fileId, filesApi],
+      [data, fileId],
     )
   
     const [isAnalysisOpen, setAnalysisOpen] = useState(false)

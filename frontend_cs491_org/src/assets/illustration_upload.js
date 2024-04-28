@@ -9,7 +9,7 @@ export default function UploadIllustration({ ...other }) {
 
   return (
     <Box {...other} sx={{ paddingLeft: theme.spacing(1) }}>
-        <img src="/static/new_images/upload_file.png" x="0" y="0" height="150px" width="150px"/>
+        <img alt="illustration_upload" src="/static/new_images/upload_file.png" x="0" y="0" height="150px" width="150px"/>
     </Box>
   )
 }
