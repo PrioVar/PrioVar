@@ -408,7 +408,7 @@ import {
       },
       {
         name: 'similar_patients',
-        label: 'See similar patients',
+        label: 'Find similar patients',
         options: {
           filter: false,
           sort: true,
