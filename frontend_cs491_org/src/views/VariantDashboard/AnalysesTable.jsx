@@ -20,7 +20,7 @@ const GoToSnpAnalysis = function ({ fileId, sampleName }) {
   const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate(`/libra/variants/${fileId}/${sampleName}`)
+    navigate(`/priovar/variants/${fileId}/${sampleName}`)
   }
 
   return (

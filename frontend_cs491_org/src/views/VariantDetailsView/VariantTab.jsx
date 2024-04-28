@@ -57,7 +57,7 @@ const VariantTab = function ({ data }) {
       <Grid container>
         {renderColumn(
           'SAMPLE',
-          <Link target="_blank" href={`/libra/variants/${fileId}/${sampleName}`}>
+          <Link target="_blank" href={`/priovar/variants/${fileId}/${sampleName}`}>
             {sampleName}
           </Link>,
         )}
