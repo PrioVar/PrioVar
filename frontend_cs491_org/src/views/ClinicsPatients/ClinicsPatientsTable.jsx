@@ -154,7 +154,7 @@ import {
     const [isLoading, setIsLoading] = useState(true)
     const [isAnnotationModalOpen, setAnnotationModalOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
-    
+    const [isPatientDeleted, setIsPatientDeleted] = useState(false)
     const fetchData = async () => {
       setIsLoading(true)
       try {
@@ -189,6 +189,12 @@ import {
       fetchMedicalCenterName();
       fetchData();
     }, [])
+
+    useEffect(() => {
+      if (isPatientDeleted) {
+        fetchData();
+      }
+    }, [isPatientDeleted]);
 
     const setFinishedInfo = (row) => {
       const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
@@ -247,6 +253,7 @@ import {
             console.log(localStorage.getItem('clinicianId'))
             const handleClickConfirm = () => {
               deletePatient(row.patientId).then(() => {
+                setIsPatientDeleted(true);
               });
             }
   
