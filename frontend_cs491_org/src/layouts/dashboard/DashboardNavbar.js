@@ -6,7 +6,6 @@ import axios from 'axios';
 // material
 import { alpha, styled } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import { Link as RouterLink } from 'react-router-dom'
 // components
 import Logo from '../../components/Logo'
 import { MHidden } from '../../components/@material-extend'
@@ -84,9 +83,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
 
         <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
         {/* Logo inside RouterLink to remain clickable */}
-        <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
-            <Logo />
-        </Box>
+        <Logo />
         {/* Text outside RouterLink to be non-clickable */}
         {fetchedText && <span style={{ marginLeft: '10px' ,color: 'black'}}>{fetchedText} Health Center</span>}
         </Box>
