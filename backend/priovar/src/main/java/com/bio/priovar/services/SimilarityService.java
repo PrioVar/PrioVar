@@ -1,12 +1,9 @@
 package com.bio.priovar.services;//service for similarity
 
-import com.bio.priovar.models.Patient;
-import com.bio.priovar.models.SimilarityReport;
-import com.bio.priovar.models.SimilarityStrategy;
-import com.bio.priovar.models.BasicHPOCosineSimilarity;
+import com.bio.priovar.models.*;
 
+import com.bio.priovar.repositories.PairSimilarityRepository;
 import com.bio.priovar.repositories.SimilarityReportRepository;
-import com.bio.priovar.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -16,6 +13,7 @@ import java.util.List;
 
 @Service
 public class SimilarityService {
+    private PairSimilarityRepository pairSimilarityRepository;
     private SimilarityReportRepository similarityReportRepository;
 
     //patient service
@@ -23,7 +21,8 @@ public class SimilarityService {
 
     //constructor
     @Autowired
-    public SimilarityService(SimilarityReportRepository similarityReportRepository, PatientService patientService) {
+    public SimilarityService(PairSimilarityRepository pairSimilarityRepository, SimilarityReportRepository similarityReportRepository, PatientService patientService) {
+        this.pairSimilarityRepository = pairSimilarityRepository;
         this.similarityReportRepository = similarityReportRepository;
         this.patientService = patientService;
     }
@@ -37,7 +36,7 @@ public class SimilarityService {
     }
 
     public List<SimilarityReport> findAllSimilarityReportsByPatientId(Long id) {
-        return similarityReportRepository.findAllSimilarityReportsByPatientId(id);
+        return similarityReportRepository.findAllByPrimaryPatientId(id);
     }
 
     public void save(SimilarityReport similarityReport) {
@@ -48,7 +47,7 @@ public class SimilarityService {
         similarityReportRepository.delete(similarityReport);
     }
 
-    //find similar patients
+    // find similar patients
     public List<Patient> getSimilarPatientsByBasicCosine(long primaryPatientId, float treshold){
 
         // get all patients from patient service using get all patients
@@ -60,7 +59,7 @@ public class SimilarityService {
         // get primary patient
         Patient primaryPatient = patientService.getPatientById(primaryPatientId);
 
-        //patinet list to return
+        // patient list to return
         List<Patient> similarPatients = new ArrayList<Patient>();
 
         // get all similarity scores above treshold
@@ -75,16 +74,17 @@ public class SimilarityService {
                 System.out.println("Similarity score: " + similarityScore);
                 System.out.println("Patient: " + patient.getName());
 
-                //cretae similarity report
-                SimilarityReport similarityReport = new SimilarityReport();
-                similarityReport.setPrimaryPatient(primaryPatient);
-                similarityReport.setSecondaryPatient(patient);
-                similarityReport.setTotalScore(similarityScore);
-                similarityReport.setSimilarityStrategy("BasicHPOCosineSimilarity");
-                similarityReport.setStatus("pending");
 
-                //save similarity report
-                save(similarityReport);
+                PairSimilarity pairSimilarity = new PairSimilarity();
+                pairSimilarity.setPrimaryPatient(primaryPatient);
+                pairSimilarity.setSecondaryPatient(patient);
+                pairSimilarity.setTotalScore(similarityScore);
+                pairSimilarity.setStatus(PairSimilarity.REPORT_STATUS.PENDING);
+                pairSimilarity.setPhenotypeScore(similarityScore);
+                pairSimilarity.setSimilarityStrategy("BasicHPOCosineSimilarity");
+
+                // save pair similarity
+                pairSimilarityRepository.save(pairSimilarity);
 
                 //add patient to similar patients list
                 similarPatients.add(patient);
@@ -146,7 +146,7 @@ public class SimilarityService {
     }
 
     // find most similar patientS by cosine
-    public List<SimilarityReport> findMostSimilarPatientsByCosine(Long primaryPatientId, int numberOfPatients) {
+    public SimilarityReport findMostSimilarPatientsByCosine(Long primaryPatientId, int numberOfPatients) {
 
         //from all patients find the most similar patient
         List<Patient> allPatients = patientService.getAllPatients();
@@ -154,7 +154,7 @@ public class SimilarityService {
         //get primary patient
         Patient primaryPatient = patientService.getPatientById(primaryPatientId);
 
-        // vectoize if needed
+        // vectorize if needed
         if (primaryPatient.getPhenotypeVector() == null) {
             patientService.vectorizePatientPhenotype(primaryPatientId);
         }
@@ -205,33 +205,33 @@ public class SimilarityService {
             }
         }
 
-        // create similarity reports
-        List<SimilarityReport> similarityReports = new ArrayList<SimilarityReport>();
+        SimilarityReport similarityReport = new SimilarityReport();
+        similarityReport.setPrimaryPatient(primaryPatient);
+        List<PairSimilarity> pairSimilarities = new ArrayList<PairSimilarity>();
 
         for (Pair<Patient, Float> pair : mostSimilarPatientsAndScores) {
             Patient patient = pair.getFirst();
             float currentSimilarityScore = pair.getSecond();
 
-            //cretae similarity report
-            SimilarityReport similarityReport = new SimilarityReport();
-            similarityReport.setPrimaryPatient(primaryPatient);
-            similarityReport.setSecondaryPatient(patient);
-            similarityReport.setTotalScore(currentSimilarityScore);
-            similarityReport.setSimilarityStrategy("BasicHPOCosineSimilarity");
-            similarityReport.setStatus("pending");
-            similarityReport.setPhenotypeScore(currentSimilarityScore);
+            PairSimilarity pairSimilarity = new PairSimilarity();
+            pairSimilarity.setPrimaryPatient(primaryPatient);
+            pairSimilarity.setSecondaryPatient(patient);
+            pairSimilarity.setTotalScore(currentSimilarityScore);
+            pairSimilarity.setStatus(PairSimilarity.REPORT_STATUS.PENDING);
+            pairSimilarity.setPhenotypeScore(currentSimilarityScore);
+            pairSimilarity.setSimilarityStrategy("BasicHPOCosineSimilarity");
 
 
             Boolean isReportExist = false;
-            //check if the patient pair has already been calculated by getting the similarity reportss
-            List<SimilarityReport> similarityReports1 = similarityReportRepository.findAllSimilarityReportsByPatientId(primaryPatientId);
-            for (SimilarityReport similarityReport1 : similarityReports1) {
-                if (similarityReport1.getSecondaryPatient().getId().equals(patient.getId()) || similarityReport1.getPrimaryPatient().getId().equals(patient.getId()) ){
+            //check if the patient pair has already been calculated by getting the similarity reports
+            List<PairSimilarity> pairSimilarities1 = pairSimilarityRepository.findAllPairSimilaritiesByPatientId(primaryPatientId);
+            for ( PairSimilarity pairSimilarity1 : pairSimilarities1 ) {
+                if ( pairSimilarity1.getSecondaryPatient().getId().equals(patient.getId()) || pairSimilarity1.getPrimaryPatient().getId().equals(patient.getId()) ){
                     //if their similarity strategy is the same, then just update the phenotype score and total score
-                    if (similarityReport1.getSimilarityStrategy().equals("BasicHPOCosineSimilarity")) {
-                        similarityReport1.setPhenotypeScore(currentSimilarityScore);
-                        similarityReport1.setTotalScore(currentSimilarityScore);
-                        similarityReportRepository.save(similarityReport1);
+                    if (pairSimilarity1.getSimilarityStrategy().equals("BasicHPOCosineSimilarity")) {
+                        pairSimilarity1.setPhenotypeScore(currentSimilarityScore);
+                        pairSimilarity1.setTotalScore(currentSimilarityScore);
+                        pairSimilarityRepository.save(pairSimilarity1);
                         isReportExist = true;
                         break;
                     }
@@ -240,14 +240,17 @@ public class SimilarityService {
 
             //save similarity report
             if (!isReportExist) {
-                save(similarityReport);
+                pairSimilarityRepository.save(pairSimilarity);
             }
 
             //add similarity report to the list
-            similarityReports.add(similarityReport);
+            pairSimilarities.add(pairSimilarity);
         }
 
-        return similarityReports;
+        similarityReport.setPairSimilarities(pairSimilarities);
+        save(similarityReport);
+
+        return similarityReport;
     }
 
 
