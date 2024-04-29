@@ -47,11 +47,11 @@ import {
             const response = await axios.get(`${ROOTS_PrioVar}/similarityReport/mostSimilarPatients/${patientId}/${resultCount}`);
             console.log("SUCCESS!")
             //console.log(response)
-            setRows(response.data);
+            setRows(response.data.pairSimilarities);
     
           } catch (error) {
             console.log("FAIL!")
-            console.error('similat patients query error:', error.response);
+            console.error('similar patients query error:', error.response);
           }
           finally {
             setSearching(false);
