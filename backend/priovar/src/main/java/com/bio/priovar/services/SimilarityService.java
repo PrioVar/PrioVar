@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,6 @@ public class SimilarityService {
     private PairSimilarityRepository pairSimilarityRepository;
     private SimilarityReportRepository similarityReportRepository;
 
-    //patient service
     private PatientService patientService;
 
     //constructor
@@ -29,10 +30,6 @@ public class SimilarityService {
 
     public SimilarityReport findSimilarityReportById(Long id) {
         return similarityReportRepository.findSimilarityReportById(id);
-    }
-
-    public List<SimilarityReport> findAllSimilarityReportsByPrimaryPatientId(Long id) {
-        return similarityReportRepository.findAllSimilarityReportsByPrimaryPatientId(id);
     }
 
     public List<SimilarityReport> findAllSimilarityReportsByPatientId(Long id) {
@@ -207,6 +204,7 @@ public class SimilarityService {
 
         SimilarityReport similarityReport = new SimilarityReport();
         similarityReport.setPrimaryPatient(primaryPatient);
+        similarityReport.setCreatedAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         List<PairSimilarity> pairSimilarities = new ArrayList<PairSimilarity>();
 
         for (Pair<Patient, Float> pair : mostSimilarPatientsAndScores) {
@@ -258,5 +256,16 @@ public class SimilarityService {
 
     public List<SimilarityReport> getAllSimilarityReports() {
         return similarityReportRepository.findAll();
+    }
+
+    public List<SimilarityReport> findNewestSimilarityReportsByPatientId(Long id, int numberOfReports) {
+        // find the newest numberOfReports similarity reports by patient id using createdAt
+        List<SimilarityReport> similarityReports = similarityReportRepository.findAllByPrimaryPatientId(id);
+
+        // sort the similarity reports by createdAt
+        similarityReports.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
+
+        // return the first numberOfReports similarity reports
+        return similarityReports.subList(0, Math.min(numberOfReports, similarityReports.size()));
     }
 }
