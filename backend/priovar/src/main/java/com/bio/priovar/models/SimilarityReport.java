@@ -12,6 +12,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Getter
@@ -23,6 +24,8 @@ public class SimilarityReport {
     @GeneratedValue
     @Id
     private Long id;
+
+    private OffsetDateTime createdAt;
 
     @Relationship(type = "SEARCHED_PATIENT", direction = Relationship.Direction.OUTGOING)
     @JsonSerialize(using = PatientLiteSerializer.class)

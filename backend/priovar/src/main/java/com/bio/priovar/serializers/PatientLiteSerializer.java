@@ -22,6 +22,7 @@ public class PatientLiteSerializer extends StdSerializer<Patient> {
         jgen.writeNumberField("id", patient.getId());
         jgen.writeStringField("name", patient.getName());
         jgen.writeStringField("sex", patient.getSex());
+        jgen.writeNumberField("age", patient.getAge());
         jgen.writeEndObject();
     }
 }
