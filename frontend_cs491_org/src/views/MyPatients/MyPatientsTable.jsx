@@ -464,17 +464,8 @@ import {
           (<CircularProgress/>) : 
           (
             <>
+            
             <Box display="flex" justifyContent="flex-end" mt={4}> 
-              <Box mr={2}>
-                <Button 
-                    variant="contained" 
-                    color="info" 
-                    size="small"
-                >
-                    <Add /> 
-                    Add Patient NOT IMPLEMENTED YET
-                </Button>
-              </Box>
               <Box mr={2}>
                 <Button 
                     variant="contained" 
