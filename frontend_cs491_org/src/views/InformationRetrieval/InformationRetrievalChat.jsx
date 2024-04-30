@@ -41,12 +41,14 @@ function InformationRetrievalChat() {
                 {
                     author: 'clinician',
                     content: chat.question,
-                    type: 'text'
+                    type: 'text',
+                    timestamp: formatTime(chat.timestamp)
                 },
                 {
                     author: 'bot',
                     content: chat.response,
-                    type: 'text'
+                    type: 'text',
+                    timestamp: formatTime(chat.timestamp)
                 }
             ]);
             setMessages(messages => [...messages, ...chatHistoryMessages]);
@@ -139,7 +141,7 @@ function InformationRetrievalChat() {
                             display: 'block', // Ensure it's a block to appear on a new line
                             color: 'black',
                             fontSize: '0.75rem',
-                            marginTop: '2px' // Add a little space between the paper and the timestamp
+                            marginTop: '1px' // Add a little space between the paper and the timestamp
                         }}>
                             {message.timestamp}
                         </Typography>
