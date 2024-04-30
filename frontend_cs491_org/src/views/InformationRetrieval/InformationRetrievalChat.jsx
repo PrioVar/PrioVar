@@ -40,8 +40,12 @@ function InformationRetrievalChat() {
         setLoading(true);
 
         try {
-            const endpoint = `${ROOTS_Flask}/search-graph?question=${encodeURIComponent(input)}`;
-            const response = await axios.post(endpoint);
+            // const endpoint = `${ROOTS_Flask}/search-graph?question=${encodeURIComponent(input)}`;
+            //const response = await axios.post(endpoint);
+            const response = await axios.post(`${ROOTS_Flask}/search-graph`, {
+                question: input,
+                healthCenterId: localStorage.getItem('healthCenterId')
+            });
 
             const botMessage = {
                 author: 'bot',

@@ -4,6 +4,7 @@ from langchain.chains import GraphCypherQAChain
 from langchain_openai import ChatOpenAI
 from langchain_community.graphs import Neo4jGraph
 from config import uri, username, password, API_KEY
+from datetime import datetime
 
 
 class KnowledgeGraphQA:
@@ -31,8 +32,38 @@ class KnowledgeGraphQA:
         # Initialize the Neo4j driver
         self.driver = GraphDatabase.driver(uri, auth=(username, password))
 
+    def close(self):
+        # Close the Neo4j connection
+        self.driver.close()
 
-def get_answer(question: str) -> str:
+    def create_chat_in_db(self, medical_center_id, question, response):
+        with self.driver.session() as session:
+            result = session.write_transaction(
+                self._create_and_link_chat, medical_center_id, question, response
+            )
+            return result
+
+    @staticmethod
+    def _create_and_link_chat(tx, medical_center_id, question, response):
+        timestamp = datetime.utcnow().isoformat()  # ISO 8601 format
+        query = (
+            "MATCH (mc:MedicalCenter) WHERE ID(mc) = $medical_center_id "
+            "CREATE (c:GraphChat {question: $question, timestamp: $timestamp, "
+            "response: $response}) "
+            "MERGE (c)-[:HAS_GRAPH_CHAT]->(mc) "
+            "RETURN c"
+        )
+        parameters = {
+            "medical_center_id": int(medical_center_id),
+            "question": question,
+            "timestamp": timestamp,
+            "response": response
+        }
+        result = tx.run(query, parameters)
+        return result.single()[0]
+
+
+def get_answer(question: str, medical_center_id: int) -> str:
     """
     Retrieves the answer by querying the knowledge graph using the provided question.
 
@@ -41,5 +72,10 @@ def get_answer(question: str) -> str:
     :return: Answer as a string
     """
     kg_qa = KnowledgeGraphQA()
+
     answer = kg_qa.chain.invoke(" " + question + " ")
+    print(answer['result'])
+    kg_qa.create_chat_in_db(medical_center_id, question, answer['result'])
+    kg_qa.close()
+
     return answer
