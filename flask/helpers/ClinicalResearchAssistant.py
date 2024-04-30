@@ -7,7 +7,7 @@ from openai import OpenAI
 from transformers import BertTokenizer, BertModel
 from config import API_KEY, uri, username, password
 from neo4j import GraphDatabase
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import torch
 import faiss
 import numpy as np
@@ -110,7 +110,9 @@ class ClinicalResearchAssistant:
 
     @staticmethod
     def _create_and_link_chat(tx, medical_center_id, question, response_data):
-        timestamp = datetime.utcnow().isoformat()  # ISO 8601 format
+        utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
+        utc_plus_3 = timezone(timedelta(hours=3))
+        timestamp = utc_now.astimezone(utc_plus_3).isoformat()
         query = (
             "MATCH (mc:MedicalCenter) WHERE ID(mc) = $medical_center_id "
             "CREATE (c:Chat {question: $question, timestamp: $timestamp, "

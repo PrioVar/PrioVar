@@ -26,7 +26,6 @@ def search_graph():
     data = request.get_json()
     question = data.get('question')
     medical_center_id = data.get('healthCenterId')
-    print("medical_center_id: ", medical_center_id)
 
     if question is None:
         return "No question provided"
