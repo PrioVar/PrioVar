@@ -38,10 +38,10 @@ class KnowledgeGraphQA:
 
     def create_chat_in_db(self, medical_center_id, question, response):
         with self.driver.session() as session:
-            result = session.write_transaction(
+            result, timestamp = session.write_transaction(
                 self._create_and_link_chat, medical_center_id, question, response
             )
-            return result
+            return result, timestamp
 
     @staticmethod
     def _create_and_link_chat(tx, medical_center_id, question, response):
@@ -62,10 +62,10 @@ class KnowledgeGraphQA:
             "response": response
         }
         result = tx.run(query, parameters)
-        return result.single()[0]
+        return result.single()[0], timestamp
 
 
-def get_answer(question: str, medical_center_id: int) -> str:
+def get_answer(question: str, medical_center_id: int) -> dict:
     """
     Retrieves the answer by querying the knowledge graph using the provided question.
 
@@ -76,8 +76,7 @@ def get_answer(question: str, medical_center_id: int) -> str:
     kg_qa = KnowledgeGraphQA()
 
     answer = kg_qa.chain.invoke(" " + question + " ")
-    print(answer['result'])
-    kg_qa.create_chat_in_db(medical_center_id, question, answer['result'])
+    result, timestamp = kg_qa.create_chat_in_db(medical_center_id, question, answer['result'])
     kg_qa.close()
 
-    return answer
+    return {"result": answer['result'], "timestamp": timestamp}
