@@ -62,6 +62,17 @@ function InformationRetrievalChat() {
         setInput(event.target.value);
     };
 
+    const formatTime = (timestamp) => {
+        console.log(timestamp)
+        const date = new Date(timestamp);
+    
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+    
+        // Return formatted string, padding minutes with leading zero if necessary
+        return `${hours}:${minutes.toString().padStart(2, '0')}`;
+    };
+
     const sendMessage = async () => {
         if (!input.trim()) return;
         const userMessage = {
@@ -84,7 +95,8 @@ function InformationRetrievalChat() {
             const botMessage = {
                 author: 'bot',
                 content: response.data.result,
-                type: 'text'
+                type: 'text',
+                timestamp: formatTime(response.data.timestamp)
             };
             setMessages(messages => [...messages, botMessage]);
         } catch (error) {
@@ -114,16 +126,24 @@ function InformationRetrievalChat() {
                 overflowY: 'auto'
             }}>
                 {messages.map((message, index) => (
-                    <Paper key={index} sx={{
-                        margin: 1,
-                        padding: 2,
-                        textAlign: message.author === 'clinician' ? 'right' : 'left',
-                        bgcolor: message.author === 'clinician' ? '#e0f7fa' : '#fce4ec',
-                        overflowWrap: 'break-word',
-                        boxSizing: 'border-box'
-                    }}>
-                        {message.type === 'jsx' ? message.content : <Typography variant="body1">{message.content}</Typography>}
-                    </Paper>
+                    <Box key={index} sx={{ margin: 1, textAlign: message.author === 'clinician' ? 'right' : 'left' }}>
+                        <Paper sx={{
+                            padding: 2,
+                            bgcolor: message.author === 'clinician' ? '#e0f7fa' : '#fce4ec',
+                            overflowWrap: 'break-word',
+                            boxSizing: 'border-box',
+                        }}>
+                            {message.type === 'jsx' ? message.content : <Typography variant="body1">{message.content}</Typography>}
+                        </Paper>
+                        <Typography variant="caption" sx={{
+                            display: 'block', // Ensure it's a block to appear on a new line
+                            color: 'black',
+                            fontSize: '0.75rem',
+                            marginTop: '2px' // Add a little space between the paper and the timestamp
+                        }}>
+                            {message.timestamp}
+                        </Typography>
+                    </Box>
                 ))}
                 {loading && <CircularProgress sx={{ display: 'block', margin: 'auto' }} />}
             </Box>
