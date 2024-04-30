@@ -4,6 +4,7 @@ import {
     Button,
     CardHeader,
     CardContent,
+    CircularProgress,
     Dialog,
     DialogActions,
     Grid,
@@ -56,9 +57,9 @@ import {
     selected: {},
   }))((props) => <Tab disableRipple {...props} />)
   
-  const VariantDasboard2 = function ({ open, onClose, handleButtonChange, vcfFileId }) {
+  const VariantDasboard2 = function ({ open, onClose, handleButtonChange, vcfFileId, fetchData, setAnnotationModalOpen }) {
     const { fileId, sampleName } = useParams()
-  
+    const [isLoading, setIsLoading] = useState(false)
     useEffect(() => {
       if (localStorage.getItem('dashboardSampleID') !== fileId) {
         localStorage.setItem('dashboardSampleID', fileId)
@@ -95,6 +96,7 @@ import {
     const handleSetNotes = (e) => setNotes(e.target.value)
   
     const handleSave = async () => {
+      setIsLoading(true)
       const phenotypeTerms = hpoList.map(item => {
         // Extract the numeric part of the HP code and remove leading zeros
         const id = parseInt(item.value.split(':')[1], 10);
@@ -117,11 +119,15 @@ import {
       try {
         await addPatientWithPhenotype( request);
         console.log("SUCCESS!")
+        setAnnotationModalOpen(false);
+        console.log("resetFileUploaded")
+        fetchData()
 
       } catch (error) {
         console.log("FAIL!")
         console.error('add patient error:', error.response);
       }
+      setIsLoading(false)
     }
   
     const [hpoList, setHpoList] = useHpo({ fileId })
@@ -198,12 +204,14 @@ import {
                       </Grid>
                     </Grid>
                     <Grid item xs={12} sx={{ flexGrow: 1 }} alignSelf="end" mr={3}>
-                      <DialogActions>
-                      <Button color="primary" variant="contained" onClick={handleSave}>
-                        Save Details
-                      </Button>
+                    {isLoading ? (<CircularProgress />): (
+                        <DialogActions>
+                        <Button color="primary" variant="contained" onClick={handleSave}>
+                          Save Details
+                        </Button>
                       </DialogActions>
-                </Grid>
+                      )}
+                  </Grid>
               </Stack>
             </Box>
 
