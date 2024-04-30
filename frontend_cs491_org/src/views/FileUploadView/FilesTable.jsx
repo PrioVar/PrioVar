@@ -279,19 +279,15 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
       },
     },
     {
-      name: 'finished_at',
-      label: 'Completed',
+      name: 'completed_at',
+      label: 'Completed At',
       options: {
-        filter: true,
-        sort: false,
+        filter: false,
+        sort: true,
         customBodyRenderLite(dataIndex) {
           const row = data[dataIndex]
-          return row ? (
-            <AnalysedCheckbox
-              checked={row.finishedAt != null}
-              details={{ date: row.finish_time, person: row.finish_person }}
-            />
-          ) : null
+          return row.finishedAt? fDateTime(row.finishedAt) : <>Not Finished</>;
+
         },
       },
     },

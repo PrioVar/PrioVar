@@ -278,6 +278,20 @@ import {
         },
       },
       {
+        name: 'completed_at',
+        label: 'Completed At',
+        options: {
+          filter: false,
+          sort: true,
+          customBodyRenderLite(dataIndex) {
+            const row = data[dataIndex]
+            return row && row.file && row.file.finishedAt? fDateTime(row.file.finishedAt) : <>Not Finished</>;
+  
+          },
+        },
+      },
+      /*
+      {
         name: 'finished_at',
         label: 'Completed',
         options: {
@@ -295,6 +309,7 @@ import {
           },
         },
       },
+      */
       {
         name: 'patientName',
         label: 'Patient Name',
