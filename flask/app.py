@@ -23,13 +23,16 @@ def ai_support():
 @app.route('/search-graph', methods=['POST'])
 def search_graph():
     # get the question, which is a parameter in the request
-    question = request.args.get('question')
+    data = request.get_json()
+    question = data.get('question')
+    medical_center_id = data.get('healthCenterId')
+    print("medical_center_id: ", medical_center_id)
 
     if question is None:
         return "No question provided"
 
     # query the knowledge graph
-    answer = get_answer(question)
+    answer = get_answer(question, medical_center_id)
 
     # return the answer
     return answer
