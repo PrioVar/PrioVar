@@ -4,7 +4,7 @@ from langchain.chains import GraphCypherQAChain
 from langchain_openai import ChatOpenAI
 from langchain_community.graphs import Neo4jGraph
 from config import uri, username, password, API_KEY
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 
 class KnowledgeGraphQA:
@@ -45,7 +45,9 @@ class KnowledgeGraphQA:
 
     @staticmethod
     def _create_and_link_chat(tx, medical_center_id, question, response):
-        timestamp = datetime.utcnow().isoformat()  # ISO 8601 format
+        utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
+        utc_plus_3 = timezone(timedelta(hours=3))
+        timestamp = utc_now.astimezone(utc_plus_3).isoformat()
         query = (
             "MATCH (mc:MedicalCenter) WHERE ID(mc) = $medical_center_id "
             "CREATE (c:GraphChat {question: $question, timestamp: $timestamp, "
