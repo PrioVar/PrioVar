@@ -399,6 +399,8 @@ const SamplesView = function ({ isFileUploaded, resetFileUploaded }) {
             handleButtonChange={handleButtonChange}
             onClose={() => setAnnotationModalOpen()}
             vcfFileId={selectedFile?.vcfFileId}
+            fetchData={fetchData}
+            setAnnotationModalOpen={setAnnotationModalOpen}
           />
           <MUIDataTable
             title="Files"

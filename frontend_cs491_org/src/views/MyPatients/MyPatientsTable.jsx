@@ -481,7 +481,8 @@ import {
             <VariantDasboard2
             open={isAnnotationModalOpen}
             handleButtonChange = {handleButtonChange}
-            onClose={() => setAnnotationModalOpen()}
+            setAnnotationModalOpen={setAnnotationModalOpen}
+            close={!isAnnotationModalOpen}
             />
             <MUIDataTable
               title={`All patients of clinician ${clinicianName || '...'}`}
