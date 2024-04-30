@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, CircularProgress, Typography, Paper } from '@mui/material';
 import axios from 'axios';
-import { ROOTS_Flask } from '../../routes/paths'
+import { ROOTS_Flask, ROOTS_PrioVar } from '../../routes/paths'
 
 function InformationRetrievalChat() {
     const [input, setInput] = useState('');
-    const [messages, setMessages] = useState([
-        {
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const welcomeMessage = {
             author: 'bot',
             content: (
                 <Typography variant="body1">
@@ -20,9 +23,40 @@ function InformationRetrievalChat() {
                 </Typography>
             ),
             type: 'jsx'
+        };
+        setMessages([welcomeMessage]);
+        retrieveChatHistory();
+    }, []);
+
+    const retrieveChatHistory = async () => {
+        const medicalCenterId = localStorage.getItem('healthCenterId');
+        if (!medicalCenterId) {
+            console.log('No medical center ID found in local storage');
+            return;
         }
-    ]);
-    const [loading, setLoading] = useState(false);
+        try {
+            setLoading(true);
+            const response = await axios.get(`${ROOTS_PrioVar}/chat/getGraphChatsByMedicalCenterId/${medicalCenterId}`);
+            const chatHistoryMessages = response.data.flatMap(chat => [
+                {
+                    author: 'clinician',
+                    content: chat.question,
+                    type: 'text'
+                },
+                {
+                    author: 'bot',
+                    content: chat.response,
+                    type: 'text'
+                }
+            ]);
+            setMessages(messages => [...messages, ...chatHistoryMessages]);
+        } catch (error) {
+            console.error('Failed to retrieve chat history:', error);
+            // You might want to handle this error more gracefully in a user-facing app
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleInputChange = (event) => {
         setInput(event.target.value);
