@@ -29,6 +29,11 @@ export const deletePhenotypeTerm = async ( patientId, phenotypeTermId) => {
   return data
 }
 
+export const addPhenotypeTerm = async (patientId, phenotypeTermIds) => {
+  const data = await axios.post(`${ROOTS_PrioVar}/patient/phenotypeTerm/${patientId}`, phenotypeTermIds)
+  return data
+}
+
 // NEW ADDITION ERKIN
 export const fetchClinicianPatients = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/patient/byClinician/${localStorage.getItem('clinicianId')}`)

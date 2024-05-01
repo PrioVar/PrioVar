@@ -437,7 +437,7 @@ import {
           sort: true,
           customBodyRenderLite(dataIndex) {
             const row = data[dataIndex];
-            const patientDetailPath = PATH_DASHBOARD.general.patientDetails.replace(':patientId', row.patientId);
+            const patientDetailPath = PATH_DASHBOARD.general.patientDetails.replace(':patientId', row.patientId).replace(':fileId', row.file.vcfFileId);
       
             return (
               <Button variant="contained" color="info" onClick={() => handleDetails(row)} 
