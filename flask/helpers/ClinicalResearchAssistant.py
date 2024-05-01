@@ -103,10 +103,10 @@ class ClinicalResearchAssistant:
 
     def create_chat_in_db(self, medical_center_id, message, response_data):
         with self.driver.session() as session:
-            result = session.write_transaction(
+            result, timestamp = session.write_transaction(
                 self._create_and_link_chat, medical_center_id, message, response_data
             )
-            return result
+            return result, timestamp
 
     @staticmethod
     def _create_and_link_chat(tx, medical_center_id, question, response_data):
@@ -133,7 +133,7 @@ class ClinicalResearchAssistant:
             "RAG_GPT_output": response_data.get('RAG_GPT_output', '')
         }
         result = tx.run(query, parameters)
-        return result.single()[0]
+        return result.single()[0], timestamp
 
 
 def analyze(data):
@@ -215,8 +215,9 @@ def analyze(data):
         'RAG_GPT_output': research_res,
     }
 
-    assistant.create_chat_in_db(medical_center_id, clinical_question, response_data)
+    result, timestamp = assistant.create_chat_in_db(medical_center_id, clinical_question, response_data)
     assistant.close()
+    response_data['timestamp'] = timestamp
 
     return jsonify(response_data), 200
 
