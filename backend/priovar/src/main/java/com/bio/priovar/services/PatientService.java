@@ -507,4 +507,50 @@ public class PatientService {
             return "Failed to delete patient: " + e.getMessage();
         }
     }
+
+    public List<PhenotypeTerm> getPhenotypeTermsOfPatient(Long patientId) {
+        
+        try {
+            Patient patient = patientRepository.findById(patientId)
+                    .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " does not exist"));
+            return patient.getPhenotypeTerms();
+        } catch (Exception e) {
+            // Log the exception or handle it as needed
+            return null;
+        }
+    }
+
+    public String deletePhenotypeTermFromPatientByPhenotypeTermId(Long patientId, Long phenotypeTermId) {
+        try {
+            Patient patient = patientRepository.findById(patientId)
+                    .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " does not exist"));
+            PhenotypeTerm phenotypeTerm = phenotypeTermRepository.findById(phenotypeTermId)
+                    .orElseThrow(() -> new IllegalArgumentException("Phenotype term with id " + phenotypeTermId + " does not exist"));
+            patient.getPhenotypeTerms().remove(phenotypeTerm);
+            patientRepository.save(patient);
+            return "Phenotype term deleted from patient successfully";
+        } catch (Exception e) {
+            // Log the exception or handle it as needed
+            return "Failed to delete phenotype term from patient: " + e.getMessage();
+        }
+    }
+
+    public String addPhenotypeTermFromPatientByPhenotypeTermId(Long patientId, List<Long>  phenotypeTerms) {
+        try {
+            Patient patient = patientRepository.findById(patientId)
+                    .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " does not exist"));
+            List<PhenotypeTerm> phenotypeTermList = new ArrayList<>();
+            for (Long phenotypeTermId : phenotypeTerms) {
+                PhenotypeTerm phenotypeTerm = phenotypeTermRepository.findById(phenotypeTermId)
+                        .orElseThrow(() -> new IllegalArgumentException("Phenotype term with id " + phenotypeTermId + " does not exist"));
+                phenotypeTermList.add(phenotypeTerm);
+            }
+            patient.getPhenotypeTerms().addAll(phenotypeTermList);
+            patientRepository.save(patient);
+            return "Phenotype term added to patient successfully";
+        } catch (Exception e) {
+            // Log the exception or handle it as needed
+            return "Failed to add phenotype term to patient: " + e.getMessage();
+        }
+    }
 }
