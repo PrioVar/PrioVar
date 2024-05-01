@@ -479,9 +479,7 @@ import {
           (<CircularProgress/>) : 
           (
             <>
-            
-            <Box display="flex" justifyContent="flex-end" mt={4}> 
-              <Box mr={2}>
+            <Box display="flex" justifyContent="flex-end" mt={2} mb={0.5} mr={0.5}> 
                 <Button 
                     variant="contained" 
                     color="info" 
@@ -491,7 +489,6 @@ import {
                     <ArrowForward /> 
                     Upload VCF File 
                 </Button>
-              </Box>
             </Box>
             <VariantDasboard2
             open={isAnnotationModalOpen}
