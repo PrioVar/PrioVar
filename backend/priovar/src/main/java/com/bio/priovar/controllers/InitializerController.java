@@ -253,7 +253,7 @@ public class InitializerController {
         clinician3.setPassword("123");
         clinician3.setMedicalCenter(liva);
         List<Patient> clinician3Patients = new ArrayList<>();
-        clinician3Patients.add(patient3);
+        clinician3Patients.add(patient4);
         clinician3.setPatients(clinician3Patients);
         List<VCFFile> clinician3VcfFiles = new ArrayList<>();
         clinician3VcfFiles.add(vcfFile4);
