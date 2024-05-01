@@ -11,7 +11,7 @@ import {
     CircularProgress
   } from '@material-ui/core'
   import axios from 'axios';
-  import { ArrowBack, CloseOutlined } from '@material-ui/icons'
+  import { ArrowBack, CloseOutlined, Add } from '@material-ui/icons'
   import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
   import { fetchDiseases, fetchPhenotypeTerms, deletePhenotypeTerm } from '../../api/file'
@@ -107,7 +107,10 @@ import {
             changeDisease();
         }
     };
+    const openPhenotypeAdd = () => {
     
+    };
+
     const changeDisease = async () => {
         try {
             console.log(selectedOption)
@@ -171,7 +174,12 @@ import {
                 <Typography variant="h6">Disease: </Typography> {details.disease?.diseaseName}
                 </Grid>
                 <Grid item xs={4} mt={4}>
-                    <Typography variant="h6">Phenotype Terms:</Typography>
+                    <Grid item xs={4} mt={4}>
+                        <Typography variant="h6">Phenotype Terms:</Typography>
+                        <IconButton size="small" onClick={openPhenotypeAdd}>
+                            <Add color='success' />
+                        </IconButton>
+                    </Grid>
                     { phenotypeTermsLoading ? (<CircularProgress />)
                     :
                     ( <>
