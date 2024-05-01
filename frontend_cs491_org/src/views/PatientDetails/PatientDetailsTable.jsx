@@ -14,13 +14,20 @@ import {
   import { useNavigate } from 'react-router-dom'
   import { fetchDiseases } from '../../api/file'
   import { useParams } from 'react-router-dom'
+  import { ROOTS_PrioVar } from '../../routes/paths'
+  import { useSnackbar } from 'notistack5'
+  import closeFill from '@iconify/icons-eva/close-fill'
+  import { Icon } from '@iconify/react'
+  import { MIconButton } from '../../components/@material-extend'
   
   const PatientDetailsTable = function () {
     //const classes = useStyles()
     const [options, setOptions] = useState([]); // Store dropdown options
     const [selectedOption, setSelectedOption] = useState('')
     const { patientId } = useParams();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     let navigate = useNavigate();
+    
 
     //
     const [details, setDetails] = useState(
@@ -49,28 +56,38 @@ import {
     const handleSubmit = async () => {
         try {
             console.log(selectedOption)
-            const response = await axios.post(`http://localhost:8080/patient/${patientId}/addDisease/${selectedOption}`);
+            const response = await axios.post(`${ROOTS_PrioVar}/patient/${patientId}/addDisease/${selectedOption}`);
             console.log(response.data);
-            // Handle response or success notification
-            navigate(0)
+
+            // Fetch updated patient details
+            await fetchPatientDetails();
+            enqueueSnackbar('Disease Added Successfully!', {
+                variant: 'success',
+                action: (key) => (
+                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                    <Icon icon={closeFill} />
+                  </MIconButton>
+                ),
+            })
         } catch (error) {
             console.error('Error posting data:', error);
             // Handle error notification
         }
     };
 
+    const fetchPatientDetails = async () => {
+        try {
+            const response = await axios.get(`${ROOTS_PrioVar}/patient/${patientId}`);
+            console.log("SUCCESS", response.data);
+            setDetails(response.data);
+        } catch (error) {
+            console.error('Error fetching patient details:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetch = async () => {
-            axios.get(`http://localhost:8080/patient/${patientId}`)
-            .then(response => {
-                console.log("SUCCESS")
-                console.log(response.data)
-                setDetails(response.data);
-            })
-            .catch(error => console.error('Error fetching data:', error));
-            }
-            fetch();
-      }, []);
+        fetchPatientDetails();
+    }, []);
 
     return (
         <>
