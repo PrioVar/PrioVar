@@ -20,15 +20,14 @@ import {
   import { useNavigate } from 'react-router-dom'
   import DeleteIcon from '@material-ui/icons/Delete'
   import { fDateTime } from 'src/utils/formatTime'
-  import JobStateStatus from '../common/JobStateStatus'
   import { useFiles, annotateFile, updateFinishInfo, updateFileNotes, fetchClinicianPatients, 
             fetchCurrentClinicianName, deletePatient } from '../../api/file'
   import { PATH_DASHBOARD, } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
-  import AnalysedCheckbox from '../common/AnalysedCheckbox'
   import VariantDasboard2 from '../common/VariantDasboard2'
-  
+  import Label from 'src/components/Label'
+
   const EditableNote = ({ note, onSave, details }) => {
     const [isEditing, setIsEditing] = useState(false)
     const [currentNote, setCurrentNote] = useState(note)
@@ -411,8 +410,26 @@ import {
           sort: true,
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex]
-            const status = getStatusLabel(row)
-            return status ? <JobStateStatus status={status} /> : null
+            //const status = getStatusLabel(row)
+            const status = row.file.fileStatus
+            console.log(status === 'FILE_ANNOTATED')
+            //return status ? <JobStateStatus status={status} /> : null
+            if (status === 'FILE_WAITING') {
+              return <Label color='error' > File Not Found </Label>
+            }
+            else if (status === 'FILE_ANNOTATED') {
+              return <Label color='secondary'> File Waiting </Label>
+            }
+            else if (status === 'ANALYSIS_IN_PROGRESS') {
+              return <Label color='warning' > Annotation Running </Label>
+            }
+            else if (status === 'ANALYSIS_DONE') {
+              return <Label color='success' > Annotation Done </Label>
+            }
+            else {
+              return <Chip label="..." />
+            }
+            //return <Chip label={status} />
           },
         },
       },
