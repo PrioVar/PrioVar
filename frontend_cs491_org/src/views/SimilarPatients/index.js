@@ -27,13 +27,6 @@ const SimilarPatients = function () {
           <SimilarPatientsTable />
         </Grid>
 
-        {/*<Grid item xs={12}>*/}
-        {/*  <UploadFastq />*/}
-        {/*</Grid>*/}
-
-        {/*<Grid item xs={12}>*/}
-        {/*  <FastqFilesTable />*/}
-        {/*</Grid>*/}
       </Grid>
     </Page>
   )
