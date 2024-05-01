@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, CircularProgress, Typography, Paper } from '@mui/material';
 import axios from 'axios';
-import { ROOTS_Flask } from '../../routes/paths'
+import { ROOTS_Flask, ROOTS_PrioVar } from '../../routes/paths'
 
 function InformationRetrievalChat() {
     const [input, setInput] = useState('');
-    const [messages, setMessages] = useState([
-        {
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const welcomeMessage = {
             author: 'bot',
             content: (
                 <Typography variant="body1">
@@ -20,12 +23,56 @@ function InformationRetrievalChat() {
                 </Typography>
             ),
             type: 'jsx'
+        };
+        setMessages([welcomeMessage]);
+        retrieveChatHistory();
+    }, []);
+
+    const retrieveChatHistory = async () => {
+        const medicalCenterId = localStorage.getItem('healthCenterId');
+        if (!medicalCenterId) {
+            console.log('No medical center ID found in local storage');
+            return;
         }
-    ]);
-    const [loading, setLoading] = useState(false);
+        try {
+            setLoading(true);
+            const response = await axios.get(`${ROOTS_PrioVar}/chat/getGraphChatsByMedicalCenterId/${medicalCenterId}`);
+            const chatHistoryMessages = response.data.flatMap(chat => [
+                {
+                    author: 'clinician',
+                    content: chat.question,
+                    type: 'text',
+                    timestamp: formatTime(chat.timestamp)
+                },
+                {
+                    author: 'bot',
+                    content: chat.response,
+                    type: 'text',
+                    timestamp: formatTime(chat.timestamp)
+                }
+            ]);
+            setMessages(messages => [...messages, ...chatHistoryMessages]);
+        } catch (error) {
+            console.error('Failed to retrieve chat history:', error);
+            // You might want to handle this error more gracefully in a user-facing app
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleInputChange = (event) => {
         setInput(event.target.value);
+    };
+
+    const formatTime = (timestamp) => {
+        console.log(timestamp)
+        const date = new Date(timestamp);
+    
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+    
+        // Return formatted string, padding minutes with leading zero if necessary
+        return `${hours}:${minutes.toString().padStart(2, '0')}`;
     };
 
     const sendMessage = async () => {
@@ -40,13 +87,18 @@ function InformationRetrievalChat() {
         setLoading(true);
 
         try {
-            const endpoint = `${ROOTS_Flask}/search-graph?question=${encodeURIComponent(input)}`;
-            const response = await axios.post(endpoint);
+            // const endpoint = `${ROOTS_Flask}/search-graph?question=${encodeURIComponent(input)}`;
+            //const response = await axios.post(endpoint);
+            const response = await axios.post(`${ROOTS_Flask}/search-graph`, {
+                question: input,
+                healthCenterId: localStorage.getItem('healthCenterId')
+            });
 
             const botMessage = {
                 author: 'bot',
                 content: response.data.result,
-                type: 'text'
+                type: 'text',
+                timestamp: formatTime(response.data.timestamp)
             };
             setMessages(messages => [...messages, botMessage]);
         } catch (error) {
@@ -76,20 +128,28 @@ function InformationRetrievalChat() {
                 overflowY: 'auto'
             }}>
                 {messages.map((message, index) => (
-                    <Paper key={index} sx={{
-                        margin: 1,
-                        padding: 2,
-                        textAlign: message.author === 'clinician' ? 'right' : 'left',
-                        bgcolor: message.author === 'clinician' ? '#e0f7fa' : '#fce4ec',
-                        overflowWrap: 'break-word',
-                        boxSizing: 'border-box'
-                    }}>
-                        {message.type === 'jsx' ? message.content : <Typography variant="body1">{message.content}</Typography>}
-                    </Paper>
+                    <Box key={index} sx={{ margin: 1, textAlign: message.author === 'clinician' ? 'right' : 'left' }}>
+                        <Paper sx={{
+                            padding: 2,
+                            bgcolor: message.author === 'clinician' ? '#e0f7fa' : '#fce4ec',
+                            overflowWrap: 'break-word',
+                            boxSizing: 'border-box',
+                        }}>
+                            {message.type === 'jsx' ? message.content : <Typography variant="body1">{message.content}</Typography>}
+                        </Paper>
+                        <Typography variant="caption" sx={{
+                            display: 'block', // Ensure it's a block to appear on a new line
+                            color: 'black',
+                            fontSize: '0.75rem',
+                            marginTop: '1px' // Add a little space between the paper and the timestamp
+                        }}>
+                            {message.timestamp}
+                        </Typography>
+                    </Box>
                 ))}
                 {loading && <CircularProgress sx={{ display: 'block', margin: 'auto' }} />}
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Paper sx={{ display: 'flex', alignItems: 'center', gap: 1, p:1 }}>
                 <TextField
                     fullWidth
                     variant="outlined"
@@ -108,7 +168,7 @@ function InformationRetrievalChat() {
                 <Button variant="contained" onClick={sendMessage} disabled={!input.trim() || loading}>
                     Send
                 </Button>
-            </Box>
+            </Paper>
         </Box>
     );
 }

@@ -123,7 +123,7 @@ export default function Router() {
         { path: '/subscriptionPlans', element: < SubscriptionPlans/>},
         { path: '/similarPatients', element: < SimilarPatients/>},
         { path: '/addClinician', element: < AddClinician/>},
-        { path: '/patientDetails/:patientId', element: < PatientDetails/>},
+        { path: '/patientDetails/:patientId/:fileId', element: < PatientDetails/>},
         { path: '/aiSupport', element: < AISupport/>},
         { path: '/informationRetrieval', element: < InformationRetrieval/>},
         { path: '/sample/:fileName', element: <NewVariantDashboard /> },

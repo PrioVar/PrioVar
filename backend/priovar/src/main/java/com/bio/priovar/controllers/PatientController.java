@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -66,6 +64,11 @@ public class PatientController {
         return patientService.getPatientForDetailedView();
     }
 
+    @GetMapping("/phenotypeTerms/{patientId}")
+    public List<PhenotypeTerm> getPhenotypeTermsOfPatient(@PathVariable("patientId") Long patientId) {
+        return patientService.getPhenotypeTermsOfPatient(patientId);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addPatient(@RequestBody Patient patient) {
         return new ResponseEntity<>(patientService.addPatient(patient), patient.getMedicalCenter() == null ? org.springframework.http.HttpStatus.BAD_REQUEST : org.springframework.http.HttpStatus.OK);
@@ -112,6 +115,12 @@ public class PatientController {
 
         return patientService.setVCFFileOfPatient(patientId, vcfFileId);
     }
+
+    @PostMapping("/phenotypeTerm/{patientId}")
+    public ResponseEntity<String> addPhenotypeTermFromPatientByPhenotypeTermId( @PathVariable("patientId") Long patientId, @RequestParam List<Long> phenotypeTermIds ) {
+        return new ResponseEntity<>( patientService.addPhenotypeTermFromPatientByPhenotypeTermId(patientId, phenotypeTermIds), org.springframework.http.HttpStatus.OK);
+    }
+    
     
 
     // Delete Requests
@@ -124,5 +133,10 @@ public class PatientController {
     @DeleteMapping("/{patientId}/deletePhenotypeTerm/{phenotypeTermId}")
     public ResponseEntity<String> deletePhenotypeTermFromPatient(@PathVariable("patientId") Long patientId, @PathVariable("phenotypeTermId") Long phenotypeTermId) {
         return new ResponseEntity<>(patientService.deletePhenotypeTermFromPatient(patientId, phenotypeTermId), org.springframework.http.HttpStatus.OK);
+    }
+
+    @DeleteMapping("/phenotypeTerm/{patientId}/{phenotypeTermId}")
+    public ResponseEntity<String> deletePhenotypeTermFromPatientByPhenotypeTermId(@PathVariable("patientId") Long patientId, @PathVariable("phenotypeTermId") Long phenotypeTermId) {
+        return new ResponseEntity<>(patientService.deletePhenotypeTermFromPatientByPhenotypeTermId(patientId, phenotypeTermId), org.springframework.http.HttpStatus.OK);
     }
 }

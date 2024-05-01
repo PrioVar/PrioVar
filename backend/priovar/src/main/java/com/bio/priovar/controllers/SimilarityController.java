@@ -47,6 +47,11 @@ public class SimilarityController {
         return similarityService.findAllSimilarityReportsByPatientId(id);
     }
 
+    @GetMapping("/byPatient/{patientId}/{numberOfReports}")
+    public List<SimilarityReport> getSimilarityReportsByPatientId(@PathVariable("patientId") Long id, @PathVariable("numberOfReports") int numberOfReports) {
+        return similarityService.findNewestSimilarityReportsByPatientId(id, numberOfReports);
+    }
+
     // find the most similar patient
     @GetMapping("/mostSimilarPatient/{patientId}")
     public Patient getMostSimilarPatient(@PathVariable("patientId") Long id) {
@@ -55,7 +60,7 @@ public class SimilarityController {
 
     // find the most similar patientS (multiple) using findMostSimilarPatientsByCosine by specifying the number of patients
     @GetMapping("/mostSimilarPatients/{patientId}/{numberOfPatients}")
-    public List<SimilarityReport> getMostSimilarPatients(@PathVariable("patientId") Long id, @PathVariable("numberOfPatients") int numberOfPatients) {
+    public SimilarityReport getMostSimilarPatients(@PathVariable("patientId") Long id, @PathVariable("numberOfPatients") int numberOfPatients) {
         return similarityService.findMostSimilarPatientsByCosine(id, numberOfPatients);
     }
 

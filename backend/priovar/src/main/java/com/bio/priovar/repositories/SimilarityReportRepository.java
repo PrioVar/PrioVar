@@ -15,14 +15,6 @@ public interface SimilarityReportRepository extends Neo4jRepository<SimilarityRe
     @Query("MATCH (p:SimilarityReport) WHERE p.id = $id RETURN p")
     SimilarityReport findSimilarityReportById(Long id);
 
-    // find all similarity reports by its primary patient ID
-    @Query("MATCH (p:SimilarityReport) WHERE p.primaryPatient.id = $id RETURN p")
-    List<SimilarityReport> findAllSimilarityReportsByPrimaryPatientId(Long id);
 
-
-    // find all similarity reports by patient ID
-    @Query("MATCH (p:SimilarityReport) WHERE p.primaryPatient.id = $id OR p.secondaryPatient.id = $id RETURN p")
-    List<SimilarityReport> findAllSimilarityReportsByPatientId(Long id);
-
-
+    List<SimilarityReport> findAllByPrimaryPatientId(Long id);
 }
