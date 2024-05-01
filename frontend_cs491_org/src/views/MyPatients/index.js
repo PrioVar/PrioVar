@@ -18,7 +18,7 @@ const MyPatients = function () {
         left: 0, 
         width: '100%', 
         height: '100vh', 
-        backgroundImage: 'url("/static/new_images/thinngs.png")', 
+        backgroundImage: 'url("/static/new_images/dna-helix.png")', 
         backgroundSize: 'cover', 
         backgroundPosition: 'center center',
         backgroundColor: 'rgba(255, 255, 255, 0.7)', // Adds white transparency
