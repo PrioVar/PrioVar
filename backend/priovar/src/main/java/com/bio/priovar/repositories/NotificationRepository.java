@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends Neo4jRepository<Notification, Long> {
-    List<Notification> findByMedicalCenterId(Long medicalCenterId);
+    List<Notification> findByReceiverId(Long actorId);
+    List<Notification> findByReceiverIdAndIsReadFalse(Long actorId);
 
-    List<Notification> findByMedicalCenterIdAndIsReadFalse(Long medicalCenterId);
 }
