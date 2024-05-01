@@ -8,13 +8,15 @@ import {
     Select,
     MenuItem,
     IconButton,
-    CircularProgress
+    CircularProgress,
+    CardContent
   } from '@material-ui/core'
   import axios from 'axios';
   import { ArrowBack, CloseOutlined, Add } from '@material-ui/icons'
   import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
-  import { fetchDiseases, fetchPhenotypeTerms, deletePhenotypeTerm } from '../../api/file'
+  import { fetchDiseases, fetchPhenotypeTerms, deletePhenotypeTerm, addPhenotypeTerm } from '../../api/file'
+  import { useHpo } from '../../api/vcf'
   import { useParams } from 'react-router-dom'
   import { ROOTS_PrioVar } from '../../routes/paths'
   import { useSnackbar } from 'notistack5'
@@ -22,15 +24,18 @@ import {
   import { Icon } from '@iconify/react'
   import { MIconButton } from '../../components/@material-extend'
   import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-  
+  import Tags from 'src/components/Tags'
+  import { HPO_OPTIONS } from 'src/constants'
+
   const PatientDetailsTable = function () {
     //const classes = useStyles()
     const [options, setOptions] = useState([]); // Store dropdown options
     const [phenotypeTermsLoading, setPhenotypeTermsLoading] = useState(true);
     const [selectedOption, setSelectedOption] = useState('')
-    const { patientId } = useParams();
+    const { patientId, fileId } = useParams();
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const [openDialog, setOpenDialog] = useState(false);
+    const [hpoList, setHpoList] = useHpo({ fileId })
     let navigate = useNavigate();
     
 
@@ -69,6 +74,8 @@ import {
             try {
                 const data = await fetchPhenotypeTerms(patientId);
                 setDetails({ ...details, phenotypeTerms: data });
+                console.log("patientId: ", patientId)
+                console.log(data);
                 console.log('SUCCESS')
             }
             catch (error) {
@@ -107,9 +114,44 @@ import {
             changeDisease();
         }
     };
-    const openPhenotypeAdd = () => {
-    
+    // KAAN LOOK TO THIS FUNCTION
+    const addPhenotype = async () => {
+        console.log('Phenotype Add');
+        const phenotypeTerms = hpoList.map(item => {
+            // Extract the numeric part of the HP code and remove leading zeros
+            const id = parseInt(item.value.split(':')[1], 10);
+            return { id };
+          });
+          const phenotypeTermIds = phenotypeTerms.map(term => term.id);
+          const formData = new FormData();
+        formData.append('phenotypeTermIds', phenotypeTermIds);
+        if( phenotypeTerms.length > 0){
+            setPhenotypeTermsLoading(true);
+            try {
+                const response = await addPhenotypeTerm(patientId, formData); // IMPLEMENT THE BACKEND SERVICE
+                console.log("SUCCESS: ", response)
+            } catch (error) {
+                console.log("FAILURE")
+                console.error('Error posting data:', error);
+                // Handle error notification
+            }
+            try {
+                const data = await fetchPhenotypeTerms(patientId);
+                setDetails({ ...details, phenotypeTerms: data });
+                console.log('SUCCESS')
+            }
+            catch (error) {
+                console.error('FAILURE');
+                console.error('Error refetching terms:', error);
+            }
+            setPhenotypeTermsLoading(false);
+        }
     };
+
+    const ManageHpo = function ({ hpoList, setHpoList}) {
+  
+        return <Tags title="Symptoms" options={HPO_OPTIONS} value={hpoList} onChange={setHpoList} />
+      }
 
     const changeDisease = async () => {
         try {
@@ -174,12 +216,7 @@ import {
                 <Typography variant="h6">Disease: </Typography> {details.disease?.diseaseName}
                 </Grid>
                 <Grid item xs={4} mt={4}>
-                    <Grid item xs={4} mt={4}>
-                        <Typography variant="h6">Phenotype Terms:</Typography>
-                        <IconButton size="small" onClick={openPhenotypeAdd}>
-                            <Add color='success' />
-                        </IconButton>
-                    </Grid>
+                    <Typography variant="h6">Phenotype Terms:</Typography>
                     { phenotypeTermsLoading ? (<CircularProgress />)
                     :
                     ( <>
@@ -187,10 +224,18 @@ import {
                         <PhenotypeTerm key={index} term={term} />
                         ))}
                         </>)}
-                    
-                    
                 </Grid>
                 <Grid item xs={4} mt={4}>
+                <Typography variant="h6">Add Phenotype Terms</Typography>
+                    <CardContent>
+                        <ManageHpo hpoList={hpoList} setHpoList={setHpoList}/>
+                    </CardContent>
+                    <Button onClick={() => addPhenotype()} color="primary" variant="contained" sx={{ mt: 0.5 }}>
+                        Add Phenotype Term
+                    </Button>
+                </Grid>
+                <Grid item xs={4} mt={4}>
+                <Typography variant="h6">Set Diagnosis</Typography>
                 <FormControl fullWidth variant="outlined">
                     <InputLabel>Select Disease</InputLabel>
                     <Select

@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -117,6 +115,12 @@ public class PatientController {
 
         return patientService.setVCFFileOfPatient(patientId, vcfFileId);
     }
+
+    @PostMapping("/phenotypeTerm/{patientId}")
+    public ResponseEntity<String> addPhenotypeTermFromPatientByPhenotypeTermId( @PathVariable("patientId") Long patientId, @RequestParam List<Long> phenotypeTermIds ) {
+        return new ResponseEntity<>( patientService.addPhenotypeTermFromPatientByPhenotypeTermId(patientId, phenotypeTermIds), org.springframework.http.HttpStatus.OK);
+    }
+    
     
 
     // Delete Requests
