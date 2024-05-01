@@ -24,24 +24,19 @@ public class NotificationController {
         return notificationService.getNotificationById(id);
     }
 
-    @GetMapping("/byMedicalCenter/{medicalCenterId}")
-    public List<Notification> getNotificationsByMedicalCenterId(@PathVariable("medicalCenterId") Long medicalCenterId) {
-        return notificationService.getNotificationsByMedicalCenterId(medicalCenterId);
+    @GetMapping("/listNotifications/{actorId}")
+    public List<Notification> getNotificationsByMedicalCenterId(@PathVariable("actorId") Long actorId) {
+        return notificationService.getNotificationsByActorId(actorId);
     }
 
-    @GetMapping("/byMedicalCenter/{medicalCenterId}/unread")
-    public List<Notification> getUnreadNotificationsByMedicalCenterId(@PathVariable("medicalCenterId") Long medicalCenterId) {
-        return notificationService.getUnreadNotificationsByMedicalCenterId(medicalCenterId);
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<String> addNotification(@RequestBody Notification notification) {
-        return new ResponseEntity<>(notificationService.addNotification(notification), notification.getMedicalCenter() == null ? org.springframework.http.HttpStatus.BAD_REQUEST : org.springframework.http.HttpStatus.OK);
+    @GetMapping("/listNotifications/{actorId}/unread")
+    public List<Notification> getUnreadNotificationsByActorId(@PathVariable("actorId") Long actorId) {
+        return notificationService.getUnreadNotificationsByActorId(actorId);
     }
 
     @PostMapping("/markRead/{notificationId}")
     public ResponseEntity<String> markNotificationAsReadByID(@PathVariable("notificationId") Long notificationId) {
-        return new ResponseEntity<>(notificationService.markNotificationAsReadByID(notificationId), org.springframework.http.HttpStatus.OK);
+        return  notificationService.markNotificationAsReadByID(notificationId);
     }
 
     @DeleteMapping("/delete/{notificationId}")

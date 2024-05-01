@@ -14,18 +14,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Node("Clinician")
-public class Clinician {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    private String name;
-    private String email;
-    private String password;
+public class Clinician extends Actor{
 
     @Relationship(type="HAS_PATIENT")
     private List<Patient> patients;
-
+    @Relationship(type="REQUESTED_FOR")
+    private List<Patient> requestedPatients; //Patients requested and obtained by the clinician
     @Relationship(type="WORKS_AT")
     private MedicalCenter medicalCenter;
 

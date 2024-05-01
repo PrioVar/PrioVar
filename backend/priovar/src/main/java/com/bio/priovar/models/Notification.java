@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -19,10 +20,17 @@ public class Notification {
     @GeneratedValue
     private Long id;
 
+    private String notification;
+    private OffsetDateTime sendAt;
+    private String appendix; //Holds any extra information that needs to be sent with the notification
     private Boolean isRead;
-    private String content;
-    private LocalDate date;
 
-    @Relationship(type="MEDICAL_CENTER_NOTIFICATION")
-    private MedicalCenter medicalCenter;
+    @Relationship(type = "NOTIFIED_BY", direction = Relationship.Direction.OUTGOING)
+    private Actor sender;
+
+    @Relationship(type = "NOTIFIED_TO", direction = Relationship.Direction.OUTGOING)
+    private Actor receiver;
+
+
+
 }
