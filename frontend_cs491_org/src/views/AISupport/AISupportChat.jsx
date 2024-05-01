@@ -48,7 +48,8 @@ function AISupportChat() {
                 {
                     author: 'clinician',
                     content: chat.question,
-                    type: 'text'
+                    type: 'text',
+                    timestamp: formatTime(chat.timestamp)
                 },
                 {
                     author: 'bot',
@@ -82,7 +83,8 @@ function AISupportChat() {
                                 AI suggestion:
                               </Typography>),
                     contentDetail: (<span>{chat.rag_GPT_output}</span>),
-                    type: 'jsx'
+                    type: 'jsx',
+                    timestamp: formatTime(chat.timestamp)
                 }
             ]);
     
@@ -95,6 +97,17 @@ function AISupportChat() {
         }
     };
 
+    const formatTime = (timestamp) => {
+        console.log(timestamp)
+        const date = new Date(timestamp);
+    
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+    
+        // Return formatted string, padding minutes with leading zero if necessary
+        return `${hours}:${minutes.toString().padStart(2, '0')}`;
+    };
+
     const handleInputChange = (event) => {
         setInput(event.target.value);
     };
@@ -104,7 +117,8 @@ function AISupportChat() {
         const clinicianMessage = {
             author: 'clinician',
             content: input,
-            type: 'text'
+            type: 'text',
+            timestamp: formatTime(Date.now())
         };
         setMessages(messages => [...messages, clinicianMessage]); // Update the message list with the new message
         setInput(''); // Clear the input field
@@ -152,7 +166,8 @@ function AISupportChat() {
                             AI suggestion:
                         </Typography>),
                 contentDetail: (<span>{response.data.RAG_GPT_output}</span>),
-                type: 'jsx'
+                type: 'jsx',
+                timestamp: formatTime(response.data.timestamp)
             };
     
             // Update the messages state with all the new messages
@@ -184,35 +199,44 @@ function AISupportChat() {
                 overflowY: 'auto'
             }}>
                 {messages.map((message, index) => (
-                    <Paper key={index} sx={{
-                        margin: 1,
-                        padding: 2,
-                        textAlign: message.author === 'clinician' ? 'right' : 'left',
-                        bgcolor: message.author === 'clinician' ? '#e0f7fa' : '#fce4ec',
-                        overflowWrap: 'break-word',
-                        boxSizing: 'border-box',
-                        // Adjust the padding for the list inside bot messages
-                        '& ul': {
-                            padding: 0,
-                            paddingLeft: theme => theme.spacing(2),
-                            margin: 0
-                        }
-                    }}>
-                        {message.type === 'jsx' ? (
-                            <>
-                                {message.content}
-                                <Box sx={{ overflow: 'auto', paddingRight: 2 }}>
-                                    {message.contentDetail}
-                                </Box>
-                            </>
-                        ) : (
-                            message.content
-                        )}
-                    </Paper>
+                    <Box key={index} sx={{ margin: 1, textAlign: message.author === 'clinician' ? 'right' : 'left' }}>
+                        <Paper key={index} sx={{
+                            padding: 2,
+                            textAlign: message.author === 'clinician' ? 'right' : 'left',
+                            bgcolor: message.author === 'clinician' ? '#e0f7fa' : '#fce4ec',
+                            overflowWrap: 'break-word',
+                            boxSizing: 'border-box',
+                            // Adjust the padding for the list inside bot messages
+                            '& ul': {
+                                padding: 0,
+                                paddingLeft: theme => theme.spacing(2),
+                                margin: 0
+                            }
+                        }}>
+                            {message.type === 'jsx' ? (
+                                <>
+                                    {message.content}
+                                    <Box sx={{ overflow: 'auto', paddingRight: 2 }}>
+                                        {message.contentDetail}
+                                    </Box>
+                                </>
+                            ) : (
+                                message.content
+                            )}
+                        </Paper>
+                        <Typography variant="caption" sx={{
+                                display: 'block', // Ensure it's a block to appear on a new line
+                                color: 'black',
+                                fontSize: '0.75rem',
+                                marginTop: '1px' // Add a little space between the paper and the timestamp
+                            }}>
+                                {message.timestamp}
+                        </Typography>
+                    </Box>
                 ))}
                 {loading && <CircularProgress sx={{ display: 'block', margin: 'auto' }} />}
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Paper sx={{ display: 'flex', alignItems: 'center', gap: 1, p:1 }}>
                 <TextField
                     fullWidth
                     variant="outlined"
@@ -231,7 +255,7 @@ function AISupportChat() {
                 <Button variant="contained" onClick={sendMessage} disabled={!input.trim() || loading}>
                     Send
                 </Button>
-            </Box>
+            </Paper>
         </Box>
     );
 }
