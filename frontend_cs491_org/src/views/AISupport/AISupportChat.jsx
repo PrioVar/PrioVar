@@ -236,7 +236,7 @@ function AISupportChat() {
                 ))}
                 {loading && <CircularProgress sx={{ display: 'block', margin: 'auto' }} />}
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Paper sx={{ display: 'flex', alignItems: 'center', gap: 1, p:1 }}>
                 <TextField
                     fullWidth
                     variant="outlined"
@@ -255,7 +255,7 @@ function AISupportChat() {
                 <Button variant="contained" onClick={sendMessage} disabled={!input.trim() || loading}>
                     Send
                 </Button>
-            </Box>
+            </Paper>
         </Box>
     );
 }
