@@ -6,13 +6,15 @@ import {
     InputLabel,
     FormControl,
     Select,
-    MenuItem
+    MenuItem,
+    IconButton,
+    CircularProgress
   } from '@material-ui/core'
   import axios from 'axios';
-  import { ArrowBack, } from '@material-ui/icons'
+  import { ArrowBack, CloseOutlined } from '@material-ui/icons'
   import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
-  import { fetchDiseases } from '../../api/file'
+  import { fetchDiseases, fetchPhenotypeTerms, deletePhenotypeTerm } from '../../api/file'
   import { useParams } from 'react-router-dom'
   import { ROOTS_PrioVar } from '../../routes/paths'
   import { useSnackbar } from 'notistack5'
@@ -24,6 +26,7 @@ import {
   const PatientDetailsTable = function () {
     //const classes = useStyles()
     const [options, setOptions] = useState([]); // Store dropdown options
+    const [phenotypeTermsLoading, setPhenotypeTermsLoading] = useState(true);
     const [selectedOption, setSelectedOption] = useState('')
     const { patientId } = useParams();
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -37,19 +40,54 @@ import {
     );
 
     const fecthData = async () => {
+        setPhenotypeTermsLoading(true);
         try {
             const fetchedDiseases = await fetchDiseases();
             setOptions(fetchedDiseases);
         } catch (error) {
             console.error('Error fetching options:', error);
         }
+        setPhenotypeTermsLoading(false);
     };
 
     const sortedOptions = options.slice().sort((a, b) => {
         // Use localeCompare for string comparison to handle special characters and case sensitivity
         return a.diseaseName.localeCompare(b.diseaseName);
-      });
+    });
+    
+    const PhenotypeTerm = ({ term }) => {
+        const handleDelete = async () => {
+            setPhenotypeTermsLoading(true);
+            try {
+                const response = await deletePhenotypeTerm(patientId, term.id);
+                console.log('SUCCESS: ', response);
+            }
+            catch (error) {
+                console.error('FAILURE');
+                console.error('Error deleting term:', error);
+            }
+            try {
+                const data = await fetchPhenotypeTerms(patientId);
+                setDetails({ ...details, phenotypeTerms: data });
+                console.log('SUCCESS')
+            }
+            catch (error) {
+                console.error('FAILURE');
+                console.error('Error refetching terms:', error);
+            }
+            setPhenotypeTermsLoading(false);
+        };
       
+        return (
+          <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '5px', display: 'inline-flex', alignItems: 'center', marginRight: '5px' }}>
+            <Typography variant="body1" style={{ marginRight: '5px' }}>{term.name}</Typography>
+            <IconButton size="small" onClick={handleDelete}>
+              <CloseOutlined color='error' />
+            </IconButton>
+          </div>
+        );
+    };
+
     // Fetch dropdown options
     useEffect(() => {
         fecthData()
@@ -133,10 +171,16 @@ import {
                 <Typography variant="h6">Disease: </Typography> {details.disease?.diseaseName}
                 </Grid>
                 <Grid item xs={4} mt={4}>
-                <Typography variant="h6">Phenotype Terms:</Typography>
-                    {details.phenotypeTerms.map((term, index) => (
-                        <div key={index}>{term.name}</div>
-            ))}
+                    <Typography variant="h6">Phenotype Terms:</Typography>
+                    { phenotypeTermsLoading ? (<CircularProgress />)
+                    :
+                    ( <>
+                        {details.phenotypeTerms.map((term, index) => (
+                        <PhenotypeTerm key={index} term={term} />
+                        ))}
+                        </>)}
+                    
+                    
                 </Grid>
                 <Grid item xs={4} mt={4}>
                 <FormControl fullWidth variant="outlined">

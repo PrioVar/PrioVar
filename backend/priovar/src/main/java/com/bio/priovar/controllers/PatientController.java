@@ -66,6 +66,11 @@ public class PatientController {
         return patientService.getPatientForDetailedView();
     }
 
+    @GetMapping("/phenotypeTerms/{patientId}")
+    public List<PhenotypeTerm> getPhenotypeTermsOfPatient(@PathVariable("patientId") Long patientId) {
+        return patientService.getPhenotypeTermsOfPatient(patientId);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addPatient(@RequestBody Patient patient) {
         return new ResponseEntity<>(patientService.addPatient(patient), patient.getMedicalCenter() == null ? org.springframework.http.HttpStatus.BAD_REQUEST : org.springframework.http.HttpStatus.OK);
@@ -124,5 +129,10 @@ public class PatientController {
     @DeleteMapping("/{patientId}/deletePhenotypeTerm/{phenotypeTermId}")
     public ResponseEntity<String> deletePhenotypeTermFromPatient(@PathVariable("patientId") Long patientId, @PathVariable("phenotypeTermId") Long phenotypeTermId) {
         return new ResponseEntity<>(patientService.deletePhenotypeTermFromPatient(patientId, phenotypeTermId), org.springframework.http.HttpStatus.OK);
+    }
+
+    @DeleteMapping("/phenotypeTerm/{patientId}/{phenotypeTermId}")
+    public ResponseEntity<String> deletePhenotypeTermFromPatientByPhenotypeTermId(@PathVariable("patientId") Long patientId, @PathVariable("phenotypeTermId") Long phenotypeTermId) {
+        return new ResponseEntity<>(patientService.deletePhenotypeTermFromPatientByPhenotypeTermId(patientId, phenotypeTermId), org.springframework.http.HttpStatus.OK);
     }
 }
