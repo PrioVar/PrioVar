@@ -106,6 +106,14 @@ export default function LoginForm({ callerPage }) {
         localStorage.setItem('healthCenterId', healthCenterId)
         localStorage.setItem('adminId', adminId)
         navigate(PATH_DASHBOARD.root)
+        enqueueSnackbar('Login Success!', {
+            variant: 'success',
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            ),
+          })
       }
       catch (error) {
         // print the error details, response is a JSON and has field 'message'
