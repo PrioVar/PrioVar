@@ -24,6 +24,11 @@ export const addPatientWithPhenotype = async (request) => {
   return data
 }
 
+export const deletePhenotypeTerm = async ( patientId, phenotypeTermId) => {
+  const data = await axios.delete(`${ROOTS_PrioVar}/patient/phenotypeTerm/${patientId}/${phenotypeTermId}`)
+  return data
+}
+
 // NEW ADDITION ERKIN
 export const fetchClinicianPatients = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/patient/byClinician/${localStorage.getItem('clinicianId')}`)
@@ -50,6 +55,11 @@ export const fecthMedicalCenterFiles = async () => {
 
 export const fetchDiseases = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/disease`)
+  return data
+}
+
+export const fetchPhenotypeTerms = async (patientId) => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/patient/phenotypeTerms/${patientId}`)
   return data
 }
 
