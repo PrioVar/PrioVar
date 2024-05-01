@@ -72,8 +72,8 @@ def simulate_a_patient(df_variants, numof_pathogenic_variants, numof_nonpathogen
     hpo_sample = hpo_network.sample_patient_phenotype_v2(hpo_ids,
                         phenotype_sample_strategy[0], phenotype_sample_strategy[1], phenotype_sample_strategy[2])
 
-    # sample numof_nonpathogenic_variants non-pathogenic variants (which is not labeled as pathogenic)
-    nonpathogenic_variants = df_variants[df_variants['CLIN_SIG'] != 'pathogenic']
+    # sample numof_nonpathogenic_variants non-pathogenic variants (which is either benign or likely benign)
+    nonpathogenic_variants = df_variants[df_variants['CLIN_SIG'].isin(['benign', 'likely_benign'])]
     nonpathogenic_variants = nonpathogenic_variants.sample(n=numof_nonpathogenic_variants)
 
     # combine the pathogenic and non-pathogenic variants
@@ -275,11 +275,10 @@ df_variants = add_embedding_info(df_variants, path_to_embedding='../data/node_em
 # read the variants variants_cleaned.pkl
 print('Doing the simulation')
 #df_variants = pd.read_pickle('../data/variants_cleaned.pkl')
+#simulate_patients(df_variants, 10, 10000, hpo_strategies, 100, '../data/patients2.pkl')
 
-
-#simulate_patients(df_variants, 10, 10000, hpo_strategies, 100, '../data/patients.pkl')
 #'../data/model_with_first_embedding_freq_based.xgb'
-scores = evaluate_model('../data/model_with_first_embedding_freq_based.xgb', '../data/patients.pkl')
+scores = evaluate_model('../data/model_with_first_embedding_freq_based.xgb', '../data/patients2.pkl')
 
 # visualize the scores
 ranks = [score[0] for score in scores]
