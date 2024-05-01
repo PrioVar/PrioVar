@@ -19,6 +19,7 @@ import {
   import closeFill from '@iconify/icons-eva/close-fill'
   import { Icon } from '@iconify/react'
   import { MIconButton } from '../../components/@material-extend'
+  import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
   
   const PatientDetailsTable = function () {
     //const classes = useStyles()
@@ -26,6 +27,7 @@ import {
     const [selectedOption, setSelectedOption] = useState('')
     const { patientId } = useParams();
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const [openDialog, setOpenDialog] = useState(false);
     let navigate = useNavigate();
     
 
@@ -52,8 +54,17 @@ import {
         setSelectedOption(event.target.value);
     };
 
-      // Handle submit
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
+        if (details.disease?.diseaseName && details.disease.diseaseName !== '') {
+            // If disease is already set, ask for confirmation
+            setOpenDialog(true);
+        } else {
+            // If no disease is set, proceed to change it
+            changeDisease();
+        }
+    };
+    
+    const changeDisease = async () => {
         try {
             console.log(selectedOption)
             const response = await axios.post(`${ROOTS_PrioVar}/patient/${patientId}/addDisease/${selectedOption}`);
@@ -95,53 +106,75 @@ import {
             <ArrowBack sx={{ mr: 1 }} /> Go Back To Patients
         </Button>
         <Box p={3}>
-        <Typography variant="h4" align="center">Patient Details</Typography>
-        <Grid container spacing={2} mt={4}>
-            {/* Name, Age, Sex, and Assigned Clinic in one row */}
-            <Grid item xs={3}>
-            <Typography variant="h6">Name: </Typography> {details.name}
-            </Grid>
-            <Grid item xs={3}>
-            <Typography variant="h6">Age: </Typography>{details.age}
-            </Grid>
-            <Grid item xs={3}>
-            <Typography variant="h6">Sex: </Typography>{details.sex}
-            </Grid>
-            <Grid item xs={3}>
-            <Typography variant="h6">Health Center: </Typography>{details.medicalCenter?.name}
-            </Grid>
+            <Typography variant="h4" align="center">Patient Details</Typography>
+            <Grid container spacing={2} mt={4}>
+                {/* Name, Age, Sex, and Assigned Clinic in one row */}
+                <Grid item xs={3}>
+                <Typography variant="h6">Name: </Typography> {details.name}
+                </Grid>
+                <Grid item xs={3}>
+                <Typography variant="h6">Age: </Typography>{details.age}
+                </Grid>
+                <Grid item xs={3}>
+                <Typography variant="h6">Sex: </Typography>{details.sex}
+                </Grid>
+                <Grid item xs={3}>
+                <Typography variant="h6">Health Center: </Typography>{details.medicalCenter?.name}
+                </Grid>
 
-            {/* Disease and Phenotype Terms in the next row */}
-            <Grid item xs={4} mt={4}>
-            <Typography variant="h6">Disease: </Typography> {details.disease?.diseaseName}
+                {/* Disease and Phenotype Terms in the next row */}
+                <Grid item xs={4} mt={4}>
+                <Typography variant="h6">Disease: </Typography> {details.disease?.diseaseName}
+                </Grid>
+                <Grid item xs={4} mt={4}>
+                <Typography variant="h6">Phenotype Terms:</Typography>
+                    {details.phenotypeTerms.map((term, index) => (
+                        <div key={index}>{term.name}</div>
+            ))}
+                </Grid>
+                <Grid item xs={4} mt={4}>
+                <FormControl fullWidth variant="outlined">
+                    <InputLabel>Select Disease</InputLabel>
+                    <Select
+                        value={selectedOption}
+                        onChange={(e) => setSelectedOption(e.target.value)}
+                        label="Select Disease"
+                    >
+                        {options.map((option) => (
+                        <MenuItem key={option.id} value={option.id}>
+                            {option.diseaseName}
+                        </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <Button onClick={() => handleSubmit(selectedOption)} color="primary" variant="contained" sx={{ mt: 0.5 }}>
+                Set Diagnosis
+                </Button>
+                </Grid>
             </Grid>
-            <Grid item xs={4} mt={4}>
-            <Typography variant="h6">Phenotype Terms:</Typography>
-                {details.phenotypeTerms.map((term, index) => (
-                    <div key={index}>{term.name}</div>
-          ))}
-            </Grid>
-            <Grid item xs={4} mt={4}>
-            <FormControl fullWidth variant="outlined">
-                <InputLabel>Select Disease</InputLabel>
-                <Select
-                    value={selectedOption}
-                    onChange={(e) => setSelectedOption(e.target.value)}
-                    label="Select Disease"
-                >
-                    {options.map((option) => (
-                    <MenuItem key={option.id} value={option.id}>
-                        {option.diseaseName}
-                    </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <Button onClick={() => handleSubmit(selectedOption)} color="primary" variant="contained">
-            Set Diagnosis
-            </Button>
-            </Grid>
-        </Grid>
-    </Box>
+        </Box>
+        <Dialog
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+        >
+            <DialogTitle>{"Change Diagnosis"}</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Are you sure you want to change the diagnosis?
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setOpenDialog(false)} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={() => {
+                    setOpenDialog(false);
+                    changeDisease();
+                }} color="primary" autoFocus>
+                    Yes
+                </Button>
+            </DialogActions>
+        </Dialog>
         </>
     )
 
