@@ -34,6 +34,11 @@ import {
 
     const geneOptions = ['ABCA1', 'ABCA2', 'ABCA3', 'ABCA4', 'ABCB7', 'ABAT', 'ABL1', 'NAT2', 'AARS1'];
 
+    // Sort the geneOptions alphabetically
+    const sortedGeneOptions = geneOptions.slice().sort((a, b) => {
+      // Use localeCompare for string comparison to handle special characters and case sensitivity
+      return a.localeCompare(b);
+    });
 
     const handleSearch = async () => {
 
@@ -147,11 +152,12 @@ import {
                 renderValue={(selected) => selected.join(', ')}
                 style={{ borderColor: 'black', color: 'black' }}
                 >
-                {geneOptions.map((option) => (
-                    <MenuItem key={option} value={option}>
+                {sortedGeneOptions.map((option) => (
+                  <MenuItem key={option} value={option}>
                     {option}
-                    </MenuItem>
+                  </MenuItem>
                 ))}
+
                 </Select>
             </FormControl>
         </Grid>

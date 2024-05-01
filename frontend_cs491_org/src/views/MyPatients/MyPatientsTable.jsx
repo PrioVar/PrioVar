@@ -418,13 +418,13 @@ import {
               return <Label color='error' > File Not Found </Label>
             }
             else if (status === 'FILE_ANNOTATED') {
-              return <Label color='secondary'> File Waiting </Label>
+              return <Label color='secondary'> Analysis Waiting </Label>
             }
             else if (status === 'ANALYSIS_IN_PROGRESS') {
-              return <Label color='warning' > Annotation Running </Label>
+              return <Label color='warning' > Analysis Running </Label>
             }
             else if (status === 'ANALYSIS_DONE') {
-              return <Label color='success' > Annotation Done </Label>
+              return <Label color='success' > Analysis Done </Label>
             }
             else {
               return <Chip label="..." />

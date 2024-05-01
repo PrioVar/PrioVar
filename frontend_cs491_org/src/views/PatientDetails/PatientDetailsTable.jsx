@@ -44,6 +44,12 @@ import {
             console.error('Error fetching options:', error);
         }
     };
+
+    const sortedOptions = options.slice().sort((a, b) => {
+        // Use localeCompare for string comparison to handle special characters and case sensitivity
+        return a.diseaseName.localeCompare(b.diseaseName);
+      });
+      
     // Fetch dropdown options
     useEffect(() => {
         fecthData()
@@ -140,11 +146,12 @@ import {
                         onChange={(e) => setSelectedOption(e.target.value)}
                         label="Select Disease"
                     >
-                        {options.map((option) => (
+                        {sortedOptions.map((option) => (
                         <MenuItem key={option.id} value={option.id}>
                             {option.diseaseName}
                         </MenuItem>
                         ))}
+
                     </Select>
                 </FormControl>
                 <Button onClick={() => handleSubmit(selectedOption)} color="primary" variant="contained" sx={{ mt: 0.5 }}>
