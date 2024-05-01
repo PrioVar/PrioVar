@@ -99,7 +99,7 @@ export const PATH_DASHBOARD = {
     subscriptionPlans: path(ROOTS_DASHBOARD, '/subscriptionPlans'),
     similarPatients: path(ROOTS_DASHBOARD, '/similarPatients'),
     addClinician: path(ROOTS_DASHBOARD, '/addClinician'),
-    patientDetails: path(ROOTS_DASHBOARD, '/patientDetails/:patientId'),
+    patientDetails: path(ROOTS_DASHBOARD, '/patientDetails/:patientId/:fileId'),
     aiSupport: path(ROOTS_DASHBOARD, '/aiSupport'),
     informationRetrieval: path(ROOTS_DASHBOARD, '/informationRetrieval'),
     NewVariantDashboard: path(ROOTS_DASHBOARD, '/sample/:fileName')
