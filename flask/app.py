@@ -7,8 +7,7 @@ from helpers.hpo_annotations import initiate_disease_database, initiate_gene_dat
 from helpers.annotation import annotate_variants, get_all_annotated_variants
 from helpers.knowledge_graph import get_answer
 from helpers.ClinicalResearchAssistant import analyze
-from neo4j import GraphDatabase
-from config import uri, username, password
+from helpers.file_decode import read_file_content_and_return_df
 
 app = Flask(__name__)
 CORS(app)
@@ -43,19 +42,10 @@ def search_graph():
 def start_analysis():
     data = request.get_json()
     vcf_id = data.get('vcfId')
-    driver = GraphDatabase.driver(uri, auth=(username, password))
 
-    # get the VCFFile with the given vcf_id, use ID() to access
-    with driver.session() as session:
-        result = session.run(
-            "MATCH (v:VCFFile) WHERE ID(v) = $vcf_id RETURN v", {"vcf_id": vcf_id}
-        )
-        vcf_file = result.single()[0]
-
-    print(len(vcf_file['content']))
+    df = read_file_content_and_return_df(vcf_id)
 
     return "hey"
-
 
 @app.route('/load-hpo', methods=['GET'])
 def start_loading_data():
