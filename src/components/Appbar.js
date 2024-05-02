@@ -43,6 +43,7 @@ const Appbar = () => {
               fontSize: '1.5rem',
               fontWeight: 'bold',
               transition: 'font-size 0.2s ease',
+              fontFamily: 'CircularStd', // Applying the font-family
             }}
             value="PrioVar"
           />
@@ -57,12 +58,12 @@ const Appbar = () => {
           </button>
         ) : (
           <div style={{ display: 'flex', justifyContent: 'flex-start', maxWidth: '960px', margin: '0 auto' }}>
-            <NavItem to="/" label="Project"  style={{ fontWeight: 'bold' }}/>
-            <NavItem to="/team" label="Team"  style={{ fontWeight: 'bold' }}/>
-            <NavItem to="/reports" label="Reports"  style={{ fontWeight: 'bold' }}/>
-            <NavItem to="/resources" label="Resources Used"  style={{ fontWeight: 'bold' }}/>
-            <NavItem to="/contact-us" label="Contact Us"  style={{ fontWeight: 'bold' }}/>
-            <NavItem to="/priovar" label="PrioVar"  style={{ fontWeight: 'bold' }}/>
+            <NavItem to="/" label="Project" style={{ fontWeight: 'bold', fontFamily: 'CircularStd', fontSize: '1rem' }}/>
+            <NavItem to="/team" label="Team" style={{ fontWeight: 'bold', fontFamily: 'CircularStd', fontSize: '1rem' }}/>
+            <NavItem to="/reports" label="Reports" style={{ fontWeight: 'bold', fontFamily: 'CircularStd', fontSize: '1rem' }}/>
+            <NavItem to="/resources" label="Resources Used" style={{ fontWeight: 'bold', fontFamily: 'CircularStd', fontSize: '1rem' }}/>
+            <NavItem to="/contact-us" label="Contact Us" style={{ fontWeight: 'bold', fontFamily: 'CircularStd', fontSize: '1rem' }}/>
+            <NavItem to="/priovar" label="PrioVar" style={{ fontWeight: 'bold', fontFamily: 'CircularStd', fontSize: '1rem' }}/>
             {
               /* 
               <div style={{ display: 'flex', alignItems: 'center', marginLeft: '0.5rem', fontWeight: 'bold' }}>
@@ -92,7 +93,6 @@ const Appbar = () => {
             }
         </div>
       )}
-      
 
     </nav>
   );
