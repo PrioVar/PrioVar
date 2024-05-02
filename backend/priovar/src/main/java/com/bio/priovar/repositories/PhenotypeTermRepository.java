@@ -16,4 +16,6 @@ public interface PhenotypeTermRepository extends Neo4jRepository<PhenotypeTerm, 
     // find a phenotype term by its ID
     @Query("MATCH (p:PhenotypeTerm) WHERE p.id = $id RETURN p")
     Optional<PhenotypeTerm> findPhenotypeTermById(Long id);
+
+    Optional<PhenotypeTerm> findPhenotypeTermByName(String name);
 }
