@@ -32,7 +32,7 @@ const MENU_OPTIONS = [
   {
     label: 'Home',
     icon: homeFill,
-    linkTo: '/',
+    linkTo: '/priovar/files',
   },
   // TODO: Don't show users if the user is not admin
   {
