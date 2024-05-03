@@ -923,11 +923,13 @@ def save_categories(df, prefix='categories_', folder_path='../data/categories'):
 # Function to apply categories from files to all categorical columns in a new DataFrame
 def apply_categories(df, prefix='categories_', folder_path='../data/categories'):
     # Select only categorical columns
-    categorical_columns = df.select_dtypes(include=['category']).columns
-    for column in categorical_columns:
+    #categorical_columns = df.select_dtypes(include=['category']).columns
+    for column in df.columns:
         file_path = os.path.join(folder_path, f'{prefix}{column}.csv')
-        categories = pd.read_csv(file_path, header=None).squeeze("columns")
-        df[column] = pd.Categorical(df[column], categories=categories)
+
+        if os.path.exists(file_path):
+            categories = pd.read_csv(file_path, header=None).squeeze("columns")
+            df[column] = pd.Categorical(df[column], categories=categories)
 
 
 # run multilabel classification
