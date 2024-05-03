@@ -11,9 +11,9 @@ import torch
 import helpers.hpo_sample
 from helpers import hpo_sample
 from helpers.gene_mapping import get_gene_phenotype_relations, get_gene_phenotype_relations_and_frequency
-from train1 import apply_categories, read_embedding, read_dicts
+from train1 import apply_categories, read_embedding, read_dicts, read_variants
 
-model_path = 'data/model_with_first_embedding_freq_based.xgb'
+model_path = '../data/model_with_first_embedding_freq_based.xgb'
 
 embedding_path = '../data/node_embeddings.txt'
 
@@ -38,8 +38,34 @@ training_data_columns = ['Allele', 'Feature', 'Consequence', 'SYMBOL', 'SIFT', '
        'scaled_min_dot_product', 'scaled_max_dot_product',
        'average_dot_product', 'min_dot_product', 'max_dot_product']
 
+# parameters for add embedding info to patient
+parameters = {
+    "average_dot_product": True,
+    "min_dot_product": False,
+    "max_dot_product": False,
+    "std_dot_product": False,
+    "scaled_average_dot_product": True,
+    "scaled_min_dot_product": False,
+    "scaled_max_dot_product": False,
+    "gene_embedding": False,
+    "fix_num_phen_embedding": 0
+}
+
+# check training data columns to set parameters
+for param in parameters:
+
+    if param == "fix_num_phen_embedding":
+        continue
+
+    if param in training_data_columns:
+        parameters[param] = True
+    else:
+        parameters[param] = False
+
+
 # Load the xgboost model
-model = pickle.load(open(model_path, 'rb'))
+model = xgb.Booster()
+model.load_model(model_path)
 
 def prepare_data(df_variants):
     # divide  HGVSc  columns into two columns by splitting the values by ':' 	ENST00000616125.5:c.11G>A
@@ -87,6 +113,7 @@ def prepare_data(df_variants):
 
     # for categorical columns, we need to convert them to numerical columns which should overlap with the training data
     apply_categories(df_variants)
+    print(df_variants.dtypes)
 
     # HGSV.. columns
     # make the column HGVSc_number a numerical column for model (pay attention to "-" values)
@@ -200,6 +227,9 @@ def add_embedding_info_to_patient(gene, sampled_hpo,
     hpo_embedding_info = {}
 
     # get the gene embedding
+    if gene not in gene_dictionary:
+        return hpo_embedding_info
+
     gene_embedding = embeddings[gene_dictionary[gene]]
 
 
@@ -246,27 +276,67 @@ def add_model_scores(variants, hpo_term_ids):
     # prepare the data
     variants = prepare_data(variants)
 
+
+    # for every row in the variants, insert the hpo related columns
+    for index, row in variants.iterrows():
+
+
+
+        # get necceassary params from parameters
+        hpo_embedding_info = add_embedding_info_to_patient(row['SYMBOL'], hpo_term_ids,  add_scaled_average_dot_product=parameters["scaled_average_dot_product"], add_scaled_min_dot_product=parameters["scaled_min_dot_product"], add_scaled_max_dot_product=parameters["scaled_max_dot_product"],
+                        add_average_dot_product = parameters["average_dot_product"], add_min_dot_product = parameters["min_dot_product"], add_max_dot_product = parameters["max_dot_product"], add_std_dot_product = parameters["std_dot_product"], add_gene_embedding = parameters["gene_embedding"], add_fix_num_phen_embedding = parameters["fix_num_phen_embedding"])
+
+        # add the columns to dataframe if they are not already in the dataframe
+        for key in hpo_embedding_info.keys():
+            if key not in variants.columns:
+                variants[key] = np.nan
+
+        # add the embedding info in hpo_embedding_info to the row
+        for key, value in hpo_embedding_info.items():
+            variants.at[index, key] = value
+
+
     # insert hpo related columns
-    hpo_embedding_info = add_embedding_info_to_patient(variants['SYMBOL'][0], hpo_term_ids, add_scaled_average_dot_product=True, add_scaled_min_dot_product=False, add_scaled_max_dot_product=False,
-                        add_average_dot_product = True, add_min_dot_product = False, add_max_dot_product = False, add_std_dot_product = False, add_gene_embedding = False, add_fix_num_phen_embedding = 0)
+    #hpo_embedding_info = add_embedding_info_to_patient(variants['SYMBOL'][0], hpo_term_ids, add_scaled_average_dot_product=True, add_scaled_min_dot_product=False, add_scaled_max_dot_product=False,
+                        #add_average_dot_product = True, add_min_dot_product = False, add_max_dot_product = False, add_std_dot_product = False, add_gene_embedding = False, add_fix_num_phen_embedding = 0)
 
     # add the embedding info in hpo_embedding_info to the variants all rows
-    variants = pd.concat([variants, pd.DataFrame([hpo_embedding_info])], axis=1)
+    #variants = pd.concat([variants, pd.DataFrame([hpo_embedding_info])], axis=1)
+
+
 
     # get the columns that are needed for the model
     columns = training_data_columns
 
     # run the model and append the results to the variants
-    variants['priovar_score'] = model.predict(variants[columns])
+    # convert the variants[columns] to DMatrix object
+    data_dmatrix = xgb.DMatrix(data=variants[columns], enable_categorical=True)
+
+    # get the predictions
+    scores = model.predict(data_dmatrix)
+    # according to  scores = scores[:, 3] + scores[:, 2] * 0.6 - scores[:, 0] - scores[:, 1] * 0.6
+    variants['Priovar_score'] = scores[:, 3] + scores[:, 2] * 0.6 - scores[:, 0] - scores[:, 1] * 0.6
 
 
     return variants
 
 
 
+def test_add_model_scores():
+    path_variants = '../data/5bc6f943-66e0-4254-94f5-ed3888f05d0a.vep.tsv'
+
+    # read the variants
+    variants = df = pd.read_csv(path_variants, sep='\t', skiprows=48)
+
+    # get random 10 rows
+    variants = variants.sample(10)
+
+    example_res = add_model_scores(variants, [1, 2])
+
+    print(example_res)
 
 
-
+#test_add_model_scores()
 
 
 
