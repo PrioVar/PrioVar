@@ -84,7 +84,7 @@ def simulate_a_patient(df_variants, numof_pathogenic_variants, numof_nonpathogen
     hpo_sample_info = add_embedding_info_to_patient(target_gene, hpo_sample, add_scaled_average_dot_product=True, add_scaled_min_dot_product=True, add_scaled_max_dot_product=True,
                                                     add_average_dot_product=True, add_min_dot_product=True, add_max_dot_product=True)
 
-    # add hpo_sample_info to the all variants
+    # add hpo_sample_info to the all variants ???
     variants = pd.concat([variants, pd.DataFrame([hpo_sample_info])], axis=1)
 
     return variants, hpo_sample, target_variant
