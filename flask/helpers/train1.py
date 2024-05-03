@@ -1,3 +1,4 @@
+import os
 import pickle
 import random
 import xgboost as xgb
@@ -97,7 +98,7 @@ def add_sampled_hpo_terms_full_precise(df_variants, node_embeddings ,gene_dict, 
     return df_variants
 
 
-
+"""
 if False:
     # read the variants
     df_variants = read_variants()
@@ -127,7 +128,7 @@ if False:
     #len rows
     print(len(df_variants))
 
-
+"""
 
 
 #example row
@@ -675,6 +676,9 @@ def run_multilabel(data_path, output_path):
     # make HGvsp categorical
     df_clean['HGVSp'] = df_clean['HGVSp'].astype('category')
 
+    # save all categorical codes by getting all categorical columns
+    save_categories(df_clean)
+
 
     # ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:Allele: category, Gene: object, Feature: category, Consequence: category, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object, DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
     # drop :Gene, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object,
@@ -904,8 +908,26 @@ def print_num_unique_values_of_categorical_columns(df):
         print(column, ":", len(df[column].unique()))
 
 
+def save_categories(df, prefix='categories_', folder_path='../data/categories'):
+    # Create the folder if it does not exist
+    os.makedirs(folder_path, exist_ok=True)
+
+    # Select only categorical columns
+    categorical_columns = df.select_dtypes(include=['category']).columns
+    for column in categorical_columns:
+        categories = df[column].cat.categories
+        file_path = os.path.join(folder_path, f'{prefix}{column}.csv')
+        categories.to_series().to_csv(file_path, index=False)
 
 
+# Function to apply categories from files to all categorical columns in a new DataFrame
+def apply_categories(df, prefix='categories_', folder_path='../data/categories'):
+    # Select only categorical columns
+    categorical_columns = df.select_dtypes(include=['category']).columns
+    for column in categorical_columns:
+        file_path = os.path.join(folder_path, f'{prefix}{column}.csv')
+        categories = pd.read_csv(file_path, header=None).squeeze("columns")
+        df[column] = pd.Categorical(df[column], categories=categories)
 
 
 # run multilabel classification

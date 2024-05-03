@@ -117,5 +117,5 @@ def save_edges(edge_items):
         for item in edge_items:
             session.write_transaction(add_relationship, item[0], item[1])
 
-a = read_hpo_from_json()
-b = 5
+#a = read_hpo_from_json()
+#b = 5
