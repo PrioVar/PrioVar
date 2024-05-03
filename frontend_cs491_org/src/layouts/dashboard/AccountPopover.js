@@ -40,11 +40,13 @@ const MENU_OPTIONS = [
     icon: peopleFill,
     linkTo: PATH_DASHBOARD.user.list,
   },
+  /*
   {
     label: 'Settings',
     icon: settings2Fill,
     linkTo: PATH_DASHBOARD.user.account,
   },
+  */
 ]
 
 // ----------------------------------------------------------------------
