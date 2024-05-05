@@ -48,6 +48,16 @@ public class PatientController {
     public List<PatientDTO> getPatientsByClinicianId(@PathVariable("clinicianId") Long clinicianId) {
         return patientService.getPatientsByClinicianId(clinicianId);
     }
+    /*@GetMapping("/allAvailables/{medicalCenterId}")
+    public List<PatientDTO> getAllAvailablePatients(@PathVariable("medicalCenterId") Long medicalCenterId) {
+        return patientService.getAllAvailablePatients(medicalCenterId);
+    }*/
+
+    @GetMapping("/requested/{medicalCenterId}")
+    public List<PatientDTO> getRequestedPatients(@PathVariable("medicalCenterId") Long medicalCenterId) {
+
+        return patientService.getRequestedPatients(medicalCenterId);
+    }
 
     @GetMapping("/byGenesusId/{genesusId}")
     public Patient getPatientByGenesusId(@PathVariable("genesusId") String genesusId) {

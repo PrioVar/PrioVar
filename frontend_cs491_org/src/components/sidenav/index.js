@@ -113,6 +113,9 @@ export default function SideNav() {
               <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.clinicPatients} sx={{ mt: 5 }}>
                   Clinics Patients
               </Button>
+              <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.requestedPatients} sx={{ mt: 5 }}>
+                  Requested Patients
+              </Button>
               <Button size="large" color="inherit" variant="contained" component={RouterLink} onClick={handleClose} to={PATH_DASHBOARD.general.customQuery} sx={{ mt: 5 }}>
                   Search Population
               </Button>
