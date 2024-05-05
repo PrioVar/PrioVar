@@ -13,6 +13,8 @@ public class PatientDTO {
     private String sex;
     private VCFFileDTO file;
     private Long clinicianId;
+    //private Long medicalCenterId;
+    //private Long requestedByClinicianId;
     public PatientDTO(Long patientId, 
                     String patientName, 
                     int age,
@@ -26,4 +28,21 @@ public class PatientDTO {
         this.file = file;
         this.clinicianId = clinicianId;
     }
+    /*public PatientDTO(Long patientId,
+                    String patientName,
+                    int age, String sex,
+                    VCFFileDTO file,
+                    Long clinicianId,
+                    Long medicalCenterId,
+                    Long requestedByClinicianId) {
+        this.patientId = patientId;
+        this.patientName = patientName;
+        this.age = age;
+        this.sex = sex;
+        this.file = file;
+        this.clinicianId = clinicianId;
+        this.medicalCenterId = medicalCenterId;
+        this.requestedByClinicianId = requestedByClinicianId;
+    }*/
+
 }

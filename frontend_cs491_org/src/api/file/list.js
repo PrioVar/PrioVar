@@ -46,6 +46,11 @@ export const fecthMedicalCenterPatients = async () => {
   return data
 }
 
+export const fetchRequestedMedicalCenterPatients = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/patient/requested/${localStorage.getItem('healthCenterId')}`)
+  return data
+}
+
 // NEW ADDITION ERKIN
 export const fecthClinicianFiles = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byClinician/${localStorage.getItem('clinicianId')}`)
@@ -93,13 +98,8 @@ export const markAllNotificationsAsRead = async (actorId) => {
 
 export const acceptInformationRequest = async (informationRequestId, responseMessage) => {
   try {
-    console.log('lala')
     console.log(responseMessage)
-    const response = await axios.post(`${ROOTS_PrioVar}/request/accept/${informationRequestId}`, null, {
-      params: {
-        notificationAppendix: responseMessage
-      }
-    });
+    const response = await axios.post(`${ROOTS_PrioVar}/request/accept/${informationRequestId}?notificationAppendix=${responseMessage}`);
     return response.data;
   } catch (error) {
     console.error('Failed to accept information request:', error);
@@ -109,11 +109,8 @@ export const acceptInformationRequest = async (informationRequestId, responseMes
 
 export const rejectInformationRequest = async (informationRequestId, responseMessage) => {
   try {
-    const response = await axios.post(`${ROOTS_PrioVar}/request/reject/${informationRequestId}`, null, {
-      params: {
-        notificationAppendix: responseMessage
-      }
-    });    return response.data;
+    const response = await axios.post(`${ROOTS_PrioVar}/request/reject/${informationRequestId}?notificationAppendix=${responseMessage}`);
+    return response.data;
   } catch (error) {
     console.error('Failed to reject information request:', error);
     throw error;

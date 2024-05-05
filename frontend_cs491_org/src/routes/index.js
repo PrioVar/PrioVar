@@ -16,6 +16,7 @@ import FileUploadView from '../views/FileUploadView'
 
 import ClinicsPatients from '../views/ClinicsPatients'
 import MyPatients from '../views/MyPatients'
+import RequestedPatients from '../views/RequestedPatients'
 import CustomQuery from 'src/views/CustomQuery'
 import SubscriptionPlans from 'src/views/SubscriptionPlans'
 import SimilarPatients from 'src/views/SimilarPatients'
@@ -119,6 +120,7 @@ export default function Router() {
         { path: '/sample/:fileId/:sampleName', element: <VariantDashboard /> },
         { path: '/clinics/:healthCenterId/patients', element: <ClinicsPatients />},
         { path: '/clinician/:healthCenterId/patients', element: <MyPatients />},
+        { path: '/clinics/:healthCenterId/requestedPatients', element: <RequestedPatients/>},
         { path: '/customquery', element: < CustomQuery/>},
         { path: '/subscriptionPlans', element: < SubscriptionPlans/>},
         { path: '/similarPatients', element: < SimilarPatients/>},

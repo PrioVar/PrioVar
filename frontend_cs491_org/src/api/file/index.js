@@ -1,5 +1,5 @@
 export { useFiles, useBedFiles, updateFileNotes, updateFinishInfo, fecthClinicianFiles, 
-        fecthMedicalCenterFiles, fetchClinicianPatients, fecthMedicalCenterPatients, 
+        fecthMedicalCenterFiles, fetchClinicianPatients, fecthMedicalCenterPatients, fetchRequestedMedicalCenterPatients,
         fetchCurrentClinicianName, addPatientWithPhenotype, deletePatient, deleteVCF,
         fetchDiseases, fetchPhenotypeTerms, deletePhenotypeTerm, addPhenotypeTerm, sendInformationRequest, 
         fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead, acceptInformationRequest, rejectInformationRequest 

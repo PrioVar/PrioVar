@@ -95,6 +95,7 @@ export const PATH_DASHBOARD = {
     variantDetails: path(ROOTS_DASHBOARD, '/variants/:fileId/:sampleName/:chrom/:pos'),
     myPatients: path(ROOTS_DASHBOARD, '/clinician/:healthCenterId/patients'),
     clinicPatients: path(ROOTS_DASHBOARD, '/clinics/:healthCenterId/patients'),
+    requestedPatients: path(ROOTS_DASHBOARD, '/clinics/:healthCenterId/requestedPatients'),
     customQuery: path(ROOTS_DASHBOARD, '/customquery'),
     subscriptionPlans: path(ROOTS_DASHBOARD, '/subscriptionPlans'),
     similarPatients: path(ROOTS_DASHBOARD, '/similarPatients'),

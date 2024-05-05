@@ -39,17 +39,31 @@ function NotificationsPopover() {
     setResponseMessage('');
   };
   const handleAccept = async () => {
-    if (selectedNotification && selectedNotification.informationRequest) {
-      await acceptInformationRequest(selectedNotification.informationRequest.id, responseMessage);
+
+    try {
+      handleClose();
+      alert("Response sent successfully");
+      if (selectedNotification && selectedNotification.informationRequest) {
+        await acceptInformationRequest(selectedNotification.informationRequest.id, responseMessage);
+      }
+    } catch (error) {
+      handleClose();
+      alert("Failed to send request");
     }
-    handleClose();
+    
   };
 
   const handleReject = async () => {
-    if (selectedNotification && selectedNotification.informationRequest) {
-      await rejectInformationRequest(selectedNotification.informationRequest.id, responseMessage);
+    try {
+      handleClose();
+      alert("Response sent successfully");
+      if (selectedNotification && selectedNotification.informationRequest) {
+        await rejectInformationRequest(selectedNotification.informationRequest.id, responseMessage);
+      }
+    } catch (error) {
+      handleClose();
+      alert("Failed to send request");
     }
-    handleClose();
   };
 
 
