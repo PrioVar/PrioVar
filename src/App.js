@@ -9,6 +9,7 @@ import PrioVar from './components/PrioVar';
 import React   from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './styles/fonts/index.css';
 import Reports from './components/Reports';
 import Resources from './components/Resources';
 

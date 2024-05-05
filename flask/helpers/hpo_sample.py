@@ -9,6 +9,17 @@ class Network:
         self.nodes = process_nodes(nodes)
         self.edges = process_edges(edges)
 
+        # parents dictionary
+        # structure: edge = [sub, obj] where sub is the child and obj is the parent
+        self.my_parents = {}
+        for edge in self.edges:
+            parent = edge[1]
+            child = edge[0]
+            if child in self.my_parents:
+                self.my_parents[child].append(parent)
+            else:
+                self.my_parents[child] = [parent]
+
     def get_all_ancestors(self, hpo_id):
         """
         :param hpo_id: HPO id
@@ -91,6 +102,9 @@ class Network:
         # precise, imporice, noisy are the number of samples for each category
         # choose which hpo_ids belong to precise, imprecise, and noisy (unique)
 
+        precise = min(precise, len(list_hpo_ids))
+        imprecise = min(imprecise, len(list_hpo_ids))
+
         precise_samples = random.sample(list_hpo_ids, precise)
         # ????
         #list_hpo_ids = list(set(list_hpo_ids) - set(precise_samples))
@@ -107,6 +121,7 @@ class Network:
 
         return samples
 
+
     def sample_from_random_strategy(self, list_hpo_ids, strategies) -> list:
 
         # strategies tuples of 3 elements: (precise, imprecise, noisy),
@@ -115,6 +130,28 @@ class Network:
         strategy = random.choice(strategies)
 
         return self.sample_patient_phenotype_v2(list_hpo_ids, strategy[0], strategy[1], strategy[2])
+
+    # returns a list of hpo_ids that are ancestors of the given hpo_ids that are at most max_ancestral_depth away
+    def get_imprecision_pool(self, hpo_ids, max_ancestral_depth) -> list:
+
+        pool = set()
+        for hpo_id in hpo_ids:
+
+            this_level_ancestors = [hpo_id]
+
+            for i in range(max_ancestral_depth):
+                next_level_ancestors = []
+                for ancestor in this_level_ancestors:
+                    if ancestor in self.my_parents:
+                        next_level_ancestors.extend(self.my_parents[ancestor])
+
+                pool.update(next_level_ancestors)
+                this_level_ancestors = next_level_ancestors
+
+                if not this_level_ancestors:
+                    break
+
+        return list(pool)
 
 
 
