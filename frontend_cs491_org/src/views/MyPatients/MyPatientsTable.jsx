@@ -1,7 +1,6 @@
 import {
     Box,
     CircularProgress,
-    Button,
     Dialog,
     DialogActions,
     DialogContent,
@@ -12,9 +11,12 @@ import {
     DialogContentText,
     Typography,
     TextField,
+    Modal,
+    Button,
   } from '@material-ui/core'
   import { makeStyles } from '@material-ui/styles'
   import { ArrowForward, Info, Note, Add } from '@material-ui/icons'
+  import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
   import MUIDataTable from 'mui-datatables'
   import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
@@ -134,20 +136,75 @@ import {
       </>
     )
   }
+
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px #000',
+    boxShadow: 24,
+    borderRadius: '16px',
+    p: 4,
+  };
   
-  const GoToSampleDashboard = function ({ fileName }) {
-    const navigate = useNavigate()
+  const StatusButton = ({ fileName, status }) => {
+    const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
   
-    const handleClick = () => {
-      navigate(`/priovar/sample/${fileName}`)
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+  
+    const startAnalysis = () => {
+      handleClose();
+      // Logic to start analysis
+      console.log("Starting analysis for:", fileName);
+      // Optionally navigate or refresh page here
+    };
+  
+    if (status === 'ANALYSIS_DONE') {
+      return (
+        <Button variant="contained" onClick={() => navigate(`/priovar/sample/${fileName}`)} size="small">
+          <ArrowForward sx={{ marginRight: '8px' }}  /> View
+        </Button>
+      );
+    } else if (status === 'ANALYSIS_IN_PROGRESS') {
+      return (
+        <Button variant="contained" disabled size="small">
+          <CircularProgress size={14} sx={{ marginRight: '8px' }} /> Running
+        </Button>
+      );
+    } else if (status === 'FILE_ANNOTATED') {
+      return (
+        <>
+          <Button variant="contained" onClick={handleOpen} size="small">
+            <PlayCircleFilledIcon sx={{ marginRight: '8px' }} /> Start
+          </Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyle}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Confirm Analysis
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Are you sure you want to start the analysis process for {fileName}?
+              </Typography>
+              <Button onClick={startAnalysis} color="primary">Yes</Button>
+              <Button onClick={handleClose} color="secondary">No</Button>
+            </Box>
+          </Modal>
+        </>
+      );
+    } else {
+      return null; // For other statuses, return nothing or adjust as needed
     }
-  
-    return (
-      <Button variant="contained" onClick={handleClick} size="small">
-        <ArrowForward />
-      </Button>
-    )
-  }
+  };
 
   const MyPatientsTable = function () {
     //const classes = useStyles()
@@ -475,17 +532,9 @@ import {
           filter: false,
           sort: false,
           customBodyRenderLite: (dataIndex) => {
-            const row = data[dataIndex]
-            const status = getStatusLabel(row)
-            if(!row.file) return null
-            if (status === 'ANNO_RUNNING' || status === 'ANNO_PENDING') return null
-            if (status.includes('ANNO') || status === 'WAITING')
-              return (
-                <GoToSampleDashboard fileName={row.file.fileName} />
-              )
-            return (
-              <GoToSampleDashboard fileName={row.file.fileName} />
-            )
+            const row = data[dataIndex];
+            const status = row.file.fileStatus;
+            return <StatusButton fileName={row.file.fileName} status={status} />;
           },
         },
       },
