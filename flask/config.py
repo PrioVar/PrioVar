@@ -10,3 +10,7 @@ uri = os.getenv('NEO4J_URI', DEFAULT_NEO4J_URI)
 username = os.getenv('NEO4J_USERNAME', DEFAULT_NEO4J_USERNAME)
 password = os.getenv('NEO4J_PASSWORD', DEFAULT_NEO4J_PASSWORD)
 API_KEY = "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"
+
+api_username = "priovar@cs492.com"
+api_password = "7G!^fEUwg^v2>b."
+api_auth_token = "20ab68f6e357ed6475f5022c0977dbd5eafe0cb2"
