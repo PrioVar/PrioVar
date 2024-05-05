@@ -25,12 +25,15 @@ public class Notification {
     private String appendix; //Holds any extra information that needs to be sent with the notification
     private Boolean isRead;
 
+
     @Relationship(type = "NOTIFIED_BY", direction = Relationship.Direction.OUTGOING)
     private Actor sender;
 
     @Relationship(type = "NOTIFIED_TO", direction = Relationship.Direction.OUTGOING)
     private Actor receiver;
 
+    @Relationship(type = "CARRIES", direction = Relationship.Direction.OUTGOING)
+    private InformationRequest informationRequest;
 
 
 }

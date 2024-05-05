@@ -11,7 +11,7 @@ import Scrollbar from '../../components/Scrollbar';
 import MenuPopover from '../../components/MenuPopover';
 import { MIconButton } from '../../components/@material-extend';
 import NotificationDetailsDialog from './NotificationDetailsDialog';
-import { markNotificationAsRead, markAllNotificationsAsRead, fetchNotifications } from '../../api/file';  // Ensure this points to your actual import path
+import { markNotificationAsRead, markAllNotificationsAsRead, fetchNotifications, acceptInformationRequest, rejectInformationRequest } from '../../api/file';  // Ensure this points to your actual import path
 
 function NotificationsPopover() {
   const anchorRef = useRef(null);
@@ -38,6 +38,20 @@ function NotificationsPopover() {
     setSelectedNotification(null);
     setResponseMessage('');
   };
+  const handleAccept = async () => {
+    if (selectedNotification && selectedNotification.informationRequest) {
+      await acceptInformationRequest(selectedNotification.informationRequest.id, responseMessage);
+    }
+    handleClose();
+  };
+
+  const handleReject = async () => {
+    if (selectedNotification && selectedNotification.informationRequest) {
+      await rejectInformationRequest(selectedNotification.informationRequest.id, responseMessage);
+    }
+    handleClose();
+  };
+
 
   const handleNotificationClick = async (notification) => {
     if (!notification.isRead) {
@@ -127,8 +141,8 @@ function NotificationsPopover() {
         responseMessage={responseMessage}
         setResponseMessage={setResponseMessage}
         handleClose={handleClose}
-        //handleAccept={handleAccept}
-        //handleReject={handleReject}
+        handleAccept={handleAccept}
+        handleReject={handleReject}
       />
     </>
   );

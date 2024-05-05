@@ -54,6 +54,7 @@ public class InformationRequestService {
         informationRequest.setRequestDescription(requestDescription);
 
         MedicalCenter receivingMedicalCenter = patient.getMedicalCenter();
+        informationRequestRepository.save(informationRequest);
 
 
         //Create a notification object for the medical center
@@ -65,12 +66,12 @@ public class InformationRequestService {
         notification.setNotification("A new information request has been made for patient " + patient.getName() +
                                      " by clinician " + informationRequest.getClinician().getName() +
                                      " from medical center " + informationRequest.getClinician().getMedicalCenter().getName());
+        notification.setInformationRequest(informationRequest);
        
         notification.setAppendix(informationRequest.getRequestDescription());
         notification.setIsRead(false);
 
         notificationRepository.save(notification);
-        informationRequestRepository.save(informationRequest);
         return ResponseEntity.ok("Information request sent successfully");
     }
 
@@ -83,6 +84,8 @@ public class InformationRequestService {
         informationRequest.setIsPending(false);
         informationRequest.setIsRejected(false);
 
+        informationRequestRepository.save(informationRequest);
+
         //Create a notification object for the clinician
         Notification notification = new Notification();
         notification.setType("RESPONSE");
@@ -91,12 +94,12 @@ public class InformationRequestService {
         notification.setSendAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         notification.setNotification("Your information request for patient " + informationRequest.getPatient().getName() +
                                      " has been accepted by medical center " + informationRequest.getPatient().getMedicalCenter().getName());
+
         notification.setIsRead(false);
         notification.setAppendix(notificationAppendix);
         Clinician clinician = informationRequest.getClinician();
 
         notificationRepository.save(notification);
-        informationRequestRepository.save(informationRequest);
         return clinicianService.addRequestedPatientToClinician(clinician, informationRequest.getPatient());
     }
 
@@ -115,7 +118,7 @@ public class InformationRequestService {
         notification.setSender(informationRequest.getPatient().getMedicalCenter());
         notification.setReceiver(informationRequest.getClinician());
         notification.setSendAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
-        notification.setNotification("Your information request for patient " + informationRequest.getPatient().getName() +
+        notification.setNotification("Your information request for patient Gender: " + informationRequest.getPatient().getSex() + " Age: " + informationRequest.getPatient().getAge() +
                                      " has been rejected by medical center " + informationRequest.getPatient().getMedicalCenter().getName());
         notification.setIsRead(false);
         notification.setAppendix(notificationAppendix);

@@ -89,6 +89,38 @@ export const markAllNotificationsAsRead = async (actorId) => {
   return data;
 };
 
+// list.js
+
+export const acceptInformationRequest = async (informationRequestId, responseMessage) => {
+  try {
+    console.log('lala')
+    console.log(responseMessage)
+    const response = await axios.post(`${ROOTS_PrioVar}/request/accept/${informationRequestId}`, null, {
+      params: {
+        notificationAppendix: responseMessage
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to accept information request:', error);
+    throw error;
+  }
+};
+
+export const rejectInformationRequest = async (informationRequestId, responseMessage) => {
+  try {
+    const response = await axios.post(`${ROOTS_PrioVar}/request/reject/${informationRequestId}`, null, {
+      params: {
+        notificationAppendix: responseMessage
+      }
+    });    return response.data;
+  } catch (error) {
+    console.error('Failed to reject information request:', error);
+    throw error;
+  }
+};
+
+
 export const useFiles = () => {
   const queryClient = useQueryClient()
 
