@@ -50,6 +50,17 @@ public class NotificationService {
         return "Notification deleted successfully";
     }
 
+    public ResponseEntity<String> markAllNotificationsAsReadByActorId(Long actorId) {
+        List<Notification> notifications = notificationRepository.findByReceiverId(actorId);
+
+        for (Notification notification : notifications) {
+            notification.setIsRead(true);
+            notificationRepository.save(notification);
+        }
+
+        return ResponseEntity.ok("All notifications marked as read");
+    }
+
     public List<Notification> getUnreadNotificationsByActorId(Long actorId) {
         return notificationRepository.findByReceiverIdAndIsReadFalse(actorId);
     }

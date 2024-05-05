@@ -19,7 +19,7 @@ public class Notification {
     @Id
     @GeneratedValue
     private Long id;
-
+    private String type; //Request, Response
     private String notification;
     private OffsetDateTime sendAt;
     private String appendix; //Holds any extra information that needs to be sent with the notification

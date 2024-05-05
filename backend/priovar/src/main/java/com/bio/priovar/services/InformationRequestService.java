@@ -55,14 +55,16 @@ public class InformationRequestService {
 
         MedicalCenter receivingMedicalCenter = patient.getMedicalCenter();
 
+
         //Create a notification object for the medical center
         Notification notification = new Notification();
+        notification.setType("REQUEST");
         notification.setSender(informationRequest.getClinician());
         notification.setReceiver(receivingMedicalCenter);
         notification.setSendAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         notification.setNotification("A new information request has been made for patient " + patient.getName() +
                                      " by clinician " + informationRequest.getClinician().getName() +
-                                     " from medical center" + informationRequest.getClinician().getMedicalCenter().getName());
+                                     " from medical center " + informationRequest.getClinician().getMedicalCenter().getName());
        
         notification.setAppendix(informationRequest.getRequestDescription());
         notification.setIsRead(false);
@@ -83,6 +85,7 @@ public class InformationRequestService {
 
         //Create a notification object for the clinician
         Notification notification = new Notification();
+        notification.setType("RESPONSE");
         notification.setSender(informationRequest.getPatient().getMedicalCenter());
         notification.setReceiver(informationRequest.getClinician());
         notification.setSendAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
@@ -108,6 +111,7 @@ public class InformationRequestService {
 
         //Create a notification object for the clinician
         Notification notification = new Notification();
+        notification.setType("RESPONSE");
         notification.setSender(informationRequest.getPatient().getMedicalCenter());
         notification.setReceiver(informationRequest.getClinician());
         notification.setSendAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
