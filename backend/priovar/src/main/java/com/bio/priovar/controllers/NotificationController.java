@@ -25,8 +25,9 @@ public class NotificationController {
     }
 
     @GetMapping("/listNotifications/{actorId}")
-    public List<Notification> getNotificationsByMedicalCenterId(@PathVariable("actorId") Long actorId) {
-        return notificationService.getNotificationsByActorId(actorId);
+    public List<Notification> getNotificationsByActorId(@PathVariable("actorId") Long actorId) {
+        List<Notification> notifications = notificationService.getNotificationsByActorId(actorId);
+        return notifications;
     }
 
     @GetMapping("/listNotifications/{actorId}/unread")
@@ -37,6 +38,11 @@ public class NotificationController {
     @PostMapping("/markRead/{notificationId}")
     public ResponseEntity<String> markNotificationAsReadByID(@PathVariable("notificationId") Long notificationId) {
         return  notificationService.markNotificationAsReadByID(notificationId);
+    }
+
+    @PostMapping("/markAllRead/{actorId}")
+    public ResponseEntity<String> markAllNotificationsAsReadByActorId(@PathVariable("actorId") Long actorId) {
+        return notificationService.markAllNotificationsAsReadByActorId(actorId);
     }
 
     @DeleteMapping("/delete/{notificationId}")

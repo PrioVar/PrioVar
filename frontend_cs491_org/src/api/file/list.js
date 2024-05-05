@@ -79,6 +79,16 @@ const fetchBedFiles = async () => {
   return data
 }
 
+export const markNotificationAsRead = async (notificationId) => {
+  const { data } = await axios.post(`${ROOTS_PrioVar}/notification/markRead/${notificationId}`);
+  return data;
+};
+
+export const markAllNotificationsAsRead = async (actorId) => {
+  const { data } = await axios.post(`${ROOTS_PrioVar}/notification/markAllRead/${actorId}`);
+  return data;
+};
+
 export const useFiles = () => {
   const queryClient = useQueryClient()
 
@@ -133,6 +143,28 @@ export const updateFinishInfo = async (fileId) => {
   return data
 }
 
+export const fetchNotifications = async (actorId) => {
+  try {
+    const response = await axios.get(`${ROOTS_PrioVar}/notification/listNotifications/${actorId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// list.js
+export const sendInformationRequest = async (clinicianId, patientId, requestDescription) => {
+  const params = new URLSearchParams({ clinicianId, patientId, requestDescription });
+  try {
+    const response = await axios.post(`${ROOTS_PrioVar}/request/send`, params);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to send information request:", error.response);
+    throw error;
+  }
+};
+
+
 export const updateFileNotes = async (vcfFileId, notes) => {
   const formData = new FormData();
   formData.append('vcfFileId', vcfFileId);
@@ -145,6 +177,11 @@ export const updateFileNotes = async (vcfFileId, notes) => {
   } catch (error) {
     console.log(error)
   }
+  
+  
+
+
+  
   /*
   const { data } = await axios.put(`${API_BASE_URL}/file/${fileId}`, {
     type: 'notes',
