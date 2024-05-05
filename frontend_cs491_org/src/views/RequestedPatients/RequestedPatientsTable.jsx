@@ -471,22 +471,6 @@ import {
         },
       },
       {
-        name: 'similar_patients',
-        label: 'Find similar patients',
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return (
-                <Button variant="contained" color="info" onClick={() => handleSeeSimilarPatients(row)} size="small">
-                  <Info />
-                </Button>
-              )
-          },
-        },
-      },
-      {
         name: 'details',
         label: 'Details',
         options: {
