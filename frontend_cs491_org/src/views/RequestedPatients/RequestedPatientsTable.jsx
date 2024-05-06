@@ -518,7 +518,7 @@ import {
             onClose={() => setAnnotationModalOpen()}
             />
             <MUIDataTable
-              title={`Requested patients of ${medicalCenterName || '...'} health center`}
+              title={`Cross-Clinic Accessed Patients by ${medicalCenterName || '...'} Health Center`}
               data={data}
               columns={COLUMNS}
               options={{
