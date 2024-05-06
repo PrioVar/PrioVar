@@ -497,7 +497,7 @@ public class PatientService {
     }
 
     public List<PatientDTO> getRequestedPatients(Long medicalCenterId) {
-        //List<Patient> patients = clinicanRepository.findRequestedPatients(medicalCenterId);
+        //List<Patient> patients = clinicianRepository.findRequestedPatients(medicalCenterId);
         //first find all clinicians of a medical center
         List<Clinician> clinicians = clinicianRepository.findAllByMedicalCenterId(medicalCenterId);
         List<Patient> patients = new ArrayList<>();

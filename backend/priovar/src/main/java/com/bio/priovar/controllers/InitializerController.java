@@ -215,6 +215,19 @@ public class InitializerController {
         clinician1.setPatients(patients);
         clinicianRepository.save(clinician1);
 
+        Clinician clinician2 = new Clinician();
+        clinician2.setName("Ayşe Melek");
+        clinician2.setEmail("ayse.melek@liva.com");
+        clinician2.setPassword("123");
+        clinician2.setMedicalCenter(liva);
+        List<Patient> clinician2Patients = new ArrayList<>();
+        clinician2Patients.add(patient4);
+        clinician2.setPatients(clinician2Patients);
+        List<VCFFile> clinician2VcfFiles = new ArrayList<>();
+        clinician2VcfFiles.add(vcfFile4);
+        clinician2.setVcfFiles(clinician2VcfFiles);
+        clinicianRepository.save(clinician2);
+
         // MEDICAL CENTER 2
 
         MedicalCenter acibadem = new MedicalCenter();
@@ -228,15 +241,6 @@ public class InitializerController {
 
         medicalCenterRepository.save(acibadem);
 
-        Clinician clinician2 = new Clinician();
-
-        clinician2.setName("Ahmet Karaca");
-        clinician2.setEmail("ahmet.karaca@acibadem.com");
-        clinician2.setPassword("123");
-        clinician2.setMedicalCenter(acibadem);
-        clinician2.setPatients(new ArrayList<>());
-        clinicianRepository.save(clinician2);
-
         Patient patient5 = new Patient();
         patient5.setName("Mehmet Ali");
         List<PhenotypeTerm> phenotypeTerms4 = new ArrayList<>();
@@ -245,6 +249,16 @@ public class InitializerController {
         patient5.setAge(29);
         patient5.setSex("Male");
         patient5.setMedicalCenter(acibadem);
+        VCFFile vcfFile5 = new VCFFile();
+        vcfFile5.setContent(base64File);
+        vcfFile5.setFileName(UUID.randomUUID().toString());
+        vcfFile5.setMedicalCenter(acibadem);
+        vcfFile5.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
+        vcfFile5.setCreatedAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
+        vcfFile5.setFinishedAt(null);
+        vcfFile5.setClinicianComments(new ArrayList<>());
+        patient5.setVcfFile(vcfFile5);
+        vcfRepository.save(vcfFile5);
         patientRepository.save(patient5);
 
         Patient patient6 = new Patient();
@@ -257,19 +271,29 @@ public class InitializerController {
         patient6.setAge(52);
         patient6.setSex("Male");
         patient6.setMedicalCenter(acibadem);
+        VCFFile vcfFile6 = new VCFFile();
+        vcfFile6.setContent(base64File);
+        vcfFile6.setFileName(UUID.randomUUID().toString());
+        vcfFile6.setMedicalCenter(acibadem);
+        vcfFile6.setFileStatus(VCFFile.FileStatus.FILE_ANNOTATED);
+        vcfFile6.setCreatedAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
+        vcfFile6.setFinishedAt(null);
+        vcfFile6.setClinicianComments(new ArrayList<>());
+        patient6.setVcfFile(vcfFile6);
+        vcfRepository.save(vcfFile6);
         patientRepository.save(patient6);
 
         Clinician clinician3 = new Clinician();
-        clinician3.setName("Ayşe Melek");
-        clinician3.setEmail("ayse.melek@liva.com");
+        clinician3.setName("Ahmet Karaca");
+        clinician3.setEmail("ahmet.karaca@acibadem.com");
         clinician3.setPassword("123");
-        clinician3.setMedicalCenter(liva);
-        List<Patient> clinician3Patients = new ArrayList<>();
-        clinician3Patients.add(patient4);
-        clinician3.setPatients(clinician3Patients);
-        List<VCFFile> clinician3VcfFiles = new ArrayList<>();
-        clinician3VcfFiles.add(vcfFile4);
-        clinician3.setVcfFiles(clinician3VcfFiles);
+        clinician3.setMedicalCenter(acibadem);
+        clinician3.setPatients(new ArrayList<>());
+        clinician3.getPatients().add(patient5);
+        clinician3.getPatients().add(patient6);
+        clinician3.setVcfFiles(new ArrayList<>());
+        clinician3.getVcfFiles().add(vcfFile5);
+        clinician3.getVcfFiles().add(vcfFile6);
         clinicianRepository.save(clinician3);
 
 
