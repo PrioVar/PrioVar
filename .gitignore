@@ -32,3 +32,9 @@ flask/helpers/__pycache__/hpo_annotations.cpython-312.pyc
 flask/helpers/__pycache__/hpo.cpython-312.pyc
 flask/helpers/__pycache__/knowledge_graph.cpython-312.pyc
 flask/helpers/__pycache__/ClinicalResearchAssistant.cpython-312.pyc
+*.pyc
+frontend_cs491_org/package-lock.json
+flask/helpers/__pycache__/hpo_annotations.cpython-311.pyc
+flask/helpers/__pycache__/hpo.cpython-311.pyc
+flask/helpers/__pycache__/annotation.cpython-311.pyc
+frontend_cs491_org/yarn.lock

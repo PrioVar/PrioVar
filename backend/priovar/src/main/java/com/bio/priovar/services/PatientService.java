@@ -28,6 +28,8 @@ public class PatientService {
     private final PhenotypeTermRepository phenotypeTermRepository;
     private final GeneRepository geneRepository;
     private final VCFRepository vcfRepository;
+    private final ClinicianRepository clinicanRepository;
+
 
 
 
@@ -39,7 +41,8 @@ public class PatientService {
                         ClinicianRepository clinicianRepository, 
                         PhenotypeTermRepository phenotypeTermRepository, 
                         GeneRepository geneRepository, 
-                        VCFRepository vcfRepository) {
+                        VCFRepository vcfRepository, ClinicianRepository clinicanRepository) {
+
 
         this.patientRepository = patientRepository;
         this.diseaseRepository = diseaseRepository;
@@ -49,6 +52,7 @@ public class PatientService {
         this.phenotypeTermRepository = phenotypeTermRepository;
         this.geneRepository = geneRepository;
         this.vcfRepository = vcfRepository;
+        this.clinicanRepository = clinicanRepository;
     }
 
     public String addPatient(Patient patient) {
@@ -491,6 +495,55 @@ public class PatientService {
         }
         
     }
+
+    public List<PatientDTO> getRequestedPatients(Long medicalCenterId) {
+        //List<Patient> patients = clinicanRepository.findRequestedPatients(medicalCenterId);
+        //first find all clinicians of a medical center
+        List<Clinician> clinicians = clinicianRepository.findAllByMedicalCenterId(medicalCenterId);
+        List<Patient> patients = new ArrayList<>();
+        for (Clinician clinician : clinicians) {
+            //if the clinician has requested patients, add them to the list
+            if (clinician.getRequestedPatients() != null) {
+                patients.addAll(clinician.getRequestedPatients());
+            }
+        }
+        List<PatientDTO> patientDTOs = new ArrayList<>();
+        for( Patient patient : patients ) {
+            VCFFile vcfFile = patient.getVcfFile();
+            VCFFileDTO vcfFileDTO = null;
+            Long clinicianId = null;
+            if( vcfFile != null) {
+                Clinician clinician = clinicianRepository.findByVcfFilesId(vcfFile.getId()).orElse(null);
+                String clinicianName = (clinician != null) ? clinician.getName() : "";
+                clinicianId = (clinician != null) ? clinician.getId() : null;
+                vcfFileDTO = new VCFFileDTO(vcfFile.getId(),
+                                            vcfFile.getFileName(), vcfFile.getClinicianComments(),
+                                            clinicianName,
+                                            vcfFile.getFileStatus(),
+                                            vcfFile.getCreatedAt(),
+                                            vcfFile.getFinishedAt());
+            }
+            PatientDTO patientDTO = new PatientDTO(patient.getId(),
+                                                patient.getName(),
+                                                patient.getAge(),
+                                                patient.getSex(),
+                                                vcfFileDTO,
+                                                clinicianId);
+            patientDTOs.add(patientDTO);
+        }
+        return patientDTOs;
+    }
+
+    public List<PatientDTO> getAllAvailablePatients(Long medicalCenterId) {
+     //get all patients from the medical center, from clinicians patients and clinicians requested patients
+        List<PatientDTO> requestedPatients = getRequestedPatients(medicalCenterId);
+        List<PatientDTO> medicalCenterPatients = getPatientsByMedicalCenterId(medicalCenterId);
+        List<PatientDTO> allPatients = new ArrayList<>();
+        allPatients.addAll(requestedPatients);
+        allPatients.addAll(medicalCenterPatients);
+        return allPatients;
+     }
+
 
     public String deletePatient(Long patientId) {
         try {

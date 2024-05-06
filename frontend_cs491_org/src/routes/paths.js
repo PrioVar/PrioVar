@@ -95,11 +95,13 @@ export const PATH_DASHBOARD = {
     variantDetails: path(ROOTS_DASHBOARD, '/variants/:fileId/:sampleName/:chrom/:pos'),
     myPatients: path(ROOTS_DASHBOARD, '/clinician/:healthCenterId/patients'),
     clinicPatients: path(ROOTS_DASHBOARD, '/clinics/:healthCenterId/patients'),
+    requestedPatients: path(ROOTS_DASHBOARD, '/clinics/:healthCenterId/requestedPatients'),
     customQuery: path(ROOTS_DASHBOARD, '/customquery'),
     subscriptionPlans: path(ROOTS_DASHBOARD, '/subscriptionPlans'),
     similarPatients: path(ROOTS_DASHBOARD, '/similarPatients'),
     addClinician: path(ROOTS_DASHBOARD, '/addClinician'),
     patientDetails: path(ROOTS_DASHBOARD, '/patientDetails/:patientId/:fileId'),
+    patientDetailsConst: path(ROOTS_DASHBOARD, '/patientDetailsConst/:patientId'),
     aiSupport: path(ROOTS_DASHBOARD, '/aiSupport'),
     informationRetrieval: path(ROOTS_DASHBOARD, '/informationRetrieval'),
     NewVariantDashboard: path(ROOTS_DASHBOARD, '/sample/:fileName')

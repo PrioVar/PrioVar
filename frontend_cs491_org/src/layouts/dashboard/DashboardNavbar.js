@@ -13,6 +13,7 @@ import { MHidden } from '../../components/@material-extend'
 import useCollapseDrawer from '../../hooks/useCollapseDrawer'
 import AccountPopover from './AccountPopover'
 import NotificationsPopover from './NotificationsPopover';
+
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280

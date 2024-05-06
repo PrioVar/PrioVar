@@ -10,7 +10,15 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Getter
 @Setter
 @NoArgsConstructor
-@Node("Admin")
-public class Admin extends Actor{
+@Node("Actor")
 
+public class Actor {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String name;
+    private String email;
+    private String password;
 }
