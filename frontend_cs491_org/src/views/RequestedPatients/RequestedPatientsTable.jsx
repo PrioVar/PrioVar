@@ -284,42 +284,6 @@ import {
   
     const COLUMNS = [
       {
-        name: 'delete',
-        label: 'Delete',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            if (!row) return null
-            // eslint-disable-next-line eqeqeq
-            const isClinicianSame = row?.clinicianId == localStorage.getItem('clinicianId')
-            //console.log(isClinicianSame)
-            //console.log(row?.clinicianId)
-            //console.log(localStorage.getItem('clinicianId'))
-            const handleClickConfirm = () => {
-              deletePatient(row.patientId).then(() => {
-                setIsPatientDeleted(true);
-              });
-            }
-  
-            return (
-              <>
-                  {isClinicianSame ? (
-                      <DeleteFileButton onClickConfirm={handleClickConfirm} />
-                  ) : (
-                      <button disabled={true} style={{ opacity: 0.5 }}>
-                          Unauthorized
-                      </button>
-                  )}
-              </>
-          );
-          
-               
-          },
-        },
-      },
-      {
         name: 'created_at',
         label: 'Uploaded At',
         options: {
@@ -428,20 +392,6 @@ import {
         },
       },
       {
-        name: 'name',
-        label: 'Filename',
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRenderLite: (dataIndex) => {
-            const row = data[dataIndex]
-            if (!row) return null
-            if (!row.file) return null
-            return <Chip label={row.file.fileName} />
-          },
-        },
-      },
-      {
         name: 'status',
         label: 'Status',
         options: {
@@ -472,7 +422,7 @@ import {
       },
       {
         name: 'details',
-        label: 'Details',
+        label: 'Patient Details',
         options: {
           filter: false,
           sort: true,
@@ -491,7 +441,7 @@ import {
       },
       {
         name: 'go',
-        label: 'Go',
+        label: 'Analysis',
         options: {
           filter: false,
           sort: false,
