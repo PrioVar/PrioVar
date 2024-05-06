@@ -12,6 +12,8 @@ import MenuPopover from '../../components/MenuPopover';
 import { MIconButton } from '../../components/@material-extend';
 import NotificationDetailsDialog from './NotificationDetailsDialog';
 import { markNotificationAsRead, markAllNotificationsAsRead, fetchNotifications, acceptInformationRequest, rejectInformationRequest } from '../../api/file';  // Ensure this points to your actual import path
+import { useSnackbar } from 'notistack5'
+import closeFill from '@iconify/icons-eva/close-fill'
 
 function NotificationsPopover() {
   const anchorRef = useRef(null);
@@ -19,6 +21,7 @@ function NotificationsPopover() {
   const [notifications, setNotifications] = useState([]);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [responseMessage, setResponseMessage] = useState('');
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   const actorId = parseInt(localStorage.getItem('clinicianId') === '-1' ? localStorage.getItem('healthCenterId') : localStorage.getItem('clinicianId'));
 
@@ -42,13 +45,27 @@ function NotificationsPopover() {
 
     try {
       handleClose();
-      alert("Response sent successfully");
+      enqueueSnackbar('Response sent successfully!', {
+        variant: 'success',
+        action: (key) => (
+          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} />
+          </MIconButton>
+        ),
+      })
       if (selectedNotification && selectedNotification.informationRequest) {
         await acceptInformationRequest(selectedNotification.informationRequest.id, responseMessage);
       }
     } catch (error) {
       handleClose();
-      alert("Failed to send request");
+      enqueueSnackbar("Failed to send request", {
+        variant: 'error',
+        action: (key) => (
+          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} />
+          </MIconButton>
+        ),
+      })
     }
     
   };
