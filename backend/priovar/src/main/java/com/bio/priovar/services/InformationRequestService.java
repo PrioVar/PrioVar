@@ -1,19 +1,15 @@
 package com.bio.priovar.services;
 
 import com.bio.priovar.models.*;
-import com.bio.priovar.repositories.ClinicianRepository;
 import com.bio.priovar.repositories.InformationRequestRepository;
 import com.bio.priovar.repositories.MedicalCenterRepository;
 import com.bio.priovar.repositories.NotificationRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,7 +61,8 @@ public class InformationRequestService {
         notification.setSendAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         notification.setNotification("A new information request has been made for patient " + patient.getName() +
                                      " by clinician " + informationRequest.getClinician().getName() +
-                                     " from medical center " + informationRequest.getClinician().getMedicalCenter().getName());
+                                     " from " + informationRequest.getClinician().getMedicalCenter().getName() +
+                                     "Health Center!");
         notification.setInformationRequest(informationRequest);
        
         notification.setAppendix(informationRequest.getRequestDescription());
@@ -93,7 +90,8 @@ public class InformationRequestService {
         notification.setReceiver(informationRequest.getClinician());
         notification.setSendAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         notification.setNotification("Your information request for patient " + informationRequest.getPatient().getName() +
-                                     " has been accepted by medical center " + informationRequest.getPatient().getMedicalCenter().getName());
+                                     " has been accepted by " + informationRequest.getPatient().getMedicalCenter().getName() +
+                                     " Health Center!");
 
         notification.setIsRead(false);
         notification.setAppendix(notificationAppendix);
@@ -119,7 +117,7 @@ public class InformationRequestService {
         notification.setReceiver(informationRequest.getClinician());
         notification.setSendAt(OffsetDateTime.now(ZoneOffset.ofHours(3)));
         notification.setNotification("Your information request for patient Gender: " + informationRequest.getPatient().getSex() + " Age: " + informationRequest.getPatient().getAge() +
-                                     " has been rejected by medical center " + informationRequest.getPatient().getMedicalCenter().getName());
+                                     " has been rejected by " + informationRequest.getPatient().getMedicalCenter().getName() + " Health Center!");
         notification.setIsRead(false);
         notification.setAppendix(notificationAppendix);
 
