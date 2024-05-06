@@ -226,7 +226,7 @@ import {
                         </>)}
                 </Grid>
                 <Grid item xs={4} mt={4}>
-                <Typography variant="h6">Add Phenotype Terms</Typography>
+                    <Typography variant="h6">Add Phenotype Terms</Typography>
                     <CardContent>
                         <ManageHpo hpoList={hpoList} setHpoList={setHpoList}/>
                     </CardContent>
@@ -234,9 +234,9 @@ import {
                         Add Phenotype Term
                     </Button>
                 </Grid>
-                <Grid item xs={4} mt={4}>
-                <Typography variant="h6">Set Diagnosis</Typography>
-                <FormControl fullWidth variant="outlined">
+                <Grid item xs={4} >
+                    <Typography variant="h6">Set Diagnosis</Typography>
+                    <FormControl fullWidth variant="outlined">
                     <InputLabel>Select Disease</InputLabel>
                     <Select
                         value={selectedOption}
@@ -250,10 +250,10 @@ import {
                         ))}
 
                     </Select>
-                </FormControl>
-                <Button onClick={() => handleSubmit(selectedOption)} color="primary" variant="contained" sx={{ mt: 0.5 }}>
-                Set Diagnosis
-                </Button>
+                    </FormControl>
+                    <Button onClick={() => handleSubmit(selectedOption)} color="primary" variant="contained" sx={{ mt: 0.5 }}>
+                    Set Diagnosis
+                    </Button>
                 </Grid>
             </Grid>
         </Box>
