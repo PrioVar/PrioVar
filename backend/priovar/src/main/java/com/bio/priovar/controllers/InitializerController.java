@@ -248,7 +248,7 @@ public class InitializerController {
         patientRepository.save(patient5);
 
         Patient patient6 = new Patient();
-        patient5.setName("Fuat Karagöz");
+        patient6.setName("Fuat Karagöz");
         List<PhenotypeTerm> phenotypeTerms5 = new ArrayList<>();
         phenotypeTerms5.add(phenotypeTerm1);
         phenotypeTerms5.add(phenotypeTerm2);
