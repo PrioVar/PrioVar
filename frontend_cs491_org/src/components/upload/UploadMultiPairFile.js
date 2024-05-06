@@ -238,10 +238,10 @@ export default function UploadMultiPairFile({
             Cancel
           </Button>
           <Button onClick={onRemoveAll} sx={{ mr: 1.5 }} disabled={locked}>
-            Remove all
+            Remove 
           </Button>
           <Button variant="contained" onClick={() => onUploadFiles(files)} disabled={locked}>
-            Upload files
+            Upload file
           </Button>
         </Stack>
       )}
