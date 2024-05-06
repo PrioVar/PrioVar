@@ -16,11 +16,13 @@ import FileUploadView from '../views/FileUploadView'
 
 import ClinicsPatients from '../views/ClinicsPatients'
 import MyPatients from '../views/MyPatients'
+import RequestedPatients from '../views/RequestedPatients'
 import CustomQuery from 'src/views/CustomQuery'
 import SubscriptionPlans from 'src/views/SubscriptionPlans'
 import SimilarPatients from 'src/views/SimilarPatients'
 import AddClinician from 'src/views/AddClinicianView'
 import PatientDetails from 'src/views/PatientDetails'
+import ConstPatientDetails from 'src/views/ConstPatientDetailsTable'
 import AISupport from 'src/views/AISupport'
 import InformationRetrieval from 'src/views/InformationRetrieval'
 import NewVariantDashboard from 'src/views/NewVariantDashboard'
@@ -119,11 +121,13 @@ export default function Router() {
         { path: '/sample/:fileId/:sampleName', element: <VariantDashboard /> },
         { path: '/clinics/:healthCenterId/patients', element: <ClinicsPatients />},
         { path: '/clinician/:healthCenterId/patients', element: <MyPatients />},
+        { path: '/clinics/:healthCenterId/requestedPatients', element: <RequestedPatients/>},
         { path: '/customquery', element: < CustomQuery/>},
         { path: '/subscriptionPlans', element: < SubscriptionPlans/>},
         { path: '/similarPatients', element: < SimilarPatients/>},
         { path: '/addClinician', element: < AddClinician/>},
         { path: '/patientDetails/:patientId/:fileId', element: < PatientDetails/>},
+        { path: '/patientDetailsConst/:patientId', element: < ConstPatientDetails/>},
         { path: '/aiSupport', element: < AISupport/>},
         { path: '/informationRetrieval', element: < InformationRetrieval/>},
         { path: '/sample/:fileName', element: <NewVariantDashboard /> },

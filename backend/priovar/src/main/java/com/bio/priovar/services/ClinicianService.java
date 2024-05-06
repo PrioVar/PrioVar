@@ -145,4 +145,18 @@ public class ClinicianService {
         }
         return clinician.getName();
     }
+
+    public ResponseEntity<String> addRequestedPatientToClinician(Clinician clinician, Patient patient) {
+        if ( clinician.getRequestedPatients() == null ) {
+            clinician.setRequestedPatients(new ArrayList<>());
+        }
+        //Add the patient to the requested patients list of the clinician if it does not already exist
+        if ( clinician.getRequestedPatients().contains(patient) ) {
+            return ResponseEntity.badRequest().body("Patient already requested");
+        }
+        clinician.getRequestedPatients().add(patient);
+        clinicianRepository.save(clinician);
+        return ResponseEntity.ok("Requested patient added successfully");
+
+    }
 }
