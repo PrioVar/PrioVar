@@ -1,7 +1,7 @@
 # create class hpo_network
 import random
 
-from hpo import process_nodes, process_edges, read_hpo_from_json
+from helpers.hpo import process_nodes, process_edges, read_hpo_from_json
 class Network:
 
     def __init__(self):

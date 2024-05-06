@@ -10,6 +10,10 @@ from helpers.ClinicalResearchAssistant import analyze
 from helpers.file_decode import read_file_content_and_return_df
 from config import api_username, api_password, api_auth_token
 import requests
+import json
+from neo4j import GraphDatabase
+from os import path
+from config import uri, username, password
 
 
 def api_save_vcf_file(file, filename = "tinyy.vcf"):
@@ -112,4 +116,20 @@ def api_get_output(vcf_id):
     #print(response3.json())
     print(response3)
     return response3
+
+
+def update_vcf_file(tx, file_id, new_api_file_id, new_file_status):
+    query = """
+    MATCH (f:VCFFile {id: $id})
+    SET f.api_file_id = $api_file_id, f.fileStatus = $file_status
+    """
+    tx.run(query, id=file_id, api_file_id=new_api_file_id, file_status=new_file_status)
+
+def set_vcf_file_details(file_id, new_api_file_id, new_file_status):
+    # Initialize the Neo4j driver
+    driver = GraphDatabase.driver(uri, auth=(username, password))
+
+    # Update the specific VCFFile node in Neo4j
+    with driver.session() as session:
+        session.write_transaction(update_vcf_file, file_id, new_api_file_id, new_file_status)
 

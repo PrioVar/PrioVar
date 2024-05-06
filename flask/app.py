@@ -10,6 +10,8 @@ from helpers.ClinicalResearchAssistant import analyze
 from helpers.file_decode import read_file_content_and_return_df
 from config import api_username, api_password, api_auth_token
 import requests
+from helpers.api_functions import api_save_vcf_file, api_start_analysis, api_get_output
+from helpers.ml_model import get_mock_results
 
 app = Flask(__name__)
 CORS(app)
@@ -45,9 +47,24 @@ def start_analysis():
     data = request.get_json()
     vcf_id = data.get('vcfId')
 
+    if vcf_id is None:
+        return "No VCF ID provided"
+
     df = read_file_content_and_return_df(vcf_id)
 
+    # upload the file to the server using the way below
+
+
     return "hey"
+
+# return mock analysis results, for testing purposes, similar to above
+@app.route('/analysis-mock', methods=['POST'])
+def start_analysis_mock():
+    df = get_mock_results()
+    return df.to_json()
+
+
+
 
 
 @app.route("/endpoint-test", methods=["GET"])
@@ -74,9 +91,9 @@ def test_endpoint():
     print(response)'''
 
     # Prepare the file to be uploaded with an explicit filename
-    files = {'file': ('tinyy.vcf', open('data/tinyy.vcf', 'rb'))}
+    """files = {'file': ('tinyy.vcf', open('data/tinyy.vcf', 'rb'))}
 
-    '''
+
     # now, send a request to lidyagenomics.com/libra/api/v1/vcf/cs492upload
     # keep the same headers as above
     # also, request.data["file"] should be the file to be uploaded, which is data/tinyy.vcf
@@ -98,13 +115,26 @@ def test_endpoint():
 
     files['file'][1].close()
     print(response2.json())
-    print(response2)'''
+    print(response2)"""
 
     vcf_sample = {'vcf_id': 'ea129c59-3382-41ef-990e-e9746ff958d1'}
+    vcf_sample2 = {'vcf_id': 'c2a12f77-2335-4cb2-a472-c0c2d9dfe952'}
+    # start an analysis with the uploaded file
+    #response2 = api_start_analysis(vcf_sample['vcf_id'])
+    #print(response2)
+    #print(response2.json())
+    response3 = api_get_output(vcf_sample2['vcf_id'])
+    print(response3)
+    print(response3.json())
+
+
+
+
+
     # now, with vcf_sample, send a request to
     # lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/<str:filename>
     # use the same headers, do not send any file
-    response3 = requests.get(f"http://lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/{vcf_sample['vcf_id']}", headers={
+    """response3 = requests.get(f"http://lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/{vcf_sample['vcf_id']}", headers={
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
         "Accept": "application/json, text/plain, /",
         "Accept-Language": "en-US,en;q=0.5",
@@ -119,9 +149,24 @@ def test_endpoint():
     })
 
     print(response3.json())
-    print(response3)
+    print(response3)"""
 
     return "Endpoint test successful"
+
+# endpoint test2
+@app.route("/endpoint-test2", methods=["GET"])
+def test_endpoint2():
+    vcf_sample = {'vcf_id': 'ea129c59-3382-41ef-990e-e9746ff958d1'}
+    vcf_sample2 = {'vcf_id': 'c2a12f77-2335-4cb2-a472-c0c2d9dfe952'}
+
+    #start an analysis with the uploaded file
+    response2 = api_start_analysis(vcf_sample2['vcf_id'])
+    print(response2)
+    #print(response2.json())
+    # save the response to a file
+
+    return "Endpoint2 test successful"
+
 
 @app.route('/load-hpo', methods=['GET'])
 def start_loading_data():
