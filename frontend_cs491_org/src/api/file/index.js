@@ -1,6 +1,6 @@
 export { useFiles, useBedFiles, updateFileNotes, updateFinishInfo, fecthClinicianFiles, 
-        fecthMedicalCenterFiles, fetchClinicianPatients, fecthMedicalCenterPatients, fetchRequestedMedicalCenterPatients,
-        fetchCurrentClinicianName, addPatientWithPhenotype, deletePatient, deleteVCF,
+        fecthMedicalCenterFiles, fetchClinicianPatients, fecthMedicalCenterPatients, fetchRequestedMedicalCenterPatients, fetchAllAvailablePatients,
+        fetchCurrentClinicianName, addPatientWithPhenotype, deletePatient, deleteVCF, 
         fetchDiseases, fetchPhenotypeTerms, deletePhenotypeTerm, addPhenotypeTerm, sendInformationRequest, 
         fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead, acceptInformationRequest, rejectInformationRequest 
 } from './list'

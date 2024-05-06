@@ -496,11 +496,6 @@ public class PatientService {
         
     }
 
-    /**public List<PatientDTO> getAllAvailablePatients(Long medicalCenterId) {
-        //get all patients from the medical center, from clinicians patients and clinicians requested patients
-        MedicalCenter medicalCenter = medicalCenterRepository.findById(medicalCenterId).orElse(null);
-    }*/
-
     public List<PatientDTO> getRequestedPatients(Long medicalCenterId) {
         //List<Patient> patients = clinicanRepository.findRequestedPatients(medicalCenterId);
         //first find all clinicians of a medical center
@@ -536,11 +531,19 @@ public class PatientService {
                                                 clinicianId);
             patientDTOs.add(patientDTO);
         }
-        //print the size
-        System.out.println("lalalalala:");
-        System.out.println("lalalala: " + patientDTOs.size());
         return patientDTOs;
     }
+
+    public List<PatientDTO> getAllAvailablePatients(Long medicalCenterId) {
+     //get all patients from the medical center, from clinicians patients and clinicians requested patients
+        List<PatientDTO> requestedPatients = getRequestedPatients(medicalCenterId);
+        List<PatientDTO> medicalCenterPatients = getPatientsByMedicalCenterId(medicalCenterId);
+        List<PatientDTO> allPatients = new ArrayList<>();
+        allPatients.addAll(requestedPatients);
+        allPatients.addAll(medicalCenterPatients);
+        return allPatients;
+     }
+
 
     public String deletePatient(Long patientId) {
         try {

@@ -101,6 +101,7 @@ export const PATH_DASHBOARD = {
     similarPatients: path(ROOTS_DASHBOARD, '/similarPatients'),
     addClinician: path(ROOTS_DASHBOARD, '/addClinician'),
     patientDetails: path(ROOTS_DASHBOARD, '/patientDetails/:patientId/:fileId'),
+    patientDetailsConst: path(ROOTS_DASHBOARD, '/patientDetailsConst/:patientId'),
     aiSupport: path(ROOTS_DASHBOARD, '/aiSupport'),
     informationRetrieval: path(ROOTS_DASHBOARD, '/informationRetrieval'),
     NewVariantDashboard: path(ROOTS_DASHBOARD, '/sample/:fileName')

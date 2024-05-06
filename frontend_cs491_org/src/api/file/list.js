@@ -51,6 +51,11 @@ export const fetchRequestedMedicalCenterPatients = async () => {
   return data
 }
 
+export const fetchAllAvailablePatients = async () => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/patient/allAvailable/${localStorage.getItem('healthCenterId')}`)
+  return data
+}
+
 // NEW ADDITION ERKIN
 export const fecthClinicianFiles = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/vcf/byClinician/${localStorage.getItem('clinicianId')}`)
