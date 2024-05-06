@@ -247,6 +247,18 @@ public class InitializerController {
         patient5.setMedicalCenter(acibadem);
         patientRepository.save(patient5);
 
+        Patient patient6 = new Patient();
+        patient5.setName("Fuat Karagöz");
+        List<PhenotypeTerm> phenotypeTerms5 = new ArrayList<>();
+        phenotypeTerms5.add(phenotypeTerm1);
+        phenotypeTerms5.add(phenotypeTerm2);
+        phenotypeTerms5.add(phenotypeTerm7);
+        patient6.setPhenotypeTerms(phenotypeTerms5);
+        patient6.setAge(52);
+        patient6.setSex("Male");
+        patient6.setMedicalCenter(acibadem);
+        patientRepository.save(patient6);
+
         Clinician clinician3 = new Clinician();
         clinician3.setName("Ayşe Melek");
         clinician3.setEmail("ayse.melek@liva.com");
