@@ -10,6 +10,10 @@ import {
   import { useParams, useNavigate } from 'react-router-dom';
   import { Link as RouterLink } from 'react-router-dom';
   import { PATH_DASHBOARD } from '../../routes/paths';
+  import { useSnackbar } from 'notistack5'
+  import closeFill from '@iconify/icons-eva/close-fill'
+  import { Icon } from '@iconify/react';
+  import { MIconButton } from '../../components/@material-extend';
   
 
   const SimilarPatientsTable = function () {
@@ -20,6 +24,7 @@ import {
     const [requestDescription, setRequestDescription] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
     const [allAvailablePatients, setAllAvailablePatients] = useState([]);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const bedFilesApi = useBedFiles();
     const { data: bedFiles = [] } = bedFilesApi.query;
@@ -42,12 +47,26 @@ import {
     const handleRequestSubmit = async () => {
         try {
               handleRequestClose();
-              alert("Request sent successfully");
+              enqueueSnackbar('Request sent successfully!', {
+                variant: 'success',
+                action: (key) => (
+                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                    <Icon icon={closeFill} />
+                  </MIconButton>
+                ),
+              })
             await sendInformationRequest(clinicianId, patientId, requestDescription);
           } catch (error) {
               console.error('Error sending request:', error.response);
               handleRequestClose();
-              alert("Failed to send request");
+              enqueueSnackbar("Failed to send request", {
+                variant: 'error',
+                action: (key) => (
+                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                    <Icon icon={closeFill} />
+                  </MIconButton>
+                ),
+              })
         }
     };
   
