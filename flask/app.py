@@ -8,6 +8,8 @@ from helpers.annotation import annotate_variants, get_all_annotated_variants
 from helpers.knowledge_graph import get_answer
 from helpers.ClinicalResearchAssistant import analyze
 from helpers.file_decode import read_file_content_and_return_df
+from config import api_username, api_password, api_auth_token
+import requests
 
 app = Flask(__name__)
 CORS(app)
@@ -46,6 +48,80 @@ def start_analysis():
     df = read_file_content_and_return_df(vcf_id)
 
     return "hey"
+
+
+@app.route("/endpoint-test", methods=["GET"])
+def test_endpoint():
+    # REQUEST: "curl 'http://lidyagenomics.com/libra/api/v1/file/list' --compressed -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0' -H 'Accept: application/json, text/plain, /' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' -H 'Authorization: Token TOKEN_HERE' -H 'Connection: keep-alive' -H 'Referer: http://lidyagenomics.com/libra/files' -H 'Cookie: csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-origin'"
+    # send a get request to lidyagenomics.com/libra/api/v1/file/list
+    # as done above
+    '''
+    response = requests.get("http://lidyagenomics.com/libra/api/v1/file/list", headers={
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
+        "Accept": "application/json, text/plain, /",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Authorization": f"Token {api_auth_token}",
+        "Connection": "keep-alive",
+        "Referer": "http://lidyagenomics.com/libra/files",
+        "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin"
+    })
+
+    print(response.json())
+    print(response)'''
+
+    # Prepare the file to be uploaded with an explicit filename
+    files = {'file': ('tinyy.vcf', open('data/tinyy.vcf', 'rb'))}
+
+    '''
+    # now, send a request to lidyagenomics.com/libra/api/v1/vcf/cs492upload
+    # keep the same headers as above
+    # also, request.data["file"] should be the file to be uploaded, which is data/tinyy.vcf
+    # Request should include a Content - Disposition header with a filename parameter
+    response2 = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload", headers={
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
+        "Accept": "application/json, text/plain, /",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Authorization": f"Token {api_auth_token}",
+        "Connection": "keep-alive",
+        "Referer": "http://lidyagenomics.com/libra/files",
+        "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "Content-Disposition": "attachment; filename=tinyy.vcf"
+    }, files=files)
+
+    files['file'][1].close()
+    print(response2.json())
+    print(response2)'''
+
+    vcf_sample = {'vcf_id': 'ea129c59-3382-41ef-990e-e9746ff958d1'}
+    # now, with vcf_sample, send a request to
+    # lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/<str:filename>
+    # use the same headers, do not send any file
+    response3 = requests.get(f"http://lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/{vcf_sample['vcf_id']}", headers={
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
+        "Accept": "application/json, text/plain, /",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Authorization": f"Token {api_auth_token}",
+        "Connection": "keep-alive",
+        "Referer": "http://lidyagenomics.com/libra/files",
+        "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin"
+    })
+
+    print(response3.json())
+    print(response3)
+
+    return "Endpoint test successful"
 
 @app.route('/load-hpo', methods=['GET'])
 def start_loading_data():
