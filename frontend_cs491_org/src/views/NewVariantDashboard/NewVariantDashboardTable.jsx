@@ -5,6 +5,7 @@ import { sortRows, filterRows } from './tableUtils.js'; // You need to create th
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import SortIcon from '@mui/icons-material/Sort';
 import axios from 'axios';
+import { each } from 'lodash';
 
 
 const NewVariantDashboardTable = () => {
@@ -16,7 +17,7 @@ const NewVariantDashboardTable = () => {
     const [termsOpen, setTermsOpen] = useState(false);
     const [phenotypeTerms, setPhenotypeTerms] = useState([]);
 
-    const data = useMemo(() => [
+    var data = useMemo(() => [
         { acmgScore: "ACMG: PM1, Strength: Pathogenic", variantPosition: "chr16:8654329", diseases: "Alzheimer's Disease, Dementia", geneSymbol: "APOE", gt: "het", frequency: 0.02, priovarScore: 0.95 },
         { acmgScore: "ACMG: PS3, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Breast Cancer", geneSymbol: "BRCA2", gt: "het", frequency: 0.03, priovarScore: 0.7 },
         { acmgScore: "ACMG: PM3, Strength: Benign", variantPosition: "chr1:154073546", diseases: "Lynch Syndrome", geneSymbol: "MLH1", gt: "hom", frequency: 0.04, priovarScore: 0.1 },
@@ -39,6 +40,35 @@ const NewVariantDashboardTable = () => {
         { acmgScore: "ACMG: PS2, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Amyotrophic Lateral Sclerosis, Sickle Cell Disease", geneSymbol: "HBB", gt: "hom", frequency: 0.3, priovarScore: 0.5 },
     ], []);
 
+    function setAcmgScoreFromPriovar(data) {
+        const acmgScoreMap = {
+            "1.00-0.80": "Pathogenic",
+            "0.80-0.60": "Likely Pathogenic",
+            "0.60-0.40": "VUS",
+            "0.40-0.20": "Likely Benign",
+            "0.20-0.00": "Benign"
+            // Add more ranges as needed
+        };
+    
+        return data.map(entry => {
+            let matchedAcmgScore = entry.acmgScore; // Default to original value
+    
+            // Iterate through each range and find the matching acmgScore
+            Object.keys(acmgScoreMap).forEach(range => {
+                const [max, min] = range.split("-").map(Number);
+                if (entry.priovarScore <= max && entry.priovarScore > min) {
+                    matchedAcmgScore = `ACMG Strength: ${acmgScoreMap[range]}`;
+                }
+            });
+    
+            return {
+                ...entry,
+                acmgScore: matchedAcmgScore
+            };
+        });
+    }
+    data = setAcmgScoreFromPriovar(data);
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -53,6 +83,7 @@ const NewVariantDashboardTable = () => {
             fetchData();
         }
     }, [termsOpen, fileName]);
+
 
     const handleOpenTerms = () => {
         setTermsOpen(true);
