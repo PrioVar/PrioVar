@@ -5,7 +5,6 @@ import { sortRows, filterRows } from './tableUtils.js'; // You need to create th
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import SortIcon from '@mui/icons-material/Sort';
 import axios from 'axios';
-import { each } from 'lodash';
 
 
 const NewVariantDashboardTable = () => {
@@ -68,7 +67,7 @@ const NewVariantDashboardTable = () => {
         });
     }
     data = setAcmgScoreFromPriovar(data);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
