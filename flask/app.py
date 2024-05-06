@@ -123,7 +123,7 @@ def test_endpoint():
     #response2 = api_start_analysis(vcf_sample['vcf_id'])
     #print(response2)
     #print(response2.json())
-    response3 = api_get_output(vcf_sample2['vcf_id'])
+    response3 = api_get_output(vcf_sample['vcf_id'])
     print(response3)
     print(response3.json())
 
