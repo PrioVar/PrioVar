@@ -125,7 +125,7 @@ import {
                                   <TableCell align="right">Age</TableCell>
                                   <TableCell align="right">Sex</TableCell>
                                   <TableCell align="right">Similarity Score</TableCell>
-                                  <TableCell align="right"></TableCell> {/* Empty on purpose */}
+                                  <TableCell align="right">Patient Details</TableCell> {/* Empty on purpose */}
                               </TableRow>
                               </TableHead>
                               <TableBody>
@@ -145,7 +145,7 @@ import {
                                                 size="small" 
                                                 onClick={() => handleRequestOpen()}
                                             >
-                                                <Info />
+                                                <Info sx={{ marginRight: '8px' }}/> Request
                                             </Button>
                                         )}
                                         {isPatientAvailable(row.secondaryPatient.id) && (
@@ -155,7 +155,7 @@ import {
                                             size="small" 
                                             onClick={() => navigate(PATH_DASHBOARD.general.patientDetailsConst.replace(':patientId', row.secondaryPatient.id))} // Using placeholders for dynamic URL
                                         >
-                                            <Info />
+                                            <Info sx={{ marginRight: '8px' }}/> View
                                         </Button>
                                     )}
                                     </TableCell>
