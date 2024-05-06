@@ -62,7 +62,7 @@ public class InformationRequestService {
         notification.setNotification("A new information request has been made for patient " + patient.getName() +
                                      " by clinician " + informationRequest.getClinician().getName() +
                                      " from " + informationRequest.getClinician().getMedicalCenter().getName() +
-                                     "Health Center!");
+                                     " Health Center!");
         notification.setInformationRequest(informationRequest);
        
         notification.setAppendix(informationRequest.getRequestDescription());
