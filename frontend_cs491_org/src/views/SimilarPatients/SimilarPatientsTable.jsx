@@ -21,6 +21,7 @@ import {
     const patientId = localStorage.getItem('patientId');
     const patientName = localStorage.getItem('patientName');
     const clinicianId = localStorage.getItem('clinicianId'); 
+    const [currentPatientId, setCurrentPatientId] = useState('');
     const [requestDescription, setRequestDescription] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
     const [allAvailablePatients, setAllAvailablePatients] = useState([]);
@@ -42,7 +43,10 @@ import {
     const handleResultCount = (e) => setResultCount(e.target.value);
     const handleTabChange = (event, newValue) => setSelectedTab(newValue);
   
-    const handleRequestOpen = () => setOpenDialog(true);
+    const handleRequestOpen = (secondaryPatientId) => {
+        setCurrentPatientId(secondaryPatientId); // Set the current patient ID when opening the dialog
+        setOpenDialog(true);
+    };
     const handleRequestClose = () => setOpenDialog(false);
     const handleRequestSubmit = async () => {
         try {
@@ -55,7 +59,7 @@ import {
                   </MIconButton>
                 ),
               })
-            await sendInformationRequest(clinicianId, patientId, requestDescription);
+            await sendInformationRequest(clinicianId, currentPatientId, requestDescription);
           } catch (error) {
               console.error('Error sending request:', error.response);
               handleRequestClose();
@@ -162,7 +166,7 @@ import {
                                                 variant="contained" 
                                                 color="info" 
                                                 size="small" 
-                                                onClick={() => handleRequestOpen()}
+                                                onClick={() => handleRequestOpen(row.secondaryPatient.id)}
                                             >
                                                 <Info sx={{ marginRight: '8px' }}/> Request
                                             </Button>
