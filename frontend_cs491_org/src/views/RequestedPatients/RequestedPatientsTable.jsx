@@ -511,15 +511,6 @@ import {
           (
             <>
             <Box display="flex" justifyContent="flex-end" mt={2} mb={0.5} mr={0.5}> 
-            <Button 
-                variant="contained" 
-                color="info" 
-                component={RouterLink} to={PATH_DASHBOARD.general.files}
-                size="small"
-            >
-                <ArrowForward /> 
-                Upload VCF File 
-            </Button>
             </Box>
             <VariantDasboard2
             open={isAnnotationModalOpen}
