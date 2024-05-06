@@ -1,27 +1,26 @@
 import pickle
 import random
 import xgboost as xgb
-import numpy as np
-from sklearn.metrics import classification_report
-from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 import pandas as pd
 import numpy as np
 import torch
-import helpers.hpo_sample
-from helpers import hpo_sample
 from helpers.gene_mapping import get_gene_phenotype_relations, get_gene_phenotype_relations_and_frequency
-from train1 import apply_categories, read_embedding, read_dicts, read_variants
+from helpers.train1 import apply_categories, read_embedding, read_dicts, read_variants
 
-model_path = '../data/model_with_first_embedding_freq_based.xgb'
+model_path = 'data/model_with_first_embedding_freq_based.xgb'
 
-embedding_path = '../data/node_embeddings.txt'
+embedding_path = 'data/node_embeddings.txt'
 
-path_gene_dict = '../data/gene_dict.pt'
-path_hpo_dict = '../data/hpo_dict.pt'
+path_gene_dict = 'data/gene_dict.pt'
+path_hpo_dict = 'data/hpo_dict.pt'
+
+# calculate the relative paths
+
 
 # Load the gene dictionary using train1
-gene_dictionary, hpo_dictionary = read_dicts(path_gene_dict, path_hpo_dict)
+gene_dictionary = torch.load(path_gene_dict)
+hpo_dictionary = torch.load(path_hpo_dict)
 
 # Load the embeddings using train1
 embeddings = read_embedding(embedding_path)
@@ -112,7 +111,7 @@ def prepare_data(df_variants):
         x[0] / sum(x), x[1] / sum(x), x[2] / sum(x))).apply(pd.Series)
 
     # for categorical columns, we need to convert them to numerical columns which should overlap with the training data
-    apply_categories(df_variants)
+    apply_categories(df_variants, folder_path="data/categories")
     print(df_variants.dtypes)
 
     # HGSV.. columns
@@ -334,6 +333,22 @@ def test_add_model_scores():
     example_res = add_model_scores(variants, [1, 2])
 
     print(example_res)
+
+
+# mock model results
+def get_mock_results(num_variants = 10):
+
+    # read the variants
+    path_variants = 'data/5bc6f943-66e0-4254-94f5-ed3888f05d0a.vep.tsv'
+    variants = df = pd.read_csv(path_variants, sep='\t', skiprows=48)
+    variants = variants.sample(num_variants)
+
+    # 4000104     # 4000105      # 4000106      # 4000107      # 4000108
+    hpo = [4000104, 4000105, 4000106, 4000107, 4000108]
+
+    variants = add_model_scores(variants, hpo)
+
+    return variants
 
 
 #test_add_model_scores()
