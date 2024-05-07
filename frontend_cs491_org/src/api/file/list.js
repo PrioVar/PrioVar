@@ -122,6 +122,16 @@ export const rejectInformationRequest = async (informationRequestId, responseMes
   }
 };
 
+export const fetchWaitingInformationRequests = async (clinicianId) => {
+  try {
+    const response = await axios.get(`${ROOTS_PrioVar}/request/waiting/${clinicianId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to get waiting information requests:', error);
+    throw error;
+  }
+}
+
 
 export const useFiles = () => {
   const queryClient = useQueryClient()
