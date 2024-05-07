@@ -52,7 +52,7 @@ import {
 
 const handleRequestSubmit = async () => {
     try {
-        await sendInformationRequest(clinicianId, currentPatientId, requestDescription);
+        handleRequestClose();
         enqueueSnackbar('Request sent successfully!', {
             variant: 'success',
             action: (key) => (
@@ -61,8 +61,9 @@ const handleRequestSubmit = async () => {
                 </MIconButton>
             ),
         });
+        await sendInformationRequest(clinicianId, currentPatientId, requestDescription);
+     
         // Close the dialog
-        handleRequestClose();
         // Update the waiting requests array
         const newRequest = { patient: { id: currentPatientId } }; // Structure this as per your actual data model
         setWaitingRequests([...waitingRequests, newRequest]);
@@ -78,7 +79,6 @@ const handleRequestSubmit = async () => {
         });
     }
 };
-
   
     const fetchReports = async () => {
         try {
