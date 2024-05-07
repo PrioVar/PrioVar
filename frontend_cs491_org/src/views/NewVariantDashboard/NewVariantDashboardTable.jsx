@@ -17,30 +17,20 @@ const NewVariantDashboardTable = () => {
     const [phenotypeTerms, setPhenotypeTerms] = useState([]);
     const patientId = localStorage.getItem('patientId');
     var [data, setData] = useState([]);
-    /*
-    var data = useMemo(() => [
-        { acmgScore: "ACMG: PM1, Strength: Pathogenic", variantPosition: "chr16:8654329", diseases: "Alzheimer's Disease, Dementia", geneSymbol: "APOE", gt: "het", frequency: 0.02, priovarScore: 0.95 },
-        { acmgScore: "ACMG: PS3, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Breast Cancer", geneSymbol: "BRCA2", gt: "het", frequency: 0.03, priovarScore: 0.7 },
-        { acmgScore: "ACMG: PM3, Strength: Benign", variantPosition: "chr1:154073546", diseases: "Lynch Syndrome", geneSymbol: "MLH1", gt: "hom", frequency: 0.04, priovarScore: 0.1 },
-        { acmgScore: "ACMG: PM1, Strength: Likely Benign", variantPosition: "chr16:8654329", diseases: "Marfan Syndrome, Lynch Syndrome", geneSymbol: "MECP2", gt: "hom", frequency: 0.04, priovarScore: 0.1 },
-        { acmgScore: "ACMG: PM4, Strength: Pathogenic", variantPosition: "chr1:154073546", diseases: "Cystic Fibrosis, Marfan Syndrome, Tay-Sachs Disease", geneSymbol: "CFTR", gt: "het", frequency: 0.01, priovarScore: 0.9 },
-        { acmgScore: "ACMG: PM2, Strength: Likely benign", variantPosition: "chr2:29465721", diseases: "Hemochromatosis", geneSymbol: "HFE", gt: "hom", frequency: 0.05, priovarScore: 0.1 },
-        { acmgScore: "ACMG: PM6, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Huntington's Disease", geneSymbol: "HTT", gt: "het", frequency: 0.06, priovarScore: 0.2 },
-        { acmgScore: "ACMG: PS1, Strength: Benign", variantPosition: "chr16:8654329", diseases: "Parkinson's Disease, Amyotrophic Lateral Sclerosis", geneSymbol: "LRRK2", gt: "hom", frequency: 0.07, priovarScore: 0.3 },
-        { acmgScore: "ACMG: PS2, Strength: Likely Benign", variantPosition: "chr16:8654329", diseases: "Amyotrophic Lateral Sclerosis, Marfan Syndrome, Sickle Cell Disease", geneSymbol: "HBB", gt: "het", frequency: 0.08, priovarScore: 0.4 },
-        { acmgScore: "ACMG: PS2, Strength: Pathogenic", variantPosition: "chr1:154073546", diseases: "Marfan Syndrome", geneSymbol: "FBN1", gt: "het", frequency: 0.28, priovarScore: 0.83 },
-        { acmgScore: "ACMG: PM2, Strength: Pathogenic", variantPosition: "chr3:98456231", diseases: "Alzheimer's Disease", geneSymbol: "APOE", gt: "hom", frequency: 0.08, priovarScore: 0.75 },
-        { acmgScore: "ACMG: PS3, Strength: Likely Pathogenic", variantPosition: "chr2:29465721", diseases: "Wilson Disease, Sickle Cell Disease", geneSymbol: "ATP7B", gt: "het", frequency: 0.09, priovarScore: 0.5 },
-        { acmgScore: "ACMG: PS4, Strength: Likely benign", variantPosition: "chr2:29465721", diseases: "Charcot-Marie-Tooth Disease", geneSymbol: "PMP22", gt: "hom", frequency: 0.1, priovarScore: 0.25 },
-        { acmgScore: "ACMG: BP1, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Amyotrophic Lateral Sclerosis", geneSymbol: "SOD1", gt: "het", frequency: 0.11, priovarScore: 0.35 },
-        { acmgScore: "ACMG: PM2, Strength: Benign", variantPosition: "chr16:8654329", diseases: "Polycystic Kidney Disease, Dementia, Huntington's Disease", geneSymbol: "PKD2", gt: "hom", frequency: 0.12, priovarScore: 0.15 },
-        { acmgScore: "ACMG: BP3, Strength: Likely Pathogenic", variantPosition: "chr3:98456231", diseases: "Rett Syndrome", geneSymbol: "MECP2", gt: "het", frequency: 0.13, priovarScore: 0.45 },
-        { acmgScore: "ACMG: BP4, Strength: Pathogenic", variantPosition: "chr1:154073546", diseases: "Tay-Sachs Disease, Hemochromatosis", geneSymbol: "HEXA", gt: "het", frequency: 0.14, priovarScore: 0.65 },
-        { acmgScore: "ACMG: PM5, Strength: Likely benign", variantPosition: "chr2:29465721", diseases: "Lynch Syndrome", geneSymbol: "HFE", gt: "hom", frequency: 0.45, priovarScore: 0.31 },
-        { acmgScore: "ACMG: BP5, Strength: Pathogenic", variantPosition: "chr1:154073546", diseases: "Sickle Cell Disease, Huntington's Disease", geneSymbol: "APOE", gt: "het", frequency: 0.15, priovarScore: 0.8 },
-        { acmgScore: "ACMG: PS2, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Amyotrophic Lateral Sclerosis, Sickle Cell Disease", geneSymbol: "HBB", gt: "hom", frequency: 0.3, priovarScore: 0.5 },
+    
+    var chromData = useMemo(() => [
+        { variantPosition: "chr3:98456231" },
+        { variantPosition: "chr2:29465721",  },
+        { variantPosition: "chr2:29465721", },
+        { variantPosition: "chr3:98456231", },
+        { variantPosition: "chr16:8654329", },
+        { variantPosition: "chr3:98456231", },
+        { variantPosition: "chr1:154073546", },
+        { variantPosition: "chr2:29465721", },
+        { variantPosition: "chr1:154073546",},
+        { variantPosition: "chr3:98456231", },
     ], []);
-    */
+    
     
     function setAcmgScoreFromPriovar(data) {
         const acmgScoreMap = {
