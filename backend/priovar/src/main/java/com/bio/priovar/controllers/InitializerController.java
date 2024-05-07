@@ -119,7 +119,7 @@ public class InitializerController {
         vcfFile1.setFinishedAt(null);
         vcfFile1.setClinicianComments(new ArrayList<>());
         patient1.setVcfFile(vcfFile1);
-        vcfRepository.save(vcfFile1);
+        VCFFile savedVCFFile1 = vcfRepository.save(vcfFile1);
         clinician1.getVcfFiles().add(vcfFile1);
         patientRepository.save(patient1);
 
@@ -151,7 +151,7 @@ public class InitializerController {
         vcfFile2.setFinishedAt(null);
         vcfFile2.setClinicianComments(new ArrayList<>());
         patient2.setVcfFile(vcfFile2);
-        vcfRepository.save(vcfFile2);
+        VCFFile savedVCFFile2 = vcfRepository.save(vcfFile2);
         clinician1.getVcfFiles().add(vcfFile2);
         patientRepository.save(patient2);
 
@@ -213,7 +213,7 @@ public class InitializerController {
         patients.add(patient2);
         patients.add(patient3);
         clinician1.setPatients(patients);
-        clinicianRepository.save(clinician1);
+        Clinician savedClinician1 = clinicianRepository.save(clinician1);
 
         Clinician clinician2 = new Clinician();
         clinician2.setName("Ayşe Melek");
@@ -303,6 +303,18 @@ public class InitializerController {
         admin.setEmail("alperen@priovar");
         admin.setPassword("123");
         adminRepository.save(admin);
+
+        ClinicianComment clinicianComment1 = new ClinicianComment();
+        clinicianComment1.setComment("This patient has a rare disease.");
+        clinicianComment1.setClinician(savedClinician1);
+        savedVCFFile1.getClinicianComments().add(clinicianComment1);
+        vcfRepository.save(savedVCFFile1);
+
+        ClinicianComment clinicianComment2 = new ClinicianComment();
+        clinicianComment2.setComment("This patient must be examined by the diagnostic tests.");
+        clinicianComment2.setClinician(savedClinician1);
+        savedVCFFile2.getClinicianComments().add(clinicianComment2);
+        vcfRepository.save(savedVCFFile2);
 
         return ResponseEntity.ok("Initialized Succesfully!");
     }
