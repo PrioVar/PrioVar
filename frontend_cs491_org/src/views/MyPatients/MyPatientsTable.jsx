@@ -179,10 +179,15 @@ import {
         patientId: currentPatientId,
       });
     };
-  
+    
+    const NavigateToNewAnalysisPage = () => {
+      localStorage.setItem('patientId', currentPatientId);
+      navigate(`/priovar/sample/${fileName}`);
+    };
+
     if (status === 'ANALYSIS_DONE') {
       return (
-        <Button variant="contained" onClick={() => navigate(`/priovar/sample/${fileName}`)} size="small">
+        <Button variant="contained" onClick={() => NavigateToNewAnalysisPage()} size="small">
           <ArrowForward sx={{ marginRight: '8px' }}  /> View
         </Button>
       );
