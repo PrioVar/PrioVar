@@ -304,7 +304,7 @@ const NewVariantDashboardTable = () => {
                         <TableRow>
                             <TableCell onClick={() => handleSort('variantPosition')}>Variant Position</TableCell>
                             <TableCell onClick={() => handleSort('acmgScore')}>ACMG Score</TableCell>
-                            <TableCell>Related diseases</TableCell>
+                            <TableCell>Known related diseases</TableCell>
                             <TableCell>Gene symbol</TableCell>
                             <TableCell>GT</TableCell>
                             <TableCell>
