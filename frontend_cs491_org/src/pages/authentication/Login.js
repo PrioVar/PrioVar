@@ -76,16 +76,6 @@ export default function Login() {
             >
               Health Center Portal
             </Button>
-            <Button
-              size="large"
-              color="inherit"
-              variant="contained"
-              component={RouterLink}
-              to={PATH_AUTH.loginAdmin}
-              sx={{ mt: isSmallScreen ? 2 : 0 }}
-            >
-              Admin Portal
-            </Button>
           </Stack>
           <LoginForm callerPage={'Login'}/>
         </ContentStyle>
