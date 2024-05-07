@@ -46,6 +46,11 @@ export const fecthMedicalCenterPatients = async () => {
   return data
 }
 
+export const fetchPatientVariants = async (patientId) => {
+  const { data } = await axios.get(`${ROOTS_PrioVar}/variant/patient/${patientId}`)
+  return data
+}
+
 export const fetchRequestedMedicalCenterPatients = async () => {
   const { data } = await axios.get(`${ROOTS_PrioVar}/patient/requested/${localStorage.getItem('healthCenterId')}`)
   return data
