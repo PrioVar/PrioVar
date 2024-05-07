@@ -134,7 +134,11 @@ public class InformationRequestService {
         }
         List<InformationRequest> informationRequests = informationRequestRepository.findAllByPatientMedicalCenterAndIsPending(medicalCenter, true);
         return informationRequests;
+    }
 
+    public List<InformationRequest> getWaitingInformationRequests(Long clinicianId) {
+        List<InformationRequest> informationRequests = informationRequestRepository.findAllByClinicianIdAndIsPending(clinicianId, true);
+        return informationRequests;
     }
 
 
