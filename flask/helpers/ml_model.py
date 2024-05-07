@@ -336,17 +336,18 @@ def test_add_model_scores():
 
 
 # mock model results
-def get_mock_results(num_variants = 10):
+def get_mock_results(num_variants = 3, hpo = None):
 
     # read the variants
     path_variants = 'data/5bc6f943-66e0-4254-94f5-ed3888f05d0a.vep.tsv'
     variants = df = pd.read_csv(path_variants, sep='\t', skiprows=48)
     variants = variants.sample(num_variants)
 
-    # 4000104     # 4000105      # 4000106      # 4000107      # 4000108
-    hpo = [4000104, 4000105, 4000106, 4000107, 4000108]
-
-    variants = add_model_scores(variants, hpo)
+    if hpo is None:
+        hpo = [4000104, 4000105, 4000106, 4000107, 4000108]
+        variants = add_model_scores(variants, hpo)
+    else:
+        variants = add_model_scores(variants, hpo)
 
     return variants
 

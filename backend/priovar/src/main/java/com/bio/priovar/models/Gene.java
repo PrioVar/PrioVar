@@ -22,4 +22,9 @@ public class Gene {
 
     @Relationship(type = "ASSOCIATED_WITH_PHENOTYPE", direction = Relationship.Direction.OUTGOING)
     private List<PhenotypeTerm> phenotypeTerms;
+
+    // variant relationship: HAS_VARIANT_ON
+    @Relationship(type = "HAS_VARIANT_ON", direction = Relationship.Direction.OUTGOING)
+    private List<Variant> variants;
+
 }
