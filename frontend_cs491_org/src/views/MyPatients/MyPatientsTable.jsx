@@ -29,6 +29,10 @@ import {
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import VariantDasboard2 from '../common/VariantDasboard2'
   import Label from 'src/components/Label'
+  import closeFill from '@iconify/icons-eva/close-fill'
+  import { useSnackbar } from 'notistack5'
+  import { MIconButton } from '../../components/@material-extend'
+  import { Icon } from '@iconify/react'
 
   const EditableNote = ({ note, onSave, details }) => {
     const [isEditing, setIsEditing] = useState(false)
@@ -150,15 +154,25 @@ import {
     p: 4,
   };
   
-  const StatusButton = ({ fileName, status }) => {
+  const StatusButton = ({ fileName, status: initialStatus }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-  
+    const [status, setStatus] = useState(initialStatus);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
   
     const startAnalysis = () => {
       handleClose();
+      setStatus('ANALYSIS_IN_PROGRESS');
+      enqueueSnackbar('Analysis has been started!', {
+        variant: 'success',
+        action: (key) => (
+          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} />
+          </MIconButton>
+        ),
+      })
       // Logic to start analysis
       console.log("Starting analysis for:", fileName);
       // Optionally navigate or refresh page here
