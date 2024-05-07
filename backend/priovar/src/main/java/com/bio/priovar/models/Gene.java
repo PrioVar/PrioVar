@@ -20,6 +20,6 @@ public class Gene {
     private Long id;
     private String geneSymbol;
 
-    @Relationship(type = "ASSOCIATED_WITH_PHENOTYPE", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "GENE_ASSOCIATED_WITH_PHENOTYPE", direction = Relationship.Direction.OUTGOING)
     private List<PhenotypeTerm> phenotypeTerms;
 }
