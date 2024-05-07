@@ -11,7 +11,7 @@ const NotificationDetailsDialog = React.memo(({ selectedNotification, responseMe
       <DialogContentText>
         {selectedNotification?.notification}
         <br />
-        Appendix: {selectedNotification?.appendix}
+        Message: {selectedNotification?.appendix}
       </DialogContentText>
       {selectedNotification?.type === 'REQUEST' && (
         <TextField
