@@ -10,7 +10,7 @@ from helpers.ClinicalResearchAssistant import analyze
 from helpers.file_decode import read_file_content_and_return_df
 from config import api_username, api_password, api_auth_token
 import requests
-from helpers.api_functions import api_save_vcf_file, api_start_analysis, api_get_output, set_vcf_file_details_for_patient, set_vcf_file_details, upload_variants
+from helpers.api_functions import api_save_vcf_file, api_start_analysis, api_get_output, set_vcf_file_details_for_patient, set_vcf_file_details, upload_variants, get_patient_phenotypes
 from helpers.ml_model import get_mock_results
 
 app = Flask(__name__)
@@ -65,7 +65,13 @@ def start_analysis_mock():
     data = request.get_json()
     patient_id = data.get('patientId')
 
-    df = get_mock_results()
+    set_vcf_file_details_for_patient(patient_id, "ANALYSIS_IN_PROGRESS")
+
+    #hpo_list = data.get('hpoList')
+    hpo_list = get_patient_phenotypes(patient_id)
+    #print("Hpolist: ", hpo_list)
+
+    df = get_mock_results(3, hpo_list)
 
     upload_variants(patient_id, df)
 
