@@ -226,14 +226,21 @@ def insert_variant(tx, variant_data, patient_id):
     # add the gene_symbol if it does not exist
     geneSymbol = variant_data['SYMBOL']
 
-    #geneSymbol = "example_gene_symbol"
+    # if gene symbol is NaN , return"
+    if geneSymbol == "NaN" or geneSymbol == "nan" or geneSymbol == "NAN" or geneSymbol == "None" or geneSymbol == None or geneSymbol == "":
+        return
 
-    tx.run(
-        """
-        MERGE (g:Gene {geneSymbol: $geneSymbol})
-        """,
-        geneSymbol=geneSymbol
-    )
+    #geneSymbol = "example_gene_symbol"
+    try:
+        tx.run(
+            """
+            MERGE (g:Gene {geneSymbol: $geneSymbol})
+            """,
+            geneSymbol=geneSymbol)
+    except Exception as e:
+        print("Gene missing: ", e)
+        print("Gene symbol: ", geneSymbol)
+        return
 
     # Connect this variant to the gene
     # "HAS_VARIANT_ON" relationship
@@ -247,7 +254,23 @@ def insert_variant(tx, variant_data, patient_id):
     )
         
 
+def get_patient_phenotypes(patient_id):
 
+    # via "HAS_PHENOTYPE_TERM" relationship
+    query = """ 
+    MATCH (p:Patient)-[:HAS_PHENOTYPE_TERM]->(h:PhenotypeTerm)
+    WHERE ID(p) = $patient_id
+    RETURN h
+    """
+
+    with driver.session() as session:
+        result = session.run(query, patient_id=patient_id)
+        # if empty return [1], return as a list of integers
+        ls = [record['h']['id'] for record in result]
+        if len(ls) == 0:
+            print("No phenotype")
+            return [1]
+        return ls
 
 def upload_variants(patient_id, variants_df):
     with driver.session() as session:
