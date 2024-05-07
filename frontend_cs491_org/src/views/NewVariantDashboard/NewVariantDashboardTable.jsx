@@ -5,6 +5,7 @@ import { sortRows, filterRows } from './tableUtils.js'; // You need to create th
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import SortIcon from '@mui/icons-material/Sort';
 import axios from 'axios';
+import { fetchPatientVariants } from '../../api/file';
 
 
 const NewVariantDashboardTable = () => {
@@ -15,7 +16,7 @@ const NewVariantDashboardTable = () => {
     const [filterOpen, setFilterOpen] = useState(false);
     const [termsOpen, setTermsOpen] = useState(false);
     const [phenotypeTerms, setPhenotypeTerms] = useState([]);
-
+    const patientId = localStorage.getItem('patientId');
     var data = useMemo(() => [
         { acmgScore: "ACMG: PM1, Strength: Pathogenic", variantPosition: "chr16:8654329", diseases: "Alzheimer's Disease, Dementia", geneSymbol: "APOE", gt: "het", frequency: 0.02, priovarScore: 0.95 },
         { acmgScore: "ACMG: PS3, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Breast Cancer", geneSymbol: "BRCA2", gt: "het", frequency: 0.03, priovarScore: 0.7 },
@@ -38,7 +39,10 @@ const NewVariantDashboardTable = () => {
         { acmgScore: "ACMG: BP5, Strength: Pathogenic", variantPosition: "chr1:154073546", diseases: "Sickle Cell Disease, Huntington's Disease", geneSymbol: "APOE", gt: "het", frequency: 0.15, priovarScore: 0.8 },
         { acmgScore: "ACMG: PS2, Strength: VUS", variantPosition: "chr3:98456231", diseases: "Amyotrophic Lateral Sclerosis, Sickle Cell Disease", geneSymbol: "HBB", gt: "hom", frequency: 0.3, priovarScore: 0.5 },
     ], []);
-
+    console.log("hehehehheh")
+    const newData = fetchPatientVariants(patientId);
+    console.log(newData);
+    console.log("njsjsdasajhhjhgasdjhg")
     function setAcmgScoreFromPriovar(data) {
         const acmgScoreMap = {
             "1.00-0.80": "Pathogenic",
@@ -67,12 +71,13 @@ const NewVariantDashboardTable = () => {
         });
     }
     data = setAcmgScoreFromPriovar(data);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/patient/termsByFileName/${fileName}`);
                 setPhenotypeTerms(response.data); // assuming the response is the list of strings directly
+                
             } catch (error) {
                 console.error('Failed to fetch phenotype terms', error);
             }
