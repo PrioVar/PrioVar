@@ -15,7 +15,7 @@ import {
     Modal,
   } from '@material-ui/core'
   import { ArrowForward, Info, Note } from '@material-ui/icons'
-  import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+  import WarningIcon from '@mui/icons-material/Warning';
   import MUIDataTable from 'mui-datatables'
   import React, { useState, useEffect } from 'react'
   import { useNavigate } from 'react-router-dom'
@@ -147,13 +147,6 @@ import {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
   
-    const startAnalysis = () => {
-      handleClose();
-      // Logic to start analysis
-      console.log("Starting analysis for:", fileName);
-      // Optionally navigate or refresh page here
-    };
-  
     if (status === 'ANALYSIS_DONE') {
       return (
         <Button variant="contained" onClick={() => navigate(`/priovar/sample/${fileName}`)} size="small">
@@ -170,25 +163,8 @@ import {
       return (
         <>
           <Button variant="contained" onClick={handleOpen} size="small">
-            <PlayCircleFilledIcon sx={{ marginRight: '8px' }} /> Start
+            <WarningIcon sx={{ marginRight: '8px' }} /> Analysis Not Started
           </Button>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={modalStyle}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Confirm Analysis
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Are you sure you want to start the analysis process for {fileName}?
-              </Typography>
-              <Button onClick={startAnalysis} color="primary">Yes</Button>
-              <Button onClick={handleClose} color="secondary">No</Button>
-            </Box>
-          </Modal>
         </>
       );
     } else {
