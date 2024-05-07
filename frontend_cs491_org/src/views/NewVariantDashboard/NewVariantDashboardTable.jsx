@@ -333,9 +333,9 @@ const NewVariantDashboardTable = () => {
                             <TableCell onClick={() => handleSort('variantPosition')}>Consequence</TableCell>
                             <TableCell onClick={() => handleSort('acmgScore')}>ACMG Score</TableCell>
                             <TableCell>Symbol</TableCell>
-                            <TableCell>Original Gene</TableCell>
-                            <TableCell>Original HGSVC</TableCell>
-                            <TableCell>Original HGSVP</TableCell>
+                            <TableCell>Gene</TableCell>
+                            <TableCell>HGSVC</TableCell>
+                            <TableCell>HGSVP</TableCell>
                             <TableCell>Turkish Variome</TableCell>
                             <TableCell>Alphamissense Score</TableCell>
                             {
@@ -368,7 +368,7 @@ const NewVariantDashboardTable = () => {
                                 <TableCell>{row.consequence}</TableCell>
                                 <TableCell>{row.acmgScore}</TableCell>
                                 <TableCell>{row.symbol}</TableCell>
-                                <TableCell>{row.gene_original}</TableCell>
+                                <TableCell>{row.gene}</TableCell>
                                 <TableCell>{row.hgsvc_original}</TableCell>
                                 <TableCell>{row.hgsvp_original}</TableCell>
                                 <TableCell>{row.turkishvariome_tv_af_original}</TableCell>

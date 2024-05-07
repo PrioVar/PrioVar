@@ -49,7 +49,7 @@ public class Variant {
     private String consequence;
     private String symbol;
 
-    private String gene_original;
+    private String gene;
 
     private String hgsvc_original;
 
