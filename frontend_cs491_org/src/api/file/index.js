@@ -3,7 +3,7 @@ export { useFiles, useBedFiles, updateFileNotes, updateFinishInfo, fecthClinicia
         fetchCurrentClinicianName, addPatientWithPhenotype, deletePatient, deleteVCF, 
         fetchDiseases, fetchPhenotypeTerms, deletePhenotypeTerm, addPhenotypeTerm, 
         sendInformationRequest, acceptInformationRequest, rejectInformationRequest, fetchWaitingInformationRequests, 
-        fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead,  
+        fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead,  fetchPatientVariants
 } from './list'
 export { annotateFile, getPlots } from './annotate'
 export { updateDetails } from './details'
