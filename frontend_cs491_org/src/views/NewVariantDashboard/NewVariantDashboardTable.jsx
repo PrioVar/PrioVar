@@ -350,7 +350,7 @@ const NewVariantDashboardTable = () => {
                             }
                             
                             <TableCell>
-                                <IconButton onClick={() => handleSort('priovarScore')}>
+                                <IconButton onClick={() => handleSort('priovar_score')}>
                                     <SortIcon />
                                 </IconButton>
                                 Priovar Score
@@ -358,7 +358,7 @@ const NewVariantDashboardTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.map((row, index) => (
+                        {sortedData.map((row, index) => (
                             <TableRow key={index} sx={{
                                 '&:hover': {
                                     backgroundColor: '#f5f5f5' // hover highlight
@@ -372,7 +372,7 @@ const NewVariantDashboardTable = () => {
                                 <TableCell>{row.hgsvc_original}</TableCell>
                                 <TableCell>{row.hgsvp_original}</TableCell>
                                 <TableCell>{row.turkishvariome_tv_af_original}</TableCell>
-                                <TableCell>{row.alphamissense_score_mean}</TableCell>
+                                <TableCell>{row.alpha_missense_score_mean}</TableCell>
                                 {
                                     /* 
                                     <TableCell>{row.diseases}</TableCell>
