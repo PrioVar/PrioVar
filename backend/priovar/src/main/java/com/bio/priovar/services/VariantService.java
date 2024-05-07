@@ -29,4 +29,8 @@ public class VariantService {
     public Variant getVariantById(Long id) {
         return variantRepository.findById(id).orElse(null);
     }
+
+    public List<Variant> getVariantsByPatientId(Long patientId) {
+        return variantRepository.getVariantsByPatientId(patientId);
+    }
 }

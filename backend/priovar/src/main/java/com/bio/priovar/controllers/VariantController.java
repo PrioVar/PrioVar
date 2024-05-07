@@ -33,4 +33,11 @@ public class VariantController {
     public ResponseEntity<String> addVariant(@RequestBody Variant variant) {
         return new ResponseEntity<>(variantService.addVariant(variant), org.springframework.http.HttpStatus.OK);
     }
+
+    // to get all variants of a patientid
+    @GetMapping("/patient/{patientId}")
+    public List<Variant> getVariantsByPatientId(@PathVariable("patientId") Long patientId) {
+        return variantService.getVariantsByPatientId(patientId);
+    }
+
 }

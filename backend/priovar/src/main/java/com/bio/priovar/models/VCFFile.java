@@ -25,6 +25,9 @@ public class VCFFile {
     private String content;
     private String fileName;
 
+    //api_file_id
+    private String apiFileId;
+
     @Relationship(type = "HAS_COMMENTS", direction = Relationship.Direction.OUTGOING)
     private List<ClinicianComment> clinicianComments;
 

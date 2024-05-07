@@ -67,6 +67,28 @@ model = xgb.Booster()
 model.load_model(model_path)
 
 def prepare_data(df_variants):
+
+    # HGSVc_original column is the same as HGVSc column
+    df_variants['HGSVc_original'] = df_variants['HGVSc']
+
+    # HGSVp_original column is the same as HGVSp column
+    df_variants['HGSVp_original'] = df_variants['HGVSp']
+
+    # Conseqence_original column is the same as Consequence column
+    df_variants['Consequence_original'] = df_variants['Consequence']
+
+    # turkishvariome_TV_AF_original column is the same as turkishvariome_TV_AF column
+    df_variants['turkishvariome_TV_AF_original'] = df_variants['turkishvariome_TV_AF']
+
+    # Gene_original column is the same as Gene column
+    df_variants['Gene_original'] = df_variants['Gene']
+
+    # Allele original column is the same as Allele column
+    df_variants['Allele_original'] = df_variants['Allele']
+
+
+
+
     # divide  HGVSc  columns into two columns by splitting the values by ':' 	ENST00000616125.5:c.11G>A
     df_variants[['HGVSc', 'HGVSc2']] = df_variants['HGVSc'].str.split(':', expand=True)
 
@@ -74,7 +96,13 @@ def prepare_data(df_variants):
     df_variants[['HGVSc_number', 'HGVSc_change']] = df_variants['HGVSc2'].str.extract(r'c\.(\d+)([A-Z]>.*)')
 
     # divide  Hgvsp  columns into two columns by splitting the values by ':' 	ENSP00000484643.1:p.Gly4Glu
-    df_variants[['HGVSp', 'HGVSp2']] = df_variants['HGVSp'].str.split(':', expand=True)
+    try:
+        df_variants[['HGVSp', 'HGVSp2']] = df_variants['HGVSp'].str.split(':', expand=True)
+    except:
+        # put the values as None if there is an error
+        df_variants['HGVSp'] = None
+        df_variants['HGVSp2'] = None
+        print("Unusual HGVSp column")
     # extract the info from the HGVSp2 column so that we have the 2 more columns 4, GlyGlu namely number in the middle and the change
     # pay attention that there should be 2 columns
     df_variants[['HGVSp_from', 'HGVSp_number', 'HGVSp_to']] = df_variants['HGVSp2'].str.extract(
@@ -89,7 +117,7 @@ def prepare_data(df_variants):
     # divide  SpliceAI_pred  columns into 8 columns by splitting the values by '|' and drop the first column
     df_variants[['SpliceAI_pred_symbol', 'DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']] = \
     df_variants['SpliceAI_pred'].str.split('|', expand=True)
-    df_variants = df_variants.drop(columns=['SpliceAI_pred', 'SpliceAI_pred_symbol'])
+    #df_variants = df_variants.drop(columns=['SpliceAI_pred', 'SpliceAI_pred_symbol'])
 
 
     df_variants[['AlphaMissense_score_mean', 'AlphaMissense_std_dev']] = df_variants['AlphaMissense_score'].apply(
