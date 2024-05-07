@@ -263,22 +263,24 @@ def insert_variant(tx, variant_data, patient_id):
 
     # add the gene_symbol if it does not exist
     geneSymbol = variant_data['SYMBOL']
+    # check via math.isnan function
 
-    # if gene symbol is NaN , return"
-    if geneSymbol == "NaN" or geneSymbol == "nan" or geneSymbol == "NAN" or geneSymbol == "None" or geneSymbol == None or geneSymbol == "":
+    # if gene symbol is not string, return
+    if not isinstance(geneSymbol, str):
+        print("Empty gene symbol")
         return
+
+
+
 
     #geneSymbol = "example_gene_symbol"
-    try:
-        tx.run(
-            """
-            MERGE (g:Gene {geneSymbol: $geneSymbol})
-            """,
-            geneSymbol=geneSymbol)
-    except Exception as e:
-        print("Gene missing: ", e)
-        print("Gene symbol: ", geneSymbol)
-        return
+
+    tx.run(
+        """
+        MERGE (g:Gene {geneSymbol: $geneSymbol})
+        """,
+        geneSymbol=geneSymbol)
+
 
     # Connect this variant to the gene
     # "HAS_VARIANT_ON" relationship
