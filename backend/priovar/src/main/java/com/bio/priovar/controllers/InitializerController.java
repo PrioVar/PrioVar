@@ -271,6 +271,8 @@ public class InitializerController {
         patient6.setAge(52);
         patient6.setSex("Male");
         patient6.setMedicalCenter(acibadem);
+        patient6.setGenes(new ArrayList<>());
+        patient6.getGenes().add(gene1);
         VCFFile vcfFile6 = new VCFFile();
         vcfFile6.setContent(base64File);
         vcfFile6.setFileName(UUID.randomUUID().toString());
