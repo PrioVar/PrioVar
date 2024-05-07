@@ -22,7 +22,7 @@ public class Disease {
     private String diseaseName;
     private String databaseId;
 
-    @Relationship(type = "ASSOCIATED_WITH_PHENOTYPE", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "DISEASE_ASSOCIATED_WITH_PHENOTYPE", direction = Relationship.Direction.OUTGOING)
     private List<PhenotypeTerm> phenotypeTerms;
 
 

@@ -29,7 +29,7 @@ def read_and_create_diseases_from_hpoa(session):
             # Create relationship with phenotype term
             create_relationship_query = (
                 "MATCH (d:Disease {diseaseName: $diseaseName}), (p:PhenotypeTerm {id: $hpo_id}) "
-                "MERGE (d)-[r:ASSOCIATED_WITH_PHENOTYPE]->(p) "
+                "MERGE (d)-[r:DISEASE_ASSOCIATED_WITH_PHENOTYPE]->(p) "
                 "SET r.frequency = $frequency, r.databaseId = $databaseId "
             )
             hpo_idd = int(row['hpo_id'][-7:])
@@ -42,7 +42,7 @@ def read_and_create_genes_from_genes_to_phenotype(session):
         #Get the first line as column names
         reader = csv.DictReader(file, delimiter='\t')
         #Limit the number of rows for testing to 500
-        reader = itertools.islice(reader, 500)
+        reader = itertools.islice(reader, 2500)
         for row in reader:
             # Create gene node if not exists
             create_gene_query = (
@@ -52,7 +52,7 @@ def read_and_create_genes_from_genes_to_phenotype(session):
             # Create relationship with phenotype term
             create_relationship_query = (
                 "MATCH (g:Gene {geneSymbol: $gene_symbol}), (p:PhenotypeTerm {id: $hpo_id}) "
-                "MERGE (g)-[:ASSOCIATED_WITH_PHENOTYPE]->(p) "
+                "MERGE (g)-[:GENE_ASSOCIATED_WITH_PHENOTYPE]->(p) "
             )
             hpo_idd = int(row['hpo_id'][-7:])
             session.run(create_relationship_query, gene_symbol=row['gene_symbol'], hpo_id=hpo_idd)
