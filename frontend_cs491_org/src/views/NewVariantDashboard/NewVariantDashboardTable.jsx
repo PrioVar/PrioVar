@@ -1,3 +1,5 @@
+
+import { CircularProgress } from '@material-ui/core';
 import React, { useState, useMemo, useEffect } from 'react';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, TextField, FormGroup, FormControlLabel, Checkbox, RadioGroup, Radio } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -15,6 +17,7 @@ const NewVariantDashboardTable = () => {
     const [filterOpen, setFilterOpen] = useState(false);
     const [termsOpen, setTermsOpen] = useState(false);
     const [phenotypeTerms, setPhenotypeTerms] = useState([]);
+    const [dataRetriever, setDataRetriever] = useState([]);
     const patientId = localStorage.getItem('patientId');
     var [data, setData] = useState([]);
     
@@ -64,6 +67,7 @@ const NewVariantDashboardTable = () => {
     data = setAcmgScoreFromPriovar(data);
     
     const fetchVariants = async () => {
+        setDataRetriever(false)
         try {
             const response = await fetchPatientVariants(patientId);
             setData(response.data);
@@ -75,7 +79,7 @@ const NewVariantDashboardTable = () => {
         } catch (error) {
             console.error('Failed to fetch patient variants', error);
         }
-    
+        setDataRetriever(true)
     }
 
     useEffect(() => {
@@ -293,8 +297,8 @@ const NewVariantDashboardTable = () => {
                 </DialogActions>
             </Dialog>
 
-
-            <TableContainer component={Paper}>
+            {!dataRetriever ? (<CircularProgress/>) : (
+                <TableContainer component={Paper}>
                 <Typography variant="h6" sx={{  mt: 4, ml:2 }}>
                     All detected variants of '{fileName}'
                 </Typography>
@@ -392,6 +396,8 @@ const NewVariantDashboardTable = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            )}
+            
         </>
     );
 };
