@@ -103,10 +103,12 @@ const NewVariantDashboardTable = () => {
         };
 
         fetchVariants();
+        /*
         if (termsOpen) {
             fetchData();
         }
-        
+        */
+        fetchData()
     }, []);
 
 
@@ -224,6 +226,7 @@ const NewVariantDashboardTable = () => {
             <Dialog open={filterOpen} onClose={closeFilter}>
                 <DialogTitle>Filter Options</DialogTitle>
                 <DialogContent>
+                    {/*
                     <Typography sx={{ mt: 2 }} variant="subtitle1" gutterBottom>Local Frequency</Typography>
                     <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
                         <TextField
@@ -241,6 +244,7 @@ const NewVariantDashboardTable = () => {
                             onChange={(e) => handleRangeChange(e, 'freqRange', 'max')}
                         />
                     </Box>
+                    */}
                     <Typography variant="subtitle1" gutterBottom>Priovar Score</Typography>
                     <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
                         <TextField
@@ -258,6 +262,7 @@ const NewVariantDashboardTable = () => {
                             onChange={(e) => handleRangeChange(e, 'scoreRange', 'max')}
                         />
                     </Box>
+                    {/*
                     <Typography variant="subtitle1" gutterBottom>GT</Typography>
                     <FormGroup>
                         {['het', 'hom'].map(gt => (
@@ -274,7 +279,7 @@ const NewVariantDashboardTable = () => {
                             />
                         ))}
                     </FormGroup>
-
+                    */}
                     <Typography sx={{ mt: 2 }} variant="subtitle1" gutterBottom>ACMG Strength</Typography>
                     <FormGroup>
                         {['Benign', 'Likely Benign', 'VUS', 'Likely Pathogenic', 'Pathogenic'].map(strength => (
@@ -372,7 +377,7 @@ const NewVariantDashboardTable = () => {
                                 <TableCell>{row.hgsvc_original}</TableCell>
                                 <TableCell>{row.hgsvp_original}</TableCell>
                                 <TableCell>{row.turkishvariome_tv_af_original}</TableCell>
-                                <TableCell>{row.alpha_missense_score_mean}</TableCell>
+                                <TableCell>{row.alpha_missense_score_mean != "NaN" ? (row.alpha_missense_score_mean.toFixed(2)) : ("Not Applicable")}</TableCell>
                                 {
                                     /* 
                                     <TableCell>{row.diseases}</TableCell>
