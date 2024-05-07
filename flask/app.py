@@ -56,6 +56,7 @@ def start_analysis():
 
     return "hey"
 
+
 # return mock analysis results, for testing purposes, similar to above
 @app.route('/analysis-mock', methods=['POST'])
 def start_analysis_mock():
@@ -74,8 +75,54 @@ def start_analysis_mock():
     return df.to_json()
 
 
+@app.route('/load-hpo', methods=['GET'])
+def start_loading_data():
+    graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
+
+    items = process_nodes(nodes)
+    save_nodes(items)
+    edge_items = process_edges(edges)
+    save_edges(edge_items)
+
+    return "Data loading finished"
 
 
+@app.route('/load-clinvar', methods=['GET'])
+def get_clinvar():
+    df = read_clinvar()
+    save_clinvar(df)
+
+    return "Variants from ClinVar successfully loaded"
+
+@app.route('/load-diseases', methods=['GET'])
+def get_diseases():
+    initiate_disease_database()
+
+    return "Diseases successfully loaded"
+
+
+@app.route('/load-genes', methods=['GET'])
+def get_genes():
+    initiate_gene_database()
+
+    return "Genes successfully loaded"
+
+
+# write an endpoint that takes a VCF file as input and returns annotated variants
+# as a dataframe
+@app.route('/annotate-variants', methods=['POST'])
+def get_annotated_variants():
+    # get the file from the request
+    file = request.files['file']
+    # annotate the variants
+    annotated_data = annotate_variants(file)
+    # return the annotated variants as a dataframe
+    return annotated_data
+
+
+@app.route('/get-annotated-variants', methods=['GET'])
+def get_annotated_variants_of_patient():
+    return get_all_annotated_variants()
 
 @app.route("/endpoint-test", methods=["GET"])
 def test_endpoint():
@@ -138,9 +185,6 @@ def test_endpoint():
     print(response3.json())
 
 
-
-
-
     # now, with vcf_sample, send a request to
     # lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/<str:filename>
     # use the same headers, do not send any file
@@ -163,6 +207,7 @@ def test_endpoint():
 
     return "Endpoint test successful"
 
+
 # endpoint test2
 @app.route("/endpoint-test2", methods=["GET"])
 def test_endpoint2():
@@ -176,56 +221,6 @@ def test_endpoint2():
     # save the response to a file
 
     return "Endpoint2 test successful"
-
-
-@app.route('/load-hpo', methods=['GET'])
-def start_loading_data():
-    graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
-
-    items = process_nodes(nodes)
-    save_nodes(items)
-    edge_items = process_edges(edges)
-    save_edges(edge_items)
-
-    return "Data loading finished"
-
-
-@app.route('/load-clinvar', methods=['GET'])
-def get_clinvar():
-    df = read_clinvar()
-    save_clinvar(df)
-
-    return "Variants from ClinVar successfully loaded"
-
-@app.route('/load-diseases', methods=['GET'])
-def get_diseases():
-    initiate_disease_database()
-
-    return "Diseases successfully loaded"
-
-
-@app.route('/load-genes', methods=['GET'])
-def get_genes():
-    initiate_gene_database()
-
-    return "Genes successfully loaded"
-
-
-# write an endpoint that takes a VCF file as input and returns annotated variants
-# as a dataframe
-@app.route('/annotate-variants', methods=['POST'])
-def get_annotated_variants():
-    # get the file from the request
-    file = request.files['file']
-    # annotate the variants
-    annotated_data = annotate_variants(file)
-    # return the annotated variants as a dataframe
-    return annotated_data
-
-
-@app.route('/get-annotated-variants', methods=['GET'])
-def get_annotated_variants_of_patient():
-    return get_all_annotated_variants()
 
 
 if __name__ == '__main__':
