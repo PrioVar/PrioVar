@@ -34,12 +34,6 @@ const MENU_OPTIONS = [
     icon: homeFill,
     linkTo: '/priovar/files',
   },
-  // TODO: Don't show users if the user is not admin
-  {
-    label: 'Users',
-    icon: peopleFill,
-    linkTo: PATH_DASHBOARD.user.list,
-  },
   /*
   {
     label: 'Settings',
