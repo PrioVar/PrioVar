@@ -117,9 +117,7 @@ def api_get_output(vcf_id):
     print(response3)
     return response3
 
-
 driver = GraphDatabase.driver(uri, auth=(username, password))
-
 def update_vcf_file(tx, file_id, new_api_file_id, new_file_status):
     query = """
     MATCH (f:VCFFile)
@@ -127,7 +125,6 @@ def update_vcf_file(tx, file_id, new_api_file_id, new_file_status):
     SET f.api_file_id = $api_file_id, f.fileStatus = $file_status
     """
     tx.run(query, id=file_id, api_file_id=new_api_file_id, file_status=new_file_status)
-
 
 def update_vcf_file_for_patient(tx, patient_id, new_api_file_id, new_file_status):
 
@@ -140,14 +137,19 @@ def update_vcf_file_for_patient(tx, patient_id, new_api_file_id, new_file_status
     tx.run(query, patient_id=patient_id, api_file_id=new_api_file_id, file_status=new_file_status)
 
 
+
 def set_vcf_file_details(file_id, new_api_file_id, new_file_status):
+    # Initialize the Neo4j driver
+    #driver = GraphDatabase.driver(uri, auth=(username, password))
 
     # Update the specific VCFFile node in Neo4j
     with driver.session() as session:
         session.write_transaction(update_vcf_file, file_id, new_api_file_id, new_file_status)
 
 
+
 def set_vcf_file_details_for_patient(patient_id, new_file_status, new_api_file_id = "none, yet"):
+
 
     with driver.session() as session:
         session.write_transaction(update_vcf_file_for_patient, patient_id, new_api_file_id, new_file_status)
@@ -224,12 +226,21 @@ def insert_variant(tx, variant_data, patient_id):
     # add the gene_symbol if it does not exist
     geneSymbol = variant_data['SYMBOL']
 
-    tx.run(
-        """
-        MERGE (g:Gene {geneSymbol: $geneSymbol})
-        """,
-        geneSymbol=geneSymbol
-    )
+    # if gene symbol is NaN , return"
+    if geneSymbol == "NaN" or geneSymbol == "nan" or geneSymbol == "NAN" or geneSymbol == "None" or geneSymbol == None or geneSymbol == "":
+        return
+
+    #geneSymbol = "example_gene_symbol"
+    try:
+        tx.run(
+            """
+            MERGE (g:Gene {geneSymbol: $geneSymbol})
+            """,
+            geneSymbol=geneSymbol)
+    except Exception as e:
+        print("Gene missing: ", e)
+        print("Gene symbol: ", geneSymbol)
+        return
 
     # Connect this variant to the gene
     # "HAS_VARIANT_ON" relationship
@@ -241,9 +252,53 @@ def insert_variant(tx, variant_data, patient_id):
         uploaded_variation=variant_data['Uploaded_variation'],
         geneSymbol=geneSymbol
     )
+        
 
+def get_patient_phenotypes(patient_id):
+
+    # via "HAS_PHENOTYPE_TERM" relationship
+    query = """ 
+    MATCH (p:Patient)-[:HAS_PHENOTYPE_TERM]->(h:PhenotypeTerm)
+    WHERE ID(p) = $patient_id
+    RETURN h
+    """
+
+    with driver.session() as session:
+        result = session.run(query, patient_id=patient_id)
+        # if empty return [1], return as a list of integers
+        ls = [record['h']['id'] for record in result]
+        if len(ls) == 0:
+            print("No phenotype")
+            return [1]
+        return ls
 
 def upload_variants(patient_id, variants_df):
     with driver.session() as session:
         for idx, row in variants_df.iterrows():
             session.write_transaction(insert_variant, row.to_dict(), patient_id)
+
+
+
+
+
+
+"""
+driver = GraphDatabase.driver(uri, auth=(username, password))
+geneSymbol = "ABCAA4"
+
+with driver.session() as session:
+    # Insert a Gene node with the given geneSymbol if it does not exist
+    # so, check first if the gene exists
+    result = session.run(
+        "MATCH (g:Gene {geneSymbol: $geneSymbol}) RETURN g", {"geneSymbol": geneSymbol}
+    )
+    gene = result.single()
+
+    if gene is None:
+        # Gene does not exist, so create it
+        session.run(
+            "CREATE (g:Gene {geneSymbol: $geneSymbol}) RETURN g", {"geneSymbol": geneSymbol}
+        )
+    else:
+        print("Gene already exists, skipping creation")
+"""

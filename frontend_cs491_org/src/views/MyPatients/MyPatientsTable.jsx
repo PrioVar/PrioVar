@@ -24,7 +24,7 @@ import {
   import { fDateTime } from 'src/utils/formatTime'
   import { useFiles, annotateFile, updateFinishInfo, updateFileNotes, fetchClinicianPatients, 
             fetchCurrentClinicianName, deletePatient } from '../../api/file'
-  import { PATH_DASHBOARD, } from '../../routes/paths'
+  import { PATH_DASHBOARD, ROOTS_Flask } from '../../routes/paths'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import VariantDasboard2 from '../common/VariantDasboard2'
@@ -33,6 +33,7 @@ import {
   import { useSnackbar } from 'notistack5'
   import { MIconButton } from '../../components/@material-extend'
   import { Icon } from '@iconify/react'
+  import axios from 'axios'
 
   const EditableNote = ({ note, onSave, details }) => {
     const [isEditing, setIsEditing] = useState(false)
@@ -154,7 +155,7 @@ import {
     p: 4,
   };
   
-  const StatusButton = ({ fileName, status: initialStatus }) => {
+  const StatusButton = ({ currentPatientId, fileName, status: initialStatus }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(initialStatus);
@@ -162,7 +163,7 @@ import {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
   
-    const startAnalysis = () => {
+    const startAnalysis = async () => {
       handleClose();
       setStatus('ANALYSIS_IN_PROGRESS');
       enqueueSnackbar('Analysis has been started!', {
@@ -173,9 +174,10 @@ import {
           </MIconButton>
         ),
       })
-      // Logic to start analysis
       console.log("Starting analysis for:", fileName);
-      // Optionally navigate or refresh page here
+      const response = await axios.post(`${ROOTS_Flask}/analysis-mock`, {
+        patientId: currentPatientId,
+      });
     };
   
     if (status === 'ANALYSIS_DONE') {
@@ -548,7 +550,7 @@ import {
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex];
             const status = row.file.fileStatus;
-            return <StatusButton fileName={row.file.fileName} status={status} />;
+            return <StatusButton currentPatientId={row.patientId} fileName={row.file.fileName} status={status} />;
           },
         },
       },
