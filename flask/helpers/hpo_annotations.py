@@ -4,20 +4,22 @@ from config import uri, username, password
 import csv 
 import itertools
 
+
 def create_session(uri, user, password):
     driver = GraphDatabase.driver(uri, auth=(user, password))
     return driver
 
+
 # Function to read the HPOA file and create the disease nodes and relationships with phenotype terms
 def read_and_create_diseases_from_hpoa(session):
     with open(path.join('data', 'phenotype.hpoa'), 'r') as file:
-        #Skip the header
+        # Skip the header
         for i in range(4):
             next(file)
         
         reader = csv.DictReader(file, delimiter='\t')
-        #Limit the number of rows for testing to 500
-        reader = itertools.islice(reader, 500)
+        # Limit the number of rows for testing to 500
+        reader = itertools.islice(reader, 2500)
         for row in reader:
             # Create disease node if not exists
             create_disease_query = (
@@ -34,7 +36,7 @@ def read_and_create_diseases_from_hpoa(session):
             session.run(create_relationship_query, diseaseName=row['disease_name'], hpo_id=hpo_idd, frequency=row['frequency'], databaseId=row['database_id'])
 
 
-#Function to read genes_to_phenotype.txt and create the gene nodes and relationships with phenotype terms
+# Function to read genes_to_phenotype.txt and create the gene nodes and relationships with phenotype terms
 def read_and_create_genes_from_genes_to_phenotype(session):
     with open(path.join('data', 'genes_to_phenotype.txt'), 'r') as file:
         #Get the first line as column names
@@ -62,7 +64,8 @@ def initiate_disease_database():
     with driver.session() as session:
         read_and_create_diseases_from_hpoa(session)
     driver.close()
-    
+
+
 # Function to connect to the database and create the gene nodes and relationships
 def initiate_gene_database():
     driver = create_session(uri, username, password)
