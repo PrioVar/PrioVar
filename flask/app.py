@@ -71,7 +71,7 @@ def start_analysis_mock():
     hpo_list = get_patient_phenotypes(patient_id)
     #print("Hpolist: ", hpo_list)
 
-    df = get_mock_results(3, hpo_list)
+    df = get_mock_results(10, hpo_list)
 
     # print df columns
     #print("Columns: ", df.columns)
