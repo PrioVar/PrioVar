@@ -49,7 +49,7 @@ public class Variant {
     private String consequence;
     private String symbol;
 
-    private String gene_original;
+    private String gene;
 
     private String hgsvc_original;
 
@@ -61,7 +61,7 @@ public class Variant {
 
     private Double priovar_score;
 
-    private Double alphamissense_score_mean;
+    private Double alpha_missense_score_mean;
 
 
 
