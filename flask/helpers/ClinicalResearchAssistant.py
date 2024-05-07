@@ -25,7 +25,7 @@ class ClinicalResearchAssistant:
 
         # Define the ChatGPT model
         self.client = OpenAI()
-        self.model_name = "gpt-3.5-turbo-0125"
+        self.model_name = "gpt-4-turbo-2024-04-09"
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         self.model = BertModel.from_pretrained('bert-base-uncased')
         self.driver = GraphDatabase.driver(uri, auth=(username, password))

@@ -23,8 +23,8 @@ class KnowledgeGraphQA:
         # Set up the QA chain with specific configurations
         self.chain = GraphCypherQAChain.from_llm(
             graph=self.graph,
-            cypher_llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0125"),
-            qa_llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0125"),
+            cypher_llm=ChatOpenAI(temperature=0, model="gpt-4-turbo-2024-04-09"),
+            qa_llm=ChatOpenAI(temperature=0, model="gpt-4-turbo-2024-04-09"),
             verbose=True,
             validate_cypher=True,
         )
