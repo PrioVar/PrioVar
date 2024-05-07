@@ -377,6 +377,9 @@ def get_mock_results(num_variants = 3, hpo = None):
     else:
         variants = add_model_scores(variants, hpo)
 
+    # scale Priovar_score (-1.6, 1.6) to be between 0 and 1
+    variants['Priovar_score'] = (variants['Priovar_score'] + 1.6) / 3.2
+
     return variants
 
 
