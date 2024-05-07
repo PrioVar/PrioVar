@@ -262,6 +262,11 @@ public class SimilarityService {
         // find the newest numberOfReports similarity reports by patient id using createdAt
         List<SimilarityReport> similarityReports = similarityReportRepository.findAllByPrimaryPatientId(id);
 
+        // sort the PairSimilarities inside each similarity report by totalScore in descending order
+        for (SimilarityReport similarityReport : similarityReports) {
+            similarityReport.getPairSimilarities().sort((o1, o2) -> Float.compare(o2.getTotalScore(), o1.getTotalScore()));
+        }
+
         // sort the similarity reports by createdAt
         similarityReports.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
 
