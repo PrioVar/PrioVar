@@ -1,5 +1,6 @@
 package com.bio.priovar.models;
 
+import com.bio.priovar.serializers.ActorLiteSerializer;
 import com.bio.priovar.serializers.InformationRequestLiteSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -30,9 +30,11 @@ public class Notification {
 
 
     @Relationship(type = "NOTIFIED_BY", direction = Relationship.Direction.OUTGOING)
+    @JsonSerialize(using = ActorLiteSerializer.class)
     private Actor sender;
 
     @Relationship(type = "NOTIFIED_TO", direction = Relationship.Direction.OUTGOING)
+    @JsonSerialize(using = ActorLiteSerializer.class)
     private Actor receiver;
 
     @Relationship(type = "CARRIES", direction = Relationship.Direction.OUTGOING)
