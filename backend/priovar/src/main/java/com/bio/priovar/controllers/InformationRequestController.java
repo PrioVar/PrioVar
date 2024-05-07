@@ -35,9 +35,17 @@ public class InformationRequestController{
          return informationRequestService.rejectInformationRequest(informationRequestId, notificationAppendix);
      }
 
+    @GetMapping("/waiting/{clinicianId}")
+    public List<InformationRequest> getWaitingInformationRequests(@PathVariable Long clinicianId) {
+         return informationRequestService.getWaitingInformationRequests(clinicianId);
+    }
+
     @GetMapping("/pending/{medicalCenterId})")
     public List<InformationRequest> getPendingInformationRequests(@PathVariable Long medicalCenterId) {
          return informationRequestService.getPendingInformationRequests(medicalCenterId);
     }
+
+
+
 
 }

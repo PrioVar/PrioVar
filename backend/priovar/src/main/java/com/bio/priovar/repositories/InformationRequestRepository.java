@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface InformationRequestRepository extends Neo4jRepository<InformationRequest, Long>{
 
     public List<InformationRequest> findAllByPatientMedicalCenterAndIsPending(MedicalCenter medicalCenter, boolean isPending);
+
+    public List<InformationRequest> findAllByClinicianIdAndIsPending(Long clinicianId, boolean isPending);
 }

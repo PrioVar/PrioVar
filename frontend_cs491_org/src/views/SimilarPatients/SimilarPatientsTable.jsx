@@ -5,7 +5,7 @@ import {
   import { Info, ArrowBack } from '@material-ui/icons';
   import axios from 'axios';
   import React, { useState, useEffect } from 'react';
-  import { useFiles, useBedFiles, sendInformationRequest, fetchAllAvailablePatients } from '../../api/file';
+  import { useFiles, useBedFiles, sendInformationRequest, fetchAllAvailablePatients, fetchWaitingInformationRequests } from '../../api/file';
   import { ROOTS_PrioVar } from '../../routes/paths';
   import { useParams, useNavigate } from 'react-router-dom';
   import { Link as RouterLink } from 'react-router-dom';
@@ -25,6 +25,7 @@ import {
     const [requestDescription, setRequestDescription] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
     const [allAvailablePatients, setAllAvailablePatients] = useState([]);
+    const [waitingRequests, setWaitingRequests] = useState([]);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const bedFilesApi = useBedFiles();
@@ -48,31 +49,36 @@ import {
         setOpenDialog(true);
     };
     const handleRequestClose = () => setOpenDialog(false);
-    const handleRequestSubmit = async () => {
-        try {
-              handleRequestClose();
-              enqueueSnackbar('Request sent successfully!', {
-                variant: 'success',
-                action: (key) => (
-                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+
+const handleRequestSubmit = async () => {
+    try {
+        await sendInformationRequest(clinicianId, currentPatientId, requestDescription);
+        enqueueSnackbar('Request sent successfully!', {
+            variant: 'success',
+            action: (key) => (
+                <MIconButton size="small" onClick={() => closeSnackbar(key)}>
                     <Icon icon={closeFill} />
-                  </MIconButton>
-                ),
-              })
-            await sendInformationRequest(clinicianId, currentPatientId, requestDescription);
-          } catch (error) {
-              console.error('Error sending request:', error.response);
-              handleRequestClose();
-              enqueueSnackbar("Failed to send request", {
-                variant: 'error',
-                action: (key) => (
-                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                </MIconButton>
+            ),
+        });
+        // Close the dialog
+        handleRequestClose();
+        // Update the waiting requests array
+        const newRequest = { patient: { id: currentPatientId } }; // Structure this as per your actual data model
+        setWaitingRequests([...waitingRequests, newRequest]);
+    } catch (error) {
+        console.error('Error sending request:', error.response);
+        enqueueSnackbar("Failed to send request", {
+            variant: 'error',
+            action: (key) => (
+                <MIconButton size="small" onClick={() => closeSnackbar(key)}>
                     <Icon icon={closeFill} />
-                  </MIconButton>
-                ),
-              })
-        }
-    };
+                </MIconButton>
+            ),
+        });
+    }
+};
+
   
     const fetchReports = async () => {
         try {
@@ -88,15 +94,28 @@ import {
         setAllAvailablePatients(allPatients);
 
     };
+
+    const fetchWaitingRequests = async () => {
+        const waitingRequests = await fetchWaitingInformationRequests(clinicianId);
+        setWaitingRequests(waitingRequests);
+    };
+
   
     useEffect(() => {
         fetchReports();
         fetchAllPatients(); // Fetch all available patients when the component mounts
+        fetchWaitingRequests();
     }, []);
+
 
     const isPatientAvailable = (secondaryPatientId) => {
         return allAvailablePatients.some(patient => patient.patientId === secondaryPatientId);
     };
+
+    const isPatientRequested = (secondaryPatientId) => {
+        return waitingRequests.some(request => request.patient.id === secondaryPatientId);
+    };
+
   
     const handleSearch = async () => {
         try {
@@ -161,7 +180,8 @@ import {
                                     <TableCell align="right">{row.secondaryPatient.sex}</TableCell>
                                     <TableCell align="right">{row.phenotypeScore.toFixed(2)}</TableCell>
                                     <TableCell align="right">
-                                        {!isPatientAvailable(row.secondaryPatient.id) && (
+                                        
+                                        {!isPatientAvailable(row.secondaryPatient.id) &&  !isPatientRequested(row.secondaryPatient.id) && (
                                             <Button 
                                                 variant="contained" 
                                                 color="info" 
@@ -180,6 +200,16 @@ import {
                                         >
                                             <Info sx={{ marginRight: '8px' }}/> View
                                         </Button>
+                                    )}
+                                       {isPatientRequested(row.secondaryPatient.id) &&  !isPatientAvailable(row.secondaryPatient.id) && (
+                                            <Button
+                                                variant="contained"
+                                                color="warning"
+                                                size="small"
+                                                disabled
+                                            >
+                                                <Info sx={{ marginRight: '8px' }} /> Already Requested
+                                            </Button>
                                     )}
                                     </TableCell>
                                 </TableRow>
