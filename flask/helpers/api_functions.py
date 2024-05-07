@@ -156,14 +156,46 @@ def set_vcf_file_details_for_patient(patient_id, new_file_status, new_api_file_i
 
 def insert_variant(tx, variant_data, patient_id):
     # Create a new variant node or update it if it already exists
-    #print(variant_data)
+
+    # columns to add to the variant node:    private String allele;
+    #     private String consequence;
+    #     private String symbol;
+    #     private String hgsvc_original;
+    #     private String hgsvp_original;
+    #     private String clin_sig;
+    #     private String turkishvariome_tv_af_original;
+    #     private Double priovar_score;
+    #     private Double alphamissense_score_mean;
+    # private String gene_original;
+
+    """
+     Index(['#Uploaded_variation', 'Allele', 'Gene', 'Feature', 'Consequence',
+    //       'Existing_variation', 'SYMBOL', 'CANONICAL', 'SIFT', 'PolyPhen',
+    //       'HGVSp', 'AF', 'gnomADe_AF', 'CLIN_SIG', 'REVEL', 'SpliceAI_pred',
+    //       'DANN_score', 'MetaLR_score', 'CADD_raw_rankscore', 'ExAC_AF',
+    //       'ALFA_Total_AF', 'AlphaMissense_score', 'AlphaMissense_pred',
+    //       'turkishvariome_TV_AF', 'turkishvariome_TV_AF_original', 'HGSVc_original', 'HGSVp_original',
+    //       'HGVSc_number', 'HGVSc_change', 'HGVSp_number', 'HGVSp_change',
+    //       'SpliceAI_pred_symbol', 'DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG',
+    //       'DP_AL', 'DP_DG', 'DP_DL', 'AlphaMissense_score_mean',
+    //       'AlphaMissense_std_dev', 'AlphaMissense_pred_A', 'AlphaMissense_pred_B',
+    //       'AlphaMissense_pred_P', 'PolyPhen_number', 'SIFT_number',
+    //       'scaled_average_dot_product', 'scaled_min_dot_product',
+    //       'scaled_max_dot_product', 'average_dot_product', 'min_dot_product',
+    //       'max_dot_product', 'Priovar_score'],
+    :param tx:
+    :param variant_data:
+    :param patient_id:
+    :return:
+    """
+
+    columns_to_add = ['Uploaded_variation' ,'Allele', 'Consequence', 'SYMBOL', 'Priovar_score', 'Gene', 'turkishvariome_TV_AF_original', 'AlphaMissense_score_mean', 'HGSVc_original', 'HGSVp_original', 'CLIN_SIG']
 
     # delete the '#' character from the #uploaded_variation column name
     variant_data['Uploaded_variation'] = variant_data['#Uploaded_variation']
     # there are so much columns in the variant_data, so we need to filter them
-    variant_data = {k: v for k, v in variant_data.items() if k in ['Uploaded_variation', 'Priovar_score', 'Gene', 'SYMBOL', 'HGVSp']}
+    variant_data = {k: v for k, v in variant_data.items() if k in columns_to_add}
 
-    #print(variant_data)
 
     variant = tx.run(
         """
@@ -171,10 +203,16 @@ def insert_variant(tx, variant_data, patient_id):
             uploaded_variation: $Uploaded_variation
         })
         ON CREATE SET
+            v.allele = $Allele,
+            v.consequence = $Consequence,
+            v.symbol = $SYMBOL,
             v.priovar_score = $Priovar_score,
             v.gene = $Gene,
-            v.symbol = $SYMBOL,
-            v.hgvsp = $HGVSp
+            v.turkishvariome_tv_af_original = $turkishvariome_TV_AF_original,
+            v.alpha_missense_score_mean = $AlphaMissense_score_mean,
+            v.hgsvc_original = $HGSVc_original,
+            v.hgsvp_original = $HGSVp_original,
+            v.clin_sig = $CLIN_SIG
         RETURN v
         """, **variant_data).single().value()
 

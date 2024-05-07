@@ -73,6 +73,9 @@ def start_analysis_mock():
 
     df = get_mock_results(3, hpo_list)
 
+    # print df columns
+    #print("Columns: ", df.columns)
+
     upload_variants(patient_id, df)
 
     # set the vcf file details for the patient
