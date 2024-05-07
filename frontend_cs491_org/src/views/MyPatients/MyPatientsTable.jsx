@@ -177,7 +177,20 @@ import {
       console.log("Starting analysis for:", fileName);
       const response = await axios.post(`${ROOTS_Flask}/analysis-mock`, {
         patientId: currentPatientId,
+        medicalCenterId: localStorage.getItem('healthCenterId'),
       });
+      if (response.status === 200) { // Assuming 200 means analysis completed successfully
+        setStatus('ANALYSIS_DONE');
+        enqueueSnackbar('Analysis completed successfully!', {
+          variant: 'success',
+        });
+      } else {
+        // Handle other statuses or errors
+        setStatus('FILE_ANNOTATED');
+        enqueueSnackbar('Analysis failed. Please try again.', {
+          variant: 'error',
+        });
+      }
     };
     
     const NavigateToNewAnalysisPage = () => {
