@@ -203,14 +203,14 @@ def insert_variant(tx, variant_data, patient_id):
     for key in variant_data:
         if key not in ['Priovar_score', 'Uploaded_variation', 'AlphaMissense_score_mean']:
             if not isinstance(variant_data[key], str):
-                variant_data[key] = "Not Available"
+                variant_data[key] = "-"
 
     # if alpha missense score mean is not float, make it "Not Available", if available, round it to 2 decimal points as string
     if not isinstance(variant_data['AlphaMissense_score_mean'], float):
-        variant_data['AlphaMissense_score_mean'] = "Not Available"
+        variant_data['AlphaMissense_score_mean'] = "-"
     # check if it is nan
     elif math.isnan(variant_data['AlphaMissense_score_mean']):
-        variant_data['AlphaMissense_score_mean'] = "Not Available"
+        variant_data['AlphaMissense_score_mean'] = "-"
     else:
         variant_data['AlphaMissense_score_mean'] = str(round(variant_data['AlphaMissense_score_mean'], 2))
 
