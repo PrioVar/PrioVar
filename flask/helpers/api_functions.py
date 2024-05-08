@@ -1,3 +1,5 @@
+import math
+
 from flask import Flask, request
 from flask_cors import CORS
 
@@ -195,6 +197,22 @@ def insert_variant(tx, variant_data, patient_id):
     variant_data['Uploaded_variation'] = variant_data['#Uploaded_variation']
     # there are so much columns in the variant_data, so we need to filter them
     variant_data = {k: v for k, v in variant_data.items() if k in columns_to_add}
+
+    # convert everything to string except Priovar_score, Uploaded_variation, and AlphaMissense_score_mean
+    # if type is not string make it "Not Available"
+    for key in variant_data:
+        if key not in ['Priovar_score', 'Uploaded_variation', 'AlphaMissense_score_mean']:
+            if not isinstance(variant_data[key], str):
+                variant_data[key] = "Not Available"
+
+    # if alpha missense score mean is not float, make it "Not Available", if available, round it to 2 decimal points as string
+    if not isinstance(variant_data['AlphaMissense_score_mean'], float):
+        variant_data['AlphaMissense_score_mean'] = "Not Available"
+    # check if it is nan
+    elif math.isnan(variant_data['AlphaMissense_score_mean']):
+        variant_data['AlphaMissense_score_mean'] = "Not Available"
+    else:
+        variant_data['AlphaMissense_score_mean'] = str(round(variant_data['AlphaMissense_score_mean'], 2))
 
 
     variant = tx.run(

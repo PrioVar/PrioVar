@@ -45,8 +45,9 @@ public class Variant {
     //
     //
     // add gene, HGSVc_original, HGVSp_original, Consequence, SYMBOL, turkishvariome_TV_AF_original, CLIN_SIG,  Priovar_score, AlphaMissense_score, AlphaMissense_pred, PolyPhen, SIFT, REVEL, SpliceAI_pred, DANN_score, MetaLR_score, CADD_raw_rankscore, ExAC_AF, ALFA_Total_AF, SpliceAI_pred_symbol, DS_AG, DS_AL, DS_DG, DS_DL, DP_AG, DP_AL, DP_DG, DP_DL, AlphaMissense_score_mean
-    private String allele;
-    private String consequence;
+    //private String allele;
+    //private String consequence;
+
     private String symbol;
 
     private String gene;
@@ -55,18 +56,15 @@ public class Variant {
 
     private String hgsvp_original;
 
-    //private String clin_sig;
+    private String clin_sig;
 
     private String turkishvariome_tv_af_original;
 
     private Double priovar_score;
 
-    private Double alpha_missense_score_mean;
+    private String alpha_missense_score_mean;
 
-
-
-
-
+    //private String string_alpha_missense_score_mean;
 
 
 
