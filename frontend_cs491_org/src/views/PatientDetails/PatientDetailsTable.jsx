@@ -45,14 +45,12 @@ import {
     );
 
     const fecthData = async () => {
-        setPhenotypeTermsLoading(true);
         try {
             const fetchedDiseases = await fetchDiseases();
             setOptions(fetchedDiseases);
         } catch (error) {
             console.error('Error fetching options:', error);
         }
-        setPhenotypeTermsLoading(false);
     };
 
     const sortedOptions = options.slice().sort((a, b) => {
@@ -180,6 +178,7 @@ import {
             const response = await axios.get(`${ROOTS_PrioVar}/patient/${patientId}`);
             console.log("SUCCESS", response.data);
             setDetails(response.data);
+            setPhenotypeTermsLoading(false);
         } catch (error) {
             console.error('Error fetching patient details:', error);
         }
