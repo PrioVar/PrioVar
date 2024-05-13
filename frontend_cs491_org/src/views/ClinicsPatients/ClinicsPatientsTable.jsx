@@ -23,12 +23,16 @@ import {
   import DeleteIcon from '@material-ui/icons/Delete'
   import { fDateTime } from 'src/utils/formatTime'
   import { annotateFile, updateFinishInfo, updateFileNotes, fecthMedicalCenterPatients, deletePatient } from '../../api/file'
-  import { PATH_DASHBOARD, ROOTS_PrioVar } from '../../routes/paths'
+  import { PATH_DASHBOARD, ROOTS_PrioVar, ROOTS_Flask } from '../../routes/paths'
   import axios from '../../utils/axios'
   import { Link as RouterLink } from 'react-router-dom'
   import ExpandOnClick from 'src/components/ExpandOnClick'
   import Label from 'src/components/Label'
   import VariantDasboard2 from '../common/VariantDasboard2'
+  import { MIconButton } from '../../components/@material-extend'
+  import { Icon } from '@iconify/react'
+  import closeFill from '@iconify/icons-eva/close-fill'
+  import { useSnackbar } from 'notistack5'
   
   const EditableNote = ({ note, onSave, details }) => {
     const [isEditing, setIsEditing] = useState(false)
@@ -74,16 +78,6 @@ import {
         )}
       </Box>
     )
-  }
-  
-  const getStatusLabel = (row) => {
-    const analyzeStatus = row?.analyses?.status ? row.analyses.status : null
-    const annotationStatus = row?.annotations?.status ? row.annotations.status : null
-    const is_annotated = row?.is_annotated
-    if (!is_annotated) return 'WAITING'
-    // if we're finished with annotating, return analysis status
-    if (!annotationStatus || annotationStatus === 'DONE') return analyzeStatus
-    return 'ANNO_' + annotationStatus
   }
   
   const DeleteFileButton = ({ onClickConfirm }) => {
@@ -141,19 +135,45 @@ import {
     p: 4,
   };
   
-  const StatusButton = ({ fileName, status, isClinicianSame }) => {
+  const StatusButton = ({ currentPatientId, fileName, status: initialStatus, onStatusChange, isClinicianSame }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-  
+    const [status, setStatus] = useState(initialStatus);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
   
-    const startAnalysis = () => {
-      handleClose();
-      // Logic to start analysis
-      console.log("Starting analysis for:", fileName);
-      // Optionally navigate or refresh page here
-    };
+    const startAnalysis = async () => {
+        handleClose();
+        setStatus('ANALYSIS_IN_PROGRESS');
+        onStatusChange(currentPatientId, 'ANALYSIS_IN_PROGRESS'); // Update the status in the parent component
+        enqueueSnackbar('Analysis has been started!', {
+          variant: 'success',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          ),
+        });
+        console.log("Starting analysis for:", fileName);
+        const response = await axios.post(`${ROOTS_Flask}/analysis-mock`, {
+          patientId: currentPatientId,
+          medicalCenterId: localStorage.getItem('healthCenterId'),
+        });
+        if (response.status === 200) {
+          setStatus('ANALYSIS_DONE');
+          onStatusChange(currentPatientId, 'ANALYSIS_DONE'); // Notify parent component
+          enqueueSnackbar('Analysis completed successfully!', {
+            variant: 'success',
+          });
+        } else {
+          setStatus('FILE_ANNOTATED');
+          onStatusChange(currentPatientId, 'FILE_ANNOTATED');
+          enqueueSnackbar('Analysis failed. Please try again.', {
+            variant: 'error',
+          });
+        }
+      };
   
     if (status === 'ANALYSIS_DONE') {
       return (
@@ -231,7 +251,17 @@ import {
       updateFileNotes(vcfFileId, note).then(() => {
         fetchData();
       })
-    }
+    };
+
+    const handleStatusChange = (patientId, newStatus) => {
+        const newData = data.map((item) => {
+          if (item.patientId === patientId) {
+            return { ...item, file: { ...item.file, fileStatus: newStatus }};
+          }
+          return item;
+        });
+        setData(newData);
+      };
 
     const fetchMedicalCenterName = async () => {
         const medicalCenterId = localStorage.getItem('healthCenterId');
@@ -255,12 +285,6 @@ import {
         fetchData();
       }
     }, [isPatientDeleted]);
-
-    const setFinishedInfo = (row) => {
-      const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
-      updateFinishInfo(id).then(() => {
-      })
-    }
 
     const handleButtonChange = () => {
       //do the change here
@@ -356,26 +380,6 @@ import {
           },
         },
       },
-      /*
-      {
-        name: 'finished_at',
-        label: 'Completed',
-        options: {
-          filter: true,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? (
-              <AnalysedCheckbox
-                checked={row.file?.finishedAt != null}
-                onChange={(e) => setFinishedInfo(row)}
-                details={{ date: row.finish_time, person: row.finish_person }}
-              />
-            ) : null
-          },
-        },
-      },
-      */
       {
         name: 'patientName',
         label: 'Patient Name',
@@ -526,7 +530,12 @@ import {
             const row = data[dataIndex]
             const status = row.file.fileStatus;
             const isClinicianSame = row?.clinicianId == localStorage.getItem('clinicianId')
-            return <StatusButton fileName={row.file.fileName} status={status} isClinicianSame={isClinicianSame}/>;
+            return <StatusButton 
+                    currentPatientId={row.patientId} 
+                    fileName={row.file.fileName} 
+                    status={status} 
+                    onStatusChange={handleStatusChange} 
+                    isClinicianSame={isClinicianSame}/>;
           },
         },
       },
@@ -575,44 +584,3 @@ import {
   }
   
   export default SamplesView
-  
-/*
-switch (status) {
-      case 'success':
-        return (
-          <>
-            <Box display="flex" justifyContent="flex-end" mt={2}> 
-            <Button 
-                variant="contained" 
-                color="info" 
-                component={RouterLink} to={PATH_DASHBOARD.general.files}
-                size="small"
-            >
-                <Add /> 
-                Add Patient 
-            </Button>
-            </Box>
-            <VariantDasboard2
-            open={isAnnotationModalOpen}
-            handleButtonChange = {handleButtonChange}
-            onClose={() => setAnnotationModalOpen()}
-            />
-            <MUIDataTable
-              title="All patients of clinic ABC"
-              data={data}
-              columns={COLUMNS}
-              options={{
-                selectableRows: 'none',
-                sortOrder: { name: 'created_at', direction: 'desc' },
-                expandableRows: false,
-                print: false,
-                viewColumns: true,
-                download: false,
-              }}
-            />
-          </>
-        )
-      default:
-        return <CircularProgress />
-    }
-    */
