@@ -1,5 +1,5 @@
 # PRIOVAR
-PRIOVAR is a robust platform designed to streamline your data analysis processes using the latest in container technology and a powerful blend of backend services.
+PrioVar is a cutting-edge bioinformatics application tailored for genetic research centers. It boasts a suite of advanced features including variant prioritization, leveraging a novel machine learning scoring system, and comprehensive variant annotation. PrioVar integrates unique LLM features; one utilizes RAG for searching the PubMed database, while another facilitates knowledge graph retrieval from the Neo4j database. This robust platform is engineered to streamline data analysis processes, utilizing state-of-the-art container technology and a potent mix of backend services, making it a powerhouse for genetic data management and research.
 
 ## 🐳 Docker Installation
 To set up PRIOVAR using Docker, follow these steps to build and run the services:
@@ -44,8 +44,12 @@ For manual installation, follow the step-by-step guide below to set up each comp
      ```
 
    - The frontend will now be running at [http://localhost:3000](http://localhost:3000).
-### Neo4j Database Setup
-2. The following step should be done before steps 3 and 4: Ensure the Neo4j Graph Database is running. Now, change the username and password information of the Neo4j from config.py in Flask and from application.properties in the Spring Boot.
+### Database Setup
+2. **Prepare the Neo4j Graph Database**:
+   - **Ensure Neo4j is Running**: Before proceeding with the following steps, verify that the Neo4j Graph Database is up and operational.
+   - **Update Configuration Settings**:
+     - In the Flask application, update the username and password information in `config.py`.
+     - In the Spring Boot application, modify the username and password details in `application.properties`.
 ### Backend Setup
 3. **Start the Spring Boot Server**:
    - Navigate to the `backend` directory and follow the instructions specific to Spring Boot to get the server running.
