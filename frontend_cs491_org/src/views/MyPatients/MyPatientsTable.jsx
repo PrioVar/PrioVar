@@ -81,16 +81,6 @@ import {
     )
   }
   
-  const getStatusLabel = (row) => {
-    const analyzeStatus = row?.analyses?.status ? row.analyses.status : null
-    const annotationStatus = row?.annotations?.status ? row.annotations.status : null
-    const is_annotated = row?.is_annotated
-    if (!is_annotated) return 'WAITING'
-    // if we're finished with annotating, return analysis status
-    if (!annotationStatus || annotationStatus === 'DONE') return analyzeStatus
-    return 'ANNO_' + annotationStatus
-  }
-  
   const useStyles = makeStyles((theme) => ({
     expandedCell: {
       boxShadow: theme.shadows[3]
@@ -155,43 +145,45 @@ import {
     p: 4,
   };
   
-  const StatusButton = ({ currentPatientId, fileName, status: initialStatus }) => {
+  const StatusButton = ({ currentPatientId, fileName, status: initialStatus, onStatusChange }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(initialStatus);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-  
+
     const startAnalysis = async () => {
-      handleClose();
-      setStatus('ANALYSIS_IN_PROGRESS');
-      enqueueSnackbar('Analysis has been started!', {
-        variant: 'success',
-        action: (key) => (
-          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-            <Icon icon={closeFill} />
-          </MIconButton>
-        ),
-      })
-      console.log("Starting analysis for:", fileName);
-      const response = await axios.post(`${ROOTS_Flask}/analysis-mock`, {
-        patientId: currentPatientId,
-        medicalCenterId: localStorage.getItem('healthCenterId'),
-      });
-      if (response.status === 200) { // Assuming 200 means analysis completed successfully
-        setStatus('ANALYSIS_DONE');
-        enqueueSnackbar('Analysis completed successfully!', {
+        handleClose();
+        setStatus('ANALYSIS_IN_PROGRESS');
+        onStatusChange(currentPatientId, 'ANALYSIS_IN_PROGRESS'); // Update the status in the parent component
+        enqueueSnackbar('Analysis has been started!', {
           variant: 'success',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          ),
         });
-      } else {
-        // Handle other statuses or errors
-        setStatus('FILE_ANNOTATED');
-        enqueueSnackbar('Analysis failed. Please try again.', {
-          variant: 'error',
+        console.log("Starting analysis for:", fileName);
+        const response = await axios.post(`${ROOTS_Flask}/analysis-mock`, {
+          patientId: currentPatientId,
+          medicalCenterId: localStorage.getItem('healthCenterId'),
         });
-      }
-    };
+        if (response.status === 200) {
+          setStatus('ANALYSIS_DONE');
+          onStatusChange(currentPatientId, 'ANALYSIS_DONE'); // Notify parent component
+          enqueueSnackbar('Analysis completed successfully!', {
+            variant: 'success',
+          });
+        } else {
+          setStatus('FILE_ANNOTATED');
+          onStatusChange(currentPatientId, 'FILE_ANNOTATED');
+          enqueueSnackbar('Analysis failed. Please try again.', {
+            variant: 'error',
+          });
+        }
+      };
     
     const NavigateToNewAnalysisPage = () => {
       localStorage.setItem('patientId', currentPatientId);
@@ -289,29 +281,16 @@ import {
       })
     }
 
-    const setFinishedInfo = (row) => {
-      const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
-      updateFinishInfo(id).then(() => {
-        filesApi.refresh()
-      })
-    }
+    const handleStatusChange = (patientId, newStatus) => {
+        const newData = data.map((item) => {
+          if (item.patientId === patientId) {
+            return { ...item, file: { ...item.file, fileStatus: newStatus }};
+          }
+          return item;
+        });
+        setData(newData);
+      };
   
-    const setFileNotes = (row, notes) => {
-      const id = row.vcf_id ? row.vcf_id : row.fastq_pair_id
-      updateFileNotes(id, notes).then(() => {
-        filesApi.refresh()
-      })
-    }
-  
-    const handleFileAnnotation = (annotation) => {
-      const { id, type } = selectedFile?.vcf_id
-        ? { id: selectedFile.vcf_id, type: 'VCF' }
-        : { id: selectedFile.fastq_pair_id, type: 'FASTQ' }
-      annotateFile(id, annotation, type).then((res) => {
-        filesApi.refresh()
-        setAnnotationModalOpen(false)
-      })
-    }
       const handleButtonChange = () => {
         //do the change here
         const { id, type } = selectedFile?.vcf_id
@@ -335,10 +314,6 @@ import {
         })
     }
   
-    const handleAnnotationModelOpen = (row) => {
-      setSelectedFile(row)
-      setAnnotationModalOpen(true)
-    }
 
     const handleSeeSimilarPatients = (row) => {
       localStorage.setItem('patientId', row.patientId);
@@ -411,26 +386,6 @@ import {
           },
         },
       },
-      /*
-      {
-        name: 'finished_at',
-        label: 'Completed',
-        options: {
-          filter: true,
-          sort: false,
-          customBodyRenderLite(dataIndex) {
-            const row = data[dataIndex]
-            return row ? (
-              <AnalysedCheckbox
-                checked={row.file?.finishedAt != null}
-                onChange={(e) => setFinishedInfo(row)}
-                details={{ date: row.finish_time, person: row.finish_person }}
-              />
-            ) : null
-          },
-        },
-      },
-      */
       {
         name: 'patientName',
         label: 'Patient Name',
@@ -568,7 +523,12 @@ import {
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex];
             const status = row.file.fileStatus;
-            return <StatusButton currentPatientId={row.patientId} fileName={row.file.fileName} status={status} />;
+            return <StatusButton 
+                        currentPatientId={row.patientId} 
+                        fileName={row.file.fileName} 
+                        status={status} 
+                        onStatusChange={handleStatusChange} 
+                    />;
           },
         },
       },
