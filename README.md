@@ -1,4 +1,5 @@
 # cs491_web
+<i class="fa fa-docker"></i>
 ## Installation Manual
 1) Navigate to frontend_cs491_org. If modules are not installed, you can install them by "yarn install". This may take some time. Then, run "yarn start" to start the frontend running on localhost:3000.
 2) Navigate to backend. Start the Spring Boot Server.
