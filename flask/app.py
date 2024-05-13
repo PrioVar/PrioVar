@@ -7,7 +7,7 @@ from helpers.hpo_annotations import initiate_disease_database, initiate_gene_dat
 from helpers.annotation import annotate_variants, get_all_annotated_variants
 from helpers.knowledge_graph import get_answer
 from helpers.ClinicalResearchAssistant import analyze
-from helpers.file_decode import read_file_content_and_return_df
+from helpers.file_decode import read_file_content, read_file_content_and_return_df
 from helpers.api_functions import (
     api_start_analysis, api_get_output,
     set_vcf_file_details_for_patient, set_vcf_file_details,
@@ -69,11 +69,40 @@ def start_analysis_mock():
     # read patient id from the request
     data = request.get_json()
     patient_id = data.get('patientId')
+    priovar_vcf_id = data.get('vcfId')
 
+    # Set the vcf file details for the patient and get phenotypes
     set_vcf_file_details_for_patient(patient_id, "ANALYSIS_IN_PROGRESS")
-
     hpo_list = get_patient_phenotypes(patient_id)
 
+    # get decoded file and upload
+    file_content = read_file_content(priovar_vcf_id)
+    vcf_id = api_upload_vcf_file(file_content)
+
+    # TODO: YOU MAY BENEFIT FROM THE BELOW DATAFRAME TO GET CHROM, POS, etc.
+    #file_content_df = read_file_content_and_return_df(priovar_vcf_id)
+
+    # start an analysis with the uploaded file
+    start_response = api_start_analysis(vcf_id)
+    print(start_response)
+
+    # in every 15 seconds, check the status of the analysis, if 200,
+    # save the file, if not, continue checking
+    time.sleep(10)
+    while True:
+        status_response = api_get_output(vcf_id)
+        if status_response.status_code == 200:
+            # TODO: YOU MIGHT WANT TO RETURN THE FILE INSTEAD OF SAVING IT
+            # TODO: BUT YOU MAY ALSO READ IT FROM THE SAVED FILE, UP TO YOU
+            save_annotated_vcf_file(status_response.content, vcf_id)
+            print(f"File successfully saved!")
+            break  # Exit the loop since the file has been saved
+        else:
+            # If the status is not 200, print the status and wait 15 seconds before checking again
+            print(f"Status code: {status_response.status_code}. Checking again in 15 seconds.")
+            time.sleep(15)
+
+    # TODO: CORRECT HERE
     df = get_mock_results(16, hpo_list)
 
     upload_variants(patient_id, df)
