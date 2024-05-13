@@ -13,6 +13,7 @@ import {
     Typography,
     TextField,
     Modal,
+    Tooltip,
   } from '@material-ui/core'
   import { ArrowForward, Info, Note } from '@material-ui/icons'
   import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -140,7 +141,7 @@ import {
     p: 4,
   };
   
-  const StatusButton = ({ fileName, status }) => {
+  const StatusButton = ({ fileName, status, isClinicianSame }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
   
@@ -169,9 +170,19 @@ import {
     } else if (status === 'FILE_ANNOTATED') {
       return (
         <>
-          <Button variant="contained" onClick={handleOpen} size="small">
-            <PlayCircleFilledIcon sx={{ marginRight: '8px' }} /> Start
-          </Button>
+           {isClinicianSame ? (
+                <Button variant="contained" onClick={handleOpen} size="small">
+                    <PlayCircleFilledIcon sx={{ marginRight: '8px' }} /> Start
+                </Button>
+                ) : (
+                <Tooltip title="You cannot start the analysis because you are not the assigned clinician for this file!">
+                    <span>
+                    <Button variant="contained" disabled size="small">
+                        <PlayCircleFilledIcon sx={{ marginRight: '8px' }} /> Start
+                    </Button>
+                    </span>
+                </Tooltip>
+           )}
           <Modal
             open={open}
             onClose={handleClose}
@@ -514,7 +525,8 @@ import {
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex]
             const status = row.file.fileStatus;
-            return <StatusButton fileName={row.file.fileName} status={status} />;
+            const isClinicianSame = row?.clinicianId == localStorage.getItem('clinicianId')
+            return <StatusButton fileName={row.file.fileName} status={status} isClinicianSame={isClinicianSame}/>;
           },
         },
       },
