@@ -43,24 +43,76 @@ def save_annotated_vcf_file(file_content, vcf_sample_id):
     os.remove(temp_tsv_gz_filename)
 
 
-def api_start_analysis(vcf_id):
-    response2 = requests.post(f"http://lidyagenomics.com/libra/api/v1/vcf/cs492annotate/{vcf_id}", headers={
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
-        "Accept": "application/json, text/plain, /",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Authorization": f"Token {api_auth_token}",
-        "Connection": "keep-alive",
-        "Referer": "http://lidyagenomics.com/libra/files",
-        "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin"
-    })
+def api_upload_vcf_file(file_content):
+    """
+    Uploads a VCF file to the API and returns the VCF ID
+    :param file_content:
+    :return:
+    """
+    max_retries = 5  # Set a max number of retries
+    retry_count = 0
+    vcf_id = None
 
-    print("api_start_analysis:")
-    #print(response2.json())
-    print(response2)
+    while retry_count < max_retries:
+        try:
+            # now, send a request to lidyagenomics.com/libra/api/v1/vcf/cs492upload
+            response = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload", headers={
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
+                "Accept": "application/json, text/plain, /",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Authorization": f"Token {api_auth_token}",
+                "Connection": "keep-alive",
+                "Referer": "http://lidyagenomics.com/libra/files",
+                "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
+                "Sec-Fetch-Dest": "empty",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-origin",
+                "Content-Disposition": "attachment; filename=tinyy.vcf",
+                "Content-Type": "application/octet-stream"  # For binary data
+            }, data=file_content)
+
+            print(response.json())
+            vcf_id = response.json()['vcf_id']
+            return vcf_id
+
+        except requests.exceptions.ConnectionError:
+            retry_count += 1
+            print(f"Retrying... {retry_count}/{max_retries}")
+            continue
+
+    return vcf_id
+
+
+def api_start_analysis(vcf_id):
+    max_retries = 5  # Set a max number of retries
+    retry_count = 0
+    response2 = None
+
+    while retry_count < max_retries:
+        try:
+            response2 = requests.post(f"http://lidyagenomics.com/libra/api/v1/vcf/cs492annotate/{vcf_id}", headers={
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
+                "Accept": "application/json, text/plain, /",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Authorization": f"Token {api_auth_token}",
+                "Connection": "keep-alive",
+                "Referer": "http://lidyagenomics.com/libra/files",
+                "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
+                "Sec-Fetch-Dest": "empty",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-origin"
+            })
+            print("api_start_analysis:")
+            print(response2)
+            return response2
+
+        except requests.exceptions.ConnectionError:
+            retry_count += 1
+            print(f"Retrying... {retry_count}/{max_retries}")
+            continue
+
     return response2
 
 

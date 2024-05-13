@@ -14,7 +14,7 @@ from helpers.api_functions import (
     api_start_analysis, api_get_output,
     set_vcf_file_details_for_patient, set_vcf_file_details,
     upload_variants, get_patient_phenotypes,
-    save_annotated_vcf_file
+    save_annotated_vcf_file, api_upload_vcf_file
 )
 from helpers.ml_model import get_mock_results
 import time
@@ -153,28 +153,7 @@ def test_endpoint():
     with open('data/tinyy.vcf', 'rb') as file:
         file_content = file.read()
 
-    # now, send a request to lidyagenomics.com/libra/api/v1/vcf/cs492upload
-    # keep the same headers as above
-    # also, request.data["file"] should be the file to be uploaded, which is data/tinyy.vcf
-    # Request should include a Content - Disposition header with a filename parameter
-    response = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload", headers={
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
-        "Accept": "application/json, text/plain, /",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Authorization": f"Token {api_auth_token}",
-        "Connection": "keep-alive",
-        "Referer": "http://lidyagenomics.com/libra/files",
-        "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin",
-        "Content-Disposition": "attachment; filename=tinyy.vcf",
-        "Content-Type": "application/octet-stream"  # For binary data
-    }, data=file_content)
-
-    print(response.json())
-    vcf_id = response.json()['vcf_id']
+    vcf_id = api_upload_vcf_file(file_content)
 
     # start an analysis with the uploaded file
     start_response = api_start_analysis(vcf_id)
@@ -183,21 +162,18 @@ def test_endpoint():
     # in every 15 seconds, check the status of the analysis, if 200,
     # save the file to data/annotated_vcfs folder
     # if not, continue checking
+    time.sleep(10)
     while True:
         status_response = api_get_output(vcf_id)
         if status_response.status_code == 200:
             # Assuming the response contains the file content to save
-            file_path = f"data/annotated_vcfs/{vcf_id}.vcf"
-            with open(file_path, 'wb') as file:
-                file.write(status_response.content)
-            print(f"File successfully saved at {file_path}")
+            save_annotated_vcf_file(status_response.content, vcf_id)
+            print(f"File successfully saved!")
             break  # Exit the loop since the file has been saved
         else:
             # If the status is not 200, print the status and wait 15 seconds before checking again
             print(f"Status code: {status_response.status_code}. Checking again in 15 seconds.")
             time.sleep(15)
-
-    # Temporary filenames
 
     return "Endpoint test successful"
 
