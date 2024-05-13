@@ -12,6 +12,8 @@ from config import api_username, api_password, api_auth_token
 import requests
 from helpers.api_functions import api_save_vcf_file, api_start_analysis, api_get_output, set_vcf_file_details_for_patient, set_vcf_file_details, upload_variants, get_patient_phenotypes
 from helpers.ml_model import get_mock_results
+import gzip
+import shutil
 
 app = Flask(__name__)
 CORS(app)
@@ -103,6 +105,7 @@ def get_clinvar():
 
     return "Variants from ClinVar successfully loaded"
 
+
 @app.route('/load-diseases', methods=['GET'])
 def get_diseases():
     initiate_disease_database()
@@ -133,6 +136,7 @@ def get_annotated_variants():
 def get_annotated_variants_of_patient():
     return get_all_annotated_variants()
 
+
 @app.route("/endpoint-test", methods=["GET"])
 def test_endpoint():
     # REQUEST: "curl 'http://lidyagenomics.com/libra/api/v1/file/list' --compressed -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0' -H 'Accept: application/json, text/plain, /' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' -H 'Authorization: Token TOKEN_HERE' -H 'Connection: keep-alive' -H 'Referer: http://lidyagenomics.com/libra/files' -H 'Cookie: csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-origin'"
@@ -157,8 +161,9 @@ def test_endpoint():
     print(response)'''
 
     # Prepare the file to be uploaded with an explicit filename
-    """files = {'file': ('tinyy.vcf', open('data/tinyy.vcf', 'rb'))}
-
+    # Open the file in binary mode
+    with open('data/tinyy.vcf', 'rb') as file:
+        file_content = file.read()
 
     # now, send a request to lidyagenomics.com/libra/api/v1/vcf/cs492upload
     # keep the same headers as above
@@ -176,15 +181,15 @@ def test_endpoint():
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Site": "same-origin",
-        "Content-Disposition": "attachment; filename=tinyy.vcf"
-    }, files=files)
+        "Content-Disposition": "attachment; filename=tinyy.vcf",
+        "Content-Type": "application/octet-stream"  # For binary data
+    }, data=file_content)
 
-    files['file'][1].close()
     print(response2.json())
-    print(response2)"""
+    print(response2)
 
     vcf_sample = {'vcf_id': 'ea129c59-3382-41ef-990e-e9746ff958d1'}
-    vcf_sample2 = {'vcf_id': 'c2a12f77-2335-4cb2-a472-c0c2d9dfe952'}
+
     # start an analysis with the uploaded file
     #response2 = api_start_analysis(vcf_sample['vcf_id'])
     #print(response2)
@@ -221,7 +226,7 @@ def test_endpoint():
 @app.route("/endpoint-test2", methods=["GET"])
 def test_endpoint2():
     vcf_sample = {'vcf_id': 'ea129c59-3382-41ef-990e-e9746ff958d1'}
-    vcf_sample2 = {'vcf_id': 'c2a12f77-2335-4cb2-a472-c0c2d9dfe952'}
+    vcf_sample2 = {'vcf_id': '59bb252b-45e9-4086-81a4-a4e3e11c6935'}
 
     #start an analysis with the uploaded file
     response2 = api_start_analysis(vcf_sample2['vcf_id'])
@@ -230,6 +235,44 @@ def test_endpoint2():
     # save the response to a file
 
     return "Endpoint2 test successful"
+
+@app.route("/endpoint-test3", methods=["GET"])
+def test_endpoint3():
+    vcf_sample = {'vcf_id': 'ea129c59-3382-41ef-990e-e9746ff958d1'}
+    vcf_sample2 = {'vcf_id': '59bb252b-45e9-4086-81a4-a4e3e11c6935'}
+
+    # Pick one
+    vcf_sample_id = vcf_sample2['vcf_id']
+
+    # get the output of the analysis
+    response3 = api_get_output(vcf_sample_id)
+    print(response3)
+
+    # Temporary filenames
+    temp_tsv_gz_filename = f"{vcf_sample_id}.temp.vep.tsv.gz"
+    temp_tsv_filename = f"{vcf_sample_id}.temp.vep.tsv"
+
+    # Save the gzipped file
+    with open(temp_tsv_gz_filename, 'wb') as temp_file:
+        temp_file.write(response3.content)
+
+    # First decompression (.vep.tsv.gz to .vep.tsv)
+    with gzip.open(temp_tsv_gz_filename, 'rb') as f_in:
+        with open(temp_tsv_filename, 'wb') as f_out:
+            shutil.copyfileobj(f_in, f_out)
+
+    # Assuming the .vep.tsv is a plain text format that should be converted to a .vcf
+    # This part of your processing might need specific logic depending on the actual content
+    # For now, we'll assume it's already in VCF format or needs simple renaming
+    final_filename = f"{vcf_sample_id}.vcf"
+    shutil.move(temp_tsv_filename, final_filename)
+
+    print(f"File saved as {final_filename}")
+    # Clean up the temporary gz file
+    import os
+    os.remove(temp_tsv_gz_filename)
+
+    return "Endpoint3 test successful"
 
 
 if __name__ == '__main__':
