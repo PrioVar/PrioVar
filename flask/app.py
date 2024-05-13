@@ -8,8 +8,6 @@ from helpers.annotation import annotate_variants, get_all_annotated_variants
 from helpers.knowledge_graph import get_answer
 from helpers.ClinicalResearchAssistant import analyze
 from helpers.file_decode import read_file_content_and_return_df
-from config import api_username, api_password, api_auth_token
-import requests
 from helpers.api_functions import (
     api_start_analysis, api_get_output,
     set_vcf_file_details_for_patient, set_vcf_file_details,
@@ -74,14 +72,9 @@ def start_analysis_mock():
 
     set_vcf_file_details_for_patient(patient_id, "ANALYSIS_IN_PROGRESS")
 
-    #hpo_list = data.get('hpoList')
     hpo_list = get_patient_phenotypes(patient_id)
-    #print("Hpolist: ", hpo_list)
 
     df = get_mock_results(16, hpo_list)
-
-    # print df columns
-    #print("Columns: ", df.columns)
 
     upload_variants(patient_id, df)
 
@@ -145,7 +138,7 @@ def get_annotated_variants_of_patient():
 @app.route("/endpoint-test", methods=["GET"])
 def test_endpoint():
     """
-    FULL PIPELINE TEST
+    FULL PIPELINE
     :return:
     """
     # Prepare the file to be uploaded with an explicit filename
