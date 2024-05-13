@@ -1,2 +1,3 @@
 # cs491_web
-##Installation Manual
+## Installation Manual
+1) 
