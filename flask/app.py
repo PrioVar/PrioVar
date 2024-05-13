@@ -10,10 +10,15 @@ from helpers.ClinicalResearchAssistant import analyze
 from helpers.file_decode import read_file_content_and_return_df
 from config import api_username, api_password, api_auth_token
 import requests
-from helpers.api_functions import api_save_vcf_file, api_start_analysis, api_get_output, set_vcf_file_details_for_patient, set_vcf_file_details, upload_variants, get_patient_phenotypes
+from helpers.api_functions import (
+    api_start_analysis, api_get_output,
+    set_vcf_file_details_for_patient, set_vcf_file_details,
+    upload_variants, get_patient_phenotypes,
+    save_annotated_vcf_file
+)
 from helpers.ml_model import get_mock_results
-import gzip
-import shutil
+import time
+
 
 app = Flask(__name__)
 CORS(app)
@@ -139,27 +144,10 @@ def get_annotated_variants_of_patient():
 
 @app.route("/endpoint-test", methods=["GET"])
 def test_endpoint():
-    # REQUEST: "curl 'http://lidyagenomics.com/libra/api/v1/file/list' --compressed -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0' -H 'Accept: application/json, text/plain, /' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' -H 'Authorization: Token TOKEN_HERE' -H 'Connection: keep-alive' -H 'Referer: http://lidyagenomics.com/libra/files' -H 'Cookie: csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-origin'"
-    # send a get request to lidyagenomics.com/libra/api/v1/file/list
-    # as done above
-    '''
-    response = requests.get("http://lidyagenomics.com/libra/api/v1/file/list", headers={
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
-        "Accept": "application/json, text/plain, /",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Authorization": f"Token {api_auth_token}",
-        "Connection": "keep-alive",
-        "Referer": "http://lidyagenomics.com/libra/files",
-        "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin"
-    })
-
-    print(response.json())
-    print(response)'''
-
+    """
+    FULL PIPELINE TEST
+    :return:
+    """
     # Prepare the file to be uploaded with an explicit filename
     # Open the file in binary mode
     with open('data/tinyy.vcf', 'rb') as file:
@@ -169,7 +157,7 @@ def test_endpoint():
     # keep the same headers as above
     # also, request.data["file"] should be the file to be uploaded, which is data/tinyy.vcf
     # Request should include a Content - Disposition header with a filename parameter
-    response2 = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload", headers={
+    response = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload", headers={
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
         "Accept": "application/json, text/plain, /",
         "Accept-Language": "en-US,en;q=0.5",
@@ -185,39 +173,31 @@ def test_endpoint():
         "Content-Type": "application/octet-stream"  # For binary data
     }, data=file_content)
 
-    print(response2.json())
-    print(response2)
-
-    vcf_sample = {'vcf_id': 'ea129c59-3382-41ef-990e-e9746ff958d1'}
+    print(response.json())
+    vcf_id = response.json()['vcf_id']
 
     # start an analysis with the uploaded file
-    #response2 = api_start_analysis(vcf_sample['vcf_id'])
-    #print(response2)
-    #print(response2.json())
-    response3 = api_get_output(vcf_sample['vcf_id'])
-    print(response3)
-    print(response3.json())
+    start_response = api_start_analysis(vcf_id)
+    print(start_response)
 
+    # in every 15 seconds, check the status of the analysis, if 200,
+    # save the file to data/annotated_vcfs folder
+    # if not, continue checking
+    while True:
+        status_response = api_get_output(vcf_id)
+        if status_response.status_code == 200:
+            # Assuming the response contains the file content to save
+            file_path = f"data/annotated_vcfs/{vcf_id}.vcf"
+            with open(file_path, 'wb') as file:
+                file.write(status_response.content)
+            print(f"File successfully saved at {file_path}")
+            break  # Exit the loop since the file has been saved
+        else:
+            # If the status is not 200, print the status and wait 15 seconds before checking again
+            print(f"Status code: {status_response.status_code}. Checking again in 15 seconds.")
+            time.sleep(15)
 
-    # now, with vcf_sample, send a request to
-    # lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/<str:filename>
-    # use the same headers, do not send any file
-    """response3 = requests.get(f"http://lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/{vcf_sample['vcf_id']}", headers={
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
-        "Accept": "application/json, text/plain, /",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Authorization": f"Token {api_auth_token}",
-        "Connection": "keep-alive",
-        "Referer": "http://lidyagenomics.com/libra/files",
-        "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin"
-    })
-
-    print(response3.json())
-    print(response3)"""
+    # Temporary filenames
 
     return "Endpoint test successful"
 
@@ -236,6 +216,7 @@ def test_endpoint2():
 
     return "Endpoint2 test successful"
 
+
 @app.route("/endpoint-test3", methods=["GET"])
 def test_endpoint3():
     vcf_sample = {'vcf_id': 'ea129c59-3382-41ef-990e-e9746ff958d1'}
@@ -248,29 +229,7 @@ def test_endpoint3():
     response3 = api_get_output(vcf_sample_id)
     print(response3)
 
-    # Temporary filenames
-    temp_tsv_gz_filename = f"{vcf_sample_id}.temp.vep.tsv.gz"
-    temp_tsv_filename = f"{vcf_sample_id}.temp.vep.tsv"
-
-    # Save the gzipped file
-    with open(temp_tsv_gz_filename, 'wb') as temp_file:
-        temp_file.write(response3.content)
-
-    # First decompression (.vep.tsv.gz to .vep.tsv)
-    with gzip.open(temp_tsv_gz_filename, 'rb') as f_in:
-        with open(temp_tsv_filename, 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
-
-    # Assuming the .vep.tsv is a plain text format that should be converted to a .vcf
-    # This part of your processing might need specific logic depending on the actual content
-    # For now, we'll assume it's already in VCF format or needs simple renaming
-    final_filename = f"{vcf_sample_id}.vcf"
-    shutil.move(temp_tsv_filename, final_filename)
-
-    print(f"File saved as {final_filename}")
-    # Clean up the temporary gz file
-    import os
-    os.remove(temp_tsv_gz_filename)
+    save_annotated_vcf_file(response3.content, vcf_sample_id)
 
     return "Endpoint3 test successful"
 

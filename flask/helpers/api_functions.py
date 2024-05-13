@@ -1,7 +1,9 @@
 import math
-
-from flask import Flask, request
-from flask_cors import CORS
+import gzip
+import shutil
+import os
+import requests
+import json
 
 from helpers.hpo import read_hpo_from_json, process_nodes, process_edges, save_nodes, save_edges
 from helpers.clinvar import read_clinvar, save_clinvar
@@ -11,70 +13,37 @@ from helpers.knowledge_graph import get_answer
 from helpers.ClinicalResearchAssistant import analyze
 from helpers.file_decode import read_file_content_and_return_df
 from config import api_username, api_password, api_auth_token
-import requests
-import json
 from neo4j import GraphDatabase
 from os import path
 from config import uri, username, password
 
 
-def api_save_vcf_file(file, filename = "tinyy.vcf"):
-    '''
-        # now, send a request to lidyagenomics.com/libra/api/v1/vcf/cs492upload
-        # keep the same headers as above
-        # also, request.data["file"] should be the file to be uploaded, which is data/tinyy.vcf
-        # Request should include a Content - Disposition header with a filename parameter
-        response2 = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload", headers={
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
-            "Accept": "application/json, text/plain, /",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Authorization": f"Token {api_auth_token}",
-            "Connection": "keep-alive",
-            "Referer": "http://lidyagenomics.com/libra/files",
-            "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
-            "Sec-Fetch-Dest": "empty",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Site": "same-origin",
-            "Content-Disposition": "attachment; filename=tinyy.vcf"
-        }, files=files)
+def save_annotated_vcf_file(file_content, vcf_sample_id):
+    # Temporary filenames
+    temp_tsv_gz_filename = f"{vcf_sample_id}.temp.vep.tsv.gz"
+    temp_tsv_filename = f"{vcf_sample_id}.temp.vep.tsv"
 
-    files['file'][1].close()
-    print(response2.json())
-    print(response2)'''
+    # Save the gzipped file
+    with open(temp_tsv_gz_filename, 'wb') as temp_file:
+        temp_file.write(file_content)
 
-    files = {'file': (filename, file)}
+    # First decompression (.vep.tsv.gz to .vep.tsv)
+    with gzip.open(temp_tsv_gz_filename, 'rb') as f_in:
+        with open(temp_tsv_filename, 'wb') as f_out:
+            shutil.copyfileobj(f_in, f_out)
 
-    response1 = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload", headers={
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
-        "Accept": "application/json, text/plain, /",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Authorization": f"Token {api_auth_token}",
-        "Connection": "keep-alive",
-        "Referer": "http://lidyagenomics.com/libra/files",
-        "Cookie": "csrftoken=ul82ceOrSl2g2fO1VcC8tcJWJ54TYI5j7qRf4tcKkhadhifSNN2WkOckyKQCD7B1",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin",
-        "Content-Disposition": f"attachment; filename={filename}"
-    }, files=files)
+    # Assuming the .vep.tsv is a plain text format that should be converted to a .vcf
+    # This part of your processing might need specific logic depending on the actual content
+    # For now, we'll assume it's already in VCF format or needs simple renaming
+    final_filename = f"{vcf_sample_id}.vcf"
+    shutil.move(temp_tsv_filename, final_filename)
 
-    files['file'][1].close()
-    print("api_save_vcf_file:")
-    print(response1.json())
-    print(response1)
-
-    return response1.json()
+    print(f"File saved as {final_filename}")
+    # Clean up the temporary gz file
+    os.remove(temp_tsv_gz_filename)
 
 
-#'vcf/cs492annotate/<str:vcf_id>'  bu istedigimiz islemi baslatmaya yariyor.
-#endpointten de anlasilacagi uzere <str:vcf_id> yerine onceki stepten donulen id'yi koyacaksiniz.
-# bu basladiktan sonra biraz surecek islem ama bu kismi ben handleladim ucuncu stepte.
-# ucuncu endpointi okurken anlarsiniz
-#
 def api_start_analysis(vcf_id):
-
     response2 = requests.post(f"http://lidyagenomics.com/libra/api/v1/vcf/cs492annotate/{vcf_id}", headers={
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
         "Accept": "application/json, text/plain, /",
@@ -94,11 +63,6 @@ def api_start_analysis(vcf_id):
     print(response2)
     return response2
 
-#vcf/cs492getoutput/<str:filename>' bu da size output donduruyor iste.
-# Eger bu id'de bi vcf yoksa size bunu soyluyor.
-# Eger varsa ama step 2 bitmemisse sunu donuyor "Response({"error": "There is such vcf but the job is not finished yet"}, status=201)".
-# Eger bitmisse de dogrudan output donuyor. bitmemisse 201 olarak yapmisim simdi fark ettim xdd debuglamasi kolay olsun diye yaptiydim.
-# Siz onu halledersiniz artik kendiniz.
 
 def api_get_output(vcf_id):
     response3 = requests.get(f"http://lidyagenomics.com/libra/api/v1/vcf/cs492getoutput/{vcf_id}", headers={
@@ -119,7 +83,10 @@ def api_get_output(vcf_id):
     print(response3)
     return response3
 
+
 driver = GraphDatabase.driver(uri, auth=(username, password))
+
+
 def update_vcf_file(tx, file_id, new_api_file_id, new_file_status):
     query = """
     MATCH (f:VCFFile)
@@ -127,6 +94,7 @@ def update_vcf_file(tx, file_id, new_api_file_id, new_file_status):
     SET f.api_file_id = $api_file_id, f.fileStatus = $file_status
     """
     tx.run(query, id=file_id, api_file_id=new_api_file_id, file_status=new_file_status)
+
 
 def update_vcf_file_for_patient(tx, patient_id, new_api_file_id, new_file_status):
 
@@ -139,22 +107,16 @@ def update_vcf_file_for_patient(tx, patient_id, new_api_file_id, new_file_status
     tx.run(query, patient_id=patient_id, api_file_id=new_api_file_id, file_status=new_file_status)
 
 
-
 def set_vcf_file_details(file_id, new_api_file_id, new_file_status):
-    # Initialize the Neo4j driver
-    #driver = GraphDatabase.driver(uri, auth=(username, password))
-
     # Update the specific VCFFile node in Neo4j
     with driver.session() as session:
         session.write_transaction(update_vcf_file, file_id, new_api_file_id, new_file_status)
 
 
-
 def set_vcf_file_details_for_patient(patient_id, new_file_status, new_api_file_id = "none, yet"):
-
-
     with driver.session() as session:
         session.write_transaction(update_vcf_file_for_patient, patient_id, new_api_file_id, new_file_status)
+
 
 def insert_variant(tx, variant_data, patient_id):
     # Create a new variant node or update it if it already exists
@@ -195,7 +157,7 @@ def insert_variant(tx, variant_data, patient_id):
 
     # delete the '#' character from the #uploaded_variation column name
     variant_data['Uploaded_variation'] = variant_data['#Uploaded_variation']
-    # there are so much columns in the variant_data, so we need to filter them
+    # there are so many columns in the variant_data, so we need to filter them
     variant_data = {k: v for k, v in variant_data.items() if k in columns_to_add}
 
     # convert everything to string except Priovar_score, Uploaded_variation, and AlphaMissense_score_mean
@@ -205,7 +167,8 @@ def insert_variant(tx, variant_data, patient_id):
             if not isinstance(variant_data[key], str):
                 variant_data[key] = "-"
 
-    # if alpha missense score mean is not float, make it "Not Available", if available, round it to 2 decimal points as string
+    # if alpha missense score mean is not float, make it "Not Available",
+    # if available, round it to 2 decimal points as string
     if not isinstance(variant_data['AlphaMissense_score_mean'], float):
         variant_data['AlphaMissense_score_mean'] = "-"
     # check if it is nan
@@ -213,7 +176,6 @@ def insert_variant(tx, variant_data, patient_id):
         variant_data['AlphaMissense_score_mean'] = "-"
     else:
         variant_data['AlphaMissense_score_mean'] = str(round(variant_data['AlphaMissense_score_mean'], 2))
-
 
     variant = tx.run(
         """
@@ -278,7 +240,6 @@ def insert_variant(tx, variant_data, patient_id):
         patient_id=patient_id
     )
 
-
     # add the gene_symbol if it does not exist
     geneSymbol = variant_data['SYMBOL']
     # check via math.isnan function
@@ -288,17 +249,11 @@ def insert_variant(tx, variant_data, patient_id):
         print("Empty gene symbol")
         return
 
-
-
-
-    #geneSymbol = "example_gene_symbol"
-
     tx.run(
         """
         MERGE (g:Gene {geneSymbol: $geneSymbol})
         """,
         geneSymbol=geneSymbol)
-
 
     # Connect this variant to the gene
     # "HAS_VARIANT_ON" relationship
@@ -330,33 +285,8 @@ def get_patient_phenotypes(patient_id):
             return [1]
         return ls
 
+
 def upload_variants(patient_id, variants_df):
     with driver.session() as session:
         for idx, row in variants_df.iterrows():
             session.write_transaction(insert_variant, row.to_dict(), patient_id)
-
-
-
-
-
-
-"""
-driver = GraphDatabase.driver(uri, auth=(username, password))
-geneSymbol = "ABCAA4"
-
-with driver.session() as session:
-    # Insert a Gene node with the given geneSymbol if it does not exist
-    # so, check first if the gene exists
-    result = session.run(
-        "MATCH (g:Gene {geneSymbol: $geneSymbol}) RETURN g", {"geneSymbol": geneSymbol}
-    )
-    gene = result.single()
-
-    if gene is None:
-        # Gene does not exist, so create it
-        session.run(
-            "CREATE (g:Gene {geneSymbol: $geneSymbol}) RETURN g", {"geneSymbol": geneSymbol}
-        )
-    else:
-        print("Gene already exists, skipping creation")
-"""
