@@ -3,18 +3,9 @@ import gzip
 import shutil
 import os
 import requests
-import json
 
-from helpers.hpo import read_hpo_from_json, process_nodes, process_edges, save_nodes, save_edges
-from helpers.clinvar import read_clinvar, save_clinvar
-from helpers.hpo_annotations import initiate_disease_database, initiate_gene_database
-from helpers.annotation import annotate_variants, get_all_annotated_variants
-from helpers.knowledge_graph import get_answer
-from helpers.ClinicalResearchAssistant import analyze
-from helpers.file_decode import read_file_content_and_return_df
-from config import api_username, api_password, api_auth_token
+from config import api_auth_token
 from neo4j import GraphDatabase
-from os import path
 from config import uri, username, password
 
 
