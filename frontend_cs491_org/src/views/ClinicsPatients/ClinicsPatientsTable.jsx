@@ -135,7 +135,7 @@ import {
     p: 4,
   };
   
-  const StatusButton = ({ currentPatientId, fileName, status: initialStatus, onStatusChange, isClinicianSame }) => {
+  const StatusButton = ({ vcfId, currentPatientId, fileName, status: initialStatus, onStatusChange, isClinicianSame }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(initialStatus);
@@ -157,6 +157,7 @@ import {
         });
         console.log("Starting analysis for:", fileName);
         const response = await axios.post(`${ROOTS_Flask}/analysis-mock`, {
+          vcfId: vcfId,
           patientId: currentPatientId,
           medicalCenterId: localStorage.getItem('healthCenterId'),
         });
@@ -531,6 +532,7 @@ import {
             const status = row.file.fileStatus;
             const isClinicianSame = row?.clinicianId == localStorage.getItem('clinicianId')
             return <StatusButton 
+                    vcfId={row.file.vcfFileId}
                     currentPatientId={row.patientId} 
                     fileName={row.file.fileName} 
                     status={status} 

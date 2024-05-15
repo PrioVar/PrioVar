@@ -145,7 +145,7 @@ import {
     p: 4,
   };
   
-  const StatusButton = ({ currentPatientId, fileName, status: initialStatus, onStatusChange }) => {
+  const StatusButton = ({ vcfId, currentPatientId, fileName, status: initialStatus, onStatusChange }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(initialStatus);
@@ -167,6 +167,7 @@ import {
         });
         console.log("Starting analysis for:", fileName);
         const response = await axios.post(`${ROOTS_Flask}/analysis-mock`, {
+          vcfId: vcfId,
           patientId: currentPatientId,
           medicalCenterId: localStorage.getItem('healthCenterId'),
         });
@@ -523,7 +524,8 @@ import {
           customBodyRenderLite: (dataIndex) => {
             const row = data[dataIndex];
             const status = row.file.fileStatus;
-            return <StatusButton 
+            return <StatusButton
+                        vcfId={row.file.vcfFileId} 
                         currentPatientId={row.patientId} 
                         fileName={row.file.fileName} 
                         status={status} 
