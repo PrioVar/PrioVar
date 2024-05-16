@@ -324,17 +324,18 @@ const NewVariantDashboardTable = () => {
                         <Button onClick={handleCloseTerms}>Close</Button>
                     </DialogActions>
                 </Dialog>
-
+                
                 <Table sx={{ padding: 2, mt: 5 }}>
                     <TableHead>
                         <TableRow>
+                            <TableCell>Chromosome</TableCell>
+                            <TableCell>Position</TableCell>
                             <TableCell>Allele</TableCell>
-                            <TableCell onClick={() => handleSort('variantPosition')}>Consequence</TableCell>
+                            <TableCell onClick={() => handleSort('variantPosition')} >Consequence</TableCell>
                             <TableCell onClick={() => handleSort('acmgScore')}>ACMG Score</TableCell>
                             <TableCell>Symbol</TableCell>
                             <TableCell>Gene</TableCell>
                             <TableCell>HGSVC</TableCell>
-                            <TableCell>HGSVP</TableCell>
                             <TableCell>Turkish Variome</TableCell>
                             <TableCell>Alphamissense Score</TableCell>
                             {
@@ -363,13 +364,16 @@ const NewVariantDashboardTable = () => {
                                     backgroundColor: '#f5f5f5' // hover highlight
                                 }
                             }}>
+                                <TableCell>{row.chrom}</TableCell>
+                                <TableCell>{row.pos}</TableCell>
                                 <TableCell>{row.allele}</TableCell>
-                                <TableCell>{row.consequence}</TableCell>
+                                <TableCell style={{ maxWidth: '200px', whiteSpace: 'normal', wordWrap: 'break-word' }}>
+                                    {row.consequence}
+                                </TableCell>
                                 <TableCell>{row.acmgScore}</TableCell>
                                 <TableCell>{row.symbol}</TableCell>
                                 <TableCell>{row.gene}</TableCell>
                                 <TableCell>{row.hgsvc_original}</TableCell>
-                                <TableCell>{row.hgsvp_original}</TableCell>
                                 <TableCell>{row.turkishvariome_tv_af_original}</TableCell>
                                 <TableCell>{row.alpha_missense_score_mean}</TableCell>
                                 {
