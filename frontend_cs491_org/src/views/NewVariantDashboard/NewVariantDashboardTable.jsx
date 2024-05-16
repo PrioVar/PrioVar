@@ -328,8 +328,11 @@ const NewVariantDashboardTable = () => {
                 <Table sx={{ padding: 2, mt: 5 }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Chromosome</TableCell>
-                            <TableCell>Position</TableCell>
+                            <TableCell>Chrom</TableCell>
+                            <TableCell>Pos</TableCell>
+                            <TableCell>Ref</TableCell>
+                            <TableCell>Alt</TableCell>
+                            <TableCell>Qual</TableCell>
                             <TableCell>Allele</TableCell>
                             <TableCell onClick={() => handleSort('variantPosition')} >Consequence</TableCell>
                             <TableCell onClick={() => handleSort('acmgScore')}>ACMG Score</TableCell>
@@ -364,8 +367,11 @@ const NewVariantDashboardTable = () => {
                                     backgroundColor: '#f5f5f5' // hover highlight
                                 }
                             }}>
-                                <TableCell>{row.chrom}</TableCell>
-                                <TableCell>{row.pos}</TableCell>
+                                <TableCell style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.chrom}</TableCell>
+                                <TableCell style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.pos}</TableCell>
+                                <TableCell style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.ref}</TableCell>
+                                <TableCell style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.alt}</TableCell>
+                                <TableCell>{row.qual}</TableCell>
                                 <TableCell>{row.allele}</TableCell>
                                 <TableCell style={{ maxWidth: '200px', whiteSpace: 'normal', wordWrap: 'break-word' }}>
                                     {row.consequence}
@@ -373,7 +379,9 @@ const NewVariantDashboardTable = () => {
                                 <TableCell>{row.acmgScore}</TableCell>
                                 <TableCell>{row.symbol}</TableCell>
                                 <TableCell>{row.gene}</TableCell>
-                                <TableCell>{row.hgsvc_original}</TableCell>
+                                <TableCell style={{ maxWidth: '200px', whiteSpace: 'normal', wordWrap: 'break-word' }}>
+                                    {row.hgsvc_original}
+                                </TableCell>
                                 <TableCell>{row.turkishvariome_tv_af_original}</TableCell>
                                 <TableCell>{row.alpha_missense_score_mean}</TableCell>
                                 {
