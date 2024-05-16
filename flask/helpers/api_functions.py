@@ -198,7 +198,10 @@ def insert_variant(tx, variant_data, patient_id):
     :return:
     """
 
-    columns_to_add = ['Uploaded_variation' ,'Allele', 'Consequence', 'SYMBOL', 'Priovar_score', 'Gene', 'turkishvariome_TV_AF_original', 'AlphaMissense_score_mean', 'HGSVc_original', 'HGSVp_original', 'CLIN_SIG', "CHROM", "POS", "ID", "REF", "ALT", "QUAL"]
+    columns_to_add = ['Uploaded_variation', 'Allele', 'Consequence', 'SYMBOL',
+                      'Priovar_score', 'Gene', 'turkishvariome_TV_AF_original',
+                      'AlphaMissense_score_mean', 'HGSVc_original', 'HGSVp_original',
+                      'CLIN_SIG', "CHROM", "POS", "ID", "REF", "ALT", "QUAL"]
 
     # delete the '#' character from the #uploaded_variation column name
     variant_data['Uploaded_variation'] = variant_data['#Uploaded_variation']
