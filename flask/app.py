@@ -14,7 +14,7 @@ from helpers.api_functions import (
     upload_variants, get_patient_phenotypes,
     save_annotated_vcf_file, api_upload_vcf_file
 )
-from helpers.ml_model import get_mock_results
+from helpers.ml_model import get_mock_results, get_real_results
 import time
 
 
@@ -88,13 +88,15 @@ def start_analysis_mock():
 
     # in every 15 seconds, check the status of the analysis, if 200,
     # save the file, if not, continue checking
+    final_file_name = None
+
     time.sleep(10)
     while True:
         status_response = api_get_output(vcf_id)
         if status_response.status_code == 200:
             # TODO: YOU MIGHT WANT TO RETURN THE FILE INSTEAD OF SAVING IT
             # TODO: BUT YOU MAY ALSO READ IT FROM THE SAVED FILE, UP TO YOU
-            save_annotated_vcf_file(status_response.content, vcf_id)
+            final_file_name = save_annotated_vcf_file(status_response.content, vcf_id)
             print(f"File successfully saved!")
             break  # Exit the loop since the file has been saved
         else:
@@ -103,12 +105,12 @@ def start_analysis_mock():
             time.sleep(15)
 
     # TODO: CORRECT HERE
-    df = get_mock_results(16, hpo_list)
+    df = get_real_results(final_file_name, hpo_list)
 
     upload_variants(patient_id, df)
 
     # set the vcf file details for the patient
-    set_vcf_file_details_for_patient(patient_id, "ANALYSIS_DONE")
+    set_vcf_file_details_for_patient(patient_id, "ANALYSIS_DONE", vcf_id)
 
     return df.to_json()
 

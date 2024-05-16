@@ -56,7 +56,7 @@ public class Variant {
 
     private String hgsvp_original;
 
-    private String clin_sig;
+    //private String clin_sig;
 
     private String turkishvariome_tv_af_original;
 

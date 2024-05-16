@@ -33,6 +33,8 @@ def save_annotated_vcf_file(file_content, vcf_sample_id):
     # Clean up the temporary gz file
     os.remove(temp_tsv_gz_filename)
 
+    return final_filename
+
 
 def api_upload_vcf_file(file_content):
     """
