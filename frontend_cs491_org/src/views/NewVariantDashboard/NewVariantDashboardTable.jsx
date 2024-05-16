@@ -371,7 +371,7 @@ const NewVariantDashboardTable = () => {
                                 <TableCell>{row.hgsvc_original}</TableCell>
                                 <TableCell>{row.hgsvp_original}</TableCell>
                                 <TableCell>{row.turkishvariome_tv_af_original}</TableCell>
-                                <TableCell>{row.alpha_missense_score_mean != "NaN" ? (row.alpha_missense_score_mean.toFixed(2)) : ("Not Applicable")}</TableCell>
+                                <TableCell>{row.alpha_missense_score_mean}</TableCell>
                                 {
                                     /* 
                                     <TableCell>{row.diseases}</TableCell>
