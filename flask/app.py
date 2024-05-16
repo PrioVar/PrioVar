@@ -14,9 +14,8 @@ from helpers.api_functions import (
     upload_variants, get_patient_phenotypes,
     save_annotated_vcf_file, api_upload_vcf_file
 )
-from helpers.ml_model import get_mock_results, get_real_results
+from helpers.ml_model import get_real_results
 import time
-# pandas
 import pandas as pd
 
 app = Flask(__name__)
@@ -62,6 +61,7 @@ def start_analysis():
 
     return "hey"
 
+
 @app.route('/analysis-test', methods=['POST'])
 def start_analysis_test():
 
@@ -85,7 +85,8 @@ def start_analysis_test():
 
     return "hey"
 
-# return mock analysis results, for testing purposes, similar to above
+
+# return analysis results
 @app.route('/analysis-mock', methods=['POST'])
 def start_analysis_mock():
 
@@ -112,8 +113,6 @@ def start_analysis_mock():
 
     # in every 15 seconds, check the status of the analysis, if 200,
     # save the file, if not, continue checking
-    final_file_name = None
-
     time.sleep(10)
     while True:
         status_response = api_get_output(vcf_id)
@@ -143,10 +142,10 @@ def start_analysis_mock():
     df["group_by_column"] = df["#Uploaded_variation"]
 
     df = df.groupby('group_by_column').agg(safe_mode)
-    #print("len of df: ", len(df))
 
     df.reset_index(drop=True, inplace=True)
     file_content_df.reset_index(drop=True, inplace=True)
+
     # concatenate the two dataframes
     df = pd.concat([df, file_content_df], axis=1)
 
