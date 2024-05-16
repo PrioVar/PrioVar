@@ -16,7 +16,8 @@ from helpers.api_functions import (
 )
 from helpers.ml_model import get_mock_results, get_real_results
 import time
-
+# pandas
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
@@ -61,6 +62,28 @@ def start_analysis():
 
     return "hey"
 
+@app.route('/analysis-test', methods=['POST'])
+def start_analysis_test():
+
+    file_name = "1e84230c-b960-49ea-be08-1d28341a078a.vcf"
+
+    df = get_real_results(file_name, [1])
+
+    def safe_mode(series):
+        try:
+            # Attempt to return the most common value
+            return series.mode().iloc[0]
+        except IndexError:
+            # If no mode found or empty, return NaN or another placeholder like None
+            return "-"
+
+    # Group by '#Uploaded_variation' and aggregate using the safe mode function
+    result = df.groupby('#Uploaded_variation').agg(safe_mode)
+
+    # save df as file
+    result.to_csv("temp.csv")
+
+    return "hey"
 
 # return mock analysis results, for testing purposes, similar to above
 @app.route('/analysis-mock', methods=['POST'])
@@ -80,7 +103,8 @@ def start_analysis_mock():
     vcf_id = api_upload_vcf_file(file_content)
 
     # TODO: YOU MAY BENEFIT FROM THE BELOW DATAFRAME TO GET CHROM, POS, etc.
-    #file_content_df = read_file_content_and_return_df(priovar_vcf_id)
+    file_content_df = read_file_content_and_return_df(priovar_vcf_id)
+    print("len of file_content_df: ", len(file_content_df))
 
     # start an analysis with the uploaded file
     start_response = api_start_analysis(vcf_id)
@@ -105,7 +129,26 @@ def start_analysis_mock():
             time.sleep(15)
 
     # TODO: CORRECT HERE
+    def safe_mode(series):
+        try:
+            # Attempt to return the most common value
+            return series.mode().iloc[0]
+        except IndexError:
+            # If no mode found or empty, return NaN or another placeholder like None
+            return "-"
+
+    # Group by '#Uploaded_variation' and aggregate using the safe mode function
     df = get_real_results(final_file_name, hpo_list)
+
+    df["group_by_column"] = df["#Uploaded_variation"]
+
+    df = df.groupby('group_by_column').agg(safe_mode)
+    #print("len of df: ", len(df))
+
+    df.reset_index(drop=True, inplace=True)
+    file_content_df.reset_index(drop=True, inplace=True)
+    # concatenate the two dataframes
+    df = pd.concat([df, file_content_df], axis=1)
 
     upload_variants(patient_id, df)
 
