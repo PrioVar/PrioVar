@@ -208,6 +208,13 @@ def insert_variant(tx, variant_data, patient_id):
     # there are so many columns in the variant_data, so we need to filter them
     variant_data = {k: v for k, v in variant_data.items() if k in columns_to_add}
 
+    # convert POS from number to string, if it cannot be converted, make it "-"
+    try:
+        variant_data['POS'] = str(int(variant_data['POS']))
+    except:
+        variant_data['POS'] = "-"
+
+
     # convert everything to string except Priovar_score, Uploaded_variation, and AlphaMissense_score_mean
     # if type is not string make it "Not Available"
     for key in variant_data:
