@@ -368,7 +368,7 @@ const NewVariantDashboardTable = () => {
                                 }
                             }}>
                                 <TableCell style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.chrom}</TableCell>
-                                <TableCell style={{ maxWidth: '60px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.pos}</TableCell>
+                                <TableCell style={{ maxWidth: '80px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.pos}</TableCell>
                                 <TableCell style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.ref}</TableCell>
                                 <TableCell style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word' }}>{row.alt}</TableCell>
                                 <TableCell>{row.qual}</TableCell>
