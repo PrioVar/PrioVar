@@ -1,0 +1,820 @@
+"Study No, age, sex","Presenting features
+HPO terms","WES diagnosis (OMIM No), gene and mutation",Clinician list,PhenoTips,"Phenomizer
+rank, p-value",GPI rank,"VPI
+rank",Combined GPI/VPI,Exomiser rank,"CADD
+Rank, score","Condel rank, score"
+"0204301 
+9m
+M","[HP:0000568] Microphthalmos  [HP:0008538] Sensorineural hearing impairment 
+[HP:0001263] Global developmental delay
+[HP:0006996] Dysgenesis of corpus callosum ","Chr3:g.181430628C>G, heterozygous
+NM_003106.3, NP_003097.1
+c.480C>G, p.(Tyr160*)","Y
+",N,N,1,5,1,1,"1
+6.84",-
+"0204303 
+8m
+M"," [HP:0004322] Short stature
+[HP:0000316] Hypertelorism [HP:0000369] Low-set ears
+[HP:0001642] Pulmonic stenosis
+[HP:0000028] Cryptorchidism  [HP:0001263] Global developmental delay
+[HP:0002281] Grey matter heterotopias
+[HP:0001250] Seizures
+","Chr7:140453133T>G, heterozygous
+NM_004333.4, NP_004324.2 
+c.1802A>C, p.(Lys601Thr)","Y
+",Y,"Y
+12, 0.6524",1,15,1,2,"9
+4.68","17 
+0.954"
+"0204317 
+1m
+M",[HP:0010783] Erythema  [HP:0007549] Desquamation of skin soon after birth  [HP:0000773] Short ribs  [HP:0001591] Bell-shaped chest ,"Chr5:g.147480035C>T, heterozygous
+NM_001127698.1, NP_001121170.1
+c.1111C>T, p.(Arg371*)","Y
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N
+","N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N","N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N",1,3,1,14,"33 (32)
+3.85",-
+"0204317 
+1m
+M",[HP:0010783] Erythema  [HP:0007549] Desquamation of skin soon after birth  [HP:0000773] Short ribs  [HP:0001591] Bell-shaped chest ,"Chr5:g.147503414C>T, heterozygous
+NM_001127698.1, NP_001121170.1
+c.2557C>T, p.(Arg853*)
+
+Jeune asphyxiating thoracic dystrophy
+(#693019)
+DYNC2H1","Y
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N
+","N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N","N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N",2 (1),4 (3),2(1),14,"19
+4.53",-
+"0204317 
+1m
+M",[HP:0010783] Erythema  [HP:0007549] Desquamation of skin soon after birth  [HP:0000773] Short ribs  [HP:0001591] Bell-shaped chest ,"Chr11:g.103124071G>A, heterozygous
+NM_001080463.1, NP_001073932.1
+c.10121G>A, p.(Arg3374His)","Y
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N
+","N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N","N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N",-,8,8,3,"2
+5.38","10 (9)
+0.991"
+"0204317 
+1m
+M",[HP:0010783] Erythema  [HP:0007549] Desquamation of skin soon after birth  [HP:0000773] Short ribs  [HP:0001591] Bell-shaped chest ,"Chr11:g.103126259T>C, heterozygous
+NM_001080463.1, NP_001073932.1
+c.10343T>C, p.(Leu3448Pro)","Y
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N
+","N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N","N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+N",-,9 (8),9 (8),3,"28 (27)
+4.04","4
+0.999"
+"0204319
+1m
+M","[HP:0001250] Seizures
+","Chr5:g.125885630C>G, heterozygous
+NM_001182.4, NP_001173.2
+c.1480G>C, p.(Gly494Arg)","Y
+",N,N,1,30,1,1,"5
+4.99","8
+0.999"
+"0204319
+1m
+M","[HP:0001250] Seizures
+","Chr5:g.125887751C>G, heterozygous
+NM_001182.4, NP_001173.2, 
+c.1279G>C, p.(Glu427Gln)","Y
+",N,N,2 (1),31 (30),2(1),1,"17(16)
+4.33","19(18)
+0.985"
+"0204327 
+9m
+F","[HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures  [HP:0002401] Stroke-like episodes
+","chr19:g.42474363_42474367delins, heterozygous
+NM_001256213.1, NP_001243142.1
+c.(2545_2549delinsTC), p.(Arg849_Ile850delinsSer)","Y
+",N,"Y
+11, 0.53",1,3,1,11,"1
+9.19",-
+"0204334 
+2m
+F",[HP:0011001] Increased bone mineral density  [HP:0001903] Anemia  [HP:0001873] Thrombocytopenia  [HP:0001433] Hepatosplenomegaly,"chr11:g.67811109delG, homozygous
+NM_006019.3, NP_006010.2
+c.702delG, p.(Ile235Serfs*44)","Y
+",N,N,1,2,1,1,"1
+6.6",-
+"0204335 
+5m
+F",[HP:0001263] Global developmental delay  [HP:0001250] Seizures [HP:0002500] Abnormality of the cerebral white matter  [HP:0009716] Subependymal nodules,"Chr17:g.42990701C>T, heterozygous
+NM_001131019.2, NP_001124491.1
+c.716G>A, p.(Arg239His)","Y
+",N,N,1,18,1,1,"33
+3.28","9
+0.994"
+"0204426 
+0.7
+M","[HP:0001290] Generalized hypotonia 
+[HP:0003198] Myopathy","chrX:g.149767145G>T, heterozygous
+NM_000252.2, NP_000243.1
+c.226G>T, p.(Glu76*)","Y
+",N,N,2,2,2,8,"2
+5.93",-
+"0204436 
+18m
+M","[HP:0010864] Intellectual disability, severe
+[HP:0001290] Generalized hypotonia
+[HP:0001302] Pachygyria
+[HP:0002126] Polymicrogyria
+[HP:0001250] Seizures","Chr1:g.46660525G>A, homozygous
+NM_001243766.1, NP_001230695.1
+c.643C>T, p.(Arg215*)","Y
+",Y,"Y
+1, 0.0017",1,1,1,1,"2
+9.95",-
+"0204428
+0.5m
+M","[HP:0001250]
+Seizures","chr17:g.46024036G>A, homozygous
+NM_018129.3, NP_060599.1
+c.674G>A, p.(Arg225His)","Y
+",N,N,1,19,1,2,"5 
+5.56","7
+0.999"
+"0204308 
+3m
+M","[HP:0000581] Blepharophimosis  [HP:0000414] Bulbous nose  [HP:0000028] Cryptorchidism [HP:0001263] Global developmental delay  [HP:0001290] Generalized hypotonia 
+[HP:0001257] Spasticity  [HP:0001274] Agenesis of corpus callosum  [HP:0000821]Hypothyroidism","Chr10:g.76785008G>A, heterozygous
+NM_012330.3
+NG_032048.1
+c.3664+1G>A","Y
+",N,N,1,1,1,2,"26
+3.37",-
+"0204329 
+8M
+M","[HP:0001696] Situs inversus totalis
+[HP:0005938]
+Ciliary dysgenesis","chr5:g.13753399delA, heterozygous
+NM_001369.2, NP_001360.1
+c.10815delT, p.(Pro3606Hisfs*23)","Y
+",N,"Y
+3, 0.0077",1,2,1,8,"2
+7.34",-
+"0204329 
+8M
+M","[HP:0001696] Situs inversus totalis
+[HP:0005938]
+Ciliary dysgenesis","chr5:g.13845040A>G, heterozygous
+NM_001369.2, NP_001360.1
+c.5177T>C, p.(Leu1726Pro)","Y
+",N,"Y
+3, 0.0077",4(3),26(25),4(3),8,"26(25)
+3.28","6
+0.994"
+"0204331 
+28m
+F","[HP:0000175] Cleft palate
+[HP:0000347] Micrognathia  [HP:0008012] Congenital myopia","chr12:g.48369769G>A, heterozygous
+NM_001844.4, NP_001835.3
+c.3574C>T, p.(Arg1192*)","Y
+",N,"Y
+48, 0.65",1,1,1,2,"1
+10.76",-
+"0204318
+16m
+M","[HP:0001513] Obesity  [HP:0000098] Tall stature  [HP:0000256] Macrocephaly  [HP:0000307] Pointed chin  [HP:0000337] Broad forehead
+[HP:0001537] Umbilical hernia
+[HP:0001256] Intellectual disability, mild","Chr5:g.176710797A>T, heterozygous
+NM_022455.4, NP_071900.2
+c.6019A>T, p.(Ile2007Phe)","Y
+",N,"Y
+2, 0.0129",2,19,2,1,"11
+5.05","10
+0.999"
+"0204333 
+0.2m
+F","[HP:0004322] Short stature
+[HP:0000252] Microcephaly [HP:0001007] Hirsutism  [HP:0000664] Synophrys  ","chr5:g.37052555C>T, heterozygous
+NM_015384.4, NP_056199.2
+c.7150C>T, p.(Gln2384*)","Y
+",Y,N,1,3,1,1,"1
+18.51",-
+"0204342 
+0.8M
+M","[HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures  [HP:0009879] Cortical gyral simplification
+[HP:0002518] Abnormality of the periventricular white matter
+[HP:0001321] Cerebellar hypoplasia
+[HP:0002365] Hypoplasia of the brainstem 
+[HP:0011441] Abnormality of the medulla oblongata","chr3:g.48508683G>A, heterozygous
+NM_016381.4, NP_057465.1
+c.794G>A, p.(Trp265*)","Y
+",N,N,2(1),105 (104),2(1),10,"6 (5)
+5.04",-
+"0204342 
+0.8M
+M","[HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures  [HP:0009879] Cortical gyral simplification
+[HP:0002518] Abnormality of the periventricular white matter
+[HP:0001321] Cerebellar hypoplasia
+[HP:0002365] Hypoplasia of the brainstem 
+[HP:0011441] Abnormality of the medulla oblongata","chr3:g.48508112dupG, heterozygous
+NM_016381.4, NP_057465.1
+c.223dupG, p.(Glu75Glyfs*82)","Y
+",N,N,1,5,1,10,"2
+7.18",-
+"0204347 
+10m
+M","[HP:0000510] Retinitis pigmentosa 
+[HP:0000090] Nephronophthisis","chr3:g.121491452_121491453delCA, heterozygous
+NM_001023570.2, NP_001018864.2
+c.1518_1519delCA, p.(His506Glnfs*13)","Y
+",Y,"Y
+2, 0.0386",1,1,1,1,"1
+8.89",-
+"0204347 
+10m
+M","[HP:0000510] Retinitis pigmentosa 
+[HP:0000090] Nephronophthisis","chr3:g.121527825_121527826delTT, heterozygous
+NM_001023570.2, NP_001018864.2
+c.424_425delTT, p.(Phe142Profs*5)","Y
+",Y,"Y
+2, 0.0386",2(1),2(1),2(1),1,"2(1)
+6.96",-
+"0204423 
+11m
+F","[HP:0004325] Decreased body weight 
+[HP:0004322] Short stature 
+[HP:0000988] Skin rash
+[HP:0010998] Increased susceptibility to spontaneous sister chromatid exchange","chr15:g.91328183C>T, homozygous
+NM_000057.3, NP_000048.1
+c.2695C>T, p.(Arg899*)","Y
+",N,N,1,8,1,2,"1 
+7.97",-
+"0204403 
+0.7
+F",[HP:0004900] Severe lactic acidosis,"chr21:g.38309023C>G, homozygous
+NM_000411.6, NP_000402.3
+c.722G>C, p.(Gly241Ala)","Y
+",N,N,1,nan,nan,2,"5 
+5.27",20 (0.963)
+"0204341 
+1m
+F","[HP:0002659]
+Increased susceptibility to fractures
+[HP:0000938] Osteopenia
+[HP:0006487] Bowing of long bones","chr7:g.94052377G>A, heterozygous
+NM_000089.3, NP_000080.2
+c.2512G>A, p.(Gly838Ser)","Y
+",Y,"Y
+49, 0.413",1,35,1,1,"12
+4.84","4 
+0.998"
+"0204413 
+9m
+M","[HP:0100272] Branchial sinus 
+[HP:0004467] Preauricular pit 
+[HP:0000003] Multicystic kidney dysplasia","chr8:g.72128968C>T, heterozygous
+NM_000503.5, NP_000494.2
+c.1319G>A, p.(Arg9440Gln)","Y
+",Y,"Y
+4, 0.096",1,16,1,1,"6 
+5.66","25 
+0.882"
+"0204302 
+17m
+F","[HP:0004322] Short stature
+[HP:0000252] Microcephaly  [HP:0001263] Global developmental delay","ChrX:g.71684476delCTCCAinsGT, heterozygous
+NM_018486, NP_060956.1
+c.839_843delCTCCAinsGT
+p.(Thr280_Pro281delinsSer)","Y
+",N,N,1,33,1,1,"3
+5.89",-
+"0204307 
+11m
+F","[HP:0008538] Sensorineural hearing impairment [HP:0001263] Global developmental delay  [HP:0001250] Seizures
+","Chr10:g.135184190G>A, hom
+NM_004092.3, NP_004083.3
+c.160C>T, p.(Arg54Cys)",N,N,N,-,14,14,87,"24
+4.27","71 
+0.741"
+"0204309 
+10m
+M","[HP:0002876] Episodic tachypnea
+[HP:0002104] Apnea
+[HP:0001263] Global developmental delay  [HP:0002419] Molar tooth sign on MRI","Chr14:g.58910876C>T, heterozygous
+NM_001244189.1, NP_001231118.1
+c.949C>T, p.(Gln317*)",Y,N,N,-,2(1),2(1),186,"2
+6.95",-
+"0204309 
+10m
+M","[HP:0002876] Episodic tachypnea
+[HP:0002104] Apnea
+[HP:0001263] Global developmental delay  [HP:0002419] Molar tooth sign on MRI","Chr14:g.58899157delG, heterozygous
+NM_001244189.1, NP_001231118.1
+c.428delG, p.(Arg143Lysfs*4)",Y,N,N,-,1,1,186,"3(2)
+6.67",-
+"0204313 
+9m
+M","[HP:0008538] Sensorineural hearing impairment  [HP:0001263] Global developmental delay  [HP:0001290] Generalized hypotonia
+[HP:0003535] 3-methylglutaconic aciduria","Chr6:g.151726371C>G,
+homozygous
+NM_017909.3, NP_060379.2
+c.1349G>C, p.(*450Serext*32)",N,N,N,-,3,3,60,"47
+2.23",-
+"0204320 
+8m
+M","[HP:0001263] Global developmental delay  [HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures
+[HP:0012707] Lactate peak on MRS","Chr2:g.228566952delTC, heterozygous
+NM_025243.3, NP_079519.1
+c.82_83insGA, p.(Met28Argfs*2)","N
+",N,N,-,4,4,26,"3
+6.39",-
+"0204320 
+8m
+M","[HP:0001263] Global developmental delay  [HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures
+[HP:0012707] Lactate peak on MRS","Chr2:g.228564094A>G, heterozygous
+NM_025243.3, NP_079519.1
+c.337T>C, p.(Tyr113His)","N
+",N,N,-,15(14),15(14),26,"16(15)
+4.50","4
+0.998"
+"0204321
+5m
+F","[HP:0000175] Cleft palate  [HP:0008538] Sensorineural hearing impairment [HP:0001629] Ventricular septal defect [
+HP:0008738] Partially duplicated displaced kidney","Chr12:g.49423183C>T, heterozygous
+NM_003482.3, NP_003473.3
+NG_027827.1
+c.14075+1G>A","Y
+",Y,N,1,2,1,1,"24
+4.18",-
+"0204323
+M
+8m","[HP:0000278] Retrognathia  [HP:0011823] Chin with horizontal crease [HP:0000396] Overfolded helix 
+[HP:0010536] Central sleep apnea
+[HP:0005612] Arthrogryposis-like hand anomaly
+[HP:0001290] Generalized hypotonia","Chr13:g.101944403T>C, heterozygous
+NM_052867.2, NP_443099.1
+c.985A>G, p.(Arg329Gly)",N,N,N,-,10,10,13,"23
+3.87","3
+0.999"
+"0204407 
+28m
+F",[HP:0005562] Multiple renal cysts,"chr16:g.2144128C>T, heterozygous
+NM_001009944.2, NP_001009944.2
+c.10583G>A, p.(Trp3528*)","Y
+",N,N,1,1,1,2,"1 
+19.23",-
+"0204326 
+15m
+M","[HP:0000957] Cafe-au-lait spot 
+HP:0009601]Aplasia/Hypoplasia of the thumb
+
+Sibling with complex forearm abnormality","chr12:g.114841599delG, heterozygous
+NM_000192.3, NP_000183.2
+c.105delC, p.(Ser36Alafs*30)","Y
+",Y,N,1,2,1,3,"1
+8.15",-
+"0204345 
+12m
+F",[HP:0012120] Methylmalonic aciduria,"chr2: g.150438731_150438738del homozygous
+NM_015702.2,  NP_056517.1
+c.57_64delCTCTTTAG, p.(Ser20*)","Y
+",Y,"Y
+3, 0.6257",1,3,1,1,"3
+7.94",-
+"0204330 
+2m
+F","[HP:0002652] Skeletal dysplasia 
+[HP:0001762] Talipes equinovarus 
+[HP:0008905] Rhizomelic short stature 
+[HP:0001193] Ulnar deviation of the hand or of fingers of the hand 
+[HP:0001385] Hip dysplasia","chr5:g.149360517A>C,
+homozygous
+NM_000112.3, NP_000103.2
+c.1361A>C, p.(Gln454Pro)","Y
+",Y,"Y
+4, 0.4419",1,29,1,1,"28
+3.72","1
+1.000"
+"0204336 
+2m
+M","[HP:0000485] Megalocornea  [HP:0001833]
+Large feet
+","X-linked megalocornea
+(#309300)
+
+CHRDL1","Y
+",Y,N,1,4,1,2,"1
+7.42",-
+"0204336 
+2m
+M","[HP:0000485] Megalocornea  [HP:0001833]
+Large feet
+","chrX:g.109963084dupA, hemizygous
+NM_001143981.1, NP_001137453.1
+c.520dupT, p.(Ser174Phefs*18),","Y
+",Y,N,-,-,-,-,-,-
+"0204337
+3m
+M","[HP:0000347] Micrognathia  [HP:0000356] Abnormality of the outer ear 
+[HP:0000359] Abnormality of the inner ear 
+[HP:0001601]
+Laryngomalacia  ","chr8:g.61655471C>T, heterozygous
+NM_017780.3, NP_060250.2
+c.1480C>T, p.(Arg494*)","Y
+",N,N,1,1,1,1,"1
+11.22",-
+"0204343 
+17m
+M",[HP:0000486] Strabismus  [HP:0000508] Ptosis  [HP:0000496] Abnormality of eye movement,"chr16:g.90001643C>T, heterozygous
+NM_001197181.1, NP_001184110.1
+c.568C>T, p.(Arg190Cys)","Y
+",N,N,1,6,1,1,"37
+2.54","12 
+0.982"
+"0204406 
+0.4m
+F",[HP:0010919] Abnormality of cysteine metabolism  [HP:0010901] Abnormality of methionine metabolism  [HP:0001987] Hyperammonemia,"chr1: g.45974495C>T, homozygous
+NM_015506.2, NP_056321.2
+c.457C>T, p.(Arg153*)","Y
+",N,"Y
+52, 0.0193",1,1,1,2,"3
+6.36",-
+"0204339 
+1m
+M","[HP:0000347] Micrognathia  [HP:0002645] Wormian bones
+[HP:0002982] Tibial bowing  [HP:0002827] Hip dislocation  [HP:0006996] Dysgenesis of corpus callosum  
+[HP:0002659]
+Increased susceptibility to fractures","chr1:g.120458147G>A, heterozygous
+NM_024408.3, NP_077719.2
+c.7198C>T, p.(Arg2400*)","Y
+",N,"Y
+59, 0.3376",1,1,1,1,"1
+14.01",-
+"0204344
+10m
+M","[HP:0001513] Obesity  [HP:0000098] Tall stature  [HP:0000256] Macrocephaly  [HP:0000431] Wide nasal bridge 
+[HP:0000286] Epicanthus  [HP:0000154] Wide mouth  [HP:0001643] Patent ductus arteriosus 
+[HP:0001007] Hirsutism","chr12: g.22065939A>G, heterozygous
+NM_005691.3, NP_005682.2
+c.878T>C, p.(Phe293Ser)","Y
+",Y,"Y
+75, 0.5827",1,6,1,1,"18
+3.88","21
+0.735"
+"0204350
+3m
+F",[HP:0000204] Cleft upper lip  [HP:0000175] Cleft palate  [HP:0009755] Ankyloblepharon  [HP:0010285] Oral synechia  [HP:0004691] 2-3 toe syndactyly,"chr1:g.209969821C>T, heterozygous
+NM_006147.3, NP_006138.1
+c.251G>A, p.(Arg84His)","Y
+",Y,"Y
+6, 0.0055",1,9,1,1,"5
+5.29","1
+1.000"
+"0204405 
+26m
+M","[HP:0005549] Congenital neutropenia 
+[HP:0001903] Anemia","chr15:g.77324645G>A, heterozygous
+NM_003978.3, NP_003969.2
+c.748G>A, p.(Glu250Lys)",N,N,N,nan,10,nan,2,12 (4.26),2 (1.000)
+"0204409 
+13m
+M","[HP:0001396] Cholestasis  [HP:0002716] Lymphadenopathy  [HP:0003256] Abnormality of the coagulation cascade  [HP:0001873] Thrombocytopenia
+[HP0011447] Hyposegmentation of neutrophil nuclei","chr2:g.191874642delT, homozygous
+NM_007315.3, NP_009330.1
+c.88delA, p.(Ile30Serfs*9)
+
+Pelger-Huet abnormality
+(#169400)
+LBR","N
+
+
+
+
+
+
+
+
+
+Y","N
+
+
+
+
+
+
+
+
+
+N","N
+
+
+
+
+
+
+
+
+
+N",-,2,2,6,"4
+6.1",-
+"0204409 
+13m
+M","[HP:0001396] Cholestasis  [HP:0002716] Lymphadenopathy  [HP:0003256] Abnormality of the coagulation cascade  [HP:0001873] Thrombocytopenia
+[HP0011447] Hyposegmentation of neutrophil nuclei","chr1:g.225591106G>A, heterozygous
+NM_002296.3, NP_002287.2
+c.1747C>T, p. (Arg583*)","N
+
+
+
+
+
+
+
+
+
+Y","N
+
+
+
+
+
+
+
+
+
+N","N
+
+
+
+
+
+
+
+
+
+N",-,1,1,1,"1
+8.31",-
+"0204412 
+24m
+M","[HP:0000252] Microcephaly  [HP:0002342] Intellectual disability, moderate  [HP:0001290] Generalized hypotonia","Chr14: g.29237028G>T, heterozygous
+NM_005249.4, NP_005240.3
+c.543G>T, p.(Lys181Asn)","Y
+",N,N,1,6,1,2,"39
+2.72",-
+"0204416 
+1m
+M","[HP:0004399] Congenital pyloric atresia 
+[HP:0005235] Jejunal atresia  [HP:0011102]
+Ileal atresia 
+[HP:0010448] Colonic atresia","chr2:g.47177603G>T, heterozygous
+NM_020458.2, NP_065191.2
+c.286G>T, p.(Glu96*)","Y
+",N,"Y
+14, 0.0007",1,3,1,3,"3
+7.72",-
+"0204416 
+1m
+M","[HP:0004399] Congenital pyloric atresia 
+[HP:0005235] Jejunal atresia  [HP:0011102]
+Ileal atresia 
+[HP:0010448] Colonic atresia","chr2:g.47233177dupC
+heterozygous
+NM_020458.2, NP_065191.2
+c.1183dupC, p.(Gln395Profs*104)","Y
+",N,"Y
+14, 0.0007",2(1),4(3),2(1),3,"4
+6.43",-
+"0204414 
+1m
+F",[HP:0010955] Dilatation of the bladder  [HP:0100771] Hypoperistalsis,"chr2:g.74140773G>A, heterozygous
+NM_001615.3, NP_001606.1
+c.613G>A, p.(Ala205Thr)","Y
+",Y,"Y
+7, 0.3752",1,34,1,128,"18
+4.35","21
+0.983"
+"0204431 
+0.5m
+F","[HP:0011100]
+Intestinal atresia
+[HP:0001629]
+Ventricular septal defect
+[HP:0010882]
+Pulmonary valve atresia","chr2:g.47300955C>T, homozygous
+NM_020458.3, NP_065191.2
+c.2470C>T, p.(Gln824*)","Y
+",N,"Y
+1, 0.0966",1,4,1,5,"2
+9.29",-
+"0204435 
+16m
+F","[HP:0000252]
+Microcephaly
+[HP:0001290] Generalized hypotonia
+","chr8:g.100168921C>T, heterozygous
+NM_017890.4, NP_060360.3
+c.2158C>T, p.(Gln720*)",N,N,N,-,5,5,3,"1
+8.81",-
+"0204435 
+16m
+F","[HP:0000252]
+Microcephaly
+[HP:0001290] Generalized hypotonia
+","chr8:g.100396500G>A, heterozygous
+NM_017890.4, NP_060360.3
+c.2889G>A, p.(Trp963*)",N,N,N,-,6(5),6(5),3,"2
+8.78",-
+"0204410
+F","[HP:0000286] Epicanthus, [HP:0000414] Bulbous nose, [HP:0001263] Global developmental delay, [HP:0001257] Spasticity, [HP:0002558] Supernumerary nipples, [HP:0001804] Hypoplastic fingernail","Chr8: g.41791481_41791484
+delCTCA
+heterozygous
+c.4254_4257delTGAG, p.(Glu1419Trpfs*12)",N,N,N,-,3,3,2,"2
+8.52",-
