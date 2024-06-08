@@ -1,7 +1,6 @@
 import pickle
 import random
 import xgboost as xgb
-import numpy as np
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
@@ -13,7 +12,6 @@ from helpers import hpo_sample
 from train1 import read_embedding, read_dicts, hpo_sample_strategies
 from helpers.gene_mapping import get_gene_phenotype_relations, get_gene_phenotype_relations_and_frequency
 import matplotlib.pyplot as plt
-
 
 
 # from hpo_sample create instance of Network
@@ -90,13 +88,13 @@ def simulate_a_patient(df_variants, numof_pathogenic_variants, numof_nonpathogen
     return variants, hpo_sample, target_variant
 
 
-
 def simulate_patients(df_variants, numof_pathogenic_variants, numof_nonpathogenic_variants, phenotype_sample_strategies, numof_patients, output_file):
      # simulate them and store the values so that they can be fed to the model and save
     patients = []
     for i in range(numof_patients):
         phenotype_sample_strategy = random.choice(phenotype_sample_strategies)
-        patient = simulate_a_patient(df_variants, numof_pathogenic_variants, numof_nonpathogenic_variants, phenotype_sample_strategy)
+        patient = simulate_a_patient(df_variants, numof_pathogenic_variants,
+                                     numof_nonpathogenic_variants, phenotype_sample_strategy)
         patients.append(patient)
 
     # save the patients as a pickle file
@@ -104,10 +102,6 @@ def simulate_patients(df_variants, numof_pathogenic_variants, numof_nonpathogeni
         pickle.dump(patients, f)
 
     return patients
-
-
-
-
 
 
 def process_hpo_info(patients_file, output_file, hpo_processor_func):
@@ -120,7 +114,7 @@ def process_hpo_info(patients_file, output_file, hpo_processor_func):
         # get the hpo_sample of the patient
         hpo_sample = patient[1]
 
-        # proccess hpo_sample of the patient add it to its variants df
+        # process hpo_sample of the patient add it to its variants df
         processed_hpo = hpo_processor_func(hpo_sample)
         patient[0] = pd.concat([patient[0], processed_hpo], axis=1)
         processed_patients.append(patient)
@@ -132,14 +126,11 @@ def process_hpo_info(patients_file, output_file, hpo_processor_func):
     return processed_patients
 
 
-
-
 # to evaluate xgboost model saved in model_file using the patients saved in patients_file
 def evaluate_model(model_file, patients_file):
     # load the xgboost model from model_file path
     model = xgb.Booster()
     model.load_model(model_file)
-
 
     # load the patients
     with open(patients_file, 'rb') as f:
@@ -149,8 +140,7 @@ def evaluate_model(model_file, patients_file):
     # get the scores of model for every variant
     # sort the variants according to the scores
     # get the target variant's rank among the variants
-
-    score_distribution = [] # involves '#Uploaded_variation', symbol, and the score
+    score_distribution = []  # involves '#Uploaded_variation', symbol, and the score
 
     for patient in patients:
         variants = patient[0]
@@ -163,12 +153,10 @@ def evaluate_model(model_file, patients_file):
             ['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']].replace('None', np.nan).astype(
             'float')
 
-
-
         X = variants.drop(columns=['CLIN_SIG'])
 
         # imputer: replace missing values with the mean of the column (only for numerical columns)
-        # dont use it for categorical columns
+        # don't use it for categorical columns
 
         imputer = SimpleImputer(strategy='mean')
         # get the numerical columns
@@ -191,7 +179,6 @@ def evaluate_model(model_file, patients_file):
         # score : p3 + p2 x 0.4 - p0 - p1 x 0.4
         scores = scores[:, 3] + scores[:, 2] * 0.6 - scores[:, 0] - scores[:, 1] * 0.6
 
-
         # sort the variants according to the scores
         variants['scores'] = scores
         #target_score = variants.loc[target_row_index, 'scores']
@@ -212,12 +199,20 @@ def evaluate_model(model_file, patients_file):
 
 
 # returns a dictionary of related info
-def add_embedding_info_to_patient(gene, sampled_hpo,
-                       add_scaled_average_dot_product=True, add_scaled_min_dot_product=False, add_scaled_max_dot_product=False,
-                       add_average_dot_product = True, add_min_dot_product = False, add_max_dot_product = False, add_std_dot_product = False, add_gene_embedding = False, add_fix_num_phen_embedding = 0):
-
+def add_embedding_info_to_patient(
+        gene,
+        sampled_hpo,
+        add_scaled_average_dot_product=True,
+        add_scaled_min_dot_product=False,
+        add_scaled_max_dot_product=False,
+        add_average_dot_product=True,
+        add_min_dot_product=False,
+        add_max_dot_product=False,
+        add_std_dot_product=False,
+        add_gene_embedding=False,
+        add_fix_num_phen_embedding=0
+):
     global node_embeddings, gene_dict, hpo_dict
-
 
     if add_fix_num_phen_embedding > 0:
         pass
@@ -226,7 +221,6 @@ def add_embedding_info_to_patient(gene, sampled_hpo,
 
     # get the gene embedding
     gene_embedding = node_embeddings[gene_dict[gene]]
-
 
     # get the embeddings of the HPO terms
     hpo_embeddings = [node_embeddings[hpo_dict[hpo]] for hpo in sampled_hpo]

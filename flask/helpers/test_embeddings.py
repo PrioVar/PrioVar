@@ -1,6 +1,7 @@
-import numpy as np
 from train1 import *
 from hpo import read_hpo_from_json, process_nodes, process_edges
+
+
 def get_hpo_terms_edges():
     graph_id, meta, nodes, edges, property_chain_axioms = read_hpo_from_json()
     items = process_nodes(nodes)
@@ -15,6 +16,7 @@ def get_hpo_terms_edges():
 
     return hpo_list, hpo_edges
 
+
 path_embedding = '../data/node_embeddings.txt'
 
 path_gene_dict = '../data/gene_dict.pt'
@@ -28,15 +30,17 @@ gene_dict, hpo_dict = read_dicts(path_gene_dict, path_hpo_dict)
 
 hpo_list, hpo_edges = get_hpo_terms_edges()  # get the hpo terms and edges
 
+
 # for the hpo term with id "1", get the embedding
 def get_hpo_embedding(hpo_id: int):
     return embeddings[hpo_dict[hpo_id]]
+
 
 def get_gene_embedding(gene_name: str):
     return embeddings[gene_dict[gene_name]]
 
 
-# in this node2vec embedding, get the closest hpo term to the hpo term with id "1"
+# in this Node2Vec embedding, get the closest hpo term to the hpo term with id "1"
 def get_closest_hpo(hpo_id: int):
     hpo_embedding = get_hpo_embedding(hpo_id)
     closest_hpo_id = None
