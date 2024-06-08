@@ -66,6 +66,7 @@ for param in parameters:
 model = xgb.Booster()
 model.load_model(model_path)
 
+
 def prepare_data(df_variants):
 
     # HGSVc_original column is the same as HGVSc column
@@ -86,9 +87,6 @@ def prepare_data(df_variants):
     # Allele original column is the same as Allele column
     df_variants['Allele_original'] = df_variants['Allele']
 
-
-
-
     # divide  HGVSc  columns into two columns by splitting the values by ':' 	ENST00000616125.5:c.11G>A
     df_variants[['HGVSc', 'HGVSc2']] = df_variants['HGVSc'].str.split(':', expand=True)
 
@@ -103,6 +101,7 @@ def prepare_data(df_variants):
         df_variants['HGVSp'] = None
         df_variants['HGVSp2'] = None
         print("Unusual HGVSp column")
+
     # extract the info from the HGVSp2 column so that we have the 2 more columns 4, GlyGlu namely number in the middle and the change
     # pay attention that there should be 2 columns
     df_variants[['HGVSp_from', 'HGVSp_number', 'HGVSp_to']] = df_variants['HGVSp2'].str.extract(
@@ -119,7 +118,6 @@ def prepare_data(df_variants):
     df_variants['SpliceAI_pred'].str.split('|', expand=True)
     #df_variants = df_variants.drop(columns=['SpliceAI_pred', 'SpliceAI_pred_symbol'])
 
-
     df_variants[['AlphaMissense_score_mean', 'AlphaMissense_std_dev']] = df_variants['AlphaMissense_score'].apply(
         lambda x: (np.nan, np.nan) if (x == "-" or x == "") else
         # Filter the split results to include only valid floats, then perform calculations
@@ -132,6 +130,7 @@ def prepare_data(df_variants):
     # alpha missense pred has several values ("A", "B", "P") seperated by commas, change this column to ratio of letters (pay attention to "-" values)
     df_variants['AlphaMissense_pred'] = df_variants['AlphaMissense_pred'].apply(
         lambda x: (x.count('A'), x.count('B'), x.count('P')) if x != "-" else (np.nan, np.nan, np.nan))
+
     # divide it so that we have 3 columns for each letter storing the ratio of the letter in the column if 3 A's 2 B's and 1 P's then 3/6, 2/6, 1/6
     df_variants[['AlphaMissense_pred_A', 'AlphaMissense_pred_B', 'AlphaMissense_pred_P']] = df_variants[
         'AlphaMissense_pred'].apply(
@@ -155,7 +154,7 @@ def prepare_data(df_variants):
     # make the column HGVSc_change a categorical column for model
     #df_variants['HGVSc_change'] = df_variants['HGVSc_change'].astype('category')
 
-    # new hereee
+    # new here
     #df_variants['HGVSp'] = df_variants['HGVSp'].astype('category')
 
     # make the column canonical a categorical column for model
@@ -214,8 +213,6 @@ def prepare_data(df_variants):
     # make the column turkishvariome_TV_AF a numerical column for model (pay attention to "-" values)
     df_variants['turkishvariome_TV_AF'] = df_variants['turkishvariome_TV_AF'].replace('-', np.nan).astype('float')
 
-
-
     #df_clean = df_clean.drop(columns=['Gene', 'Existing_variation', 'SYMBOL', 'CANONICAL', 'SIFT', 'PolyPhen', 'HGVSc', 'HGVSp','AlphaMissense_score', 'AlphaMissense_pred', 'HGVSc2', 'HGVSp2'])
     # make float or nan :  DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
 
@@ -229,7 +226,6 @@ def prepare_data(df_variants):
         ['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']].replace('None', np.nan).astype(
         'float')
 
-
     imputer = SimpleImputer(strategy='mean')
     # get the numerical columns
     numerical_columns = df_variants.select_dtypes(include=[np.number]).columns
@@ -241,12 +237,12 @@ def prepare_data(df_variants):
 
     return df_variants
 
+
 def add_embedding_info_to_patient(gene, sampled_hpo,
                        add_scaled_average_dot_product=True, add_scaled_min_dot_product=False, add_scaled_max_dot_product=False,
                        add_average_dot_product = True, add_min_dot_product = False, add_max_dot_product = False, add_std_dot_product = False, add_gene_embedding = False, add_fix_num_phen_embedding = 0):
 
     global gene_dictionary, hpo_dictionary, embeddings
-
 
     if add_fix_num_phen_embedding > 0:
         pass
@@ -258,7 +254,6 @@ def add_embedding_info_to_patient(gene, sampled_hpo,
         return hpo_embedding_info
 
     gene_embedding = embeddings[gene_dictionary[gene]]
-
 
     # get the embeddings of the HPO terms
     hpo_embeddings = [embeddings[hpo_dictionary[hpo]] for hpo in sampled_hpo]
@@ -303,15 +298,22 @@ def add_model_scores(variants, hpo_term_ids):
     # prepare the data
     variants = prepare_data(variants)
 
-
     # for every row in the variants, insert the hpo related columns
     for index, row in variants.iterrows():
-
-
-
-        # get necceassary params from parameters
-        hpo_embedding_info = add_embedding_info_to_patient(row['SYMBOL'], hpo_term_ids,  add_scaled_average_dot_product=parameters["scaled_average_dot_product"], add_scaled_min_dot_product=parameters["scaled_min_dot_product"], add_scaled_max_dot_product=parameters["scaled_max_dot_product"],
-                        add_average_dot_product = parameters["average_dot_product"], add_min_dot_product = parameters["min_dot_product"], add_max_dot_product = parameters["max_dot_product"], add_std_dot_product = parameters["std_dot_product"], add_gene_embedding = parameters["gene_embedding"], add_fix_num_phen_embedding = parameters["fix_num_phen_embedding"])
+        # get necessary params from parameters
+        hpo_embedding_info = add_embedding_info_to_patient(
+            row['SYMBOL'],
+            hpo_term_ids,
+            add_scaled_average_dot_product=parameters["scaled_average_dot_product"],
+            add_scaled_min_dot_product=parameters["scaled_min_dot_product"],
+            add_scaled_max_dot_product=parameters["scaled_max_dot_product"],
+            add_average_dot_product=parameters["average_dot_product"],
+            add_min_dot_product=parameters["min_dot_product"],
+            add_max_dot_product=parameters["max_dot_product"],
+            add_std_dot_product=parameters["std_dot_product"],
+            add_gene_embedding=parameters["gene_embedding"],
+            add_fix_num_phen_embedding=parameters["fix_num_phen_embedding"]
+        )
 
         # add the columns to dataframe if they are not already in the dataframe
         for key in hpo_embedding_info.keys():
@@ -322,15 +324,12 @@ def add_model_scores(variants, hpo_term_ids):
         for key, value in hpo_embedding_info.items():
             variants.at[index, key] = value
 
-
     # insert hpo related columns
     #hpo_embedding_info = add_embedding_info_to_patient(variants['SYMBOL'][0], hpo_term_ids, add_scaled_average_dot_product=True, add_scaled_min_dot_product=False, add_scaled_max_dot_product=False,
                         #add_average_dot_product = True, add_min_dot_product = False, add_max_dot_product = False, add_std_dot_product = False, add_gene_embedding = False, add_fix_num_phen_embedding = 0)
 
     # add the embedding info in hpo_embedding_info to the variants all rows
     #variants = pd.concat([variants, pd.DataFrame([hpo_embedding_info])], axis=1)
-
-
 
     # get the columns that are needed for the model
     columns = training_data_columns
@@ -344,9 +343,7 @@ def add_model_scores(variants, hpo_term_ids):
     # according to  scores = scores[:, 3] + scores[:, 2] * 0.6 - scores[:, 0] - scores[:, 1] * 0.6
     variants['Priovar_score'] = scores[:, 3] + scores[:, 2] * 0.6 - scores[:, 0] - scores[:, 1] * 0.6
 
-
     return variants
-
 
 
 def test_add_model_scores():
@@ -364,7 +361,7 @@ def test_add_model_scores():
 
 
 # mock model results
-def get_mock_results(num_variants = 3, hpo = None):
+def get_mock_results(num_variants=3, hpo=None):
 
     # read the variants
     path_variants = 'data/5bc6f943-66e0-4254-94f5-ed3888f05d0a.vep.tsv'
@@ -381,6 +378,7 @@ def get_mock_results(num_variants = 3, hpo = None):
     variants['Priovar_score'] = (variants['Priovar_score'] + 1.6) / 3.2
 
     return variants
+
 
 def get_real_results(path_variants, hpo):
 
