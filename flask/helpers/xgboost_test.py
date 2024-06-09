@@ -28,7 +28,12 @@ node_embeddings = read_embedding()
 # numof_nonpathogenic_variants: number of non-pathogenic variants to add to the patient
 # phenotype_sample_strategy: strategy to sample the phenotypes of the patient: precise, imprecise, noisy
 # return: a list of variants and the phenotypes of the patient
-def simulate_a_patient(df_variants, numof_pathogenic_variants, numof_nonpathogenic_variants, phenotype_sample_strategy):
+def simulate_a_patient(
+    df_variants,
+    numof_pathogenic_variants,
+    numof_nonpathogenic_variants,
+    phenotype_sample_strategy
+):
 
     # first randomly  sample A pathogenic variant (according to CLIN_SIG  classification)
     pathogenic_variants = df_variants[df_variants['CLIN_SIG'] == 'pathogenic']

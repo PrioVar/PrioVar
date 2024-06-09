@@ -65,7 +65,13 @@ print(len(not_in_gene_dict))
 """
 
 
-def add_sampled_hpo_terms_full_precise(df_variants, node_embeddings, gene_dict, hpo_dict, number_of_phenotypes):
+def add_sampled_hpo_terms_full_precise(
+    df_variants,
+    node_embeddings,
+    gene_dict,
+    hpo_dict,
+    number_of_phenotypes
+):
     gene_phenotype_relations = get_gene_phenotype_relations()
     global neutral_embedding
     # for each gene in the dataframe, sample number_of_phenotypes HPO terms
@@ -159,7 +165,11 @@ if False:
 ## AlphaMissense_score : (from dbNSFP4.5a_grch38) AlphaMissense is a unsupervised model for predicting the pathogenicity of human missense variants by incorporating structural context of an AlphaFold-derived system. The AlphaMissense score ranges from 0 to 1. The larger the score, the more likely the variant is pathogenic. Detals see https://doi.org/10.1126/science.adg7492. License information: "AlphaMissense Database Copyright (2023) DeepMind Technologies Limited. All predictions are provided for non-commercial research use only under CC BY-NC-SA license." This distribution of AlphaMissense_score, AlphaMissense_rankscore, and AlphaMissense_pred are also under CC BY-NC-SA license. A copy of CC BY-NC-SA license can be found at https://creativecommons.org/licenses/by-nc-sa/4.0/.
 ## AlphaMissense_pred : (from dbNSFP4.5a_grch38) The AlphaMissense classification of likely (B)enign, (A)mbiguous, or likely (P)athogenic with 90% expected precision estimated from ClinVar for likely benign and likely pathogenic classes.
 ## turkishvariome_TV_AF : TV_AF field from [PATH]/TurkishVariome.vcf.gz
-def clean_data(df_variants, output_pickle_file, labels=['pathogenic', 'benign', 'likely_benign', 'likely_pathogenic']):
+def clean_data(
+    df_variants,
+    output_pickle_file='../data/variants_cleaned.pkl',
+    labels=['pathogenic', 'benign', 'likely_benign', 'likely_pathogenic']
+):
     # only get the rows with pathogenic or benign, likely_benign, likely_pathogenic values in CLIN_SIG column
     df_variants = df_variants[df_variants['CLIN_SIG'].isin(labels)]
 
@@ -299,10 +309,10 @@ def clean_data(df_variants, output_pickle_file, labels=['pathogenic', 'benign', 
 
 
 def sample_hpo_terms_for_variants_optimized(
-        df_variants,
-        gene_dict,
-        max_ancestral_depth=10,
-        put_in_the_df=False
+    df_variants,
+    gene_dict,
+    max_ancestral_depth=10,
+    put_in_the_df=False
 ):
 
     # order df_variants by SYMBOL
@@ -385,11 +395,11 @@ def sample_hpo_terms_for_variants_optimized(
 
 
 def sample_hpo_terms_with_frequency_optimized(
-        df_variants,
-        gene_dict,
-        output_pickle_file,
-        max_ancestral_depth=10,
-        put_in_the_df=False
+    df_variants,
+    gene_dict,
+    output_pickle_file,
+    max_ancestral_depth=10,
+    put_in_the_df=False
 ):
     # order df_variants by SYMBOL
     df_variants = df_variants.sort_values(by='SYMBOL')
@@ -763,20 +773,20 @@ def run_multilabel(data_path, output_path):
 
 
 def add_embedding_info(
-        df_variants,
-        path_to_embedding,
-        path_to_gene_dict,
-        path_to_hpo_dict,
-        path_to_sampled_hpo,
-        add_scaled_average_dot_product=True,
-        add_scaled_min_dot_product=False,
-        add_scaled_max_dot_product=False,
-        add_average_dot_product=True,
-        add_min_dot_product=False,
-        add_max_dot_product=False,
-        add_std_dot_product=False,
-        add_gene_embedding=False,
-        add_fix_num_phen_embedding=0
+    df_variants,
+    path_to_embedding,
+    path_to_gene_dict,
+    path_to_hpo_dict,
+    path_to_sampled_hpo,
+    add_scaled_average_dot_product=True,
+    add_scaled_min_dot_product=False,
+    add_scaled_max_dot_product=False,
+    add_average_dot_product=True,
+    add_min_dot_product=False,
+    add_max_dot_product=False,
+    add_std_dot_product=False,
+    add_gene_embedding=False,
+    add_fix_num_phen_embedding=0
 ):
 
     # read the embeddings
