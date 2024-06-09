@@ -2,33 +2,33 @@ import os
 import pickle
 import random
 import xgboost as xgb
-import numpy as np
-from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 import pandas as pd
 import numpy as np
 import torch
-import helpers.hpo_sample
 from helpers import hpo_sample
 from helpers.gene_mapping import get_gene_phenotype_relations, get_gene_phenotype_relations_and_frequency
 
 path_variants = '../data/5bc6f943-66e0-4254-94f5-ed3888f05d0a.vep.tsv'
-
 path_embedding = '../data/node_embeddings.txt'
 
 path_gene_dict = '../data/gene_dict.pt'
 path_hpo_dict = '../data/hpo_dict.pt'
 
+# triplets of strategies for hpo_sample.sample_from_random_strategy like (precise, imprecise, noisy)
+HPO_SAMPLE_STRATEGIES = [(3, 2, 1), (4, 2, 1), (2, 1, 0), (1, 2, 0), (2, 2, 0)]
+
 neutral_embedding = None
 
+
 def read_variants():
-    # read by skippin 48 lines
+    # read by skipping 48 lines
     df = pd.read_csv(path_variants, sep='\t', skiprows=48)
     return df
 
 
-def read_embedding(path_of_embedding = path_embedding):
+def read_embedding(path_of_embedding=path_embedding):
     node_embeddings = np.loadtxt(path_of_embedding, skiprows=1)
 
     # sort the array by the first column
@@ -38,16 +38,16 @@ def read_embedding(path_of_embedding = path_embedding):
     node_embeddings = node_embeddings[:, 1:]
     return node_embeddings
 
+
 def calculate_neutral_embedding_as_root_embedding(node_embeddings, hpo_dict):
     # get the embedding of first phenotype
     root_embedding = node_embeddings[hpo_dict[1]]
     return root_embedding
 
 
-
-def read_dicts(gene_path = path_gene_dict, hpo_path = path_hpo_dict):
-    gene_dict = torch.load(path_gene_dict)
-    hpo_dict = torch.load(path_hpo_dict)
+def read_dicts(gene_path=path_gene_dict, hpo_path=path_hpo_dict):
+    gene_dict = torch.load(gene_path)
+    hpo_dict = torch.load(hpo_path)
     return gene_dict, hpo_dict
 
 
@@ -65,9 +65,7 @@ print(len(not_in_gene_dict))
 """
 
 
-
-
-def add_sampled_hpo_terms_full_precise(df_variants, node_embeddings ,gene_dict, hpo_dict, number_of_phenotypes):
+def add_sampled_hpo_terms_full_precise(df_variants, node_embeddings, gene_dict, hpo_dict, number_of_phenotypes):
     gene_phenotype_relations = get_gene_phenotype_relations()
     global neutral_embedding
     # for each gene in the dataframe, sample number_of_phenotypes HPO terms
@@ -161,20 +159,24 @@ if False:
 ## AlphaMissense_score : (from dbNSFP4.5a_grch38) AlphaMissense is a unsupervised model for predicting the pathogenicity of human missense variants by incorporating structural context of an AlphaFold-derived system. The AlphaMissense score ranges from 0 to 1. The larger the score, the more likely the variant is pathogenic. Detals see https://doi.org/10.1126/science.adg7492. License information: "AlphaMissense Database Copyright (2023) DeepMind Technologies Limited. All predictions are provided for non-commercial research use only under CC BY-NC-SA license." This distribution of AlphaMissense_score, AlphaMissense_rankscore, and AlphaMissense_pred are also under CC BY-NC-SA license. A copy of CC BY-NC-SA license can be found at https://creativecommons.org/licenses/by-nc-sa/4.0/.
 ## AlphaMissense_pred : (from dbNSFP4.5a_grch38) The AlphaMissense classification of likely (B)enign, (A)mbiguous, or likely (P)athogenic with 90% expected precision estimated from ClinVar for likely benign and likely pathogenic classes.
 ## turkishvariome_TV_AF : TV_AF field from [PATH]/TurkishVariome.vcf.gz
-def clean_data(df_variants, output_pickle_file, labels = ['pathogenic', 'benign', 'likely_benign', 'likely_pathogenic']):
+def clean_data(df_variants, output_pickle_file, labels=['pathogenic', 'benign', 'likely_benign', 'likely_pathogenic']):
     # only get the rows with pathogenic or benign, likely_benign, likely_pathogenic values in CLIN_SIG column
     df_variants = df_variants[df_variants['CLIN_SIG'].isin(labels)]
 
-
-    # divide  HGVSc  columns into two columns by splitting the values by ':' 	ENST00000616125.5:c.11G>A
+    # divide  HGVSc  columns into two columns by splitting the
+    # values by ':' ENST00000616125.5:c.11G>A
     df_variants[['HGVSc', 'HGVSc2']] = df_variants['HGVSc'].str.split(':', expand=True)
 
-    # extract the info from the HGVSc2 column so that we have the 2 more columns 11, G>A # ENST00000616125.5:c.11G>A
+    # extract the info from the HGVSc2 column so that we have the 2
+    # more columns 11, G>A # ENST00000616125.5:c.11G>A
     df_variants[['HGVSc_number', 'HGVSc_change']] = df_variants['HGVSc2'].str.extract(r'c\.(\d+)([A-Z]>.*)')
 
-    # divide  Hgvsp  columns into two columns by splitting the values by ':' 	ENSP00000484643.1:p.Gly4Glu
+    # divide HGVSp columns into two columns by splitting the
+    # values by ':' ENSP00000484643.1:p.Gly4Glu
     df_variants[['HGVSp', 'HGVSp2']] = df_variants['HGVSp'].str.split(':', expand=True)
-    # extract the info from the HGVSp2 column so that we have the 2 more columns 4, GlyGlu namely number in the middle and the change
+
+    # extract the info from the HGVSp2 column so that we have the 2 more columns 4,
+    # GlyGlu namely number in the middle and the change
     # pay attention that there should be 2 columns
     df_variants[['HGVSp_from', 'HGVSp_number', 'HGVSp_to']] = df_variants['HGVSp2'].str.extract(
         r'p\.([A-Z][a-z]+)(\d+)([A-Z][a-z]+)')
@@ -185,17 +187,15 @@ def clean_data(df_variants, output_pickle_file, labels = ['pathogenic', 'benign'
     # drop the columns that are not needed
     df_variants = df_variants.drop(columns=['HGVSc', 'HGVSc2', 'HGVSp2', 'HGVSp_from', 'HGVSp_to'])
 
-
-
-
-    # divide  SpliceAI_pred  columns into 8 columns by splitting the values by '|' and drop the first column
-    df_variants[['SpliceAI_pred_symbol', 'DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']] = df_variants['SpliceAI_pred'].str.split('|', expand=True)
+    # divide  SpliceAI_pred  columns into 8 columns by
+    # splitting the values by '|' and drop the first column
+    df_variants[['SpliceAI_pred_symbol', 'DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']] \
+        = df_variants['SpliceAI_pred'].str.split('|', expand=True)
     df_variants = df_variants.drop(columns=['SpliceAI_pred', 'SpliceAI_pred_symbol'])
 
-
     # alpha missense scorelarda . lar var
-    # eliminate ,., values for example 0.0848,.,0.0854 -> 0.0848,0.0854 or .,0.5 -> 0.5  or 0.5,. -> 0.5 so, repleca . , pairs that is adjacent to each other
-
+    # eliminate ,., values for example 0.0848,.,0.0854 -> 0.0848,0.0854 or .,0.5 -> 0.5
+    # or 0.5,. -> 0.5 so, replace . , pairs that is adjacent to each other
     df_variants[['AlphaMissense_score_mean', 'AlphaMissense_std_dev']] = df_variants['AlphaMissense_score'].apply(
         lambda x: (np.nan, np.nan) if (x == "-" or x == "") else
         # Filter the split results to include only valid floats, then perform calculations
@@ -205,12 +205,15 @@ def clean_data(df_variants, output_pickle_file, labels = ['pathogenic', 'benign'
          else (np.nan, np.nan))
     ).apply(pd.Series)
 
-    # alpha missense pred has several values ("A", "B", "P") seperated by commas, change this column to ratio of letters (pay attention to "-" values)
+    # alpha missense pred has several values ("A", "B", "P") seperated by commas,
+    # change this column to ratio of letters (pay attention to "-" values)
     df_variants['AlphaMissense_pred'] = df_variants['AlphaMissense_pred'].apply(lambda x: (x.count('A'), x.count('B'), x.count('P')) if x != "-" else (np.nan, np.nan, np.nan))
-    # divide it so that we have 3 columns for each letter storing the ratio of the letter in the column if 3 A's 2 B's and 1 P's then 3/6, 2/6, 1/6
-    df_variants[['AlphaMissense_pred_A', 'AlphaMissense_pred_B', 'AlphaMissense_pred_P']] = df_variants['AlphaMissense_pred'].apply(
-        lambda x: (np.nan, np.nan, np.nan) if x == "-" or sum(x) == 0 else (x[0] / sum(x), x[1] / sum(x), x[2] / sum(x))).apply(pd.Series)
 
+    # divide it so that we have 3 columns for each letter storing the ratio of
+    # the letter in the column if 3 A's 2 B's and 1 P's then 3/6, 2/6, 1/6
+    df_variants[['AlphaMissense_pred_A', 'AlphaMissense_pred_B', 'AlphaMissense_pred_P']] \
+        = df_variants['AlphaMissense_pred'].apply(
+        lambda x: (np.nan, np.nan, np.nan) if x == "-" or sum(x) == 0 else (x[0] / sum(x), x[1] / sum(x), x[2] / sum(x))).apply(pd.Series)
 
     # HGSV.. columns
     # make the column HGVSc_number a numerical column for model (pay attention to "-" values)
@@ -231,11 +234,13 @@ def clean_data(df_variants, output_pickle_file, labels = ['pathogenic', 'benign'
     # make the Allele column a categorical column for model
     df_variants['Allele'] = df_variants['Allele'].astype('category')
 
-    # make the column polyphen a numerical column and categorical for model by extracting the number from the string and taking the string before by looking for the '(number)'
+    # make the column polyphen a numerical column and categorical for model by
+    # extracting the number from the string and taking the string before by looking for the '(number)'
     df_variants['PolyPhen_number'] = df_variants['PolyPhen'].str.extract(r'\((\d+\.\d+)\)').astype('float')
     df_variants['PolyPhen'] = df_variants['PolyPhen'].str.extract(r'(\w+)').astype('category')
 
-    # make the column SIFT a numerical column and categorical for model by extracting the number from the string and taking the string before by looking for the '(number)'
+    # make the column SIFT a numerical column and categorical for model by
+    # extracting the number from the string and taking the string before by looking for the '(number)'
     df_variants['SIFT_number'] = df_variants['SIFT'].str.extract(r'\((\d+\.\d+)\)').astype('float')
     df_variants['SIFT'] = df_variants['SIFT'].str.extract(r'(\w+)').astype('category')
 
@@ -281,16 +286,7 @@ def clean_data(df_variants, output_pickle_file, labels = ['pathogenic', 'benign'
     # make the column turkishvariome_TV_AF a numerical column for model (pay attention to "-" values)
     df_variants['turkishvariome_TV_AF'] = df_variants['turkishvariome_TV_AF'].replace('-', np.nan).astype('float')
 
-    # check the columns again
-    debug = """
-    for column in df_variants.columns:
-        print("-NEWWWWW-------------------")
-        print(column)
-        for value in df_variants[column].head(100):
-            print(value)
-        print(df_variants[column].nunique())
-    """
-    # save the dataframe to a new file that preseves data types (category, numerical etc for each column)
+    # save the dataframe to a new file that preserves data types (category, numerical etc. for each column)
     # pickle the dataframe
     df_variants.to_pickle(output_pickle_file)
 
@@ -302,12 +298,12 @@ def clean_data(df_variants, output_pickle_file, labels = ['pathogenic', 'benign'
 #exit()
 
 
-
-
-# triplets of strategyies for hpo_sample.sample_from_random_strategy like (precise, imprecise, noisy)
-hpo_sample_strategies = [(3, 2, 1), (4, 2, 1), (2, 1, 0), (1, 2, 0), (2, 2, 0)]
-
-def sample_hpo_terms_for_variants_optimized(df_variants, gene_dict, max_ancesteral_depth = 10 , put_in_the_df = False):
+def sample_hpo_terms_for_variants_optimized(
+        df_variants,
+        gene_dict,
+        max_ancesteral_depth=10,
+        put_in_the_df=False
+):
 
     # order df_variants by SYMBOL
     df_variants = df_variants.sort_values(by='SYMBOL')
@@ -327,12 +323,12 @@ def sample_hpo_terms_for_variants_optimized(df_variants, gene_dict, max_ancester
     # key: variant name (e.g. 'rs12345'), value: list of sampled HPO terms
     sampled_hpoIDs_for_variants = {}
 
-    # proccessed variants
+    # processed variants
     count = 0
     j = 0
     print("Loop for phenotypes started")
     # for each gene in the dataframe (ordered) , sample hpo terms using get_pool function
-    # dont calulate the hpo terms for the same gene again
+    # don't calculate the hpo terms for the same gene again
     last_gene = None
     last_hpo_terms = []
     last_hpo_pool = []
@@ -358,12 +354,11 @@ def sample_hpo_terms_for_variants_optimized(df_variants, gene_dict, max_ancester
         if len(last_hpo_terms) == 0:
             continue
 
-
         count += 1
         if count % 100 == 0:
             print("Processed variants (sample pheno) : ", count)
 
-        strategy = random.choice(hpo_sample_strategies)
+        strategy = random.choice(HPO_SAMPLE_STRATEGIES)
         precision = min(strategy[0], len(last_hpo_terms))
         imprecision = min(strategy[1], len(last_hpo_pool))
 
@@ -386,7 +381,6 @@ def sample_hpo_terms_for_variants_optimized(df_variants, gene_dict, max_ancester
 
     print("Sampled HPO terms for variants are saved to sampled_hpoIDs_for_variants.pkl")
     return sampled_hpoIDs_for_variants, df_variants
-
 
 
 def sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, output_pickle_file ,max_ancesteral_depth = 10 , put_in_the_df = False):
@@ -417,8 +411,8 @@ def sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, output_pic
     last_gene = None
     last_hpo_terms = []
     last_hpo_pool = []
-    # among hpo_sample_strategies get the max of sum of precise and imprecise not noisy
-    max_number_of_relevant_phenotypes = max([sum(strategy[:2]) for strategy in hpo_sample_strategies])
+    # among HPO_SAMPLE_STRATEGIES get the max of sum of precise and imprecise not noisy
+    max_number_of_relevant_phenotypes = max([sum(strategy[:2]) for strategy in HPO_SAMPLE_STRATEGIES])
     for i, row in df_variants.iterrows():
         if j % 1000 == 0:
             print("Row: ", j)
@@ -452,7 +446,7 @@ def sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, output_pic
         if count % 100 == 0:
             print("Processed variants (sample pheno) : ", count)
 
-        strategy = random.choice(hpo_sample_strategies)
+        strategy = random.choice(HPO_SAMPLE_STRATEGIES)
         precision = min(strategy[0], len(last_hpo_terms))
         imprecision = min(strategy[1], len(last_hpo_pool))
 
@@ -546,7 +540,7 @@ def sample_hpo_terms_for_variants(df_variants, gene_dict, put_in_the_df = False)
         if count % 10 == 0:
             print("Processed variants (sample pheno) : ", count)
         # sample HPO terms for the gene
-        sampled_hpo = network.sample_from_random_strategy(hpo_terms, hpo_sample_strategies)
+        sampled_hpo = network.sample_from_random_strategy(hpo_terms, HPO_SAMPLE_STRATEGIES)
 
         # add the sampled HPO terms to the dictionary
         sampled_hpoIDs_for_variants[row['#Uploaded_variation']] = sampled_hpo
