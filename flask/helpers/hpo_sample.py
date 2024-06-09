@@ -1,7 +1,8 @@
 # create class hpo_network
 import random
-
 from helpers.hpo import process_nodes, process_edges, read_hpo_from_json
+
+
 class Network:
 
     def __init__(self):
@@ -42,14 +43,19 @@ class Network:
 
         return ancestors
 
-    def sample_from_proper_ancestors(self, hpo_id, sample_size = 1) -> list:
+    def sample_from_proper_ancestors(self, hpo_id, sample_size=1) -> list:
+        """
+        Sample from the ancestors of the given hpo_id, excluding the hpo_id itself
+        :param hpo_id:
+        :param sample_size:
+        :return: the list of sampled HPO ids
+        """
 
         ancestors = self.get_all_ancestors(hpo_id)
         ancestors.remove(hpo_id)
         # get random sample of ancestors
         sample = random.sample(ancestors, sample_size)
         return sample
-
 
     def sample_noisy(self, hpo_ids, sample_size) -> list:
         """
@@ -72,10 +78,9 @@ class Network:
 
         return sample
 
-
     def sample_patient_phenotype(self, list_hpo_ids, precise, imprecise, noisy) -> list:
 
-        # precise, imporice, noisy are the number of samples for each category
+        # precise, imprecise, noisy are the number of samples for each category
         # choose which hpo_ids belong to precise, imprecise, and noisy (unique)
 
         # assert precise + imprecise <= len(list_hpo_ids)
@@ -99,7 +104,7 @@ class Network:
 
     def sample_patient_phenotype_v2(self, list_hpo_ids, precise, imprecise, noisy) -> list:
 
-        # precise, imporice, noisy are the number of samples for each category
+        # precise, imprecise, noisy are the number of samples for each category
         # choose which hpo_ids belong to precise, imprecise, and noisy (unique)
 
         precise = min(precise, len(list_hpo_ids))
@@ -120,7 +125,6 @@ class Network:
         samples.extend(self.sample_noisy(list_hpo_ids, noisy))
 
         return samples
-
 
     def sample_from_random_strategy(self, list_hpo_ids, strategies) -> list:
 
