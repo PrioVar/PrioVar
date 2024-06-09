@@ -79,6 +79,15 @@ class Network:
         return sample
 
     def sample_patient_phenotype(self, list_hpo_ids, precise, imprecise, noisy) -> list:
+        """
+        This is an alternative way to do the sampling. It is not currently used.
+        The difference is that precise and imprecise samples cannot intersect.
+        :param list_hpo_ids:
+        :param precise:
+        :param imprecise:
+        :param noisy:
+        :return: list of sampled HPO ids
+        """
 
         # precise, imprecise, noisy are the number of samples for each category
         # choose which hpo_ids belong to precise, imprecise, and noisy (unique)
@@ -87,7 +96,6 @@ class Network:
         assert precise + imprecise <= len(list_hpo_ids)
 
         precise_samples = random.sample(list_hpo_ids, precise)
-        # ????
         list_hpo_ids = list(set(list_hpo_ids) - set(precise_samples))
 
         imprecise_samples = random.sample(list_hpo_ids, imprecise)
@@ -103,27 +111,28 @@ class Network:
         return samples
 
     def sample_patient_phenotype_v2(self, list_hpo_ids, precise, imprecise, noisy) -> list:
+        """
+        This is the latest version of the sampling function
+        :param list_hpo_ids:
+        :param precise:
+        :param imprecise:
+        :param noisy:
+        :return: list of sampled HPO ids
+        """
 
         # precise, imprecise, noisy are the number of samples for each category
         # choose which hpo_ids belong to precise, imprecise, and noisy (unique)
-
         precise = min(precise, len(list_hpo_ids))
         imprecise = min(imprecise, len(list_hpo_ids))
 
         precise_samples = random.sample(list_hpo_ids, precise)
-        # ????
-        #list_hpo_ids = list(set(list_hpo_ids) - set(precise_samples))
-
         imprecise_samples = random.sample(list_hpo_ids, imprecise)
-        list_hpo_ids = list(set(list_hpo_ids) - set(imprecise_samples))
 
         samples = precise_samples
-
         for imprecise_hpo in imprecise_samples:
             samples.extend(self.sample_from_proper_ancestors(imprecise_hpo, 1))
 
         samples.extend(self.sample_noisy(list_hpo_ids, noisy))
-
         return samples
 
     def sample_from_random_strategy(self, list_hpo_ids, strategies) -> list:
@@ -132,7 +141,6 @@ class Network:
 
         # random strategy
         strategy = random.choice(strategies)
-
         return self.sample_patient_phenotype_v2(list_hpo_ids, strategy[0], strategy[1], strategy[2])
 
     # returns a list of hpo_ids that are ancestors of the given hpo_ids that are at most max_ancestral_depth away
@@ -142,7 +150,6 @@ class Network:
         for hpo_id in hpo_ids:
 
             this_level_ancestors = [hpo_id]
-
             for i in range(max_ancestral_depth):
                 next_level_ancestors = []
                 for ancestor in this_level_ancestors:
