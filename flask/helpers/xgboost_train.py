@@ -301,7 +301,7 @@ def clean_data(df_variants, output_pickle_file, labels=['pathogenic', 'benign', 
 def sample_hpo_terms_for_variants_optimized(
         df_variants,
         gene_dict,
-        max_ancesteral_depth=10,
+        max_ancestral_depth=10,
         put_in_the_df=False
 ):
 
@@ -349,7 +349,8 @@ def sample_hpo_terms_for_variants_optimized(
             hpo_terms = [relation[1] for relation in gene_phenotype_relations if relation[0] == gene]
             last_gene = gene
             last_hpo_terms = hpo_terms
-            last_hpo_pool = network.get_imprecision_pool(hpo_terms, max_ancesteral_depth)
+            # TODO: A problem might occur here if both parents of a term are in the list
+            last_hpo_pool = network.get_imprecision_pool(hpo_terms, max_ancestral_depth)
 
         if len(last_hpo_terms) == 0:
             continue
@@ -383,7 +384,13 @@ def sample_hpo_terms_for_variants_optimized(
     return sampled_hpoIDs_for_variants, df_variants
 
 
-def sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, output_pickle_file ,max_ancesteral_depth = 10 , put_in_the_df = False):
+def sample_hpo_terms_with_frequency_optimized(
+        df_variants,
+        gene_dict,
+        output_pickle_file,
+        max_ancestral_depth=10,
+        put_in_the_df=False
+):
     # order df_variants by SYMBOL
     df_variants = df_variants.sort_values(by='SYMBOL')
 
@@ -402,12 +409,12 @@ def sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, output_pic
     # key: variant name (e.g. 'rs12345'), value: list of sampled HPO terms
     sampled_hpoIDs_for_variants = {}
 
-    # proccessed variants
+    # processed variants
     count = 0
     j = 0
     print("Loop for phenotypes started")
     # for each gene in the dataframe (ordered) , sample hpo terms using get_pool function
-    # dont calulate the hpo terms for the same gene again
+    # don't calculate the hpo terms for the same gene again
     last_gene = None
     last_hpo_terms = []
     last_hpo_pool = []
@@ -430,14 +437,20 @@ def sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, output_pic
             hpo_terms_and_frequencies = [relation[1:] for relation in gene_phenotype_relations if relation[0] == gene]
 
             # get the terms with the highest frequencies (top 10) pay attention to None values consider them as 0
-            hpo_terms_and_frequencies = sorted(hpo_terms_and_frequencies, key = lambda x: x[1] if x[1] is not None else 0, reverse = True)
+            hpo_terms_and_frequencies = sorted(hpo_terms_and_frequencies,
+                                               key=lambda x: x[1] if x[1] is not None else 0,
+                                               reverse=True)
 
-            # get the most frequent max_number_of_relevant_phenotypes HPO terms if there are less than max_number_of_relevant_phenotypes, get all
-            hpo_terms = [relation[0] for relation in hpo_terms_and_frequencies[:max_number_of_relevant_phenotypes]]
+            # get the most frequent max_number_of_relevant_phenotypes HPO terms
+            # if there are less than max_number_of_relevant_phenotypes, get all
+            hpo_terms = [relation[0]
+                         for relation in
+                         hpo_terms_and_frequencies[:max_number_of_relevant_phenotypes]]
 
             last_gene = gene
             last_hpo_terms = hpo_terms
-            last_hpo_pool = network.get_imprecision_pool(hpo_terms, max_ancesteral_depth)
+            # TODO: A problem might occur here if both parents of a term are in the list
+            last_hpo_pool = network.get_imprecision_pool(hpo_terms, max_ancestral_depth)
 
         if len(last_hpo_terms) == 0:
             continue
@@ -480,23 +493,19 @@ def test_sample_hpo_terms_for_variants_optimized():
     gene_dict, hpo_dict = read_dicts()
 
     # pass the first 100 rows to the function
-    sampled_hpoIDs_for_variants, df100 = sample_hpo_terms_for_variants_optimized(df_variants.iloc[0:25000], gene_dict, put_in_the_df=True)
+    sampled_hpoIDs_for_variants, df100 = sample_hpo_terms_for_variants_optimized(
+        df_variants.iloc[0:25000], gene_dict, put_in_the_df=True)
+
     # print the rows of the dataframe (changed)
     for i, row in df100.iterrows():
         print(row['#Uploaded_variation'], row['SYMBOL'], row['sampled_hpo'])
 
     print(sampled_hpoIDs_for_variants)
 
-#test_sample_hpo_terms_for_variants_optimized()
-#exit()
 
-#df_variants = read_variants()
-#gene_dict, hpo_dict = read_dicts()
-#sample_hpo_terms_for_variants_optimized(df_variants, gene_dict)
-
-
+'''
 # returns a dictionary with keys as variant names and values as lists of sampled HPO terms
-def sample_hpo_terms_for_variants(df_variants, gene_dict, put_in_the_df = False):
+def sample_hpo_terms_for_variants(df_variants, gene_dict, put_in_the_df=False):
 
     # add new column to the dataframe to store the sampled HPO terms
     if put_in_the_df:
@@ -513,7 +522,7 @@ def sample_hpo_terms_for_variants(df_variants, gene_dict, put_in_the_df = False)
     # key: variant name (e.g. 'rs12345'), value: list of sampled HPO terms
     sampled_hpoIDs_for_variants = {}
 
-    # proccessed variants
+    # processed variants
     count = 0
     j = 0
     print("Loop for phenotypes started")
@@ -564,24 +573,15 @@ def test_sample_hpo_terms_for_variants():
     for i, row in df_variants.iloc[22000:22500].iterrows():
         print(row['#Uploaded_variation'], row['SYMBOL'], row['sampled_hpo'])
 
-    print(sampled_hpoIDs_for_variants)
+    print(sampled_hpoIDs_for_variants)'''
 
 
 def run_binary_classification():
     print("Startanzi")
+
     # read clean data
     # mostly clean
     df_clean = pd.read_pickle('dataframe.pkl')
-    #df_clean = pd.read_pickle('multilabel_clean.pkl')
-
-    # sample 5 HPO terms for each gene and add the embeddings to the dataframe
-    # get the embeddings of the HPO terms
-    #node_embeddings = read_embedding()
-    # read the gene and hpo dictionaries
-    #gene_dict, hpo_dict = read_dicts()
-    # calculate the neutral embedding as the root embedding
-    #neutral_embedding = calculate_neutral_embedding_as_root_embedding(node_embeddings, hpo_dict)
-
 
     #ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:Allele: category, Gene: object, Feature: category, Consequence: category, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object, DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
     # drop :Gene, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object,
@@ -596,28 +596,25 @@ def run_binary_classification():
     # there are some None values in the columns, so we need to replace them with np.nan
     df_clean[['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']] = df_clean[['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']].replace('None', np.nan).astype('float')
 
-
-
     # print data types and classes of the columns
     print(df_clean.dtypes)
     print(df_clean.select_dtypes(include=['category']).columns)
     print(df_clean.select_dtypes(include=['object']).columns)
 
-
     # separate the data into features and target (label is CLIN_SIG)
     y = df_clean['CLIN_SIG']
-    #print class distribution
+
+    # print class distribution
     print(y.value_counts())
     y = y.cat.codes
 
     X = df_clean.drop(columns=['CLIN_SIG'])
 
-
     # split the data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # imputer: replace missing values with the mean of the column (only for numerical columns)
-    # dont use it for categorical columns
+    # don't use it for categorical columns
 
     imputer = SimpleImputer(strategy='mean')
     # get the numerical columns
@@ -633,7 +630,6 @@ def run_binary_classification():
 
     # print columns of the dataframe
     print(X_train.columns)
-
 
     # Train XGBoost model
     params = {
@@ -667,12 +663,11 @@ def run_multilabel(data_path, output_path):
     # df_clean = pd.read_pickle('dataframe.pkl')
     df_clean = pd.read_pickle(data_path)
 
-    # make HGvsp categorical
+    # make HGVSp categorical
     df_clean['HGVSp'] = df_clean['HGVSp'].astype('category')
 
     # save all categorical codes by getting all categorical columns
     save_categories(df_clean)
-
 
     # ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:Allele: category, Gene: object, Feature: category, Consequence: category, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object, DS_AG: object, DS_AL: object, DS_DG: object, DS_DL: object, DP_AG: object, DP_AL: object, DP_DG: object, DP_DL: object
     # drop :Gene, Existing_variation: object, SYMBOL: category, CANONICAL: category, SIFT: category, PolyPhen: category, HGVSc: object, HGVSp: object, AlphaMissense_score: object, AlphaMissense_pred: object, HGVSc2: object, HGVSp2: object,
@@ -690,11 +685,6 @@ def run_multilabel(data_path, output_path):
         ['DS_AG', 'DS_AL', 'DS_DG', 'DS_DL', 'DP_AG', 'DP_AL', 'DP_DG', 'DP_DL']].replace('None', np.nan).astype(
         'float')
 
-    # print data types and classes of the columns
-    #print(df_clean.dtypes)
-    #print(df_clean.select_dtypes(include=['category']).columns)
-    #print(df_clean.select_dtypes(include=['object']).columns)
-
     # separate the data into features and target (label is CLIN_SIG)
     y = df_clean['CLIN_SIG']
     # print class distribution
@@ -702,7 +692,6 @@ def run_multilabel(data_path, output_path):
     print("print codes and classes like class 0: benign etc", y.cat.categories)
     y = y.cat.codes
     print(y.value_counts())
-    #exit()
 
     X = df_clean.drop(columns=['CLIN_SIG'])
 
@@ -710,11 +699,12 @@ def run_multilabel(data_path, output_path):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # imputer: replace missing values with the mean of the column (only for numerical columns)
-    # dont use it for categorical columns
+    # don't use it for categorical columns
 
     imputer = SimpleImputer(strategy='mean')
     # get the numerical columns
     numerical_columns = X_train.select_dtypes(include=[np.number]).columns
+
     # fit the imputer to the training data
     imputer.fit(X_train[numerical_columns])
 
@@ -725,8 +715,6 @@ def run_multilabel(data_path, output_path):
 
     # print columns of dtrain
     print(dtrain.feature_names)
-
-
 
     # print columns of the dataframe
     print(X_train.columns)
@@ -774,9 +762,22 @@ def run_multilabel(data_path, output_path):
     model.save_model(output_path)
 
 
-def add_embedding_info(df_variants, path_to_embedding, path_to_gene_dict, path_to_hpo_dict, path_to_sampled_hpo,
-                       add_scaled_average_dot_product=True, add_scaled_min_dot_product=False, add_scaled_max_dot_product=False,
-                       add_average_dot_product = True, add_min_dot_product = False, add_max_dot_product = False, add_std_dot_product = False, add_gene_embedding = False, add_fix_num_phen_embedding = 0):
+def add_embedding_info(
+        df_variants,
+        path_to_embedding,
+        path_to_gene_dict,
+        path_to_hpo_dict,
+        path_to_sampled_hpo,
+        add_scaled_average_dot_product=True,
+        add_scaled_min_dot_product=False,
+        add_scaled_max_dot_product=False,
+        add_average_dot_product=True,
+        add_min_dot_product=False,
+        add_max_dot_product=False,
+        add_std_dot_product=False,
+        add_gene_embedding=False,
+        add_fix_num_phen_embedding=0
+):
 
     # read the embeddings
     node_embeddings = read_embedding(path_to_embedding)
@@ -812,10 +813,7 @@ def add_embedding_info(df_variants, path_to_embedding, path_to_gene_dict, path_t
         for i in range(add_fix_num_phen_embedding):
             df_variants[f'phen_embedding_{i}'] = np.nan
 
-
-
-
-    # for every row add neccessary columns to the dataframe
+    # for every row add necessary columns to the dataframe
     for i, row in df_variants.iterrows():
 
         gene = row['SYMBOL']
@@ -850,7 +848,6 @@ def add_embedding_info(df_variants, path_to_embedding, path_to_gene_dict, path_t
         if add_scaled_max_dot_product:
             df_variants.at[i, 'scaled_max_dot_product'] = np.max(scaled_dot_products)
 
-
         # if asked, add average dot product between gene and hpo embeddings
         if add_average_dot_product:
             df_variants.at[i, 'average_dot_product'] = np.mean(dot_products)
@@ -880,8 +877,6 @@ def add_embedding_info(df_variants, path_to_embedding, path_to_gene_dict, path_t
     return df_variants
 
 
-
-
 # read the cleaned datadf_variants = pd.read_pickle('../data/variants_cleaned.pkl')
 
 # read dictionaries
@@ -889,7 +884,6 @@ def add_embedding_info(df_variants, path_to_embedding, path_to_gene_dict, path_t
 
 # add the sampled HPO terms to the dataframe (frequency based)
 #sample_hpo_terms_with_frequency_optimized(df_variants, gene_dict, '../data/sampled_hpoIDs__with_freq_for_variants.pkl', put_in_the_df=False)
-
 
 def print_num_unique_values_of_categorical_columns(df):
     print("Categorical columns")
@@ -952,33 +946,29 @@ exit()"""
 
 def add_embo():
     print("Startanzi")
-
-
     df_variants = pd.read_pickle('../data/variants_cleaned.pkl')
 
-
-
     # add embedding info to the dataframe
-    df_variants = add_embedding_info(df_variants, path_to_embedding='../data/node_embeddings.txt', path_to_gene_dict='../data/gene_dict.pkl', path_to_hpo_dict='../data/hpo_dict.pkl', path_to_sampled_hpo='../data/sampled_hpoIDs__with_freq_for_variants.pkl',
-                                        add_scaled_average_dot_product=True, add_scaled_min_dot_product=True, add_scaled_max_dot_product=True, add_average_dot_product=True, add_min_dot_product=True, add_max_dot_product=True)
-
+    df_variants = add_embedding_info(
+        df_variants,
+        path_to_embedding='../data/node_embeddings.txt',
+        path_to_gene_dict='../data/gene_dict.pkl',
+        path_to_hpo_dict='../data/hpo_dict.pkl',
+        path_to_sampled_hpo='../data/sampled_hpoIDs__with_freq_for_variants.pkl',
+        add_scaled_average_dot_product=True,
+        add_scaled_min_dot_product=True,
+        add_scaled_max_dot_product=True,
+        add_average_dot_product=True,
+        add_min_dot_product=True,
+        add_max_dot_product=True
+    )
 
     print(df_variants.head(10))
+
     # eliminate the rows that has none as average_dot_product
     df_variants = df_variants.dropna(subset=['average_dot_product'])
     print(df_variants.head(10))
+
     # save df_variants to a new file in data folder outside the repository
     df_variants.to_pickle('../data/df_with_first_embedding_freq_based.pkl')
     print("Dataframe with embedding is saved to dataframe_with_embedding.pkl")
-
-
-
-
-
-
-
-
-
-
-#run_binary_classification()
-#run_multilabel()

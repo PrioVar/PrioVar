@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import torch
 from helpers.gene_mapping import get_gene_phenotype_relations, get_gene_phenotype_relations_and_frequency
-from helpers.train1 import apply_categories, read_embedding, read_dicts, read_variants
+from helpers.xgboost_train import apply_categories, read_embedding, read_dicts, read_variants
 
 model_path = 'data/model_with_first_embedding_freq_based.xgb'
 
@@ -93,7 +93,7 @@ def prepare_data(df_variants):
     # extract the info from the HGVSc2 column so that we have the 2 more columns 11, G>A # ENST00000616125.5:c.11G>A
     df_variants[['HGVSc_number', 'HGVSc_change']] = df_variants['HGVSc2'].str.extract(r'c\.(\d+)([A-Z]>.*)')
 
-    # divide  Hgvsp  columns into two columns by splitting the values by ':' 	ENSP00000484643.1:p.Gly4Glu
+    # divide  HGVSp  columns into two columns by splitting the values by ':' 	ENSP00000484643.1:p.Gly4Glu
     try:
         df_variants[['HGVSp', 'HGVSp2']] = df_variants['HGVSp'].str.split(':', expand=True)
     except:

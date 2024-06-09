@@ -1,16 +1,12 @@
 import pickle
 import random
 import xgboost as xgb
-from sklearn.metrics import classification_report
-from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 import pandas as pd
 import numpy as np
-import torch
-import helpers.hpo_sample
 from helpers import hpo_sample
-from train1 import read_embedding, read_dicts, hpo_sample_strategies
-from helpers.gene_mapping import get_gene_phenotype_relations, get_gene_phenotype_relations_and_frequency
+from xgboost_train import read_embedding, read_dicts, HPO_SAMPLE_STRATEGIES
+from helpers.gene_mapping import get_gene_phenotype_relations_and_frequency
 import matplotlib.pyplot as plt
 
 
@@ -18,8 +14,7 @@ import matplotlib.pyplot as plt
 hpo_network = hpo_sample.Network()
 
 # from train1.py
-hpo_strategies = hpo_sample_strategies
-max_number_of_relevant_phenotypes = max([sum(strategy[:2]) for strategy in hpo_strategies])
+max_number_of_relevant_phenotypes = max([sum(strategy[:2]) for strategy in HPO_SAMPLE_STRATEGIES])
 
 # read dictionaries by using the functions in train1.py
 gene_dict, hpo_dict = read_dicts()
@@ -54,7 +49,9 @@ def simulate_a_patient(df_variants, numof_pathogenic_variants, numof_nonpathogen
     gene_phenotype_relations = get_gene_phenotype_relations_and_frequency()
 
     hpo_terms_and_frequencies = [relation[1:] for relation in gene_phenotype_relations if relation[0] == target_gene]
-    hpo_terms_and_frequencies = sorted(hpo_terms_and_frequencies, key=lambda x: x[1] if x[1] is not None else 0, reverse=True)
+    hpo_terms_and_frequencies = sorted(hpo_terms_and_frequencies,
+                                       key=lambda x: x[1] if x[1] is not None else 0,
+                                       reverse=True)
     hpo_ids = [relation[0] for relation in hpo_terms_and_frequencies[:max_number_of_relevant_phenotypes+1]]
 
     while len(hpo_ids) == 0 or target_gene not in gene_dict:
@@ -62,13 +59,21 @@ def simulate_a_patient(df_variants, numof_pathogenic_variants, numof_nonpathogen
         target_gene = target_variant['SYMBOL']
         target_gene = target_gene.values[0].split('.')[0]
         gene_phenotype_relations = get_gene_phenotype_relations_and_frequency()
-        hpo_terms_and_frequencies = [relation[1:] for relation in gene_phenotype_relations if relation[0] == target_gene]
-        hpo_terms_and_frequencies = sorted(hpo_terms_and_frequencies, key=lambda x: x[1] if x[1] is not None else 0, reverse=True)
+        hpo_terms_and_frequencies = [relation[1:]
+                                     for relation in gene_phenotype_relations
+                                     if relation[0] == target_gene]
+        hpo_terms_and_frequencies = sorted(hpo_terms_and_frequencies,
+                                           key=lambda x: x[1] if x[1] is not None else 0,
+                                           reverse=True)
         hpo_ids = [relation[0] for relation in hpo_terms_and_frequencies[:max_number_of_relevant_phenotypes+1]]
 
     # sample the phenotypes of the patient
-    hpo_sample = hpo_network.sample_patient_phenotype_v2(hpo_ids,
-                        phenotype_sample_strategy[0], phenotype_sample_strategy[1], phenotype_sample_strategy[2])
+    hpo_sample = hpo_network.sample_patient_phenotype_v2(
+        hpo_ids,
+        phenotype_sample_strategy[0],
+        phenotype_sample_strategy[1],
+        phenotype_sample_strategy[2]
+    )
 
     # sample numof_nonpathogenic_variants non-pathogenic variants (which is either benign or likely benign)
     nonpathogenic_variants = df_variants[df_variants['CLIN_SIG'].isin(['benign', 'likely_benign'])]
@@ -79,8 +84,16 @@ def simulate_a_patient(df_variants, numof_pathogenic_variants, numof_nonpathogen
 
     #variants = variants.drop(columns=['CLIN_SIG'])
     # get hpo_sample_info from add_embedding_info_to_patient
-    hpo_sample_info = add_embedding_info_to_patient(target_gene, hpo_sample, add_scaled_average_dot_product=True, add_scaled_min_dot_product=True, add_scaled_max_dot_product=True,
-                                                    add_average_dot_product=True, add_min_dot_product=True, add_max_dot_product=True)
+    hpo_sample_info = add_embedding_info_to_patient(
+        target_gene,
+        hpo_sample,
+        add_scaled_average_dot_product=True,
+        add_scaled_min_dot_product=True,
+        add_scaled_max_dot_product=True,
+        add_average_dot_product=True,
+        add_min_dot_product=True,
+        add_max_dot_product=True
+    )
 
     # add hpo_sample_info to the all variants ???
     variants = pd.concat([variants, pd.DataFrame([hpo_sample_info])], axis=1)
@@ -195,7 +208,7 @@ def evaluate_model(model_file, patients_file):
     return score_distribution
 
 
-# proccess to add add_scaled_average_dot_product=True, add_scaled_min_dot_product=True, add_scaled_max_dot_product=True, add_average_dot_product=True, add_min_dot_product=True, add_max_dot_product=True
+# process to add add_scaled_average_dot_product=True, add_scaled_min_dot_product=True, add_scaled_max_dot_product=True, add_average_dot_product=True, add_min_dot_product=True, add_max_dot_product=True
 
 
 # returns a dictionary of related info
