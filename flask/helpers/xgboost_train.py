@@ -397,7 +397,7 @@ def sample_hpo_terms_for_variants_optimized(
 def sample_hpo_terms_with_frequency_optimized(
     df_variants,
     gene_dict,
-    output_pickle_file,
+    output_pickle_file='../data/sampled_hpoIDs_with_freq_for_variants.pkl',
     max_ancestral_depth=10,
     put_in_the_df=False
 ):
@@ -954,7 +954,9 @@ for column in df.select_dtypes(include=['category']).columns:
 exit()"""
 
 
-def add_embo():
+def add_embo(
+    path_to_sampled_hpo='../data/sampled_hpoIDs_with_freq_for_variants.pkl'
+):
     print("Startanzi")
     df_variants = pd.read_pickle('../data/variants_cleaned.pkl')
 
@@ -962,9 +964,9 @@ def add_embo():
     df_variants = add_embedding_info(
         df_variants,
         path_to_embedding='../data/node_embeddings.txt',
-        path_to_gene_dict='../data/gene_dict.pkl',
-        path_to_hpo_dict='../data/hpo_dict.pkl',
-        path_to_sampled_hpo='../data/sampled_hpoIDs__with_freq_for_variants.pkl',
+        path_to_gene_dict='../data/gene_dict.pt',
+        path_to_hpo_dict='../data/hpo_dict.pt',
+        path_to_sampled_hpo=path_to_sampled_hpo,
         add_scaled_average_dot_product=True,
         add_scaled_min_dot_product=True,
         add_scaled_max_dot_product=True,
