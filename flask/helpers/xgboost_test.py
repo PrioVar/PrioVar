@@ -53,7 +53,9 @@ def simulate_a_patient(
     # get the hpo ids of the target gene with frequency
     gene_phenotype_relations = get_gene_phenotype_relations_and_frequency()
 
-    hpo_terms_and_frequencies = [relation[1:] for relation in gene_phenotype_relations if relation[0] == target_gene]
+    hpo_terms_and_frequencies = [
+        relation[1:] for relation in gene_phenotype_relations if relation[0] == target_gene
+    ]
     hpo_terms_and_frequencies = sorted(hpo_terms_and_frequencies,
                                        key=lambda x: x[1] if x[1] is not None else 0,
                                        reverse=True)
