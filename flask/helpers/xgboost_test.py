@@ -304,3 +304,11 @@ plt.xlabel('Rank of the target variant')
 plt.ylabel('Frequency')
 plt.title('Distribution of the ranks of the target variant')
 plt.show()
+
+# sort and save the ranks under ../data
+ranks = sorted(ranks)
+with open('../data/ranks.txt', 'w') as f:
+    for rank in ranks:
+        f.write(str(rank) + '\n')  # write the rank to the file
+
+a = 5
