@@ -49,7 +49,7 @@ def api_upload_vcf_file(file_content):
     while retry_count < max_retries:
         try:
             # now, send a request to lidyagenomics.com/libra/api/v1/vcf/cs492upload
-            response = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload", headers={
+            response = requests.post("http://lidyagenomics.com/libra/api/v1/vcf/cs492upload/GRCh38", headers={
                 "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",
                 "Accept": "application/json, text/plain, /",
                 "Accept-Language": "en-US,en;q=0.5",
