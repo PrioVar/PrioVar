@@ -1,4 +1,4 @@
-from train1 import *
+from xgboost_train import *
 from hpo import read_hpo_from_json, process_nodes, process_edges
 
 
@@ -17,7 +17,7 @@ def get_hpo_terms_edges():
     return hpo_list, hpo_edges
 
 
-path_embedding = '../data/node_embeddings.txt'
+path_embedding = '../data/embedding_results/node_embeddings.txt'
 
 path_gene_dict = '../data/gene_dict.pt'
 path_hpo_dict = '../data/hpo_dict.pt'
