@@ -10,7 +10,7 @@ from helpers.xgboost_train import apply_categories, read_embedding, read_dicts, 
 
 model_path = 'data/model_with_first_embedding_freq_based.xgb'
 
-embedding_path = 'data/node_embeddings.txt'
+embedding_path = 'data/embedding_results/node_embeddings.txt'
 
 path_gene_dict = 'data/gene_dict.pt'
 path_hpo_dict = 'data/hpo_dict.pt'
