@@ -1,0 +1,150 @@
+HPO terms,Mutation,CHROM,POS,REF,ALT,INFO,FORMAT,Wes2450,ID,QUAL,FILTER
+"[HP:0000568] Microphthalmos  [HP:0008538] Sensorineural hearing impairment 
+[HP:0001263] Global developmental delay
+[HP:0006996] Dysgenesis of corpus callosum ",chr3.181430628C>G,chr3,181430628,C,G,.,.,.,.,.,.
+" [HP:0004322] Short stature
+[HP:0000316] Hypertelorism [HP:0000369] Low-set ears
+[HP:0001642] Pulmonic stenosis
+[HP:0000028] Cryptorchidism  [HP:0001263] Global developmental delay
+[HP:0002281] Grey matter heterotopias
+[HP:0001250] Seizures
+",chr7.140453133T>G,chr7,140453133,T,G,.,.,.,.,.,.
+[HP:0010783] Erythema  [HP:0007549] Desquamation of skin soon after birth  [HP:0000773] Short ribs  [HP:0001591] Bell-shaped chest ,chr5.147480035C>T,chr5,147480035,C,T,.,.,.,.,.,.
+[HP:0010783] Erythema  [HP:0007549] Desquamation of skin soon after birth  [HP:0000773] Short ribs  [HP:0001591] Bell-shaped chest ,chr5.147503414C>T,chr5,147503414,C,T,.,.,.,.,.,.
+[HP:0010783] Erythema  [HP:0007549] Desquamation of skin soon after birth  [HP:0000773] Short ribs  [HP:0001591] Bell-shaped chest ,chr11.103124071G>A,chr11,103124071,G,A,.,.,.,.,.,.
+[HP:0010783] Erythema  [HP:0007549] Desquamation of skin soon after birth  [HP:0000773] Short ribs  [HP:0001591] Bell-shaped chest ,chr11.103126259T>C,chr11,103126259,T,C,.,.,.,.,.,.
+"[HP:0001250] Seizures
+",chr5.125885630C>G,chr5,125885630,C,G,.,.,.,.,.,.
+"[HP:0001250] Seizures
+",chr5.125887751C>G,chr5,125887751,C,G,.,.,.,.,.,.
+[HP:0011001] Increased bone mineral density  [HP:0001903] Anemia  [HP:0001873] Thrombocytopenia  [HP:0001433] Hepatosplenomegaly,chr11.67811109delG,chr11,67811109,G,.,.,.,.,.,.,.
+[HP:0001263] Global developmental delay  [HP:0001250] Seizures [HP:0002500] Abnormality of the cerebral white matter  [HP:0009716] Subependymal nodules,chr17.42990701C>T,chr17,42990701,C,T,.,.,.,.,.,.
+"[HP:0001290] Generalized hypotonia 
+[HP:0003198] Myopathy",chrX.149767145G>T,chrX,149767145,G,T,.,.,.,.,.,.
+"[HP:0010864] Intellectual disability, severe
+[HP:0001290] Generalized hypotonia
+[HP:0001302] Pachygyria
+[HP:0002126] Polymicrogyria
+[HP:0001250] Seizures",chr1.46660525G>A,chr1,46660525,G,A,.,.,.,.,.,.
+"[HP:0001250]
+Seizures",chr17.46024036G>A,chr17,46024036,G,A,.,.,.,.,.,.
+"[HP:0000581] Blepharophimosis  [HP:0000414] Bulbous nose  [HP:0000028] Cryptorchidism [HP:0001263] Global developmental delay  [HP:0001290] Generalized hypotonia 
+[HP:0001257] Spasticity  [HP:0001274] Agenesis of corpus callosum  [HP:0000821]Hypothyroidism",chr10.76785008G>A,chr10,76785008,G,A,.,.,.,.,.,.
+"[HP:0001696] Situs inversus totalis
+[HP:0005938]
+Ciliary dysgenesis",chr5.13753399delA,chr5,13753399,A,.,.,.,.,.,.,.
+"[HP:0001696] Situs inversus totalis
+[HP:0005938]
+Ciliary dysgenesis",chr5.13845040A>G,chr5,13845040,A,G,.,.,.,.,.,.
+"[HP:0000175] Cleft palate
+[HP:0000347] Micrognathia  [HP:0008012] Congenital myopia",chr12.48369769G>A,chr12,48369769,G,A,.,.,.,.,.,.
+"[HP:0001513] Obesity  [HP:0000098] Tall stature  [HP:0000256] Macrocephaly  [HP:0000307] Pointed chin  [HP:0000337] Broad forehead
+[HP:0001537] Umbilical hernia
+[HP:0001256] Intellectual disability, mild",chr5.176710797A>T,chr5,176710797,A,T,.,.,.,.,.,.
+"[HP:0004322] Short stature
+[HP:0000252] Microcephaly [HP:0001007] Hirsutism  [HP:0000664] Synophrys  ",chr5.37052555C>T,chr5,37052555,C,T,.,.,.,.,.,.
+"[HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures  [HP:0009879] Cortical gyral simplification
+[HP:0002518] Abnormality of the periventricular white matter
+[HP:0001321] Cerebellar hypoplasia
+[HP:0002365] Hypoplasia of the brainstem 
+[HP:0011441] Abnormality of the medulla oblongata",chr3.48508683G>A,chr3,48508683,G,A,.,.,.,.,.,.
+"[HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures  [HP:0009879] Cortical gyral simplification
+[HP:0002518] Abnormality of the periventricular white matter
+[HP:0001321] Cerebellar hypoplasia
+[HP:0002365] Hypoplasia of the brainstem 
+[HP:0011441] Abnormality of the medulla oblongata",chr3.48508112dupG,chr3,48508112,G,GG,.,.,.,.,.,.
+"[HP:0004325] Decreased body weight 
+[HP:0004322] Short stature 
+[HP:0000988] Skin rash
+[HP:0010998] Increased susceptibility to spontaneous sister chromatid exchange",chr15.91328183C>T,chr15,91328183,C,T,.,.,.,.,.,.
+[HP:0004900] Severe lactic acidosis,chr21.38309023C>G,chr21,38309023,C,G,.,.,.,.,.,.
+"[HP:0002659]
+Increased susceptibility to fractures
+[HP:0000938] Osteopenia
+[HP:0006487] Bowing of long bones",chr7.94052377G>A,chr7,94052377,G,A,.,.,.,.,.,.
+"[HP:0100272] Branchial sinus 
+[HP:0004467] Preauricular pit 
+[HP:0000003] Multicystic kidney dysplasia",chr8.72128968C>T,chr8,72128968,C,T,.,.,.,.,.,.
+"[HP:0004322] Short stature
+[HP:0000252] Microcephaly  [HP:0001263] Global developmental delay",chrX.71684476delCTCCAinsGT,chrX,71684476,CTCCA,GT,.,.,.,.,.,.
+"[HP:0008538] Sensorineural hearing impairment [HP:0001263] Global developmental delay  [HP:0001250] Seizures
+",chr10.135184190G>A,chr10,135184190,G,A,.,.,.,.,.,.
+"[HP:0002876] Episodic tachypnea
+[HP:0002104] Apnea
+[HP:0001263] Global developmental delay  [HP:0002419] Molar tooth sign on MRI",chr14.58910876C>T,chr14,58910876,C,T,.,.,.,.,.,.
+"[HP:0002876] Episodic tachypnea
+[HP:0002104] Apnea
+[HP:0001263] Global developmental delay  [HP:0002419] Molar tooth sign on MRI",chr14.58899157delG,chr14,58899157,G,.,.,.,.,.,.,.
+"[HP:0008538] Sensorineural hearing impairment  [HP:0001263] Global developmental delay  [HP:0001290] Generalized hypotonia
+[HP:0003535] 3-methylglutaconic aciduria",chr6.151726371C>G,chr6,151726371,C,G,.,.,.,.,.,.
+"[HP:0001263] Global developmental delay  [HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures
+[HP:0012707] Lactate peak on MRS",chr2.228566952delTC,chr2,228566952,TC,.,.,.,.,.,.,.
+"[HP:0001263] Global developmental delay  [HP:0001290] Generalized hypotonia 
+[HP:0001250] Seizures
+[HP:0012707] Lactate peak on MRS",chr2.228564094A>G,chr2,228564094,A,G,.,.,.,.,.,.
+"[HP:0000175] Cleft palate  [HP:0008538] Sensorineural hearing impairment [HP:0001629] Ventricular septal defect [
+HP:0008738] Partially duplicated displaced kidney",chr12.49423183C>T,chr12,49423183,C,T,.,.,.,.,.,.
+"[HP:0000278] Retrognathia  [HP:0011823] Chin with horizontal crease [HP:0000396] Overfolded helix 
+[HP:0010536] Central sleep apnea
+[HP:0005612] Arthrogryposis-like hand anomaly
+[HP:0001290] Generalized hypotonia",chr13.101944403T>C,chr13,101944403,T,C,.,.,.,.,.,.
+[HP:0005562] Multiple renal cysts,chr16.2144128C>T,chr16,2144128,C,T,.,.,.,.,.,.
+"[HP:0000957] Cafe-au-lait spot 
+HP:0009601]Aplasia/Hypoplasia of the thumb
+
+Sibling with complex forearm abnormality",chr12.114841599delG,chr12,114841599,G,.,.,.,.,.,.,.
+"[HP:0002652] Skeletal dysplasia 
+[HP:0001762] Talipes equinovarus 
+[HP:0008905] Rhizomelic short stature 
+[HP:0001193] Ulnar deviation of the hand or of fingers of the hand 
+[HP:0001385] Hip dysplasia",chr5.149360517A>C,chr5,149360517,A,C,.,.,.,.,.,.
+"[HP:0000485] Megalocornea  [HP:0001833]
+Large feet
+",chrX.109963084dupA,chrX,109963084,A,AA,.,.,.,.,.,.
+"[HP:0000347] Micrognathia  [HP:0000356] Abnormality of the outer ear 
+[HP:0000359] Abnormality of the inner ear 
+[HP:0001601]
+Laryngomalacia  ",chr8.61655471C>T,chr8,61655471,C,T,.,.,.,.,.,.
+[HP:0000486] Strabismus  [HP:0000508] Ptosis  [HP:0000496] Abnormality of eye movement,chr16.90001643C>T,chr16,90001643,C,T,.,.,.,.,.,.
+[HP:0010919] Abnormality of cysteine metabolism  [HP:0010901] Abnormality of methionine metabolism  [HP:0001987] Hyperammonemia,chr1.45974495C>T,chr1,45974495,C,T,.,.,.,.,.,.
+"[HP:0000347] Micrognathia  [HP:0002645] Wormian bones
+[HP:0002982] Tibial bowing  [HP:0002827] Hip dislocation  [HP:0006996] Dysgenesis of corpus callosum  
+[HP:0002659]
+Increased susceptibility to fractures",chr1.120458147G>A,chr1,120458147,G,A,.,.,.,.,.,.
+"[HP:0001513] Obesity  [HP:0000098] Tall stature  [HP:0000256] Macrocephaly  [HP:0000431] Wide nasal bridge 
+[HP:0000286] Epicanthus  [HP:0000154] Wide mouth  [HP:0001643] Patent ductus arteriosus 
+[HP:0001007] Hirsutism",chr12.22065939A>G,chr12,22065939,A,G,.,.,.,.,.,.
+[HP:0000204] Cleft upper lip  [HP:0000175] Cleft palate  [HP:0009755] Ankyloblepharon  [HP:0010285] Oral synechia  [HP:0004691] 2-3 toe syndactyly,chr1.209969821C>T,chr1,209969821,C,T,.,.,.,.,.,.
+"[HP:0005549] Congenital neutropenia 
+[HP:0001903] Anemia",chr15.77324645G>A,chr15,77324645,G,A,.,.,.,.,.,.
+"[HP:0001396] Cholestasis  [HP:0002716] Lymphadenopathy  [HP:0003256] Abnormality of the coagulation cascade  [HP:0001873] Thrombocytopenia
+[HP0011447] Hyposegmentation of neutrophil nuclei",chr2.191874642delT,chr2,191874642,T,.,.,.,.,.,.,.
+"[HP:0001396] Cholestasis  [HP:0002716] Lymphadenopathy  [HP:0003256] Abnormality of the coagulation cascade  [HP:0001873] Thrombocytopenia
+[HP0011447] Hyposegmentation of neutrophil nuclei",chr1.225591106G>A,chr1,225591106,G,A,.,.,.,.,.,.
+"[HP:0000252] Microcephaly  [HP:0002342] Intellectual disability, moderate  [HP:0001290] Generalized hypotonia",chr14.29237028G>T,chr14,29237028,G,T,.,.,.,.,.,.
+"[HP:0004399] Congenital pyloric atresia 
+[HP:0005235] Jejunal atresia  [HP:0011102]
+Ileal atresia 
+[HP:0010448] Colonic atresia",chr2.47177603G>T,chr2,47177603,G,T,.,.,.,.,.,.
+"[HP:0004399] Congenital pyloric atresia 
+[HP:0005235] Jejunal atresia  [HP:0011102]
+Ileal atresia 
+[HP:0010448] Colonic atresia",chr2.47233177dupC,chr2,47233177,C,CC,.,.,.,.,.,.
+[HP:0010955] Dilatation of the bladder  [HP:0100771] Hypoperistalsis,chr2.74140773G>A,chr2,74140773,G,A,.,.,.,.,.,.
+"[HP:0011100]
+Intestinal atresia
+[HP:0001629]
+Ventricular septal defect
+[HP:0010882]
+Pulmonary valve atresia",chr2.47300955C>T,chr2,47300955,C,T,.,.,.,.,.,.
+"[HP:0000252]
+Microcephaly
+[HP:0001290] Generalized hypotonia
+",chr8.100168921C>T,chr8,100168921,C,T,.,.,.,.,.,.
+"[HP:0000252]
+Microcephaly
+[HP:0001290] Generalized hypotonia
+",chr8.100396500G>A,chr8,100396500,G,A,.,.,.,.,.,.
